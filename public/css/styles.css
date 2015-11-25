@@ -1,0 +1,56 @@
+
+/* General & Master blade template */
+
+body {
+	line-height: 1.25em ! important;
+}
+
+div.container {
+	margin-top: 60px;
+}
+
+div#session-alert {
+	margin-top:10px;
+}
+
+/* Templates */
+
+table.template tr td {
+	border-color: black;
+}
+
+table.template td.tablecell:hover { 
+	background-color: #ECF1EF;
+}
+
+table.template td.disabled {
+	background-color: LightGray ! important;
+}
+
+table.template td.clicked {
+	background-color: #90EE90 ! important;
+}
+
+.table .info-left, .table .info-right {
+	width: 50%;
+}
+
+ .modal-body #row_legal, .modal-body #row_interpretation {
+	width: 90%;
+}
+
+ .modal-body div.technical-info {
+	padding-left: 30px;
+}
+
+ .modal-body table.table.technical {
+	width: 75% !important;
+	margin-left: 100px;
+}
+
+/* Changerequest page */
+
+input.changerequest.btn {
+	float:left;
+	margin-right:20px;
+}
