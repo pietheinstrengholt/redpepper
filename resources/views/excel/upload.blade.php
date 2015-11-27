@@ -6,7 +6,7 @@
 <h2>Upload a new template</h2>
 <h4>Please make use of the upload form below</h4>
 
-{!! Form::open(array('action' => 'TemplateController@uploadexcel', 'id' => 'form', 'files'=> 'true')) !!}
+{!! Form::open(array('action' => 'ExcelController@uploadexcel', 'id' => 'form', 'files'=> 'true')) !!}
 
 <br>
 {!! Form::file('excel') !!}

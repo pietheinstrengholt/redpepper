@@ -70,7 +70,7 @@
 		  <li><a href="<?php echo url('sources'); ?>">Edit sources</a></li>
 		  <li><a href="<?php echo url('changerequests'); ?>">Change requests</a></li>
 		  <li class="divider"></li>
-		  <li><a href="#">Separated link</a></li>
+		  <li><a href="<?php echo url('excel/upload'); ?>">Upload excel template</a></li>
 		  <li class="divider"></li>
 		  <li><a href="#">One more separated link</a></li>
 		</ul>
