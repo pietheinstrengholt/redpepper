@@ -32,6 +32,619 @@ class TemplateController extends Controller
 		return view('templates.show', compact('section', 'template','disabledFields'));
     }
 	
+	public function getExcelColumnNumber($num) 
+	{
+		$numeric = ($num - 1) % 26;
+		$letter = chr(65 + $numeric);
+		$num2 = intval(($num - 1) / 26);
+		if ($num2 > 0) {
+			return getNameFromNumber($num2) . $letter;
+		} else {
+			return $letter;
+		}
+	}	
+	
+	public function uploadexcel(Request $request) 
+	{
+		if ($request->isMethod('post')) {
+		
+			if ($request->hasFile('excel')) {
+				if ($request->file('excel')->isValid()) {
+					$file = array('excel' => Input::file('excel'));
+					//echo "<pre>";
+					//print_r($file);
+					//echo "</pre>";
+								
+					Excel::load(Input::file('excel'), function ($reader) {
+
+						// Getting all results
+						$results = $reader->get();
+
+						//set error to zero
+						$error = 0;
+					
+						foreach($results as $sheet)
+						{
+
+							$worksheetTitle = $sheet->getTitle();							
+							$arraySheet = $sheet->toArray();
+							
+							if ($worksheetTitle == "structure") {
+								echo "<strong>Template structure</strong>";
+								
+								//get column and row count from imported excel
+								$highestRow         = count($arraySheet) + 1;
+								
+								if ($highestRow > 2) {								
+									
+									$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
+									$highestColumnIndex = count($arraySheet[0]) + 1;
+									$nrColumns = ord($highestColumn) - 64;
+									
+									echo "<br><small>The worksheet ".$worksheetTitle." has ";
+									echo $nrColumns . ' columns (A-' . $highestColumn . ') ';
+									echo ' and ' . $highestRow . ' row.</small><br>';
+									//create empty arrays for build structure and for validation
+									$templatestructure = array();
+									$templatecolumns = array();
+									$templaterows = array();
+									//start counting unique id for disabled cells in templatestructure array
+									$disabledcount = 1;
+									
+									//create table
+									echo '<table border="1">';
+
+									for ($row = 1; $row <= $highestRow; ++ $row) {
+										echo '<tr>';
+										for ($col = 1; $col < $highestColumnIndex; ++ $col) {
+
+											//set column letter and retrieve value
+											$columnLetter = $this->getExcelColumnNumber($col);
+											$val = $reader->getExcel()->getSheet()->getCell($columnLetter . $row)->getValue();
+											
+											//1th row is where the column names are stored
+											if ($row == 1) {
+												echo '<td style="background-color: #dff0d8; padding: 5px; font-weight: bold;">' . $val . '</td>';
+												//4th column is where column naming starts
+												if ($col > 4) {
+													$columnid = $col-3;
+													$templatestructure['columns'][$columnid]['column_name'] = $val;
+												}
+											//2nd row is where the column numbers are stored
+											} elseif ($row == 2) {
+												echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
+												//4th column is where column numbering starts
+												if ($col > 4) {
+													$columnid = $col-3;
+													$templatestructure['columns'][$columnid]['column_num'] = $val;
+													//push to array for validation
+													array_push($templatecolumns, $val);
+												}
+											//more than 2 rows and 1st column is where the row number is stored
+											} elseif ($row > 2 && $col == 1) {
+												echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
+												$rowid = $row-2;
+												$templatestructure['rows'][$rowid]['row_num'] = $val;
+												//push to array for validation
+												array_push($templaterows, $val);
+											//more than 2 rows and 2nd column is where the row name is stored
+											} elseif ($row > 2 && $col == 2) {
+												echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
+												$rowid = $row-2;
+												$templatestructure['rows'][$rowid]['row_name'] = $val;
+											//more than 2 rows and 3th column is where the row style is stored
+											} elseif ($row > 2 && $col == 3) {
+												echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
+												$rowid = $row-2;
+												$templatestructure['rows'][$rowid]['row_style'] = $val;
+											//more than 2 rows and 4th column is where the row reference is stored
+											} elseif ($row > 2 && $col == 4) {
+												echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
+												$rowid = $row-2;
+												$templatestructure['rows'][$rowid]['row_reference'] = $val;
+											//more than 2 rows and 2 columns is where the data is stored
+											} elseif ($row > 2 && $col > 4) {
+
+												$newcol = $col-3;
+												$newrow = $row-2;
+												
+												//todo update with cell color
+												$cellcolor = '';
+												
+												//set cell column num and row num based on templatestructure
+												$cell_column_num = $templatestructure['columns'][$newcol]['column_num'];
+												$cell_row_num = $templatestructure['rows'][$newrow]['row_num'];
+												//check if cell color is disabled: = D3D3D3
+												if ($cellcolor == 'D3D3D3' || $val == 'disabled') {
+													echo '<td style="background-color: LightGray ! important; padding: 5px;">disabled</td>';
+													$templatestructure['disabledcells'][$disabledcount]['column_num'] = $cell_column_num;
+													$templatestructure['disabledcells'][$disabledcount]['row_num'] = $cell_row_num;
+													$disabledcount++;
+												} else {
+													echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
+												}
+											}
+											
+											echo '</td>';
+										}
+										echo '</tr>';
+									}
+									
+									echo '</table><br><br>';
+								} else {
+									$error = 1;
+								}
+								
+							}
+							
+							//validatie work sheet with the name column_content
+							if ($worksheetTitle == "column_content") {
+								echo "<strong>Column content</strong><br><br>";
+								//get column and row count from imported excel
+								$highestRow         = count($arraySheet) + 1;
+								
+								if ($highestRow > 1) {
+									
+									$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
+									$highestColumnIndex = count($arraySheet[0]) + 1;
+									$nrColumns = ord($highestColumn) - 64;
+									
+									//start counting unique id for column_content in templatestructure array
+									$columncontentcount = 0;
+									//create table
+									echo '<table border="1" style="max-width: 90%;">';
+									for ($row = 1; $row <= $highestRow; ++ $row) {
+										echo '<tr>';
+										for ($col = 1; $col < $highestColumnIndex; ++ $col) {
+											//set column letter and retrieve value
+											$columnLetter = $this->getExcelColumnNumber($col);
+											$val = $reader->getExcel()->getSheet(1)->getCell($columnLetter . $row)->getValue();
+											//1th row is the heading
+											if ($row == 1) {
+												//validate if heading is correct
+												if ($col == 1 && $val != 'number' || $col == 2 && $val != 'content_type' || $col == 3 && $val != 'content') {
+													echo '<td style="background-color: #FFB2B2; padding: 5px; font-weight: bold;">' . $val . '</td>';
+												} else {
+													echo '<td style="background-color: #dff0d8; padding: 5px; font-weight: bold;">' . $val . '</td>';
+												}
+											} else {
+												//validate if content_type contains legal_desc or interpretation_desc
+												if ($col == 2 && !($val == 'legal_desc' || $val == 'interpretation_desc' || $val == 'reference')) {
+													echo '<td style="background-color: #FFB2B2; padding: 5px;">' . $val . '</td>';
+												//validate if column number exists in template columns
+												} elseif ($col == 1 && !(in_array($val, $templatecolumns))) {
+													echo '<td style="background-color: #FFB2B2; padding: 5px;">' . $val . '</td>';
+													$error = 1;
+												} else {
+													echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
+													//add content to template structure column_content
+													if ($col == 1) {
+														$templatestructure['column_content'][$columncontentcount]['number'] = $val;
+													}
+													if ($col == 2) {
+														$templatestructure['column_content'][$columncontentcount]['content_type'] = $val;
+													}
+													if ($col == 3) {
+														$templatestructure['column_content'][$columncontentcount]['content'] = $val;
+													}
+												}
+											}
+										}
+										$columncontentcount++;
+										echo '</tr>';
+									}
+									echo '</table><br>';
+								}
+							}
+							
+							//validatie work sheet with the name row_content
+							if ($worksheetTitle == "row_content") {
+								echo "<strong>Row content</strong><br><br>";
+								//get column and row count from imported excel
+								$highestRow         = count($arraySheet) + 1;
+								
+								if ($highestRow > 1) {
+									
+									$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
+									$highestColumnIndex = count($arraySheet[0]) + 1;
+									$nrColumns = ord($highestColumn) - 64;
+									//start counting unique id for row_content in templatestructure array
+									$rowcontentcount = 0;
+									//create table
+									echo '<table border="1" style="max-width: 90%;">';
+									for ($row = 1; $row <= $highestRow; ++ $row) {
+										echo '<tr>';
+										for ($col = 1; $col < $highestColumnIndex; ++ $col) {
+											//set column letter and retrieve value
+											$columnLetter = $this->getExcelColumnNumber($col);
+											$val = $reader->getExcel()->getSheet(2)->getCell($columnLetter . $row)->getValue();
+											//1th row is the heading
+											if ($row == 1) {
+												//validate if heading is correct
+												if ($col == 1 && $val != 'number' || $col == 2 && $val != 'content_type' || $col == 3 && $val != 'content') {
+													echo '<td style="background-color: #FFB2B2; padding: 5px; font-weight: bold;">' . $val . '</td>';
+												} else {
+													echo '<td style="background-color: #dff0d8; padding: 5px; font-weight: bold;">' . $val . '</td>';
+												}
+											} else {
+												//validate if content_type contains legal_desc or interpretation_desc
+												if ($col == 2 && !($val == 'legal_desc' || $val == 'interpretation_desc' || $val == 'reference')) {
+													echo '<td style="background-color: #FFB2B2; padding: 5px;">' . $val . '</td>';
+												//validate if row number exists in templaterow
+												} elseif ($col == 1 && !(in_array($val, $templaterows))) {
+													echo '<td style="background-color: #FFB2B2; padding: 5px;">' . $val . '</td>';
+													$error = 1;
+												} else {
+													echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
+													//add content to templatestructure row_content
+													if ($col == 1) {
+														$templatestructure['row_content'][$rowcontentcount]['number'] = $val;
+													}
+													if ($col == 2) {
+														$templatestructure['row_content'][$rowcontentcount]['content_type'] = $val;
+													}
+													if ($col == 3) {
+														$templatestructure['row_content'][$rowcontentcount]['content'] = $val;
+													}
+												}
+											}
+										}
+										$rowcontentcount++;
+										echo '</tr>';
+									}
+									echo '</table><br><br>';
+								}
+							}
+							
+							//validatie work sheet with the name column_content
+							if ($worksheetTitle == "template_content") {
+								echo "<strong>Template content</strong><br><br>";
+								//get column and row count from imported excel
+								$highestRow         = count($arraySheet) + 1;
+								$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
+								$highestColumnIndex = count($arraySheet[0]) + 1;
+								$nrColumns = ord($highestColumn) - 64;
+								//start counting unique id for column_content in templatestructure array
+								$columncontentcount = 0;
+								//create table
+								echo '<table border="1" style="max-width: 90%;">';
+								for ($row = 1; $row <= $highestRow; ++ $row) {
+									echo '<tr>';
+									for ($col = 1; $col < $highestColumnIndex; ++ $col) {
+										//set column letter and retrieve value
+										$columnLetter = $this->getExcelColumnNumber($col);
+										$val = $reader->getExcel()->getSheet(5)->getCell($columnLetter . $row)->getValue();
+										//1th row is the heading
+										if ($row == 1 && $col < 3) {
+											echo '<td style="background-color: #dff0d8; padding: 5px; font-weight: bold;">'. $val .'</td>';
+										}
+										//next rows contain content
+										//check content type
+										if ($row == 2 && $col == 1) {
+											if ($col == 1 && $val != 'template_longdesc') {
+												echo '<td style="background-color: #FFB2B2; padding: 5px;">'. $val .'</td>';
+												$error = 1;
+											} else {
+												echo '<td style="background-color: #FFF; padding: 5px;">'. $val .'</td>';
+											}
+										}
+										//add content to array
+										if ($row == 2 && $col == 2) {
+											echo '<td style="background-color: #FFF; padding: 5px;">'. $val .'</td>';
+											$templatestructure['template_content']['template_longdesc'] = $val;
+										}
+										//check content type
+										if ($row == 3 && $col == 1) {
+											if ($col == 1 && $val != 'frequency_description') {
+												echo '<td style="background-color: #FFB2B2; padding: 5px;">'. $val .'</td>';
+												$error = 1;
+											} else {
+												echo '<td style="background-color: #FFF; padding: 5px;">'. $val .'</td>';
+											}
+										}
+										//add content to array
+										if ($row == 3 && $col == 2) {
+											echo '<td style="background-color: #FFF; padding: 5px;">'. $val .'</td>';
+											$templatestructure['template_content']['frequency_description'] = $val;
+										}
+										//check content type
+										if ($row == 4 && $col == 1) {
+											if ($col == 1 && $val != 'reporting_dates_description') {
+												echo '<td style="background-color: #FFB2B2; padding: 5px;">'. $val .'</td>';
+												$error = 1;
+											} else {
+												echo '<td style="background-color: #FFF; padding: 5px;">'. $val .'</td>';
+											}
+										}
+										//add content to array
+										if ($row == 4 && $col == 2) {
+											echo '<td style="background-color: #FFF; padding: 5px;">'. $val .'</td>';
+											$templatestructure['template_content']['reporting_dates_description'] = $val;
+										}
+										//check content type
+										if ($row == 5 && $col == 1) {
+											if ($col == 1 && $val != 'main_changes_description') {
+												echo '<td style="background-color: #FFB2B2; padding: 5px;">'. $val .'</td>';
+												$error = 1;
+											} else {
+												echo '<td style="background-color: #FFF; padding: 5px;">'. $val .'</td>';
+											}
+										}
+										//add content to array
+										if ($row == 5 && $col == 2) {
+											echo '<td style="background-color: #FFF; padding: 5px;">'. $val .'</td>';
+											$templatestructure['template_content']['main_changes_description'] = $val;
+										}
+										//check content type
+										if ($row == 6 && $col == 1) {
+											if ($col == 1 && $val != 'links_other_temp_description') {
+												echo '<td style="background-color: #FFB2B2; padding: 5px;">'. $val .'</td>';
+												$error = 1;
+											} else {
+												echo '<td style="background-color: #FFF; padding: 5px;">'. $val .'</td>';
+											}
+										}
+										//add content to array
+										if ($row == 6 && $col == 2) {
+											echo '<td style="background-color: #FFF; padding: 5px;">'. $val .'</td>';
+											$templatestructure['template_content']['links_other_temp_description'] = $val;
+										}
+										//check content type
+										if ($row == 7 && $col == 1) {
+											if ($col == 1 && $val != 'process_and_organisation_description') {
+												echo '<td style="background-color: #FFB2B2; padding: 5px;">'. $val .'</td>';
+												$error = 1;
+											} else {
+												echo '<td style="background-color: #FFF; padding: 5px;">'. $val .'</td>';
+											}
+										}
+										//add content to array
+										if ($row == 7 && $col == 2) {
+											echo '<td style="background-color: #FFF; padding: 5px;">'. $val .'</td>';
+											$templatestructure['template_content']['process_and_organisation_description'] = $val;
+										}
+									}
+									echo '</tr>';
+								}
+								echo '</table><br><br>';
+							}
+
+							if ($worksheetTitle == "sourcing") {
+
+								$type_results = TechnicalType::select('id', 'type_name')->get();
+								
+								//create empty array to lookup types
+								$type_array = array();
+								
+								//restructure array from database results
+								if (!empty($type_results)) {
+									foreach($type_results as $type_result) {
+										$type_id = $type_result['id'];
+										$type_array[$type_id] = $type_result['type_name'];
+									}
+								}
+
+								$source_results = TechnicalSource::select('id', 'source_name')->get();
+								
+								//create empty array to lookup sources
+								$source_array = array();
+								
+								//restructure array from database results
+								if (!empty($source_results)) {
+									foreach($source_results as $source_result) {
+										$source_id = $source_result['id'];
+										$source_array[$source_id] = $source_result['source_name'];
+									}
+								}
+							
+								echo "<strong>Sourcing content</strong><br><br>";
+								//get column and row count from imported excel
+								$highestRow         = count($arraySheet) + 1;
+								
+								if ($highestRow > 1) {
+								
+									$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
+									$highestColumnIndex = count($arraySheet[0]) + 1;
+									$nrColumns = ord($highestColumn) - 64;
+									//start counting unique id for field_content in templatestructure array
+									$sourcingcontentcount = 0;
+									//create table
+									echo '<table border="1" style="max-width: 90%;">';
+									for ($row = 1; $row <= $highestRow; ++ $row) {
+										echo '<tr>';
+										for ($col = 1; $col < $highestColumnIndex; ++ $col) {
+											//set column letter and retrieve value
+											$columnLetter = $this->getExcelColumnNumber($col);
+											$val = $reader->getExcel()->getSheet(4)->getCell($columnLetter . $row)->getValue();
+											//1th row is the heading
+											if ($row == 1) {
+												if ($col == 1 && $val != 'column_number' || $col == 2 && $val != 'row_number' || $col == 3 && $val != 'type' || $col == 4 && $val != 'source' || $col == 5 && $val != 'value' || $col == 6 && $val != 'description') {
+													echo '<td style="background-color: #FFB2B2; padding: 5px; font-weight: bold;">' . $val . '</td>';
+												} else {
+													echo '<td style="background-color: #dff0d8; padding: 5px; font-weight: bold;">' . $val . '</td>';
+												}
+											} else {
+												//validate if column number exists in templatecolumns
+												if ($col == 1 && !(in_array($val, $templatecolumns))) {
+													echo '<td style="background-color: #FFB2B2; padding: 5px;">' . $val . '</td>';
+													$error = 1;
+												//validate if row number exists in templaterow
+												} elseif ($col == 2 && !(in_array($val, $templaterows))) {
+													echo '<td style="background-color: #FFB2B2; padding: 5px;">' . $val . '</td>';
+													$error = 1;
+												} elseif ($col == 3 && !(in_array($val, $type_array))) {
+													echo '<td style="background-color: #FFB2B2; padding: 5px;">' . $val . '</td>';
+													$error = 1;
+												} elseif ($col == 4 && !(in_array($val, $source_array))) {
+													echo '<td style="background-color: #FFB2B2; padding: 5px;">' . $val . '</td>';
+													$error = 1;
+												} else {
+													echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
+													//add content to templatestructure sourcing
+													if ($col == 1) {
+														$templatestructure['sourcing'][$sourcingcontentcount]['column_number'] = $val;
+													}
+													if ($col == 2) {
+														$templatestructure['sourcing'][$sourcingcontentcount]['row_number'] = $val;
+													}
+													if ($col == 3) {
+														$key = array_search($val, $type_array);
+														$templatestructure['sourcing'][$sourcingcontentcount]['type'] = $key;
+													}
+													if ($col == 4) {
+														$key = array_search($val, $source_array);
+														$templatestructure['sourcing'][$sourcingcontentcount]['source'] = $key;
+													}
+													
+													if ($col == 5) {
+														$templatestructure['sourcing'][$sourcingcontentcount]['value'] = $val;
+													}
+													if ($col == 6) {
+														$templatestructure['sourcing'][$sourcingcontentcount]['description'] = $val;
+													}
+												}
+											}
+										}
+										$sourcingcontentcount++;
+										echo '</tr>';
+									}
+									echo '</table><br><br>';
+								}
+							}
+
+							if ($worksheetTitle == "field_content") {
+								echo "<strong>Field content</strong><br><br>";
+								//get column and row count from imported excel
+								$highestRow         = count($arraySheet) + 1;
+								
+								if ($highestRow > 1) {
+									
+									$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
+									$highestColumnIndex = count($arraySheet[0]) + 1;
+									$nrColumns = ord($highestColumn) - 64;
+									//start counting unique id for field_content in templatestructure array
+									$fieldcontentcount = 0;
+									//create table
+									echo '<table border="1" style="max-width: 90%;">';
+									for ($row = 1; $row <= $highestRow; ++ $row) {
+										echo '<tr>';
+										for ($col = 1; $col < $highestColumnIndex; ++ $col) {
+											//set column letter and retrieve value
+											$columnLetter = $this->getExcelColumnNumber($col);
+											$val = $reader->getExcel()->getSheet(3)->getCell($columnLetter . $row)->getValue();
+											//1th row is the heading
+											if ($row == 1) {
+												if ($col == 1 && $val != 'column_number' || $col == 2 && $val != 'row_number' || $col == 3 && $val != 'content_type' || $col == 4 && $val != 'content') {
+													echo '<td style="background-color: #FFB2B2; padding: 5px; font-weight: bold;">' . $val . '</td>';
+												} else {
+													echo '<td style="background-color: #dff0d8; padding: 5px; font-weight: bold;">' . $val . '</td>';
+												}
+											} else {
+												//validate if content_type contains legal_desc or interpretation_desc
+												if ($col == 3 && !($val == 'legal_desc' || $val == 'interpretation_desc' || $val == 'property1' || $val == 'property2')) {
+													echo '<td style="background-color: #FFB2B2; padding: 5px;">' . $val . '</td>';
+													$error = 1;
+												//validate if column number exists in templatecolumns
+												} elseif ($col == 1 && !(in_array($val, $templatecolumns))) {
+													echo '<td style="background-color: #FFB2B2; padding: 5px;">' . $val . '</td>';
+													$error = 1;
+												//validate if row number exists in templaterow
+												} elseif ($col == 2 && !(in_array($val, $templaterows))) {
+													echo '<td style="background-color: #FFB2B2; padding: 5px;">' . $val . '</td>';
+													$error = 1;
+												} else {
+													echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
+													//add content to templatestructure field_content
+													if ($col == 1) {
+														$templatestructure['field_content'][$fieldcontentcount]['column_number'] = $val;
+													}
+													if ($col == 2) {
+														$templatestructure['field_content'][$fieldcontentcount]['row_number'] = $val;
+													}
+													if ($col == 3) {
+														$templatestructure['field_content'][$fieldcontentcount]['content_type'] = $val;
+													}
+													if ($col == 4) {
+														$templatestructure['field_content'][$fieldcontentcount]['content'] = $val;
+													}
+												}
+											}
+										}
+										$fieldcontentcount++;
+										echo '</tr>';
+									}
+									echo '</table><br><br>';
+								}
+							}							
+							
+							
+							
+						}
+						
+						if ($error == 0) {
+							if (!empty($templatestructure)) {
+								//Restructuring of the array is needed because legal_desc, interpretation_desc and reference are stored in the database on a single line
+								//The code below joins the legal_desc, interpretation_desc and reference for the row and column lines
+								if (!empty($templatestructure['column_content'])) {
+									foreach($templatestructure['column_content'] as $content_c) {
+										//number could be blank if row of column cannot be found in template structure
+										if (isset($content_c['number'])) {
+											$c_number = 'C-' . $content_c['number'];
+											$c_content_type = $content_c['content_type'];
+											if (!isset($templatestructure['requirements'][$c_number][$c_content_type])) {
+												$templatestructure['requirements'][$c_number][$c_content_type] = $content_c['content'];
+											} else {
+												echo "<p style=\"color:red;\"><strong>Error: </strong>" . $c_number . ' - ' . $c_content_type . ' already exists!</p>';
+												$error = 1;
+											}
+										}
+									}
+								}
+								if (!empty($templatestructure['row_content'])) {
+									foreach($templatestructure['row_content'] as $content_r) {
+										//number could be blank if row of column cannot be found in template structure
+										if (isset($content_r['number'])) {
+											$r_number = 'R-' . $content_r['number'];
+											$r_content_type = $content_r['content_type'];
+											if (!isset($templatestructure['requirements'][$r_number][$r_content_type])) {
+												$templatestructure['requirements'][$r_number][$r_content_type] = $content_r['content'];
+											} else {
+												echo "<p style=\"color:red;\"><strong>Error: </strong>" . $r_number . ' - ' . $r_content_type . ' already exists!</p>';
+												$error = 1;
+											}
+										}
+									}
+								}
+							}
+						}
+						
+						echo "<pre>";
+						print_r($templatecolumns);
+						echo "</pre>";	
+
+						echo "<pre>";
+						print_r($templaterows);
+						echo "</pre>";
+						
+						echo "<pre>";
+						print_r($templatestructure);
+						echo "</pre>";
+						
+						
+
+						
+						
+					});
+
+				}
+			
+			}
+
+
+			//return Redirect::to('/template/upload');
+		}
+	}	
+	
 	//function to disabled fields
 	public function getDisabledFields(Template $template)
 	{
@@ -503,86 +1116,6 @@ class TemplateController extends Controller
 	public function uploadform() 
 	{	
 		return view('templates.upload');
-	}
-	
-	public function getExcelColumnNumber($let) 
-	{
-		// Iterate through each letter, starting at the back to increment the value
-		for ($num = 0, $i = 0; $let != ''; $let = substr($let, 0, -1), $i++)
-			$num += (ord(substr($let, -1)) - 65) * pow(26, $i);
-
-		return $num;
-	}
-	
-	public function uploadexcel(Request $request) 
-	{
-		if ($request->isMethod('post')) {
-		
-			if ($request->hasFile('excel')) {
-				if ($request->file('excel')->isValid()) {
-					$file = array('excel' => Input::file('excel'));
-					echo "<pre>";
-					print_r($file);
-					echo "</pre>";
-					
-					Excel::load(Input::file('excel'), function ($reader) {
-
-						// Getting all results
-						$results = $reader->get();
-
-					
-						foreach($results as $sheet)
-						{
-							// get sheet title
-							echo $sheet->getTitle() . "<br>";
-							$worksheetTitle = $sheet->getTitle();
-							
-							$arraySheet = $sheet->toArray();
-							
-							echo "<pre>";
-							print_r($arraySheet);
-							echo "</pre>";		
-							
-							echo count($arraySheet) . "nummer of rijen<br>";
-							echo count($arraySheet[0]) . "nummer of kolommen<br>";
-														
-							$sheet->cell('A1', function($cell) {
-								// manipulate the range of cells
-								echo $cell->getValue();
-							});
-														
-							// Loop through all rows
-							$sheet->each(function($row) {
-							
-								echo '<table border="1">';
-								echo "<tr>";
-							
-								//$arrayRow = $row->toArray();
-
-								
-								//echo "<pre>";
-								//print_r($row);
-								//echo "</pre>";
-								
-								echo "</tr>";
-
-							});
-							
-							
-						}
-						
-					
-
-
-					});
-
-				}
-			
-			}
-
-
-			//return Redirect::to('/template/upload');
-		}
 	}
 	
 	//function to add new template
