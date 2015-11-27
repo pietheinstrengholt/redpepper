@@ -54,7 +54,6 @@ class ChangeRequestController extends Controller
 	
 	public function edit(ChangeRequest $changerequest)
 	{
-		$changerequest->test = $this->compare('test', 'test aap');
 		
 		//get current content
 		$current_requirement_row = Requirement::where('template_id', $changerequest->template_id)->where('field_id', 'R-' . $changerequest->row_number)->first();
@@ -200,6 +199,7 @@ class ChangeRequestController extends Controller
 				$draftfield->save();
 			}			
 			
+			//redirect back to template page
 			return Redirect::route('sections.templates.show', [$request->input('section_id'), $request->input('template_id')])->with('message', 'Change request submitted for review.');
 
 		}

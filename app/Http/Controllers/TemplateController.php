@@ -20,6 +20,8 @@ use Illuminate\Http\Request;
 use Input;
 use Redirect;
 use Maatwebsite\Excel\Facades\Excel;
+use Validator;
+use Session;
 
 class TemplateController extends Controller
 {
@@ -497,6 +499,90 @@ class TemplateController extends Controller
 
 		})->download('xlsx');	
 		
+	}
+	public function uploadform() 
+	{	
+		return view('templates.upload');
+	}
+	
+	public function getExcelColumnNumber($let) 
+	{
+		// Iterate through each letter, starting at the back to increment the value
+		for ($num = 0, $i = 0; $let != ''; $let = substr($let, 0, -1), $i++)
+			$num += (ord(substr($let, -1)) - 65) * pow(26, $i);
+
+		return $num;
+	}
+	
+	public function uploadexcel(Request $request) 
+	{
+		if ($request->isMethod('post')) {
+		
+			if ($request->hasFile('excel')) {
+				if ($request->file('excel')->isValid()) {
+					$file = array('excel' => Input::file('excel'));
+					echo "<pre>";
+					print_r($file);
+					echo "</pre>";
+					
+					Excel::load(Input::file('excel'), function ($reader) {
+
+						// Getting all results
+						$results = $reader->get();
+
+					
+						foreach($results as $sheet)
+						{
+							// get sheet title
+							echo $sheet->getTitle() . "<br>";
+							$worksheetTitle = $sheet->getTitle();
+							
+							$arraySheet = $sheet->toArray();
+							
+							echo "<pre>";
+							print_r($arraySheet);
+							echo "</pre>";		
+							
+							echo count($arraySheet) . "nummer of rijen<br>";
+							echo count($arraySheet[0]) . "nummer of kolommen<br>";
+														
+							$sheet->cell('A1', function($cell) {
+								// manipulate the range of cells
+								echo $cell->getValue();
+							});
+														
+							// Loop through all rows
+							$sheet->each(function($row) {
+							
+								echo '<table border="1">';
+								echo "<tr>";
+							
+								//$arrayRow = $row->toArray();
+
+								
+								//echo "<pre>";
+								//print_r($row);
+								//echo "</pre>";
+								
+								echo "</tr>";
+
+							});
+							
+							
+						}
+						
+					
+
+
+					});
+
+				}
+			
+			}
+
+
+			//return Redirect::to('/template/upload');
+		}
 	}
 	
 	//function to add new template
