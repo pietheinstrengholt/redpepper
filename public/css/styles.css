@@ -1,6 +1,13 @@
 
 /* General & Master blade template */
 
+@media (min-width: 1400px) {
+  .container {
+    width: 1300px;
+	/* margin-left: 2%; */
+  }
+}
+
 body {
 	line-height: 1.25em ! important;
 }
