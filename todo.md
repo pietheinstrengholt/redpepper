@@ -3,7 +3,7 @@ TODO
 
 * user model
 * user rights
-* history table for excel import
+* export history table
 * line breaks in pop-up content
 * template structure screen
 * import csv files
