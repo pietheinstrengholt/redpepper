@@ -8,13 +8,19 @@ use App\TemplateRow;
 use App\TemplateColumn;
 use App\TemplateField;
 use App\Requirement;
+
 use App\Technical;
 use App\TechnicalType;
 use App\TechnicalSource;
+
 use App\ChangeRequest;
 use App\DraftField;
 use App\DraftRequirement;
 use App\DraftTechnical;
+
+use App\HistoryRequirement;
+use App\HistoryTechnical;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Input;
@@ -647,6 +653,21 @@ class ExcelController extends Controller
 									$templatefield->property = $field_content['content_type'];
 									$templatefield->content = $field_content['content'];
 									$templatefield->save();
+									
+									//submit new content to archive table
+									$HistoryRequirement = new HistoryRequirement;
+									$HistoryRequirement->changerequest_id = '0';
+									$HistoryRequirement->template_id = $template->id;
+									$HistoryRequirement->row_name = $field_content['row_number'];
+									$HistoryRequirement->column_name = $field_content['column_number'];
+									$HistoryRequirement->content_type = $field_content['content_type'];
+									$HistoryRequirement->content = $field_content['content'];
+									$HistoryRequirement->change_type = 'excel';
+									$HistoryRequirement->created_by = 1;
+									$HistoryRequirement->submission_date = null;
+									$HistoryRequirement->approved_by = 1;
+									$HistoryRequirement->save();									
+									
 								}
 							}
 							
@@ -659,6 +680,21 @@ class ExcelController extends Controller
 									$templaterequirement->content_type = $requirement['content_type'];
 									$templaterequirement->content = $requirement['content'];
 									$templaterequirement->save();
+									
+									//submit new content to archive table
+									$HistoryRequirement = new HistoryRequirement;
+									$HistoryRequirement->changerequest_id = '0';
+									$HistoryRequirement->template_id = $template->id;
+									$HistoryRequirement->row_name = $field_content['row_number'];
+									$HistoryRequirement->column_name = '';
+									$HistoryRequirement->content_type = $field_content['content_type'];
+									$HistoryRequirement->content = $field_content['content'];
+									$HistoryRequirement->change_type = 'excel';
+									$HistoryRequirement->created_by = 1;
+									$HistoryRequirement->submission_date = null;
+									$HistoryRequirement->approved_by = 1;
+									$HistoryRequirement->save();										
+									
 								}
 							}
 							
@@ -671,6 +707,21 @@ class ExcelController extends Controller
 									$templaterequirement->content_type = $requirement['content_type'];
 									$templaterequirement->content = $requirement['content'];
 									$templaterequirement->save();
+									
+									//submit new content to archive table
+									$HistoryRequirement = new HistoryRequirement;
+									$HistoryRequirement->changerequest_id = '0';
+									$HistoryRequirement->template_id = $template->id;
+									$HistoryRequirement->row_name = '';
+									$HistoryRequirement->column_name = $field_content['column_number'];
+									$HistoryRequirement->content_type = $field_content['content_type'];
+									$HistoryRequirement->content = $field_content['content'];
+									$HistoryRequirement->change_type = 'excel';
+									$HistoryRequirement->created_by = 1;
+									$HistoryRequirement->submission_date = null;
+									$HistoryRequirement->approved_by = 1;
+									$HistoryRequirement->save();										
+									
 								}
 							}							
 							
@@ -691,13 +742,30 @@ class ExcelController extends Controller
 								foreach($templatestructure['sourcing'] as $sourcing) {
 									$technical = new Technical;
 									$technical->template_id = $template->id;
+									$technical->row_num = $sourcing['row_number'];
+									$technical->col_num = $sourcing['column_number'];									
 									$technical->source_id = $sourcing['source'];
 									$technical->type_id = $sourcing['type'];
 									$technical->content = $sourcing['value'];
-									$technical->row_num = $sourcing['row_number'];
-									$technical->col_num = $sourcing['column_number'];
 									$technical->description = $sourcing['description'];
 									$technical->save();
+									
+									//submit new content to archive table
+									$HistoryTechnical = new HistoryTechnical;
+									$HistoryTechnical->changerequest_id = '0';
+									$HistoryTechnical->template_id = $template->id;
+									$HistoryTechnical->row_name = $sourcing['row_number'];
+									$HistoryTechnical->column_name = $sourcing['column_number'];
+									$HistoryTechnical->type_id = $sourcing['type'];
+									$HistoryTechnical->source_id = $sourcing['source'];
+									$HistoryTechnical->content = $sourcing['value'];
+									$HistoryTechnical->description = $sourcing['description'];
+									$HistoryTechnical->change_type = 'excel';
+									$HistoryTechnical->created_by = 1;
+									$HistoryTechnical->submission_date = null;
+									$HistoryTechnical->approved_by = 1;
+									$HistoryTechnical->save();
+									
 								}
 							}
 						}
