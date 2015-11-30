@@ -11,9 +11,20 @@ use Redirect;
 
 class SectionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-		$sections = Section::orderBy('section_name', 'asc')->get();
+	
+		if ($request->input('group') == "corep") {
+			$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 1)->get();
+		} elseif ($request->input('group') == "finrep") {
+			$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 2)->get();
+		} elseif ($request->input('group') == "liquidity") {
+			$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 3)->get();
+		} elseif ($request->input('group') == "other") {
+			$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 4)->get();
+		} else {
+			$sections = Section::orderBy('section_name', 'asc')->get();
+		}
 		return view('sections.index', compact('sections'));
     }
 	

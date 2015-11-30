@@ -6,7 +6,7 @@
 	<h4>Please make a selection of one of the following templates</h4>
  
     @if ( !$sections->count() )
-        No sections found in the database!
+        No sections found in the database!<br><br>
     @else
 		<table style="margin-bottom:20px;" class="table section-table dialog table-striped" border="1">
 

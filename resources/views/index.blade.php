@@ -29,10 +29,10 @@
 			<div class="col-md-3 col-sm-6 hero-feature">
 				<div class="thumbnail">
 					<div class="caption">
-						<h3 class="center"><a href="section-overview.php?subject_id=1">COREP</a></h3>
+						<h3 class="center"><a href="<?php echo url('sections'); ?>?group=corep">COREP</a></h3>
 						<p class="center">Common Reporting (COREP) is the standardized reporting framework issued by the EBA for the Capital Requirements Directive reporting.</p>
 						<p class="p-more-info">
-							<a href="section-overview.php?subject_id=1" class="btn btn-danger">More info</a>
+							<a href="<?php echo url('sections'); ?>?group=corep" class="btn btn-danger">More info</a>
 						</p>
 					</div>
 				</div>
@@ -41,10 +41,10 @@
 			<div class="col-md-3 col-sm-6 hero-feature">
 				<div class="thumbnail">
 					<div class="caption">
-						<h3 class="center"><a href="section-overview.php?subject_id=2">FINREP</a></h3>
+						<h3 class="center"><a href="<?php echo url('sections'); ?>?group=finrep">FINREP</a></h3>
 						<p class="center">FINREP reporting is a standardized EU-wide framework for reporting financial (accounting) data.<br><br></p>
 						<p class="p-more-info">
-							<a href="section-overview.php?subject_id=2" class="btn btn-primary">More info</a>
+							<a href="<?php echo url('sections'); ?>?group=finrep" class="btn btn-primary">More info</a>
 						</p>
 					</div>
 				</div>
@@ -53,10 +53,10 @@
 			<div class="col-md-3 col-sm-6 hero-feature">
 				<div class="thumbnail">
 					<div class="caption">
-						<h3 class="center"><a href="section-overview.php?subject_id=3">Liquidity reports</a></h3>
+						<h3 class="center"><a href="<?php echo url('sections'); ?>?group=liquidity">Liquidity reports</a></h3>
 						<p class="center">Liquidity covers the Liquidity coverage ratio templates, the stable funding templates and other liquidity reports.<br><br></p>
 						<p class="p-more-info">
-							<a href="section-overview.php?subject_id=3" class="btn btn-success">More info</a>
+							<a href="<?php echo url('sections'); ?>?group=liquidity" class="btn btn-success">More info</a>
 						</p>
 					</div>
 				</div>
@@ -65,10 +65,10 @@
 			<div class="col-md-3 col-sm-6 hero-feature">
 				<div class="thumbnail">
 					<div class="caption">
-						<h3 class="center"><a href="section-overview.php?subject_id=0">Other reports</a></h3>
+						<h3 class="center"><a href="<?php echo url('sections'); ?>?group=other">Other reports</a></h3>
 						<p class="center">This section covers all other regulatory reports, e.g. issues by the local NSA (National Supervisory Authority).<br><br></p>
 						<p class="p-more-info">
-							<a href="section-overview.php?subject_id=0" class="btn btn-warning">More info</a>
+							<a href="<?php echo url('sections'); ?>?group=other" class="btn btn-warning">More info</a>
 						</p>
 					</div>
 				</div>

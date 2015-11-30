@@ -6,7 +6,7 @@
 	<h4>Please make a selection of one of the following types</h4>
  
     @if ( !$changerequests->count() )
-        No types found in the database!
+        No types found in the database!<br><br>
     @else
 		<table class="section-table table table-condensed sortable" border="1">
 		
