@@ -28,7 +28,7 @@ class TemplateController extends Controller
     public function show(Section $section, Template $template)
     {
 		$disabledFields = $this->getDisabledFields($template);
-		return view('templates.show', compact('section', 'template','disabledFields'));
+		return view('templates.show', compact('section', 'template', 'disabledFields'));
     }
 	
 	//function to disabled fields
@@ -54,7 +54,8 @@ class TemplateController extends Controller
 	//function to edit template
 	public function edit(Section $section, Template $template)
 	{
-		return view('templates.edit', compact('section', 'template'));
+		$sections = Section::orderBy('section_name', 'asc')->get();
+		return view('templates.edit', compact('sections', 'section', 'template'));
 	}
 	
 	//function to add new template

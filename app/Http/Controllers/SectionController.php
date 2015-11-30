@@ -19,7 +19,8 @@ class SectionController extends Controller
 	
     public function show(Section $section)
     {
-		return view('sections.show', compact('section'));
+		$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->get();
+		return view('sections.show', compact('section', 'templates'));
     }
 
 	public function edit(Section $section)
