@@ -32,13 +32,13 @@
 	</dl>
 
 	<dl class="dl-horizontal" style="margin-right: 30px;">
-	<dt>Legal standard:</dt>
-	<dd><textarea form="form" name="field_legal_desc" class="form-control" rows="5" id="field_legal_desc" style="width: 70%;">{{ $field_legal_desc['content'] }}</textarea></dd>
+	<dt>Regulation:</dt>
+	<dd><textarea form="form" name="field_regulation" class="form-control" rows="5" id="field_regulation" style="width: 70%;">{{ $field_regulation['content'] }}</textarea></dd>
 	</dl>
 
 	<dl class="dl-horizontal" style="margin-right: 30px;">
 	<dt>Interpretation:</dt>
-	<dd><textarea form="form" name="field_interpretation_desc" class="form-control" rows="5" id="field_interpretation_desc" style="width: 70%;">{{ $field_legal_desc['content'] }}</textarea></dd>
+	<dd><textarea form="form" name="field_interpretation" class="form-control" rows="5" id="field_interpretation" style="width: 70%;">{{ $field_interpretation['content'] }}</textarea></dd>
 	</dl>
 
 	</td>
@@ -56,18 +56,18 @@
 		<td class="info-left im-content">
 			<h4><b>Name:</b></h4>
 			<div rows="1" id="rowname">{{ $row->row_description }}</div>
-			<h4><b>Legal standard:</b></h4>
-			<textarea form="form" name="requirement_row_legal_desc" class="form-control" rows="6" id="requirement_row_legal_desc" style="width: 90%;">{{ $requirement_row->legal_desc }}</textarea>
+			<h4><b>Regulation:</b></h4>
+			<textarea form="form" name="regulation_row" class="form-control" rows="6" id="regulation_row" style="width: 90%;">{{ $regulation_row->content }}</textarea>
 			<h4><b>Interpretation:</b></h4>
-			<textarea form="form" name="requirement_row_interpretation_desc" class="form-control" rows="5" id="requirement_row_interpretation_desc" style="width: 90%;">{{ $requirement_row->interpretation_desc }}</textarea>
+			<textarea form="form" name="interpretation_row" class="form-control" rows="5" id="interpretation_row" style="width: 90%;">{{ $interpretation_row->content }}</textarea>
 		</td>
 		<td class="info-right im-content">
 			<h4><b>Name:</b></h4>
 			<div rows="1" id="colname">{{ $column->column_description }}</div>
-			<h4><b>Legal standard:</b></h4>
-			<textarea form="form" name="requirement_column_legal_desc" class="form-control" rows="6" id="requirement_column_legal_desc" style="width: 90%;">{{ $requirement_column->legal_desc }}</textarea>
+			<h4><b>Regulation:</b></h4>
+			<textarea form="form" name="regulation_column" class="form-control" rows="6" id="regulation_column" style="width: 90%;">{{ $regulation_column->content }}</textarea>
 			<h4><b>Interpretation:</b></h4>
-			<textarea form="form" name="requirement_column_interpretation_desc" class="form-control" rows="5" id="requirement_column_interpretation_desc" style="width: 90%;">{{ $requirement_column->interpretation_desc }}</textarea>
+			<textarea form="form" name="interpretation_column" class="form-control" rows="5" id="interpretation_column" style="width: 90%;">{{ $interpretation_column->content }}</textarea>
 		</td>
 	</tr>
 	</table>

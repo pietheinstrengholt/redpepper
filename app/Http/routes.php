@@ -59,3 +59,5 @@ Route::get('uploadtemplate', 'ExcelController@upload');
 
 Route::get('/excel/upload', 'ExcelController@uploadform');
 Route::post('/excel/uploadexcel', 'ExcelController@uploadexcel');
+
+Route::post('/changerequests/uploadexcel', 'ChangeRequestController@update');

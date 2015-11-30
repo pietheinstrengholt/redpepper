@@ -1,6 +1,8 @@
 <!-- /resources/views/changerequests/edit.blade.php -->
 @extends('layouts.master')
 
+@section('content')
+
 <head>
 <style type="text/css">
 ins {
@@ -67,11 +69,10 @@ code {
 </style>
 </head>
 
-<div style="margin-top:80px; margin-left: 10%; margin-right: 10%;">
 <h2>Review Changerequest</h2>
 
 <!-- cell content -->
-@if ($changerequest->field_property1 !== '' || $changerequest->field_property2 !== '' || $changerequest->legal_desc !== '' || $changerequest->interpretation_desc !== '')
+@if ($changerequest->field_property1 !== '' || $changerequest->field_property2 !== '' || $changerequest->field_regulation !== '' || $changerequest->field_interpretation !== '')
 	<table style="border: 1px solid #ddd;" class="table dialog table-striped">
 	<tr>
 	<td class="info-header"><h4><b>Specific Information: {{ $template_row->row_name }} - {{ $template_column->column_name }}</b></h4></td>
@@ -89,16 +90,16 @@ code {
 		<dd><div class="content-box" style="float:left;">{!! $changerequest->field_property2 !!}</div></dd>
 		</dl>
 	@endif
-	@if ($changerequest->legal_desc !== '')
+	@if ($changerequest->field_regulation !== '')
 		<dl class="dl-horizontal" style="margin-right: 30px;">
 		<dt>Legal standard:</dt>
-		<dd><div class="content-box" style="float:left;">{!! $changerequest->legal_desc !!}</div></dd>
+		<dd><div class="content-box" style="float:left;">{!! $changerequest->field_regulation !!}</div></dd>
 		</dl>
 	@endif
-	@if ($changerequest->interpretation_desc !== '')
+	@if ($changerequest->field_interpretation !== '')
 		<dl class="dl-horizontal" style="margin-right: 30px;">
 		<dt>Interpretation:</dt>
-		<dd><div class="content-box" style="float:left;">{!! $changerequest->interpretation_desc !!}</div></dd>
+		<dd><div class="content-box" style="float:left;">{!! $changerequest->field_interpretation !!}</div></dd>
 		</dl>
 	@endif
 	</td>
@@ -118,17 +119,17 @@ code {
 		<h4><b>Name:</b></h4>
 		<div rows="1" id="rowname">{{ $template_row->row_description }}</div>
 		<h4><b>Legal standard:</b></h4>
-		<div rows="7" id="row_legal">{!! $changerequest->legal_requirement_row !!}</div>
+		<div rows="7" id="row_legal">{!! $changerequest->regulation_row !!}</div>
 		<h4><b>Interpretation:</b></h4>
-		<div rows="6" id="row_interpretation">{!! $changerequest->interpretation_requirement_row !!}</div>
+		<div rows="6" id="row_interpretation">{!! $changerequest->interpretation_row !!}</div>
 	</td>
 	<td class="info-right im-content">
 		<h4><b>Name:</b></h4>
 		<div rows="1" id="colname">{{ $template_column->column_description }}</div>
 		<h4><b>Legal standard:</b></h4>
-		<div rows="7" id="column_legal">{!! $changerequest->legal_requirement_column !!}</div>
+		<div rows="7" id="column_legal">{!! $changerequest->regulation_column !!}</div>
 		<h4><b>Interpretation:</b></h4>
-		<div rows="6" id="row_interpretation">{!! $changerequest->interpretation_requirement_column !!}</div>
+		<div rows="6" id="row_interpretation">{!! $changerequest->interpretation_column !!}</div>
 	</td>
 </tr>
 </table>
@@ -142,17 +143,24 @@ code {
 
 <textarea form="form" name="comment" style="width: 600px;" class="form-control" rows="3" id="user" class="comment" placeholder="Please enter a comment about this change"></textarea>
 
-{!! Form::model($changerequest, ['method' => 'PATCH', 'route' => ['changerequests.update', $changerequest->id]]) !!}
+{!! Form::open(array('action' => 'ChangeRequestController@update', 'id' => 'form')) !!}
 <div class="form-group">
-	{!! Form::submit('Approve changerequest', ['class' => 'changerequest btn btn-primary']) !!}
+<button type="submit" class="changerequest btn btn-primary">Approve changerequest</button>
+<input type="hidden" name="_token" value="{!! csrf_token() !!}">	
+<input type="hidden" name="changerequest_id" value="{!! $changerequest->id !!}">	
+<input type="hidden" name="change_type" value="approve">	
 </div>
 {!! Form::close() !!}
 
-{!! Form::model($changerequest, ['method' => 'PATCH', 'route' => ['changerequests.update', $changerequest->id]]) !!}
+{!! Form::open(array('action' => 'ChangeRequestController@update', 'id' => 'form')) !!}
 <div class="form-group">
-	{!! Form::submit('Reject changerequest', ['class' => 'changerequest btn btn-danger']) !!}
+<button type="submit" class="changerequest btn btn-danger">Reject changerequest</button>
+<input type="hidden" name="_token" value="{!! csrf_token() !!}">
+<input type="hidden" name="changerequest_id" value="{!! $changerequest->id !!}">	
+<input type="hidden" name="change_type" value="reject">
 </div>
 {!! Form::close() !!}
 
-</div>
+@endsection
 
+@stop

@@ -61,7 +61,7 @@ table.template td.clicked {
 
 /* Changerequest page */
 
-input.changerequest.btn {
+button.changerequest.btn {
 	float:left;
 	margin-right:20px;
 }

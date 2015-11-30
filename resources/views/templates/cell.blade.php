@@ -18,16 +18,16 @@
 	<dd><div class="content-box" style="float:left;">{{ $field_property2{0}->content }}</div></dd>
 	</dl>
 @endif
-@if ( $field_legal_desc->count() )
+@if ( $field_regulation->count() )
 	<dl class="dl-horizontal" style="margin-right: 30px;">
-	<dt>Legal standard:</dt>
-	<dd><div class="content-box" style="float:left;">{{ $field_legal_desc{0}->content }}</div></dd>
+	<dt>Regulation:</dt>
+	<dd><div class="content-box" style="float:left;">{{ $field_regulation{0}->content }}</div></dd>
 	</dl>
 @endif
-@if ( $field_interpretation_desc->count() )
+@if ( $field_interpretation->count() )
 	<dl class="dl-horizontal" style="margin-right: 30px;">
 	<dt>Interpretation:</dt>
-	<dd><div class="content-box" style="float:left;">{{ $field_interpretation_desc{0}->content }}</div></dd>
+	<dd><div class="content-box" style="float:left;">{{ $field_interpretation{0}->content }}</div></dd>
 	</dl>
 @endif
 </td>
@@ -44,18 +44,18 @@
 	<td class="info-left im-content">
 		<h4><b>Name:</b></h4>
 		<div rows="1" id="rowname">{{ $row->row_description }}</div>
-		<h4><b>Legal standard:</b></h4>
-		<div rows="7" id="row_regulation">{{ $requirement_row['legal_desc'] }}</div>
+		<h4><b>Regulation:</b></h4>
+		<div rows="7" id="row_regulation">{{ $regulation_row['content'] }}</div>
 		<h4><b>Interpretation:</b></h4>
-		<div rows="6" id="row_interpretation">{{ $requirement_row['interpretation_desc'] }}</div>
+		<div rows="6" id="row_interpretation">{{ $interpretation_row['content'] }}</div>
 	</td>
 	<td class="info-right im-content">
 		<h4><b>Name:</b></h4>
 		<div rows="1" id="colname">{{ $column->column_description }}</div>
-		<h4><b>Legal standard:</b></h4>
-		<div rows="7" id="column_regulation">{{ $requirement_column['legal_desc'] }}</div>
+		<h4><b>Regulation:</b></h4>
+		<div rows="7" id="column_regulation">{{ $regulation_column['content'] }}</div>
 		<h4><b>Interpretation:</b></h4>
-		<div rows="6" id="column_interpretation">{{ $requirement_column['interpretation_desc'] }}</div>
+		<div rows="6" id="column_interpretation">{{ $interpretation_column['content'] }}</div>
 	</td>
 </tr>
 </table>
