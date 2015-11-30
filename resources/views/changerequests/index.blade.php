@@ -24,23 +24,40 @@
 		</tr>
 		
 		@foreach( $changerequests as $changerequest )
-		<tr>
-			<td>{{ $changerequest->id }}</td>
-			<td>{{ $changerequest->template->template_name }}</td>
-			<td>{{ $changerequest->creator_id }}</td>
-			<td></td>
-			<td>{{ $changerequest->template->section->section_name }}</td>
-			<td>{{ $changerequest->created_at }}</td>
-			<td>{{ $changerequest->updated_at }}</td>
-			<td>{{ $changerequest->status }}</td>
-			<td>{{ $changerequest->comment }}</td>
-			{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('changerequests.destroy', $changerequest->id))) !!}
-			<td>
-				{!! link_to_route('changerequests.edit', 'Review', array($changerequest->id), array('class' => 'btn btn-info btn-xs')) !!}
-				{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
-			</td>
-		{!! Form::close() !!}
-		</tr>
+		
+		@if ( $changerequest->status == "pending" )
+			<tr>
+				<td>{{ $changerequest->id }}</td>
+				<td>{{ $changerequest->template->template_name }}</td>
+				<td>{{ $changerequest->creator_id }}</td>
+				<td></td>
+				<td>{{ $changerequest->template->section->section_name }}</td>
+				<td>{{ $changerequest->created_at }}</td>
+				<td>{{ $changerequest->updated_at }}</td>
+				<td>{{ $changerequest->status }}</td>
+				<td>{{ $changerequest->comment }}</td>
+				{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('changerequests.destroy', $changerequest->id))) !!}
+				<td>
+					{!! link_to_route('changerequests.edit', 'Review', array($changerequest->id), array('class' => 'btn btn-info btn-xs')) !!}
+					{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
+				</td>
+				{!! Form::close() !!}
+			</tr>
+		@else
+			<tr style="background-color:#F5F5F5;">
+				<td>{{ $changerequest->id }}</td>
+				<td>{{ $changerequest->template->template_name }}</td>
+				<td>{{ $changerequest->creator_id }}</td>
+				<td></td>
+				<td>{{ $changerequest->template->section->section_name }}</td>
+				<td>{{ $changerequest->created_at }}</td>
+				<td>{{ $changerequest->updated_at }}</td>
+				<td>{{ $changerequest->status }}</td>
+				<td>{{ $changerequest->comment }}</td>
+				<td></td>
+			</tr>
+		@endif
+		
 		@endforeach
 
 		</table>
