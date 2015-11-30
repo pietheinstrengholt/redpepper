@@ -45,17 +45,17 @@
 		<h4><b>Name:</b></h4>
 		<div rows="1" id="rowname">{{ $row->row_description }}</div>
 		<h4><b>Legal standard:</b></h4>
-		<div rows="7" id="row_legal">{{ $requirement_row->legal_desc }}</div>
+		<div rows="7" id="row_regulation">{{ $requirement_row['legal_desc'] }}</div>
 		<h4><b>Interpretation:</b></h4>
-		<div rows="6" id="row_interpretation">{{ $requirement_row->interpretation_desc }}</div>
+		<div rows="6" id="row_interpretation">{{ $requirement_row['interpretation_desc'] }}</div>
 	</td>
 	<td class="info-right im-content">
 		<h4><b>Name:</b></h4>
 		<div rows="1" id="colname">{{ $column->column_description }}</div>
 		<h4><b>Legal standard:</b></h4>
-		<div rows="7" id="column_legal">{{ $requirement_column->legal_desc }}</div>
+		<div rows="7" id="column_regulation">{{ $requirement_column['legal_desc'] }}</div>
 		<h4><b>Interpretation:</b></h4>
-		<div rows="6" id="row_interpretation">{{ $requirement_column->interpretation_desc }}</div>
+		<div rows="6" id="column_interpretation">{{ $requirement_column['interpretation_desc'] }}</div>
 	</td>
 </tr>
 </table>

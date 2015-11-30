@@ -42,8 +42,12 @@ table.template td.clicked {
 	width: 50%;
 }
 
- .modal-body #row_legal, .modal-body #row_interpretation {
+ .modal-body #row_regulation, .modal-body #row_interpretation {
 	width: 90%;
+}
+
+.modal-body #row_regulation, .modal-body #row_interpretation,  .modal-body #column_regulation,  .modal-body #column_interpretation {
+	min-height:20px;
 }
 
  .modal-body div.technical-info {
