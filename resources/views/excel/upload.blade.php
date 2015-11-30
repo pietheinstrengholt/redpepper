@@ -13,6 +13,11 @@
 <p class="errors">{!!$errors->first('excel')!!}</p>
 
 <div class="form-group">
+	<label for="caption">Section name</label>
+    {!! Form::select('section_id', $sections->lists('section_name', 'id'), null, ['id' => 'section_id', 'class' => 'form-control']) !!}
+</div>
+
+<div class="form-group">
 	<label for="caption">Template name</label>
 	<input type="text" class="form-control" name="template_name" value="">
 </div>

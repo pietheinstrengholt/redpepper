@@ -45,9 +45,8 @@ class ExcelController extends Controller
 			if ($request->hasFile('excel')) {
 				if ($request->file('excel')->isValid()) {
 					$file = array('excel' => Input::file('excel'));
-					//echo "<pre>";
-					//print_r($file);
-					//echo "</pre>";
+					
+					echo "<h2>Excel import section_id: " . $request->input('section_id') . "</h2>";
 					
 					if ($request->has('template_name')) {
 						echo "<h2>Excel import template: " . $request->input('template_name') . "</h2>";
@@ -57,10 +56,10 @@ class ExcelController extends Controller
 					}
 					
 					if ($request->has('template_description')) {
-						echo "<h3>Template description: " . $request->input('template_name') . "</h3>";
+						echo "<h3>Template description: " . $request->input('template_description') . "</h3>";
 					}
 								
-					Excel::load(Input::file('excel'), function ($reader) {
+					Excel::load(Input::file('excel'), function ($reader) use ($request) {
 
 						// Getting all results
 						$results = $reader->get();
@@ -623,21 +622,143 @@ class ExcelController extends Controller
 							}
 						}
 						
-						echo "<pre>";
-						print_r($templatecolumns);
-						echo "</pre>";	
+						//add new template to database
+						if ($request->has('section_id')) {
+							$template = new Template;
+							$template->section_id = $request->input('section_id');
+							$template->template_name = $request->input('template_name');
+							$template->template_shortdesc = $request->input('template_description');
 
-						echo "<pre>";
-						print_r($templaterows);
-						echo "</pre>";
+							//add additional template content
+							if (!empty($templatestructure['template_content'])) {
+								$template->template_longdesc = $templatestructure['template_content']['template_longdesc'];
+								$template->frequency_description = $templatestructure['template_content']['frequency_description'];
+								$template->reporting_dates_description = $templatestructure['template_content']['reporting_dates_description'];
+								$template->main_changes_description = $templatestructure['template_content']['main_changes_description'];
+								$template->links_other_temp_description = $templatestructure['template_content']['links_other_temp_description'];
+								$template->process_and_organisation_description = $templatestructure['template_content']['process_and_organisation_description'];
+							}
+							
+							$template->visible = 'No';
+							$template->save();
+							
+							//add template column to database
+							if (!empty($templatestructure['columns'])) {
+								$i = 1;
+								foreach($templatestructure['columns'] as $columnline) {
+									$column = new TemplateColumn;
+									$column->template_id = $template->id;
+									$column->column_num = $i;
+									$column->column_name = $columnline['column_num'];
+									$column->column_description = $columnline['column_name'];
+									$column->save();
+									$i++;
+								}
+							//a template needs a least one column
+							} else {
+								exit();
+							}
+							
+							//add template rows to database
+							if (!empty($templatestructure['rows'])) {
+								$i = 1;
+								foreach($templatestructure['rows'] as $rowline) {
+									$row = new TemplateRow;
+									$row->template_id = $template->id;
+									$row->row_num = $i;
+									$row->row_name = $rowline['row_num'];
+									$row->row_description = $rowline['row_name'];
+									$row->row_reference = $rowline['row_reference'];
+									$row->save();
+									$i++;
+								}
+							//a template needs a least one row
+							} else {
+								exit();
+							}
+							
+							//add template fields to database
+							if (!empty($templatestructure['field_content'])) {
+								foreach($templatestructure['field_content'] as $field_content) {
+									$templatefield = new TemplateField;
+									$templatefield->template_id = $template->id;
+									$templatefield->row_name = $field_content['row_number'];
+									$templatefield->column_name = $field_content['column_number'];
+									$templatefield->property = $field_content['content_type'];
+									$templatefield->content = $field_content['content'];
+									$templatefield->save();
+								}
+							}
+							
+							//add template requirements to database
+							if (!empty($templatestructure['requirements'])) {
+								foreach($templatestructure['requirements'] as $key => $requirement) {
+									if (!empty($requirement['reference'])) {
+										$field_refence = $requirement['reference'];
+									} else {
+										$field_refence = NULL;
+									}
+									if (!empty($requirement['legal_desc'])) {
+										$field_legal_desc = $requirement['legal_desc'];
+									} else {
+										$field_legal_desc = NULL;
+									}
+									if (!empty($requirement['interpretation_desc'])) {
+										$field_interpretation_desc = $requirement['interpretation_desc'];
+									} else {
+										$field_interpretation_desc = NULL;
+									}
+									$templaterequirement = new Requirement;
+									$templaterequirement->template_id = $template->id;
+									$templaterequirement->field_id = $key;
+									$templaterequirement->reference = $field_refence;
+									$templaterequirement->legal_desc = $field_legal_desc;
+									$templaterequirement->interpretation_desc = $field_interpretation_desc;
+									$templaterequirement->save();
+								}
+							}
+							
+							//add disabled cells to database
+							if (!empty($templatestructure['disabledcells'])) {
+								foreach($templatestructure['disabledcells'] as $disabledcell) {
+									$templatefield = new TemplateField;
+									$templatefield->template_id = $template->id;
+									$templatefield->row_name = $disabledcell['row_num'];
+									$templatefield->column_name = $disabledcell['column_num'];
+									$templatefield->property = 'disabled';
+									$templatefield->save();
+								}
+							}
+							
+							//add technical content to database
+							if (!empty($templatestructure['sourcing'])) {
+								foreach($templatestructure['sourcing'] as $sourcing) {
+									$technical = new Technical;
+									$technical->template_id = $template->id;
+									$technical->source_id = $sourcing['source'];
+									$technical->type_id = $sourcing['type'];
+									$technical->content = $sourcing['value'];
+									$technical->row_num = $sourcing['row_number'];
+									$technical->col_num = $sourcing['column_number'];
+									$technical->description = $sourcing['description'];
+									$technical->save();
+								}
+							}
+						}
 						
-						echo "<pre>";
-						print_r($templatestructure);
-						echo "</pre>";
-						
-						
+						//echo "<pre>";
+						//print_r($templatecolumns);
+						//echo "</pre>";	
 
+						//echo "<pre>";
+						//print_r($templaterows);
+						//echo "</pre>";
 						
+						//echo "<pre>";
+						//print_r($templatestructure);
+						//echo "</pre>";
+						
+						//echo $template->id;
 						
 					});
 
@@ -645,8 +766,7 @@ class ExcelController extends Controller
 			
 			}
 
-
-			//return Redirect::to('/template/upload');
+			return Redirect::to('/sections');
 		}
 	}	
 
@@ -1096,8 +1216,9 @@ class ExcelController extends Controller
 		
 	}
 	public function uploadform() 
-	{	
-		return view('excel.upload');
+	{
+		$sections = Section::all();
+		return view('excel.upload', compact('sections'));
 	}
 	
 }
