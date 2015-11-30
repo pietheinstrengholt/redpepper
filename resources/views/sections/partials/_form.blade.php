@@ -25,7 +25,7 @@
 
 	<div class="form-group">
 		{!! Form::label('Visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
-		<div class="col-sm-6" style="margin-top: 10px;">
+		<div class="col-sm-6" style="margin-top: 11px;">
 		@if ( $section->visible == "True" )
 			{!! Form::checkbox('visible', 'True', true) !!}
 		@else

@@ -57,10 +57,17 @@
 		{!! Form::textarea('process_and_organisation_description', null, ['class' => 'form-control', 'rows' => '4']) !!}
 		</div>
 	</div>
+	
+	<div class="form-group">
+		{!! Form::label('section_id', 'Section:', array('class' => 'col-sm-3 control-label')) !!}
+		<div class="col-sm-6">
+		{!! Form::select('section_id', $sections->lists('section_name', 'id'), null, ['id' => 'section_id', 'class' => 'form-control']) !!}
+		</div>
+	</div>
 
 	<div class="form-group">
 		{!! Form::label('Visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
-		<div class="col-sm-6" style="margin-top: 10px;">
+		<div class="col-sm-6" style="margin-top: 11px;">
 		@if ( $section->visible == "True" )
 			{!! Form::checkbox('visible', 'True', true) !!}
 		@else
