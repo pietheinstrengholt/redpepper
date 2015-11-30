@@ -213,7 +213,7 @@ class ExcelController extends Controller
 												}
 											} else {
 												//validate if content_type contains legal_desc or interpretation_desc
-												if ($col == 2 && !($val == 'legal_desc' || $val == 'interpretation_desc' || $val == 'reference')) {
+												if ($col == 2 && !($val == 'regulation' || $val == 'interpretation' || $val == 'reference')) {
 													echo '<td style="background-color: #FFB2B2; padding: 5px;">' . $val . '</td>';
 												//validate if column number exists in template columns
 												} elseif ($col == 1 && !(in_array($val, $templatecolumns))) {
@@ -272,7 +272,7 @@ class ExcelController extends Controller
 												}
 											} else {
 												//validate if content_type contains legal_desc or interpretation_desc
-												if ($col == 2 && !($val == 'legal_desc' || $val == 'interpretation_desc' || $val == 'reference')) {
+												if ($col == 2 && !($val == 'regulation' || $val == 'interpretation' || $val == 'reference')) {
 													echo '<td style="background-color: #FFB2B2; padding: 5px;">' . $val . '</td>';
 												//validate if row number exists in templaterow
 												} elseif ($col == 1 && !(in_array($val, $templaterows))) {
@@ -545,7 +545,7 @@ class ExcelController extends Controller
 												}
 											} else {
 												//validate if content_type contains legal_desc or interpretation_desc
-												if ($col == 3 && !($val == 'legal_desc' || $val == 'interpretation_desc' || $val == 'property1' || $val == 'property2')) {
+												if ($col == 3 && !($val == 'regulation' || $val == 'interpretation' || $val == 'property1' || $val == 'property2')) {
 													echo '<td style="background-color: #FFB2B2; padding: 5px;">' . $val . '</td>';
 													$error = 1;
 												//validate if column number exists in templatecolumns
@@ -579,47 +579,12 @@ class ExcelController extends Controller
 									}
 									echo '</table><br><br>';
 								}
-							}							
-							
-							
-							
-						}
-						
-						if ($error == 0) {
-							if (!empty($templatestructure)) {
-								//Restructuring of the array is needed because legal_desc, interpretation_desc and reference are stored in the database on a single line
-								//The code below joins the legal_desc, interpretation_desc and reference for the row and column lines
-								if (!empty($templatestructure['column_content'])) {
-									foreach($templatestructure['column_content'] as $content_c) {
-										//number could be blank if row of column cannot be found in template structure
-										if (isset($content_c['number'])) {
-											$c_number = 'C-' . $content_c['number'];
-											$c_content_type = $content_c['content_type'];
-											if (!isset($templatestructure['requirements'][$c_number][$c_content_type])) {
-												$templatestructure['requirements'][$c_number][$c_content_type] = $content_c['content'];
-											} else {
-												echo "<p style=\"color:red;\"><strong>Error: </strong>" . $c_number . ' - ' . $c_content_type . ' already exists!</p>';
-												$error = 1;
-											}
-										}
-									}
-								}
-								if (!empty($templatestructure['row_content'])) {
-									foreach($templatestructure['row_content'] as $content_r) {
-										//number could be blank if row of column cannot be found in template structure
-										if (isset($content_r['number'])) {
-											$r_number = 'R-' . $content_r['number'];
-											$r_content_type = $content_r['content_type'];
-											if (!isset($templatestructure['requirements'][$r_number][$r_content_type])) {
-												$templatestructure['requirements'][$r_number][$r_content_type] = $content_r['content'];
-											} else {
-												echo "<p style=\"color:red;\"><strong>Error: </strong>" . $r_number . ' - ' . $r_content_type . ' already exists!</p>';
-												$error = 1;
-											}
-										}
-									}
-								}
 							}
+						}				
+						
+						if ($error == 1) {
+							echo "Error: an error occurred while processing the template file.";
+							exit();
 						}
 						
 						//add new template to database
@@ -642,42 +607,37 @@ class ExcelController extends Controller
 							$template->visible = 'No';
 							$template->save();
 							
+							if (empty($templatestructure['columns']) || empty($templatestructure['rows'])) {
+								echo "Error: a template needs a least one column or one row!";
+								exit();							
+							}
+							
 							//add template column to database
-							if (!empty($templatestructure['columns'])) {
-								$i = 1;
-								foreach($templatestructure['columns'] as $columnline) {
-									$column = new TemplateColumn;
-									$column->template_id = $template->id;
-									$column->column_num = $i;
-									$column->column_name = $columnline['column_num'];
-									$column->column_description = $columnline['column_name'];
-									$column->save();
-									$i++;
-								}
-							//a template needs a least one column
-							} else {
-								exit();
+							$i = 1;
+							foreach($templatestructure['columns'] as $columnline) {
+								$column = new TemplateColumn;
+								$column->template_id = $template->id;
+								$column->column_num = $i;
+								$column->column_name = $columnline['column_num'];
+								$column->column_description = $columnline['column_name'];
+								$column->save();
+								$i++;
 							}
 							
 							//add template rows to database
-							if (!empty($templatestructure['rows'])) {
-								$i = 1;
-								foreach($templatestructure['rows'] as $rowline) {
-									$row = new TemplateRow;
-									$row->template_id = $template->id;
-									$row->row_num = $i;
-									$row->row_name = $rowline['row_num'];
-									$row->row_description = $rowline['row_name'];
-									$row->row_reference = $rowline['row_reference'];
-									$row->save();
-									$i++;
-								}
-							//a template needs a least one row
-							} else {
-								exit();
+							$i = 1;
+							foreach($templatestructure['rows'] as $rowline) {
+								$row = new TemplateRow;
+								$row->template_id = $template->id;
+								$row->row_num = $i;
+								$row->row_name = $rowline['row_num'];
+								$row->row_description = $rowline['row_name'];
+								$row->row_reference = $rowline['row_reference'];
+								$row->save();
+								$i++;
 							}
 							
-							//add template fields to database
+							//add template field content to database
 							if (!empty($templatestructure['field_content'])) {
 								foreach($templatestructure['field_content'] as $field_content) {
 									$templatefield = new TemplateField;
@@ -690,33 +650,29 @@ class ExcelController extends Controller
 								}
 							}
 							
-							//add template requirements to database
-							if (!empty($templatestructure['requirements'])) {
-								foreach($templatestructure['requirements'] as $key => $requirement) {
-									if (!empty($requirement['reference'])) {
-										$field_refence = $requirement['reference'];
-									} else {
-										$field_refence = NULL;
-									}
-									if (!empty($requirement['legal_desc'])) {
-										$field_legal_desc = $requirement['legal_desc'];
-									} else {
-										$field_legal_desc = NULL;
-									}
-									if (!empty($requirement['interpretation_desc'])) {
-										$field_interpretation_desc = $requirement['interpretation_desc'];
-									} else {
-										$field_interpretation_desc = NULL;
-									}
+							//add template row content to database
+							if (!empty($templatestructure['row_content'])) {
+								foreach($templatestructure['row_content'] as $key => $requirement) {
 									$templaterequirement = new Requirement;
 									$templaterequirement->template_id = $template->id;
-									$templaterequirement->field_id = $key;
-									$templaterequirement->reference = $field_refence;
-									$templaterequirement->legal_desc = $field_legal_desc;
-									$templaterequirement->interpretation_desc = $field_interpretation_desc;
+									$templaterequirement->field_id = 'R-' . $requirement['number'];
+									$templaterequirement->content_type = $requirement['content_type'];
+									$templaterequirement->content = $requirement['content'];
 									$templaterequirement->save();
 								}
 							}
+							
+							//add template column content to database
+							if (!empty($templatestructure['column_content'])) {
+								foreach($templatestructure['column_content'] as $key => $requirement) {
+									$templaterequirement = new Requirement;
+									$templaterequirement->template_id = $template->id;
+									$templaterequirement->field_id = 'C-' . $requirement['number'];
+									$templaterequirement->content_type = $requirement['content_type'];
+									$templaterequirement->content = $requirement['content'];
+									$templaterequirement->save();
+								}
+							}							
 							
 							//add disabled cells to database
 							if (!empty($templatestructure['disabledcells'])) {
@@ -745,18 +701,6 @@ class ExcelController extends Controller
 								}
 							}
 						}
-						
-						//echo "<pre>";
-						//print_r($templatecolumns);
-						//echo "</pre>";	
-
-						//echo "<pre>";
-						//print_r($templaterows);
-						//echo "</pre>";
-						
-						//echo "<pre>";
-						//print_r($templatestructure);
-						//echo "</pre>";
 						
 						//echo $template->id;
 						
@@ -919,44 +863,17 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1:C1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
 				
-				$column_contents_legal  = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'C-%')->where('legal_desc', '!=' , '')->orderBy('field_id', 'asc')->get();
+				$column_content  = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'C-%')->where('content', '!=' , '')->orderBy('field_id', 'asc')->get();
 				
 				$columncontentcount = 2;
 				//add content to excel
-				if (!empty($column_contents_legal )) {
-					foreach($column_contents_legal  as $key => $value) {
+				if (!empty($column_content )) {
+					foreach($column_content  as $key => $value) {
 						$column_name = trim($value['field_id']);
 						$column_name = ltrim($column_name, 'C-');
 						$sheet->setCellValueExplicit('A' . $columncontentcount, $column_name)
-						->setCellValueExplicit('B' . $columncontentcount, 'legal_desc')
-						->setCellValueExplicit('C' . $columncontentcount, $value['legal_desc']);
-						$columncontentcount++;
-					}
-				}
-				
-				$column_contents_inter = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'C-%')->where('interpretation_desc', '!=' , '')->orderBy('field_id', 'asc')->get();
-
-				//add content to excel
-				if (!empty($column_contents_inter)) {
-					foreach($column_contents_inter as $key => $value) {
-						$column_name = trim($value['field_id']);
-						$column_name = ltrim($column_name, 'C-');
-						$sheet->setCellValueExplicit('A' . $columncontentcount, $column_name)
-						->setCellValueExplicit('B' . $columncontentcount, 'interpretation_desc')
-						->setCellValueExplicit('C' . $columncontentcount, $value['interpretation_desc']);
-						$columncontentcount++;
-					}
-				}
-				
-				$column_contents_ref = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'C-%')->where('reference', '!=' , '')->orderBy('field_id', 'asc')->get();
-				//add content to excel
-				if (!empty($column_contents_ref)) {
-					foreach($column_contents_ref as $key => $value) {
-						$column_name = trim($value['field_id']);
-						$column_name = ltrim($column_name, 'C-');
-						$sheet->setCellValueExplicit('A' . $columncontentcount, $column_name)
-						->setCellValueExplicit('B' . $columncontentcount, 'reference')
-						->setCellValueExplicit('C' . $columncontentcount, $value['reference']);
+						->setCellValueExplicit('B' . $columncontentcount, $value['content_type'])
+						->setCellValueExplicit('C' . $columncontentcount, $value['content']);
 						$columncontentcount++;
 					}
 				}
@@ -988,46 +905,18 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1:C1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
 				
-				$row_contents_legal  = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'R-%')->where('legal_desc', '!=' , '')->orderBy('field_id', 'asc')->get();
+				$row_contents  = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'R-%')->where('content', '!=' , '')->orderBy('field_id', 'asc')->get();
 				
 				$rowcontentcount = 2;
 
 				//add content to excel
-				if (!empty($row_contents_legal)) {
-					foreach($row_contents_legal as $key => $value) {
+				if (!empty($row_contents)) {
+					foreach($row_contents as $key => $value) {
 						$row_name = trim($value['field_id']);
 						$row_name = ltrim($row_name, 'R-');
 						$sheet->setCellValueExplicit('A' . $rowcontentcount, $row_name)
-						->setCellValueExplicit('B' . $rowcontentcount, 'legal_desc')
-						->setCellValueExplicit('C' . $rowcontentcount, $value['legal_desc']);
-						$rowcontentcount++;
-					}
-				}
-				
-				$row_contents_inter = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'R-%')->where('interpretation_desc', '!=' , '')->orderBy('field_id', 'asc')->get();
-				
-				//add content to excel
-				if (!empty($row_contents_inter)) {
-					foreach($row_contents_inter as $key => $value) {
-						$row_name = trim($value['field_id']);
-						$row_name = ltrim($row_name, 'R-');
-						$sheet->setCellValueExplicit('A' . $rowcontentcount, $row_name)
-						->setCellValueExplicit('B' . $rowcontentcount, 'interpretation_desc')
-						->setCellValueExplicit('C' . $rowcontentcount, $value['interpretation_desc']);
-						$rowcontentcount++;
-					}
-				}
-				
-				$row_contents_ref = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'R-%')->where('reference', '!=' , '')->orderBy('field_id', 'asc')->get();
-				
-				//add content to excel
-				if (!empty($row_contents_ref)) {
-					foreach($row_contents_ref as $key => $value) {
-						$row_name = trim($value['field_id']);
-						$row_name = ltrim($row_name, 'R-');
-						$sheet->setCellValueExplicit('A' . $rowcontentcount, $row_name)
-						->setCellValueExplicit('B' . $rowcontentcount, 'reference')
-						->setCellValueExplicit('C' . $rowcontentcount, $value['reference']);
+						->setCellValueExplicit('B' . $rowcontentcount, $value['content_type'])
+						->setCellValueExplicit('C' . $rowcontentcount, $value['content']);
 						$rowcontentcount++;
 					}
 				}
@@ -1055,7 +944,6 @@ class ExcelController extends Controller
 				$sheet->getStyle('D1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('D')->setWidth(30);
 
-				
 				$sheet->cells('A1:D1', function($cells) {
 					$cells->setBackground('#18bc9c');
 				});
