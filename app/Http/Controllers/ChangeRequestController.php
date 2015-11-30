@@ -31,7 +31,7 @@ class ChangeRequestController extends Controller
 
     public function index()
     {
-		$changerequests = ChangeRequest::all();
+		$changerequests = ChangeRequest::orderBy('created_at', 'desc')->get();
 		return view('changerequests.index', compact('changerequests'));
     }
 	
@@ -127,18 +127,18 @@ class ChangeRequestController extends Controller
 			if ($request->has('changerequest_id')) {
 			
 				//update change request
-				if ($request->input('change_type') == "reject") {
+				if ($request->input('change_type') == "rejected") {
 					$changerequest_id = $request->input('changerequest_id');
 					$ChangeRequest = ChangeRequest::find($changerequest_id);
-					ChangeRequest::where('id', $changerequest_id)->update(['status' => 'reject']);			
+					ChangeRequest::where('id', $changerequest_id)->update(['status' => 'rejected']);			
 					
 				}
 				
 				//update change request
-				if ($request->input('change_type') == "approve") {
+				if ($request->input('change_type') == "approved") {
 					$changerequest_id = $request->input('changerequest_id');
 					$ChangeRequest = ChangeRequest::find($changerequest_id);
-					ChangeRequest::where('id', $changerequest_id)->update(['status' => 'approve']);
+					ChangeRequest::where('id', $changerequest_id)->update(['status' => 'approved']);
 					
 					//get draft content
 					$DraftRegulation_row = DraftRequirement::where('changerequest_id', $changerequest_id)->where('field_id', 'R-' . $ChangeRequest->row_number)->where('content_type', 'regulation')->first();
@@ -338,16 +338,9 @@ class ChangeRequestController extends Controller
 				}				
 				
 			}
-	
-			echo "<pre>";
-			print_r($_POST);
-			echo "</pre>";
 		
 		}
-		
-		//$input = array_except(Input::all(), '_method');
-		//$type->update($input);
-		//return Redirect::route('changerequests.show', $type->slug)->with('message', 'Changerequest updated.');
+		return Redirect::route('changerequests.index')->with('message', 'Changerequest updated.');
 	}
 	 
 	public function destroy(ChangeRequest $type)
@@ -365,7 +358,7 @@ class ChangeRequestController extends Controller
 			$changerequest->row_number = $request->input('row_name');
 			$changerequest->column_number = $request->input('column_name');
 			$changerequest->creator_id = 1;
-			$changerequest->status = 'draft';
+			$changerequest->status = 'pending';
 			$changerequest->save();
 
 			if ($request->has('regulation_row')) {

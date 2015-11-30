@@ -148,7 +148,7 @@ code {
 <button type="submit" class="changerequest btn btn-primary">Approve changerequest</button>
 <input type="hidden" name="_token" value="{!! csrf_token() !!}">	
 <input type="hidden" name="changerequest_id" value="{!! $changerequest->id !!}">	
-<input type="hidden" name="change_type" value="approve">	
+<input type="hidden" name="change_type" value="approved">	
 </div>
 {!! Form::close() !!}
 
@@ -157,7 +157,7 @@ code {
 <button type="submit" class="changerequest btn btn-danger">Reject changerequest</button>
 <input type="hidden" name="_token" value="{!! csrf_token() !!}">
 <input type="hidden" name="changerequest_id" value="{!! $changerequest->id !!}">	
-<input type="hidden" name="change_type" value="reject">
+<input type="hidden" name="change_type" value="rejected">
 </div>
 {!! Form::close() !!}
 
