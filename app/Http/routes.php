@@ -20,6 +20,7 @@ Route::model('sections', 'Section');
 Route::model('templates', 'Template');
 Route::model('sources', 'TechnicalSource');
 Route::model('types', 'TechnicalType');
+Route::model('departments', 'Department');
 Route::model('changerequests', 'ChangeRequest');
  
 // Use IDs in URLs
@@ -39,6 +40,10 @@ Route::bind('types', function($value, $route) {
 	return App\TechnicalType::whereId($value)->first();
 });
 
+Route::bind('departments', function($value, $route) {
+	return App\Department::whereId($value)->first();
+});
+
 Route::bind('changerequests', function($value, $route) {
 	return App\ChangeRequest::whereId($value)->first();
 });
@@ -47,6 +52,8 @@ Route::resource('sections', 'SectionController');
 Route::resource('sections.templates', 'TemplateController');
 Route::resource('sources', 'TechnicalSourceController');
 Route::resource('types', 'TechnicalTypeController');
+Route::resource('departments', 'DepartmentController');
+
 Route::resource('changerequests', 'ChangeRequestController');
 
 //getCellContent api call
