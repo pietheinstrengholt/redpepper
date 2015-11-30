@@ -13,7 +13,7 @@ class SectionController extends Controller
 {
     public function index()
     {
-		$sections = Section::all();
+		$sections = Section::orderBy('section_name', 'asc')->get();
 		return view('sections.index', compact('sections'));
     }
 	
@@ -35,7 +35,7 @@ class SectionController extends Controller
 	public function store()
 	{
 		$input = Input::all();
-		Section::create( $input );
+		Section::create($input);
 		return Redirect::route('sections.index')->with('message', 'Section created');
 	}
 	 
