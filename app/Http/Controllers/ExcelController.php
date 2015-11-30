@@ -654,12 +654,14 @@ class ExcelController extends Controller
 	public function export($id)
 	{
 	
-		Excel::create('Filename', function($excel) {
+		$template = Template::find($id);
+	
+		Excel::create($template->template_name, function($excel) use ($id)  {
 
 			// Our first sheet
-			$excel->sheet('structure', function($sheet) {
+			$excel->sheet('structure', function($sheet) use ($id) {
 			
-				$template = Template::find(13);
+				$template = Template::find($id);
 			
 				$sheet->SetCellValue('A1', 'Row#');
 				$sheet->getStyle('A1')->getFont()->setBold(true);
@@ -754,7 +756,8 @@ class ExcelController extends Controller
 						$structurerowid = $structurerowid + 2;
 						$structurecolumnid = $structurecolumnid + 3;
 						//convert columnid to letter
-						$columnLetter = PHPExcel_Cell::stringFromColumnIndex($structurecolumnid);
+						//$columnLetter = PHPExcel_Cell::stringFromColumnIndex($structurecolumnid);
+						$columnLetter = $this->getExcelColumnNumber($structurecolumnid);
 						//grey color
 						//add disabled to cell, otherwise the import won't pick it up
 						$sheet->setCellValueExplicit($columnLetter . $structurerowid, 'disabled');
@@ -772,7 +775,7 @@ class ExcelController extends Controller
 			});
 
 			// Our second sheet
-			$excel->sheet('column_content', function($sheet) {
+			$excel->sheet('column_content', function($sheet) use ($id) {
 			
 				//set first column for column_content
 				//Column part
@@ -796,7 +799,7 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1:C1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
 				
-				$column_contents_legal  = Requirement::where('template_id', 13)->where('field_id', 'LIKE', 'C-%')->where('legal_desc', '!=' , '')->orderBy('field_id', 'asc')->get();
+				$column_contents_legal  = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'C-%')->where('legal_desc', '!=' , '')->orderBy('field_id', 'asc')->get();
 				
 				$columncontentcount = 2;
 				//add content to excel
@@ -811,7 +814,7 @@ class ExcelController extends Controller
 					}
 				}
 				
-				$column_contents_inter = Requirement::where('template_id', 13)->where('field_id', 'LIKE', 'C-%')->where('interpretation_desc', '!=' , '')->orderBy('field_id', 'asc')->get();
+				$column_contents_inter = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'C-%')->where('interpretation_desc', '!=' , '')->orderBy('field_id', 'asc')->get();
 
 				//add content to excel
 				if (!empty($column_contents_inter)) {
@@ -825,7 +828,7 @@ class ExcelController extends Controller
 					}
 				}
 				
-				$column_contents_ref = Requirement::where('template_id', 13)->where('field_id', 'LIKE', 'C-%')->where('reference', '!=' , '')->orderBy('field_id', 'asc')->get();
+				$column_contents_ref = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'C-%')->where('reference', '!=' , '')->orderBy('field_id', 'asc')->get();
 				//add content to excel
 				if (!empty($column_contents_ref)) {
 					foreach($column_contents_ref as $key => $value) {
@@ -841,7 +844,7 @@ class ExcelController extends Controller
 			});
 			
 			// Our third sheet
-			$excel->sheet('row_content', function($sheet) {
+			$excel->sheet('row_content', function($sheet) use ($id) {
 			
 				//set first column for column_content
 				//Column part
@@ -865,7 +868,7 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1:C1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
 				
-				$row_contents_legal  = Requirement::where('template_id', 13)->where('field_id', 'LIKE', 'R-%')->where('legal_desc', '!=' , '')->orderBy('field_id', 'asc')->get();
+				$row_contents_legal  = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'R-%')->where('legal_desc', '!=' , '')->orderBy('field_id', 'asc')->get();
 				
 				$rowcontentcount = 2;
 
@@ -881,7 +884,7 @@ class ExcelController extends Controller
 					}
 				}
 				
-				$row_contents_inter = Requirement::where('template_id', 13)->where('field_id', 'LIKE', 'R-%')->where('interpretation_desc', '!=' , '')->orderBy('field_id', 'asc')->get();
+				$row_contents_inter = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'R-%')->where('interpretation_desc', '!=' , '')->orderBy('field_id', 'asc')->get();
 				
 				//add content to excel
 				if (!empty($row_contents_inter)) {
@@ -895,7 +898,7 @@ class ExcelController extends Controller
 					}
 				}
 				
-				$row_contents_ref = Requirement::where('template_id', 13)->where('field_id', 'LIKE', 'R-%')->where('reference', '!=' , '')->orderBy('field_id', 'asc')->get();
+				$row_contents_ref = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'R-%')->where('reference', '!=' , '')->orderBy('field_id', 'asc')->get();
 				
 				//add content to excel
 				if (!empty($row_contents_ref)) {
@@ -912,7 +915,7 @@ class ExcelController extends Controller
 			});	
 
 			// Our fourth sheet
-			$excel->sheet('field_content', function($sheet) {
+			$excel->sheet('field_content', function($sheet) use ($id) {
 			
 				//set first column for field_content
 				//Column part
@@ -957,7 +960,7 @@ class ExcelController extends Controller
 			});
 
 			// Our firth sheet
-			$excel->sheet('sourcing', function($sheet) {
+			$excel->sheet('sourcing', function($sheet) use ($id) {
 
 				//set first column for field_content
 				//Column part
@@ -995,7 +998,7 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1:F1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
 				
-				$field_contents = Technical::where('template_id', 13)->get();
+				$field_contents = Technical::where('template_id', $id)->get();
 				
 				$fieldcontentcount = 2;
 				//set grey fields, add two to put it correctly in the template
@@ -1015,9 +1018,9 @@ class ExcelController extends Controller
 			});
 
 			// Our sixth sheet
-			$excel->sheet('template_content', function($sheet) {
+			$excel->sheet('template_content', function($sheet) use ($id) {
 
-				$template_content = Template::find(13);
+				$template_content = Template::find($id);
 
 				//style
 				$sheet->getColumnDimension('A')->setWidth(40);
@@ -1050,7 +1053,7 @@ class ExcelController extends Controller
 			});
 
 			// Our seventh sheet
-			$excel->sheet('explanation', function($sheet) {
+			$excel->sheet('explanation', function($sheet) use ($id) {
 
 				//set first column for field_content
 				//Column part

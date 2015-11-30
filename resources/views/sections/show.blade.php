@@ -15,7 +15,7 @@
 		<td class="header">Name</td>
 		<td class="header">Type</td>
 		<td class="header">Description</td>
-		<td class="header" style="width: 120px;">Options</td>
+		<td class="header" style="width: 170px;">Options</td>
 		</tr>
             @foreach( $section->templates as $template )
                 <tr>
@@ -26,6 +26,7 @@
 						<td>{{ $template->template_longdesc }}</td>
 						<td>
                             {!! link_to_route('sections.templates.edit', 'Edit', array($section->id, $template->id), array('class' => 'btn btn-info btn-xs')) !!}
+							<a class="btn btn-primary btn-xs" style="margin-left:3px;" href="{{ url('exporttemplate') . '/' . $template->id }}">Export</a>
                             {!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
 						</td>
                     {!! Form::close() !!}

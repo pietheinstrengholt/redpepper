@@ -54,8 +54,8 @@ Route::get('/cell', 'TemplateController@getCellContent');
 Route::get('/updatecell', 'ChangeRequestController@create');
 Route::post('/updatecell', 'ChangeRequestController@submit');
 
-Route::get('exporttemplate/{id}', 'TemplateController@export');
-Route::get('uploadtemplate', 'TemplateController@upload');
+Route::get('exporttemplate/{id}', 'ExcelController@export');
+Route::get('uploadtemplate', 'ExcelController@upload');
 
 Route::get('/excel/upload', 'ExcelController@uploadform');
 Route::post('/excel/uploadexcel', 'ExcelController@uploadexcel');
