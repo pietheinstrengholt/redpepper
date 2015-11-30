@@ -17,6 +17,9 @@ use App\DraftField;
 use App\DraftRequirement;
 use App\DraftTechnical;
 
+use App\HistoryRequirement;
+use App\HistoryTechnical;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Input;
@@ -167,6 +170,7 @@ class ChangeRequestController extends Controller
 						$field_interpretation = TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_name', $ChangeRequest->row_number)->where('column_name', $ChangeRequest->column_number)->where('property', 'interpretation')->first();
 						$technical = Technical::where('template_id', $ChangeRequest->template_id)->where('row_num', $ChangeRequest->row_number)->where('col_num', $ChangeRequest->column_number)->get();
 
+						
 						//delete any existing if empty is proposed
 						if (count($DraftRegulation_row) == 0) {
 							Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'R-' . $ChangeRequest->row_number)->where('content_type', 'regulation')->delete();
@@ -182,7 +186,37 @@ class ChangeRequestController extends Controller
 							//update
 							} else {
 								Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'R-' . $ChangeRequest->row_number)->where('content_type', 'regulation')->update(['content' => $DraftRegulation_row->content]);
+
+								//submit existing content to archive table
+								$HistoryRequirement = new HistoryRequirement;
+								$HistoryRequirement->changerequest_id = $ChangeRequest->id;
+								$HistoryRequirement->template_id = $ChangeRequest->template_id;
+								$HistoryRequirement->row_name = $ChangeRequest->row_number;
+								$HistoryRequirement->column_name = '';
+								$HistoryRequirement->content_type = 'regulation';
+								$HistoryRequirement->content = $Regulation_row->content;
+								$HistoryRequirement->change_type = 'existing';
+								$HistoryRequirement->created_by = $ChangeRequest->creator_id;
+								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
+								$HistoryRequirement->approved_by = 1;
+								$HistoryRequirement->save();								
+								
 							}
+							
+							//submit new content to archive table
+							$HistoryRequirement = new HistoryRequirement;
+							$HistoryRequirement->changerequest_id = $ChangeRequest->id;
+							$HistoryRequirement->template_id = $ChangeRequest->template_id;
+							$HistoryRequirement->row_name = $ChangeRequest->row_number;
+							$HistoryRequirement->column_name = '';
+							$HistoryRequirement->content_type = 'regulation';
+							$HistoryRequirement->content = $DraftRegulation_row->content;
+							$HistoryRequirement->change_type = 'new';
+							$HistoryRequirement->created_by = $ChangeRequest->creator_id;
+							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
+							$HistoryRequirement->approved_by = 1;
+							$HistoryRequirement->save();
+							
 						}
 						
 						//delete any existing if empty is proposed
@@ -200,7 +234,37 @@ class ChangeRequestController extends Controller
 							//update
 							} else {
 								Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'R-' . $ChangeRequest->row_number)->where('content_type', 'interpretation')->update(['content' => $DraftInterpretation_row->content]);
+								
+								//submit existing content to archive table
+								$HistoryRequirement = new HistoryRequirement;
+								$HistoryRequirement->changerequest_id = $ChangeRequest->id;
+								$HistoryRequirement->template_id = $ChangeRequest->template_id;
+								$HistoryRequirement->row_name = $ChangeRequest->row_number;
+								$HistoryRequirement->column_name = '';
+								$HistoryRequirement->content_type = 'interpretation';
+								$HistoryRequirement->content = $Interpretation_row->content;
+								$HistoryRequirement->change_type = 'existing';
+								$HistoryRequirement->created_by = $ChangeRequest->creator_id;
+								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
+								$HistoryRequirement->approved_by = 1;
+								$HistoryRequirement->save();								
+								
 							}
+							
+							//submit new content to archive table
+							$HistoryRequirement = new HistoryRequirement;
+							$HistoryRequirement->changerequest_id = $ChangeRequest->id;
+							$HistoryRequirement->template_id = $ChangeRequest->template_id;
+							$HistoryRequirement->row_name = $ChangeRequest->row_number;
+							$HistoryRequirement->column_name = '';
+							$HistoryRequirement->content_type = 'interpretation';
+							$HistoryRequirement->content = $DraftInterpretation_row->content;
+							$HistoryRequirement->change_type = 'new';
+							$HistoryRequirement->created_by = $ChangeRequest->creator_id;
+							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
+							$HistoryRequirement->approved_by = 1;
+							$HistoryRequirement->save();								
+							
 						}						
 
 						//delete any existing if empty is proposed
@@ -218,7 +282,36 @@ class ChangeRequestController extends Controller
 							//update
 							} else {
 								Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'C-' . $ChangeRequest->column_number)->where('content_type', 'regulation')->update(['content' => $DraftRegulation_column->content]);
+								
+								//submit existing content to archive table
+								$HistoryRequirement = new HistoryRequirement;
+								$HistoryRequirement->changerequest_id = $ChangeRequest->id;
+								$HistoryRequirement->template_id = $ChangeRequest->template_id;
+								$HistoryRequirement->row_name = '';
+								$HistoryRequirement->column_name = $ChangeRequest->column_number;
+								$HistoryRequirement->content_type = 'regulation';
+								$HistoryRequirement->content = $Regulation_column->content;
+								$HistoryRequirement->change_type = 'existing';
+								$HistoryRequirement->created_by = $ChangeRequest->creator_id;
+								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
+								$HistoryRequirement->approved_by = 1;
+								$HistoryRequirement->save();									
 							}
+							
+							//submit existing content to archive table
+							$HistoryRequirement = new HistoryRequirement;
+							$HistoryRequirement->changerequest_id = $ChangeRequest->id;
+							$HistoryRequirement->template_id = $ChangeRequest->template_id;
+							$HistoryRequirement->row_name = '';
+							$HistoryRequirement->column_name = $ChangeRequest->column_number;
+							$HistoryRequirement->content_type = 'regulation';
+							$HistoryRequirement->content = $DraftRegulation_column->content;
+							$HistoryRequirement->change_type = 'new';
+							$HistoryRequirement->created_by = $ChangeRequest->creator_id;
+							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
+							$HistoryRequirement->approved_by = 1;
+							$HistoryRequirement->save();								
+							
 						}
 						
 						//delete any existing if empty is proposed
@@ -236,7 +329,36 @@ class ChangeRequestController extends Controller
 							//update
 							} else {
 								Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'C-' . $ChangeRequest->column_number)->where('content_type', 'interpretation')->update(['content' => $DraftInterpretation_column->content]);
+								
+								//submit existing content to archive table
+								$HistoryRequirement = new HistoryRequirement;
+								$HistoryRequirement->changerequest_id = $ChangeRequest->id;
+								$HistoryRequirement->template_id = $ChangeRequest->template_id;
+								$HistoryRequirement->row_name = '';
+								$HistoryRequirement->column_name = $ChangeRequest->column_number;
+								$HistoryRequirement->content_type = 'interpretation';
+								$HistoryRequirement->content = $Interpretation_column->content;
+								$HistoryRequirement->change_type = 'existing';
+								$HistoryRequirement->created_by = $ChangeRequest->creator_id;
+								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
+								$HistoryRequirement->approved_by = 1;
+								$HistoryRequirement->save();									
 							}
+							
+							//submit new content to archive table
+							$HistoryRequirement = new HistoryRequirement;
+							$HistoryRequirement->changerequest_id = $ChangeRequest->id;
+							$HistoryRequirement->template_id = $ChangeRequest->template_id;
+							$HistoryRequirement->row_name = '';
+							$HistoryRequirement->column_name = $ChangeRequest->column_number;
+							$HistoryRequirement->content_type = 'interpretation';
+							$HistoryRequirement->content = $DraftInterpretation_column->content;
+							$HistoryRequirement->change_type = 'new';
+							$HistoryRequirement->created_by = $ChangeRequest->creator_id;
+							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
+							$HistoryRequirement->approved_by = 1;
+							$HistoryRequirement->save();								
+							
 						}
 
 						//delete any existing if empty is proposed
@@ -255,7 +377,36 @@ class ChangeRequestController extends Controller
 							//update
 							} else {
 								TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_name', $ChangeRequest->row_number)->where('column_name', $ChangeRequest->column_number)->where('property', 'property1')->update(['content' => $DraftField_property1->content]);
+								
+								//submit existing content to archive table
+								$HistoryRequirement = new HistoryRequirement;
+								$HistoryRequirement->changerequest_id = $ChangeRequest->id;
+								$HistoryRequirement->template_id = $ChangeRequest->template_id;
+								$HistoryRequirement->row_name = $ChangeRequest->row_number;
+								$HistoryRequirement->column_name = $ChangeRequest->column_number;
+								$HistoryRequirement->content_type = 'property1';
+								$HistoryRequirement->content = $field_property1->content;
+								$HistoryRequirement->change_type = 'existing';
+								$HistoryRequirement->created_by = $ChangeRequest->creator_id;
+								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
+								$HistoryRequirement->approved_by = 1;
+								$HistoryRequirement->save();
 							}
+							
+							//submit new content to archive table
+							$HistoryRequirement = new HistoryRequirement;
+							$HistoryRequirement->changerequest_id = $ChangeRequest->id;
+							$HistoryRequirement->template_id = $ChangeRequest->template_id;
+							$HistoryRequirement->row_name = $ChangeRequest->row_number;
+							$HistoryRequirement->column_name = $ChangeRequest->column_number;
+							$HistoryRequirement->content_type = 'property1';
+							$HistoryRequirement->content = $DraftField_property1->content;
+							$HistoryRequirement->change_type = 'new';
+							$HistoryRequirement->created_by = $ChangeRequest->creator_id;
+							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
+							$HistoryRequirement->approved_by = 1;
+							$HistoryRequirement->save();								
+							
 						}
 						
 						//delete any existing if empty is proposed
@@ -274,7 +425,36 @@ class ChangeRequestController extends Controller
 							//update
 							} else {
 								TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_name', $ChangeRequest->row_number)->where('column_name', $ChangeRequest->column_number)->where('property', 'property2')->update(['content' => $DraftField_property2->content]);
+								
+								//submit existing content to archive table
+								$HistoryRequirement = new HistoryRequirement;
+								$HistoryRequirement->changerequest_id = $ChangeRequest->id;
+								$HistoryRequirement->template_id = $ChangeRequest->template_id;
+								$HistoryRequirement->row_name = $ChangeRequest->row_number;
+								$HistoryRequirement->column_name = $ChangeRequest->column_number;
+								$HistoryRequirement->content_type = 'property2';
+								$HistoryRequirement->content = $field_property2->content;
+								$HistoryRequirement->change_type = 'existing';
+								$HistoryRequirement->created_by = $ChangeRequest->creator_id;
+								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
+								$HistoryRequirement->approved_by = 1;
+								$HistoryRequirement->save();								
 							}
+							
+							//submit new content to archive table
+							$HistoryRequirement = new HistoryRequirement;
+							$HistoryRequirement->changerequest_id = $ChangeRequest->id;
+							$HistoryRequirement->template_id = $ChangeRequest->template_id;
+							$HistoryRequirement->row_name = $ChangeRequest->row_number;
+							$HistoryRequirement->column_name = $ChangeRequest->column_number;
+							$HistoryRequirement->content_type = 'property2';
+							$HistoryRequirement->content = $DraftField_property2->content;
+							$HistoryRequirement->change_type = 'new';
+							$HistoryRequirement->created_by = $ChangeRequest->creator_id;
+							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
+							$HistoryRequirement->approved_by = 1;
+							$HistoryRequirement->save();								
+							
 						}
 
 						//delete any existing if empty is proposed
@@ -293,7 +473,36 @@ class ChangeRequestController extends Controller
 							//update
 							} else {
 								TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_name', $ChangeRequest->row_number)->where('column_name', $ChangeRequest->column_number)->where('property', 'regulation')->update(['content' => $DraftField_regulation->content]);
+								
+								//submit existing content to archive table
+								$HistoryRequirement = new HistoryRequirement;
+								$HistoryRequirement->changerequest_id = $ChangeRequest->id;
+								$HistoryRequirement->template_id = $ChangeRequest->template_id;
+								$HistoryRequirement->row_name = $ChangeRequest->row_number;
+								$HistoryRequirement->column_name = $ChangeRequest->column_number;
+								$HistoryRequirement->content_type = 'regulation';
+								$HistoryRequirement->content = $field_regulation->content;
+								$HistoryRequirement->change_type = 'existing';
+								$HistoryRequirement->created_by = $ChangeRequest->creator_id;
+								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
+								$HistoryRequirement->approved_by = 1;
+								$HistoryRequirement->save();									
 							}
+							
+							//submit new content to archive table
+							$HistoryRequirement = new HistoryRequirement;
+							$HistoryRequirement->changerequest_id = $ChangeRequest->id;
+							$HistoryRequirement->template_id = $ChangeRequest->template_id;
+							$HistoryRequirement->row_name = $ChangeRequest->row_number;
+							$HistoryRequirement->column_name = $ChangeRequest->column_number;
+							$HistoryRequirement->content_type = 'regulation';
+							$HistoryRequirement->content = $DraftField_regulation->content;
+							$HistoryRequirement->change_type = 'new';
+							$HistoryRequirement->created_by = $ChangeRequest->creator_id;
+							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
+							$HistoryRequirement->approved_by = 1;
+							$HistoryRequirement->save();							
+							
 						}
 
 						//delete any existing if empty is proposed
@@ -312,7 +521,35 @@ class ChangeRequestController extends Controller
 							//update
 							} else {
 								TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_name', $ChangeRequest->row_number)->where('column_name', $ChangeRequest->column_number)->where('property', 'interpretation')->update(['content' => $DraftField_interpretation->content]);
+								
+								//submit existing content to archive table
+								$HistoryRequirement = new HistoryRequirement;
+								$HistoryRequirement->changerequest_id = $ChangeRequest->id;
+								$HistoryRequirement->template_id = $ChangeRequest->template_id;
+								$HistoryRequirement->row_name = $ChangeRequest->row_number;
+								$HistoryRequirement->column_name = $ChangeRequest->column_number;
+								$HistoryRequirement->content_type = 'interpretation';
+								$HistoryRequirement->content = $field_interpretation->content;
+								$HistoryRequirement->change_type = 'existing';
+								$HistoryRequirement->created_by = $ChangeRequest->creator_id;
+								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
+								$HistoryRequirement->approved_by = 1;
+								$HistoryRequirement->save();									
 							}
+							
+							//submit new content to archive table
+							$HistoryRequirement = new HistoryRequirement;
+							$HistoryRequirement->changerequest_id = $ChangeRequest->id;
+							$HistoryRequirement->template_id = $ChangeRequest->template_id;
+							$HistoryRequirement->row_name = $ChangeRequest->row_number;
+							$HistoryRequirement->column_name = $ChangeRequest->column_number;
+							$HistoryRequirement->content_type = 'interpretation';
+							$HistoryRequirement->content = $DraftField_interpretation->content;
+							$HistoryRequirement->change_type = 'new';
+							$HistoryRequirement->created_by = $ChangeRequest->creator_id;
+							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
+							$HistoryRequirement->approved_by = 1;
+							$HistoryRequirement->save();
 						}
 						
 						
@@ -320,6 +557,28 @@ class ChangeRequestController extends Controller
 						if (count($DraftTechnical) == 0) {
 							Technical::where('template_id', $ChangeRequest->template_id)->where('row_num', $ChangeRequest->row_number)->where('col_num', $ChangeRequest->column_number)->delete();
 						} else {
+						
+							//submit existing technical content to archive 
+							if (count($technical) != 0) {
+								foreach($technical as $techexistingrow) {
+									//submit new content to archive table
+									$HistoryTechnical = new HistoryTechnical;
+									$HistoryTechnical->changerequest_id = $ChangeRequest->id;
+									$HistoryTechnical->template_id = $ChangeRequest->template_id;
+									$HistoryTechnical->row_name = $ChangeRequest->row_number;
+									$HistoryTechnical->column_name = $ChangeRequest->column_number;
+									$HistoryTechnical->type_id = $techexistingrow->type_id;
+									$HistoryTechnical->source_id = $techexistingrow->source_id;		
+									$HistoryTechnical->content = $techexistingrow->content;
+									$HistoryTechnical->description = $techexistingrow->description;
+									$HistoryTechnical->change_type = 'existing';
+									$HistoryTechnical->created_by = $ChangeRequest->creator_id;
+									$HistoryTechnical->submission_date = $ChangeRequest->created_at;
+									$HistoryTechnical->approved_by = 1;
+									$HistoryTechnical->save();
+								}
+							}
+						
 							Technical::where('template_id', $ChangeRequest->template_id)->where('row_num', $ChangeRequest->row_number)->where('col_num', $ChangeRequest->column_number)->delete();
 							foreach($DraftTechnical as $Technicalrow) {
 								$Technical = new Technical;
@@ -331,6 +590,22 @@ class ChangeRequestController extends Controller
 								$Technical->content = $Technicalrow->content;
 								$Technical->description = $Technicalrow->description;
 								$Technical->save();
+								
+								//submit new content to archive table
+								$HistoryTechnical = new HistoryTechnical;
+								$HistoryTechnical->changerequest_id = $ChangeRequest->id;
+								$HistoryTechnical->template_id = $ChangeRequest->template_id;
+								$HistoryTechnical->row_name = $ChangeRequest->row_number;
+								$HistoryTechnical->column_name = $ChangeRequest->column_number;
+								$HistoryTechnical->type_id = $Technicalrow->type_id;
+								$HistoryTechnical->source_id = $Technicalrow->source_id;		
+								$HistoryTechnical->content = $Technicalrow->content;
+								$HistoryTechnical->description = $Technicalrow->description;
+								$HistoryTechnical->change_type = 'new';
+								$HistoryTechnical->created_by = $ChangeRequest->creator_id;
+								$HistoryTechnical->submission_date = $ChangeRequest->created_at;
+								$HistoryTechnical->approved_by = 1;
+								$HistoryTechnical->save();
 							}
 						}
 						
