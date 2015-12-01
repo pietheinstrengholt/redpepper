@@ -77,7 +77,12 @@
 	  </li>
 	</ul>	
 	<ul class="nav navbar-nav navbar-right">
-	  <li><a href="#">Login</a></li>
+	@if (Auth::guest())
+	  <li><a href="<?php echo url('/auth/login'); ?>">Login</a></li>
+	  <li><a href="<?php echo url('/auth/register'); ?>">Register</a></li>
+	@else
+	  <li><a href="<?php echo url('/auth/logout'); ?>">Logout</a></li>
+	@endif
 	</ul>
 	</div>
 	</div>

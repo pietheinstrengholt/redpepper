@@ -17,23 +17,14 @@ class User extends Model implements AuthenticatableContract,
     use Authenticatable, Authorizable, CanResetPassword;
 
     /**
-     * The database table used by the model.
-     *
-     * @var string
+     * It looks like user table is defined in 3 different place out of the box Laravel 5.
+     * 1) /config/auth.php ('table' => 'users',)
+     * 2) In User.php (protected $table)
+     * 3) In AuthController.php (there is a unique field validator as in @Kollley reply )
      */
-    protected $table = 'users';
+    protected $table = 't_usernames';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['username', 'email', 'password', 'section_id', 'entity_id', 'role', 'firstname', 'lastname', 'department_id'];
 
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
     protected $hidden = ['password', 'remember_token'];
 }
