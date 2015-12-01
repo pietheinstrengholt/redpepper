@@ -1,7 +1,6 @@
 TODO
 =======
 
-* user model
 * user rights
 * export history table (partially)
 * line breaks in pop-up content
@@ -10,7 +9,8 @@ TODO
 * dropdown in topnav
 * search page, advanced search page
 * manual page
-* ie8 test / css
+* ie8 test 
+* css in all single app.css
 * reference tables
 * builder user?
 * system config?
