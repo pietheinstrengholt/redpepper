@@ -27,4 +27,11 @@ class User extends Model implements AuthenticatableContract,
     protected $fillable = ['username', 'email', 'password', 'section_id', 'entity_id', 'role', 'firstname', 'lastname', 'department_id'];
 
     protected $hidden = ['password', 'remember_token'];
+	
+    public function department()
+    {
+		return $this->hasOne('App\Department', 'id', 'department_id');
+    }
+	
+	
 }

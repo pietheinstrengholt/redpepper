@@ -33,7 +33,7 @@ class Template extends Model
     public function requirement()
     {
         return $this->hasMany('App\Requirement');
-    }		
+    }
 	
 }
 

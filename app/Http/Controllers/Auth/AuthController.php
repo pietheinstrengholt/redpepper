@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use App\Department;
 use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
@@ -68,4 +68,11 @@ class AuthController extends Controller
 			//'password' => md5($data['password']),
         ]);
     }
+	
+    /* Login get post methods */
+    protected function getRegister() {
+		$departments = Department::orderBy('department_name', 'asc')->get();
+        return view('auth.register', compact('departments','user'));
+    }	
+	
 }

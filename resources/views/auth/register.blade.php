@@ -9,6 +9,9 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
+			
+			
+			
 				<div class="panel panel-default">
 					<div class="panel-heading">Register</div>
 					<div class="panel-body">
@@ -67,6 +70,13 @@
 									<input type="password" class="form-control" name="password_confirmation">
 								</div>
 							</div>
+
+							<div class="form-group">
+								<label class="col-md-4 control-label">Department name</label>
+								<div class="col-md-6">
+								{!! Form::select('department_id', $departments->lists('department_name', 'id'), null, ['id' => 'department_id', 'class' => 'form-control']) !!}
+								</div>
+							</div>							
 	 
 							<div class="form-group">
 								<div class="col-md-6 col-md-offset-4">
