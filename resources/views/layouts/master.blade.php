@@ -69,6 +69,7 @@
 		  <li><a href="<?php echo url('types'); ?>">Edit types</a></li>
 		  <li><a href="<?php echo url('sources'); ?>">Edit sources</a></li>
 		  <li><a href="<?php echo url('departments'); ?>">Edit departments</a></li>
+		  <li><a href="<?php echo url('users'); ?>">Edit users</a></li>
 		  <li class="divider"></li>
 		  <li><a href="<?php echo url('changerequests'); ?>">Change requests</a></li>
 		  <li class="divider"></li>
