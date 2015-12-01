@@ -3,7 +3,7 @@ TODO
 
 * user model
 * user rights
-* export history table
+* export history table (partially)
 * line breaks in pop-up content
 * template structure screen
 * import csv files
@@ -15,3 +15,4 @@ TODO
 * builder user?
 * system config?
 * definitions / hovers?
+* rewrite index

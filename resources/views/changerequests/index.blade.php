@@ -63,6 +63,16 @@
 		</table>
     @endif
 	
+	{!! Form::open(array('action' => 'ChangeRequestController@cleanup', 'id' => 'form')) !!}
+	<button type="submit" class="btn btn-primary changerequest">Cleanup changerequests</button>
+	<input type="hidden" name="_token" value="{!! csrf_token() !!}">
+	{!! Form::close() !!}
+	
+	{!! Form::open(array('action' => 'ExcelController@exportchanges', 'id' => 'form')) !!}
+	<button type="submit" class="btn btn-warning changerequest">Export changerequests</button>
+	<input type="hidden" name="_token" value="{!! csrf_token() !!}">
+	{!! Form::close() !!}		
+	
 @endsection
 
 @stop

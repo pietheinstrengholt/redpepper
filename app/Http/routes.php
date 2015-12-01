@@ -68,3 +68,5 @@ Route::get('/excel/upload', 'ExcelController@uploadform');
 Route::post('/excel/uploadexcel', 'ExcelController@uploadexcel');
 
 Route::post('/changerequests/uploadexcel', 'ChangeRequestController@update');
+Route::post('/changerequests/cleanup', 'ChangeRequestController@cleanup');
+Route::post('/changerequests/exportchanges', 'ExcelController@exportchanges');

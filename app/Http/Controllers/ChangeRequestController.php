@@ -761,6 +761,12 @@ class ChangeRequestController extends Controller
 			'field_property2' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'property2')->first()
 		]);
 		
-    }	
+    }
+	
+    public function cleanup()
+    {
+		ChangeRequest::where('status', 'rejected')->orWhere('status', 'approved')->delete();
+		return Redirect::route('changerequests.index')->with('message', 'Cleanup performed.');
+    }
 	
 }

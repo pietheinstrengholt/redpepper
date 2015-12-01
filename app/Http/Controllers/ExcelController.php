@@ -1177,4 +1177,159 @@ class ExcelController extends Controller
 		return view('excel.upload', compact('sections'));
 	}
 	
+    public function exportchanges()
+    {
+	
+		Excel::create('ChangeRequests', function($excel)  {
+
+			// Our first sheet
+			$excel->sheet('regulatory_content', function($sheet) {
+			
+				$sheet->SetCellValue('A1', 'changerequest_id');
+				$sheet->getStyle('A1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('A')->setWidth(15);
+
+				$sheet->SetCellValue('B1', 'template');
+				$sheet->getStyle('B1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('B')->setWidth(30);
+
+				$sheet->SetCellValue('C1', 'row_name');
+				$sheet->getStyle('C1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('C')->setWidth(15);
+
+				$sheet->SetCellValue('D1', 'column_name');
+				$sheet->getStyle('D1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('D')->setWidth(15);
+
+				$sheet->SetCellValue('E1', 'content_type');
+				$sheet->getStyle('E1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('E')->setWidth(15);
+
+				$sheet->SetCellValue('F1', 'content');
+				$sheet->getStyle('F1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('F')->setWidth(15);
+
+				$sheet->SetCellValue('G1', 'change_type');
+				$sheet->getStyle('G1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('G')->setWidth(15);
+
+				$sheet->SetCellValue('H1', 'created_by');
+				$sheet->getStyle('H1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('H')->setWidth(15);
+
+
+				$sheet->SetCellValue('I1', 'submission_date');
+				$sheet->getStyle('I1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('I')->setWidth(15);
+
+				$sheet->SetCellValue('J1', 'approved_by');
+				$sheet->getStyle('J1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('J')->setWidth(15);
+
+				$sheet->SetCellValue('K1', 'approval_date');
+				$sheet->getStyle('K1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('K')->setWidth(15);
+				
+				//start counter
+				$i = 1;
+				
+				$HistoryRequirement = HistoryRequirement::all();
+				
+				foreach($HistoryRequirement as $row) {
+				
+					$i++;
+				
+					$sheet->setCellValueExplicit('A' . $i, $row['id'])
+						  ->setCellValueExplicit('B' . $i, $row['template_id'])
+						  ->setCellValueExplicit('C' . $i, $row['row_name'])
+						  ->setCellValueExplicit('D' . $i, $row['column_name'])
+						  ->setCellValueExplicit('E' . $i, $row['content_type'])
+						  ->setCellValueExplicit('F' . $i, $row['content'])
+						  ->setCellValueExplicit('G' . $i, $row['change_type'])
+						  ->setCellValueExplicit('I' . $i, $row['submission_date'])
+						  ->setCellValueExplicit('K' . $i, $row['created_at']);
+				}
+			});
+			
+
+			// Our second sheet
+			$excel->sheet('technical_content', function($sheet) {
+			
+				$sheet->SetCellValue('A1', 'changerequest_id');
+				$sheet->getStyle('A1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('A')->setWidth(15);
+
+				$sheet->SetCellValue('B1', 'template');
+				$sheet->getStyle('B1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('B')->setWidth(30);
+
+				
+				$sheet->SetCellValue('C1', 'row_name');
+				$sheet->getStyle('C1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('C')->setWidth(15);
+				
+				$sheet->SetCellValue('D1', 'column_name');
+				$sheet->getStyle('D1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('D')->setWidth(15);
+				
+				$sheet->SetCellValue('E1', 'source_name');
+				$sheet->getStyle('E1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('E')->setWidth(15);
+
+				$sheet->SetCellValue('F1', 'type_name');
+				$sheet->getStyle('F1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('F')->setWidth(15);
+				
+				$sheet->SetCellValue('G1', 'content');
+				$sheet->getStyle('G1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('G')->setWidth(15);
+				
+				$sheet->SetCellValue('H1', 'description');
+				$sheet->getStyle('H1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('H')->setWidth(15);
+				
+				$sheet->SetCellValue('I1', 'change_type');
+				$sheet->getStyle('I1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('I')->setWidth(15);
+
+				$sheet->SetCellValue('J1', 'created_by');
+				$sheet->getStyle('J1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('J')->setWidth(15);
+
+				$sheet->SetCellValue('K1', 'submission_date');
+				$sheet->getStyle('K1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('K')->setWidth(15);
+
+				$sheet->SetCellValue('L1', 'approved_by');
+				$sheet->getStyle('L1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('L')->setWidth(15);
+				
+				$sheet->SetCellValue('M1', 'approval_date');
+				$sheet->getStyle('M1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('M')->setWidth(15);
+				
+				//start counter
+				$i = 1;
+				
+				$HistoryTechnical = HistoryTechnical::all();
+				
+				foreach($HistoryTechnical as $row) {
+				
+					$i++;
+
+					$sheet->setCellValueExplicit('A' . $i, $row['changerequest_id'])
+						  ->setCellValueExplicit('B' . $i, $row['template_id'])
+						  ->setCellValueExplicit('C' . $i, $row['row_name'])
+						  ->setCellValueExplicit('D' . $i, $row['column_name'])
+						  ->setCellValueExplicit('G' . $i, $row['content'])
+						  ->setCellValueExplicit('H' . $i, $row['description'])
+						  ->setCellValueExplicit('I' . $i, $row['change_type'])
+						  ->setCellValueExplicit('K' . $i, $row['submission_date'])
+						  ->setCellValueExplicit('M' . $i, $row['created_at']);
+				}
+				
+			});			
+			
+		})->download('xlsx');
+    }
 }
