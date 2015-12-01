@@ -8,6 +8,7 @@ TODO
 * import csv files
 * dropdown in topnav
 * search page, advanced search page
+* show warning before deleting content
 * manual page
 * ie8 test 
 * css in all single app.css
