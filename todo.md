@@ -8,7 +8,7 @@ TODO
 * dropdown in topnav
 * advanced search page
 * show warning before deleting content
-* manual page
+* manual page (pdf?)
 * ie8 test 
 * css in all single app.css
 * reference tables
@@ -17,3 +17,4 @@ TODO
 * definitions / hovers?
 * rewrite index
 * user_id when submitting content
+* data schema's, constraints
