@@ -35,6 +35,11 @@ class Template extends Model
         return $this->hasMany('App\Requirement');
     }
 	
+    public function technical()
+    {
+        return $this->hasMany('App\Technical');
+    }	
+	
 }
 
 ?>

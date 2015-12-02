@@ -19,6 +19,11 @@ class Technical extends Model
     {
 		return $this->hasOne('App\TechnicalSource', 'id', 'source_id');
     }
+	
+    public function template()
+    {
+        return $this->belongsTo('App\Template');
+    }	
 }
 
 ?>

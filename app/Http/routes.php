@@ -52,7 +52,8 @@ Route::bind('users', function($value, $route) {
 Route::bind('changerequests', function($value, $route) {
 	return App\ChangeRequest::whereId($value)->first();
 });
- 
+
+// Model routes...
 Route::resource('sections', 'SectionController');
 Route::resource('sections.templates', 'TemplateController');
 Route::resource('sources', 'TechnicalSourceController');
@@ -66,9 +67,13 @@ Route::get('/cell', 'TemplateController@getCellContent');
 Route::get('/updatecell', 'ChangeRequestController@create');
 Route::post('/updatecell', 'ChangeRequestController@submit');
 
+// Excel routes...
 Route::get('exporttemplate/{id}', 'ExcelController@export');
 Route::get('uploadtemplate', 'ExcelController@upload');
+Route::get('/excel/upload', 'ExcelController@uploadform');
+Route::post('/excel/uploadexcel', 'ExcelController@uploadexcel');
 
+// CSV routes...
 Route::get('/csv/importtech', 'CSVController@importtech');
 Route::get('/csv/importrows', 'CSVController@importrows');
 Route::get('/csv/importcolumns', 'CSVController@importcolumns');
@@ -76,12 +81,13 @@ Route::get('/csv/importfields', 'CSVController@importfields');
 Route::get('/csv/importcontent', 'CSVController@importcontent');
 Route::post('/csv/uploadcsv', 'CSVController@uploadcsv');
 
-Route::get('/excel/upload', 'ExcelController@uploadform');
-Route::post('/excel/uploadexcel', 'ExcelController@uploadexcel');
-
+// Changerequest routes...
 Route::post('/changerequests/uploadexcel', 'ChangeRequestController@update');
 Route::post('/changerequests/cleanup', 'ChangeRequestController@cleanup');
 Route::post('/changerequests/exportchanges', 'ExcelController@exportchanges');
+
+// Search routes...
+Route::post('/search', 'SearchController@search');
 
 // Authentication routes...
 Route::get('/auth/login', 'Auth\AuthController@getLogin');

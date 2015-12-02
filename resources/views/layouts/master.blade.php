@@ -56,9 +56,10 @@
 	  <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
 	  <li><a href="#">Link</a></li>
 	</ul>
-	<form class="navbar-form navbar-left" role="search">
+	<form class="navbar-form navbar-left" role="search" action="<?php echo url('search'); ?>" method="post">
+	<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 	  <div class="form-group">
-		<input type="text" class="form-control" placeholder="Search for content">
+		<input type="text" name="search" class="form-control" placeholder="Search for content">
 	  </div>
 	  <button type="submit" class="btn btn-default">Submit</button>
 	</form>
