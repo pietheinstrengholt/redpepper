@@ -72,6 +72,8 @@ Route::get('uploadtemplate', 'ExcelController@upload');
 Route::get('/csv/importtech', 'CSVController@importtech');
 Route::get('/csv/importrows', 'CSVController@importrows');
 Route::get('/csv/importcolumns', 'CSVController@importcolumns');
+Route::get('/csv/importfields', 'CSVController@importfields');
+Route::get('/csv/importcontent', 'CSVController@importcontent');
 Route::post('/csv/uploadcsv', 'CSVController@uploadcsv');
 
 Route::get('/excel/upload', 'ExcelController@uploadform');
