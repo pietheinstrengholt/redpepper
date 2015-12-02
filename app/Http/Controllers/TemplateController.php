@@ -25,10 +25,35 @@ use Session;
 class TemplateController extends Controller
 {
 	//function to show template
-    public function show(Section $section, Template $template)
+    public function show(Section $section, Template $template, Request $request)
     {
+		
+		//set empty search value
+		$searchvalue = '';
+		
+		//return field_id, e.g. R-010 as row010 or column010
+		if ($request->has('field_id')) {
+			//replace R- or C- with row or column
+			if (preg_match('/R-/', $request->input('field_id'))) {
+				$searchvalue = str_ireplace("R-", "row", $request->input('field_id'));
+			}
+			
+			if (preg_match('/C-/', $request->input('field_id'))) {
+				$searchvalue = str_ireplace("C-", "column", $request->input('field_id'));
+			}
+		}
+		
+		//if both row and column are set, return combination, else only row or column
+		if ($request->has('row') && $request->has('column')) {
+			$searchvalue = "column" . $request->input('column') . "-row" . $request->input('row');
+		} else if ($request->has('row')) {
+			$searchvalue = "row" . $request->input('row');
+		} else if ($request->has('column')) {
+			$searchvalue = "column" . $request->input('column');
+		}
+		
 		$disabledFields = $this->getDisabledFields($template);
-		return view('templates.show', compact('section', 'template', 'disabledFields'));
+		return view('templates.show', compact('section', 'template', 'disabledFields', 'searchvalue'));
     }
 	
 	//function to disabled fields
@@ -93,7 +118,7 @@ class TemplateController extends Controller
 		//split input into row and column
 		list($before, $after) = explode('-row', $_GET['cell_id'], 2);
 		$columnnum = str_ireplace("column", "", "$before");
-		$rownum = $after;
+		$rownum = $after;				
 		
 		return view('templates.cell', [
 			'template' => Template::find($_GET['template_id']),

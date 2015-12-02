@@ -16,7 +16,7 @@
 		
 		@foreach( $rows as $row )
 			<tr>
-			<td>{{ $row->template->template_name }}</a></td>
+			<td><a href="<?php echo url('sections/' . $row->template->section_id . '/templates/' . $row->template_id . '?row=' . $row->row_name); ?>">{{ $row->template->template_name }}</a></td>
 			<td>{{ $row->row_name }}</td>
 			<td>{{ $row->row_description }}</td>
 			</tr>
@@ -36,7 +36,7 @@
 		
 		@foreach( $columns as $column )
 			<tr>
-			<td>{{ $column->template->template_name }}</td>
+			<td><a href="<?php echo url('sections/' . $column->template->section_id . '/templates/' . $column->template_id . '?column=' . $column->column_name); ?>">{{ $column->template->template_name }}</a></td>
 			<td>{{ $column->column_name }}</td>
 			<td>{{ $column->column_description }}</td>
 			</tr>
@@ -58,7 +58,7 @@
 		
 		@foreach( $fields as $field )
 			<tr>
-			<td>{{ $field->template->template_name }}</td>
+			<td><a href="<?php echo url('sections/' . $field->template->section_id . '/templates/' . $field->template_id . '?row=' . $field->row_name . '&column=' . $field->column_name); ?>">{{ $field->template->template_name }}</a></td>
 			<td>{{ $field->row_name }}</td>
 			<td>{{ $field->column_name }}</td>
 			<td>{{ $field->property }}</td>
@@ -81,7 +81,7 @@
 		
 		@foreach( $requirements as $requirement )
 			<tr>
-			<td>{{ $requirement->template->template_name }}</td>
+			<td><a href="<?php echo url('sections/' . $requirement->template->section_id . '/templates/' . $requirement->template_id . '?field_id=' . $requirement->field_id); ?>">{{ $requirement->template->template_name }}</a></td>
 			<td>{{ $requirement->field_id }}</td>
 			<td>{{ $requirement->content_type }}</td>
 			<td>{{ $requirement->content }}</td>
@@ -106,7 +106,7 @@
 		
 		@foreach( $technicals as $technical )
 			<tr>
-			<td>{{ $technical->template->template_name }}</td>
+			<td><a href="<?php echo url('sections/' . $technical->template->section_id . '/templates/' . $technical->template_id . '?row=' . $technical->row_num . '&column=' . $technical->col_num); ?>">{{ $technical->template->template_name }}</a></td>
 			<td>{{ $technical->row_num }}</td>
 			<td>{{ $technical->col_num }}</td>
 			<td>{{ $technical->source->source_name }}</td>
