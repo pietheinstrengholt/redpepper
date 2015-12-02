@@ -69,6 +69,11 @@ Route::post('/updatecell', 'ChangeRequestController@submit');
 Route::get('exporttemplate/{id}', 'ExcelController@export');
 Route::get('uploadtemplate', 'ExcelController@upload');
 
+Route::get('/csv/importtech', 'CSVController@importtech');
+Route::get('/csv/importrows', 'CSVController@importrows');
+Route::get('/csv/importcolumns', 'CSVController@importcolumns');
+Route::post('/csv/uploadcsv', 'CSVController@uploadcsv');
+
 Route::get('/excel/upload', 'ExcelController@uploadform');
 Route::post('/excel/uploadexcel', 'ExcelController@uploadexcel');
 
