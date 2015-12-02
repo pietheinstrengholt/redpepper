@@ -42,6 +42,8 @@ class CSVController extends Controller
 					
 					echo "<h2>Excel import section_id: " . $request->input('section_id') . "</h2>";
 					
+					echo "<h2>Excel import template_id: " . $request->input('template_id') . "</h2>";					
+					
 					if ($request->has('template_name')) {
 						echo "<h2>Excel import template: " . $request->input('template_name') . "</h2>";
 					} else {
@@ -49,23 +51,29 @@ class CSVController extends Controller
 						//exit();
 					}
 					
-					if ($request->has('template_description')) {
-						echo "<h3>Template description: " . $request->input('template_description') . "</h3>";
+					if ($request->has('formname')) {
+						echo "<h3>Formname description: " . $request->input('formname') . "</h3>";
 					}
 								
 					Excel::load(Input::file('csv'), function ($reader) use ($request) {
-
-						// Getting all results
-						$reader->setDelimiter(';');
-						//$results = $reader->get();
-						
+	
 						$csvarray = $reader->toArray();
 						
 						echo "<pre>";
 						print_r($csvarray);
 						echo "</pre>";
 						
-						//echo $template->id;
+						foreach ($csvarray as $csv) {
+							
+							if (array_key_exists('template_id', $csv) && array_key_exists('row_num', $csv) && array_key_exists('row_name', $csv) && array_key_exists('row_description', $csv)) {
+								echo "<pre>";
+								print_r($csv);
+								echo "</pre>";
+							}
+							
+
+						}
+						
 						
 					});
 
