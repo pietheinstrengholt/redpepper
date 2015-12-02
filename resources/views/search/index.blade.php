@@ -6,7 +6,7 @@
 	<h4>the following search results have been found</h4>
  
     @if ( $rows->count() )
-		<table style="margin-bottom:20px;" class="table section-table dialog table-striped" border="1">
+		<table class="table search-table dialog table-striped" border="1">
 
 		<tr class="success">
 		<td class="header">Template Name</td>
@@ -26,7 +26,7 @@
     @endif
 	
     @if ( $columns->count() )
-		<table style="margin-bottom:20px;" class="table section-table dialog table-striped" border="1">
+		<table class="table search-table dialog table-striped" border="1">
 
 		<tr class="success">
 		<td class="header">Template Name</td>
@@ -46,7 +46,7 @@
     @endif	
 	
     @if ( $fields->count() )
-		<table style="margin-bottom:20px;" class="table section-table dialog table-striped" border="1">
+		<table class="table search-table dialog table-striped" border="1">
 
 		<tr class="success">
 		<td class="header">Template Name</td>
@@ -70,7 +70,7 @@
     @endif
 
     @if ( $requirements->count() )
-		<table style="margin-bottom:20px;" class="table section-table dialog table-striped" border="1">
+		<table class="table search-table dialog table-striped" border="1">
 
 		<tr class="success">
 		<td class="header">Template Name</td>
@@ -92,7 +92,7 @@
     @endif
 	
     @if ( $technicals->count() )
-		<table style="margin-bottom:20px;" class="table section-table dialog table-striped" border="1">
+		<table class="table search-table dialog table-striped" border="1">
 
 		<tr class="success">
 		<td class="header">Template Name</td>
