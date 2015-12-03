@@ -33,5 +33,10 @@ class User extends Model implements AuthenticatableContract,
 		return $this->hasOne('App\Department', 'id', 'department_id');
     }
 	
+    public function changerequest()
+    {
+        return $this->hasMany('App\ChangeRequest');
+    }	
+	
 	
 }

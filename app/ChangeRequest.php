@@ -28,6 +28,16 @@ class ChangeRequest extends Model
     public function template()
     {
 		return $this->hasOne('App\Template', 'id', 'template_id');
+    }
+	
+    public function creator()
+    {
+		return $this->hasOne('App\User', 'id', 'creator_id');
+    }
+	
+    public function approver()
+    {
+		return $this->hasOne('App\User', 'id', 'approver_id');
     }	
 	
 }
