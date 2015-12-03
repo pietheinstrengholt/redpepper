@@ -53,6 +53,10 @@ Route::bind('changerequests', function($value, $route) {
 	return App\ChangeRequest::whereId($value)->first();
 });
 
+// Template routes...
+Route::get('templatestructure/{id}', 'TemplateController@structure');
+Route::post('changestructure', 'TemplateController@changestructure');
+
 // Model routes...
 Route::resource('sections', 'SectionController');
 Route::resource('sections.templates', 'TemplateController');
@@ -88,6 +92,7 @@ Route::post('/changerequests/exportchanges', 'ExcelController@exportchanges');
 
 // Search routes...
 Route::post('/search', 'SearchController@search');
+Route::get('/advancedsearch', 'SearchController@advancedsearch');
 
 // Authentication routes...
 Route::get('/auth/login', 'Auth\AuthController@getLogin');

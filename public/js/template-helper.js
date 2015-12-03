@@ -147,5 +147,30 @@ jQuery(document).ready(function () {
 	$('#template-modal').on('hidden.bs.modal', function () {
 	  $("html").css("overflow", "initial");
 	});
+	
+	//mark hidden checkbox if cell in table is clicked
+	$("table.template-structure td.value").click(function() {
+		if ($(this).find('input').is(':checked')) {
+			$(this).find('input').prop('checked', false);
+			$(this).css("background-color", "transparent");
+		} else {
+			$(this).find('input').prop('checked', true);
+			$(this).css("background-color", "LightGray");
+		}
+	});
+
+	//uncheck radio buttons if clicked again
+	$("table.template-structure input[type='radio']").click(function() {
+		var previousValue = $(this).attr('previousValue');
+		var id = $(this).attr('id');
+		if (previousValue == 'checked') {
+			$(this).removeAttr('checked');
+			$(this).attr('previousValue', false);
+		} else {
+			$("input[id="+id+"]:radio").attr('previousValue', false);
+			$(this).attr('previousValue', 'checked');
+		}
+	});
+	
 
 });

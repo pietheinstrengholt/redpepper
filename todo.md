@@ -4,8 +4,6 @@ TODO
 * user rights
 * export history table (partially)
 * line breaks in pop-up content
-* template structure screen
-* advanced search page
 * show warning before deleting content
 * manual page (pdf?)
 * ie8 test 
@@ -18,3 +16,5 @@ TODO
 * user_id when submitting content
 * data schema's, constraints
 * bread crumbs
+* technical draft order by, section_name, template_name, search orders
+* delete all related content when template or section is delete

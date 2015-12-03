@@ -27,9 +27,8 @@ class TemplateController extends Controller
 	//function to show template
     public function show(Section $section, Template $template, Request $request)
     {
-		
 		//set empty search value
-		$searchvalue = '';
+		$searchvalue = 'empty';
 		
 		//return field_id, e.g. R-010 as row010 or column010
 		if ($request->has('field_id')) {
@@ -82,6 +81,100 @@ class TemplateController extends Controller
 		$sections = Section::orderBy('section_name', 'asc')->get();
 		return view('templates.edit', compact('sections', 'section', 'template'));
 	}
+	
+	//function to structure template
+	public function changestructure(Request $request)
+	{
+		if ($request->isMethod('post')) {
+			
+			if ($request->has('template_id')) {
+
+				//update column numbers
+				if ($request->has('colnum')) {
+					foreach($request->input('colnum') as $key => $value) {
+						if (!empty($value)) {
+							TemplateColumn::where('template_id', $request->input('template_id'))->where('column_name', $key)->update(['column_name' => $value]);
+							Requirement::where('template_id', $request->input('template_id'))->where('field_id', 'C-' . $key)->update(['field_id' => 'C-' . $value]);
+						}
+					}
+				}
+			
+				//update column desc
+				if ($request->has('coldesc')) {
+					foreach($request->input('coldesc') as $key => $value) {
+						if (!empty($value)) {
+							TemplateColumn::where('template_id', $request->input('template_id'))->where('column_name', $key)->update(['column_description' => $value]);
+						}
+					}
+				}
+				
+				//update row numbers
+				if ($request->has('rownum')) {
+					foreach($request->input('rownum') as $key => $value) {
+						if (!empty($value)) {
+							TemplateRow::where('template_id', $request->input('template_id'))->where('row_name', $key)->update(['row_name' => $value]);
+							Requirement::where('template_id', $request->input('template_id'))->where('field_id', 'R-' . $key)->update(['field_id' => 'R-' . $value]);
+						}
+					}
+				}
+
+				//update row desc
+				if ($request->has('rowdesc')) {
+					foreach($request->input('rowdesc') as $key => $value) {
+						if (!empty($value)) {
+							TemplateRow::where('template_id', $request->input('template_id'))->where('row_name', $key)->update(['row_description' => $value]);
+						}
+					}
+				}
+
+				//delete disabled cells
+				TemplateField::where('template_id', $request->input('template_id'))->where('property', 'disabled')->delete();
+				if ($request->has('options')) {
+					foreach($request->input('options') as $disabled){
+						//split options into row and column
+						list($before, $after) = explode('-row', $disabled, 2);
+						$column = str_ireplace("column", "", "$before");
+						$row = $after;
+						//create new disabled field
+						$TemplateField = new TemplateField;
+						$TemplateField->template_id = $request->input('template_id');
+						$TemplateField->row_name = $row;
+						$TemplateField->column_name = $column;
+						$TemplateField->property = 'disabled';
+						$TemplateField->save();
+					}
+				}
+				
+				//update changerequests, technical and fields properties
+				if ($request->has('colnum')) {
+					foreach($request->input('colnum') as $columnkey => $columnvalue) {
+						if (!empty($columnvalue)) {
+							if ($request->has('rownum')) {
+								foreach($request->input('rownum') as $rowkey => $rowvalue) {
+									if (!empty($rowvalue)) {
+										TemplateField::where('template_id', $request->input('template_id'))->where('row_name', $rowkey)->where('column_name', $columnkey)->where('property', '!=' , 'disabled')->update(['row_name' => $rowvalue, 'column_name' => $columnvalue]);
+										Technical::where('template_id', $request->input('template_id'))->where('row_num', $rowkey)->where('col_num', $columnkey)->update(['row_num' => $rowvalue, 'col_num' => $columnvalue]);
+										ChangeRequest::where('template_id', $request->input('template_id'))->where('row_number', $rowkey)->where('column_number', $columnkey)->update(['row_number' => $rowvalue, 'column_number' => $columnvalue]);
+									}
+								}
+							}
+						}
+					}
+				}
+				
+			}
+		}
+		
+		return Redirect::route('sections.index')->with('message', 'Template structure updated.');
+	}
+	
+	//function to structure template
+	public function structure($id)
+	{
+		$template = Template::find($id);
+		$disabledFields = $this->getDisabledFields($template);
+		return view('templates.structure', compact('section', 'template', 'disabledFields'));
+	}	
 	
 	//function to add new template
 	public function store(Section $section)

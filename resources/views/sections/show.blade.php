@@ -15,7 +15,7 @@
 		<td class="header">Name</td>
 		<td class="header">Type</td>
 		<td class="header">Description</td>
-		<td class="header" style="width: 170px;">Options</td>
+		<td class="header" style="width: 245px;">Options</td>
 		</tr>
             @foreach( $templates as $template )
                 <tr>
@@ -26,8 +26,9 @@
 						<td>{{ $template->template_longdesc }}</td>
 						<td>
                             {!! link_to_route('sections.templates.edit', 'Edit', array($template->section_id, $template->id), array('class' => 'btn btn-info btn-xs')) !!}
-							<a class="btn btn-primary btn-xs" style="margin-left:3px;" href="{{ url('exporttemplate') . '/' . $template->id }}">Export</a>
-                            {!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
+							<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('templatestructure') . '/' . $template->id }}">Structure</a>
+							<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $template->id }}">Export</a>
+                            {!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:2px;')) !!}
 						</td>
                     {!! Form::close() !!}
                 </tr>

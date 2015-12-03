@@ -17,7 +17,7 @@
 					<ul class="list-inline intro-social-buttons">
 						<li><a href="<?php echo url('sections'); ?>" class="btn btn-default btn-lg"><span class="network-name"><span style="margin-right:3px;" class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>All regulatory reports</span></a></li>
 						<li><a href="doc/FRC_RADAR_Tooling_User_Manual.pdf" class="btn btn-default btn-lg"><span class="network-name"><span style="margin-right:3px;" class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>Instruction manual</span></a></li>
-						<li><a href="<?php echo url('search'); ?>" class="btn btn-default btn-lg"><span class="network-name"><span style="margin-right:3px;" class="glyphicon glyphicon-search" aria-hidden="true"></span>Advanced search</span></a></li>
+						<li><a href="<?php echo url('advancedsearch'); ?>" class="btn btn-default btn-lg"><span class="network-name"><span style="margin-right:3px;" class="glyphicon glyphicon-search" aria-hidden="true"></span>Advanced search</span></a></li>
 
 					</ul>
 				</div>
