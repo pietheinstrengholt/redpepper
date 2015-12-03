@@ -29,7 +29,7 @@
 			<tr>
 				<td>{{ $changerequest->id }}</td>
 				<td>{{ $changerequest->template->template_name }}</td>
-				<td>{{ $changerequest->creator_id }}</td>
+				<td>{{ $changerequest->creator->username }}</td>
 				<td></td>
 				<td>{{ $changerequest->template->section->section_name }}</td>
 				<td>{{ $changerequest->created_at }}</td>
@@ -47,7 +47,7 @@
 			<tr style="background-color:#F5F5F5;">
 				<td>{{ $changerequest->id }}</td>
 				<td>{{ $changerequest->template->template_name }}</td>
-				<td>{{ $changerequest->creator_id }}</td>
+				<td>{{ $changerequest->creator->username }}</td>
 				<td></td>
 				<td>{{ $changerequest->template->section->section_name }}</td>
 				<td>{{ $changerequest->created_at }}</td>
