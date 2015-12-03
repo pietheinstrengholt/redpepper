@@ -13,7 +13,6 @@
 		<div class="col-sm-6">
 		{!! Form::textarea('source_description', null, ['class' => 'form-control', 'rows' => '4']) !!}
 		</div>
-		
 	</div>
 	 
 	<div class="form-group">
