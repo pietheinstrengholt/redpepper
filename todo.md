@@ -18,3 +18,4 @@ TODO
 * rewrite index
 * user_id when submitting content
 * data schema's, constraints
+* bread crumbs
