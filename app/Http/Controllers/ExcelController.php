@@ -9,6 +9,8 @@ use App\TemplateColumn;
 use App\TemplateField;
 use App\Requirement;
 
+use App\User;
+
 use App\Technical;
 use App\TechnicalType;
 use App\TechnicalSource;
@@ -1217,7 +1219,6 @@ class ExcelController extends Controller
 				$sheet->getStyle('H1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('H')->setWidth(15);
 
-
 				$sheet->SetCellValue('I1', 'submission_date');
 				$sheet->getStyle('I1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('I')->setWidth(15);
@@ -1248,6 +1249,18 @@ class ExcelController extends Controller
 						  ->setCellValueExplicit('G' . $i, $row['change_type'])
 						  ->setCellValueExplicit('I' . $i, $row['submission_date'])
 						  ->setCellValueExplicit('K' . $i, $row['created_at']);
+						  
+					//query for user table
+					$created_by = User::where('id', $row['created_by'])->first(),
+					if (!empty($created_by)) {
+						$sheet->setCellValueExplicit('H' . $i, $created_by['username']);
+					}
+					
+					//query for user table
+					$approved_by = User::where('id', $row['approved_by'])->first(),
+					if (!empty($approved_by)) {
+						$sheet->setCellValueExplicit('J' . $i, $approved_by['username']);
+					} 
 				}
 			});
 			
@@ -1262,7 +1275,6 @@ class ExcelController extends Controller
 				$sheet->SetCellValue('B1', 'template');
 				$sheet->getStyle('B1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('B')->setWidth(30);
-
 				
 				$sheet->SetCellValue('C1', 'row_name');
 				$sheet->getStyle('C1')->getFont()->setBold(true);
@@ -1326,6 +1338,30 @@ class ExcelController extends Controller
 						  ->setCellValueExplicit('I' . $i, $row['change_type'])
 						  ->setCellValueExplicit('K' . $i, $row['submission_date'])
 						  ->setCellValueExplicit('M' . $i, $row['created_at']);
+						  
+					//query for user table
+					$created_by = User::where('id', $row['created_by'])->first(),
+					if (!empty($created_by)) {
+						$sheet->setCellValueExplicit('J' . $i, $created_by['username']);
+					}
+
+					//query for user table
+					$approved_by = User::where('id', $row['approved_by'])->first(),
+					if (!empty($approved_by)) {
+						$sheet->setCellValueExplicit('L' . $i, $approved_by['username']);
+					}
+
+					//query for technical source table
+					$source_id  = TechnicalSource::where('id ', $row['source_id '])->first(),
+					if (!empty($source_id )) {
+						$sheet->setCellValueExplicit('E' . $i, $source_id['source_name']);
+					}
+
+					//query for technical type table
+					$type_id   = TechnicalType::where('id ', $row['type_id '])->first(),
+					if (!empty($type_id )) {
+						$sheet->setCellValueExplicit('F' . $i, $type_id['type_name']);
+					}
 				}
 				
 			});			
