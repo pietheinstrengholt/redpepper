@@ -17,3 +17,4 @@ TODO
 * bread crumbs
 * technical draft order by, section_name, template_name, search orders
 * delete all related content when template or section is delete
+* change row_num, row_number, row_name -> row_code
