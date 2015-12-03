@@ -65,7 +65,7 @@ class ChangeRequestController extends Controller
 		$current_interpretation_row = Requirement::where('template_id', $changerequest->template_id)->where('field_id', 'R-' . $changerequest->column_number)->where('content_type', 'interpretation')->first();
 		$current_regulation_column = Requirement::where('template_id', $changerequest->template_id)->where('field_id', 'C-' . $changerequest->row_number)->where('content_type', 'regulation')->first();
 		$current_interpretation_column = Requirement::where('template_id', $changerequest->template_id)->where('field_id', 'C-' . $changerequest->column_number)->where('content_type', 'interpretation')->first();		
-		$current_technical = Technical::where('template_id', $changerequest->template_id)->where('row_num', $changerequest->row_number)->where('col_num', $changerequest->column_number)->get();
+		$current_technical = Technical::where('template_id', $changerequest->template_id)->where('row_num', $changerequest->row_number)->where('col_num', $changerequest->column_number)->orderBy('content', 'asc')->get();
 		$current_field_regulation = TemplateField::where('template_id', $changerequest->template_id)->where('row_name', $changerequest->row_number)->where('column_name', $changerequest->column_number)->where('property', 'regulation')->first();
 		$current_field_interpretation = TemplateField::where('template_id', $changerequest->template_id)->where('row_name', $changerequest->row_number)->where('column_name', $changerequest->column_number)->where('property', 'interpretation')->first();
 		$current_field_property1 = TemplateField::where('template_id', $changerequest->template_id)->where('row_name', $changerequest->row_number)->where('column_name', $changerequest->column_number)->where('property', 'property1')->first();
@@ -76,7 +76,7 @@ class ChangeRequestController extends Controller
 		$draft_interpretation_row = DraftRequirement::where('changerequest_id', $changerequest->id)->where('field_id', 'R-' . $changerequest->row_number)->where('content_type', 'interpretation')->first();
 		$draft_regulation_column = DraftRequirement::where('changerequest_id', $changerequest->id)->where('field_id', 'C-' . $changerequest->row_number)->where('content_type', 'regulation')->first();
 		$draft_interpretation_column = DraftRequirement::where('changerequest_id', $changerequest->id)->where('field_id', 'C-' . $changerequest->row_number)->where('content_type', 'interpretation')->first();
-		$draft_technical = DraftTechnical::where('changerequest_id', $changerequest->id)->get();
+		$draft_technical = DraftTechnical::where('changerequest_id', $changerequest->id)->orderBy('content', 'asc')->get();
 		$draft_field_regulation = DraftField::where('changerequest_id', $changerequest->id)->where('property', 'regulation')->first();
 		$draft_field_interpretation = DraftField::where('changerequest_id', $changerequest->id)->where('property', 'interpretation')->first();
 		$draft_field_property1 = DraftField::where('changerequest_id', $changerequest->id)->where('property', 'property1')->first();
@@ -760,7 +760,6 @@ class ChangeRequestController extends Controller
 			'field_property1' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'property1')->first(),
 			'field_property2' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'property2')->first()
 		]);
-		
     }
 	
     public function cleanup()
