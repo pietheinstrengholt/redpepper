@@ -2,17 +2,16 @@ TODO
 =======
 
 * user rights
-* export history table (partially)
 * line breaks in pop-up content
 * show warning before deleting content
-* manual page (pdf?)
+* manual pages (pdf?)
 * ie8 test 
 * css in all single app.css
 * reference tables
 * builder user?
 * system config?
 * definitions / hovers?
-* rewrite index
+* rewrite index (htaccess)
 * user_id when submitting content
 * data schema's, constraints
 * bread crumbs

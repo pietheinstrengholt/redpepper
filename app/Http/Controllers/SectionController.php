@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Input;
 use Redirect;
 
+use Gate;
+use App\User;
+
 class SectionController extends Controller
 {
     public function index(Request $request)
@@ -36,6 +39,11 @@ class SectionController extends Controller
 
 	public function edit(Section $section)
 	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action. Only superadmin users are allowed to edit sections.');
+        }
+	
 		return view('sections.edit', compact('section'));
 	}	
 	
