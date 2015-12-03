@@ -5,7 +5,6 @@ TODO
 * export history table (partially)
 * line breaks in pop-up content
 * template structure screen
-* dropdown in topnav
 * advanced search page
 * show warning before deleting content
 * manual page (pdf?)

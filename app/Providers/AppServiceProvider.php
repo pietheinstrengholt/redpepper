@@ -13,7 +13,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //view()->composer('layouts.master', 'App\Http\Composers\MasterComposer');
+		//show drop-down in nav menu
+        view()->composer('layouts.master', 'App\Http\Composers\SectionComposer');
     }
 
     /**

@@ -53,8 +53,16 @@
 
 	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	<ul class="nav navbar-nav">
-	  <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-	  <li><a href="#">Link</a></li>
+	  <li class="dropdown">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sections <span class="caret"></span></a>
+		<ul class="dropdown-menu" role="menu">
+		  @if ( $sections->count() )
+			@foreach( $sections as $section )
+				<li><a href="{{ route('sections.show', $section->id) }}">{{ $section->section_name }}</a></li>
+			@endforeach
+		  @endif
+		</ul>
+	  </li>
 	</ul>
 	<form class="navbar-form navbar-left" role="search" action="<?php echo url('search'); ?>" method="post">
 	<input type="hidden" name="_token" value="{!! csrf_token() !!}">
@@ -83,7 +91,7 @@
 		  <li><a href="<?php echo url('excel/upload'); ?>">Upload excel template</a></li>
 		</ul>
 	  </li>
-	</ul>	
+	</ul>
 	<ul class="nav navbar-nav navbar-right">
 	@if (Auth::guest())
 	  <li><a href="<?php echo url('/auth/login'); ?>">Login</a></li>
