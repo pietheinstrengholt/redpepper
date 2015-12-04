@@ -10,6 +10,8 @@ use App\TemplateField;
 use App\Requirement;
 
 use App\User;
+use Gate;
+use Auth;
 
 use App\Technical;
 use App\TechnicalType;
@@ -30,6 +32,8 @@ use Redirect;
 use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 use Session;
+
+
 
 class ExcelController extends Controller
 {
@@ -665,9 +669,9 @@ class ExcelController extends Controller
 									$HistoryRequirement->content_type = $field_content['content_type'];
 									$HistoryRequirement->content = $field_content['content'];
 									$HistoryRequirement->change_type = 'excel';
-									$HistoryRequirement->created_by = 1;
+									$HistoryRequirement->created_by = Auth::user()->id;
 									$HistoryRequirement->submission_date = null;
-									$HistoryRequirement->approved_by = 1;
+									$HistoryRequirement->approved_by = Auth::user()->id;
 									$HistoryRequirement->save();									
 									
 								}
@@ -692,9 +696,9 @@ class ExcelController extends Controller
 									$HistoryRequirement->content_type = $field_content['content_type'];
 									$HistoryRequirement->content = $field_content['content'];
 									$HistoryRequirement->change_type = 'excel';
-									$HistoryRequirement->created_by = 1;
+									$HistoryRequirement->created_by = Auth::user()->id;
 									$HistoryRequirement->submission_date = null;
-									$HistoryRequirement->approved_by = 1;
+									$HistoryRequirement->approved_by = Auth::user()->id;
 									$HistoryRequirement->save();										
 									
 								}
@@ -719,9 +723,9 @@ class ExcelController extends Controller
 									$HistoryRequirement->content_type = $field_content['content_type'];
 									$HistoryRequirement->content = $field_content['content'];
 									$HistoryRequirement->change_type = 'excel';
-									$HistoryRequirement->created_by = 1;
+									$HistoryRequirement->created_by = Auth::user()->id;
 									$HistoryRequirement->submission_date = null;
-									$HistoryRequirement->approved_by = 1;
+									$HistoryRequirement->approved_by = Auth::user()->id;
 									$HistoryRequirement->save();										
 									
 								}
@@ -763,9 +767,9 @@ class ExcelController extends Controller
 									$HistoryTechnical->content = $sourcing['value'];
 									$HistoryTechnical->description = $sourcing['description'];
 									$HistoryTechnical->change_type = 'excel';
-									$HistoryTechnical->created_by = 1;
+									$HistoryTechnical->created_by = Auth::user()->id;
 									$HistoryTechnical->submission_date = null;
-									$HistoryTechnical->approved_by = 1;
+									$HistoryTechnical->approved_by = Auth::user()->id;
 									$HistoryTechnical->save();
 									
 								}
@@ -1175,7 +1179,12 @@ class ExcelController extends Controller
 	}
 	public function uploadform() 
 	{
-		$sections = Section::all();
+		//only superadmin can see all sections
+		if (Gate::denies('superadmin')) {
+			$sections = Section::orderBy('section_name', 'asc')->where('visible', 'True')->get();
+		} else {
+			$sections = Section::orderBy('section_name', 'asc')->get();
+		}
 		return view('excel.upload', compact('sections'));
 	}
 	
@@ -1251,13 +1260,13 @@ class ExcelController extends Controller
 						  ->setCellValueExplicit('K' . $i, $row['created_at']);
 						  
 					//query for user table
-					$created_by = User::where('id', $row['created_by'])->first(),
+					$created_by = User::where('id', $row['created_by'])->first();
 					if (!empty($created_by)) {
 						$sheet->setCellValueExplicit('H' . $i, $created_by['username']);
 					}
 					
 					//query for user table
-					$approved_by = User::where('id', $row['approved_by'])->first(),
+					$approved_by = User::where('id', $row['approved_by'])->first();
 					if (!empty($approved_by)) {
 						$sheet->setCellValueExplicit('J' . $i, $approved_by['username']);
 					} 
@@ -1340,25 +1349,25 @@ class ExcelController extends Controller
 						  ->setCellValueExplicit('M' . $i, $row['created_at']);
 						  
 					//query for user table
-					$created_by = User::where('id', $row['created_by'])->first(),
+					$created_by = User::where('id', $row['created_by'])->first();
 					if (!empty($created_by)) {
 						$sheet->setCellValueExplicit('J' . $i, $created_by['username']);
 					}
 
 					//query for user table
-					$approved_by = User::where('id', $row['approved_by'])->first(),
+					$approved_by = User::where('id', $row['approved_by'])->first();
 					if (!empty($approved_by)) {
 						$sheet->setCellValueExplicit('L' . $i, $approved_by['username']);
 					}
 
 					//query for technical source table
-					$source_id  = TechnicalSource::where('id ', $row['source_id '])->first(),
+					$source_id  = TechnicalSource::where('id ', $row['source_id '])->first();
 					if (!empty($source_id )) {
 						$sheet->setCellValueExplicit('E' . $i, $source_id['source_name']);
 					}
 
 					//query for technical type table
-					$type_id   = TechnicalType::where('id ', $row['type_id '])->first(),
+					$type_id   = TechnicalType::where('id ', $row['type_id '])->first();
 					if (!empty($type_id )) {
 						$sheet->setCellValueExplicit('F' . $i, $type_id['type_name']);
 					}

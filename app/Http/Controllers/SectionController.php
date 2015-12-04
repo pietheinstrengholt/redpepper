@@ -11,29 +11,49 @@ use Redirect;
 
 use Gate;
 use App\User;
+use Auth;
 
 class SectionController extends Controller
 {
     public function index(Request $request)
     {
-	
-		if ($request->input('group') == "corep") {
-			$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 1)->get();
-		} elseif ($request->input('group') == "finrep") {
-			$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 2)->get();
-		} elseif ($request->input('group') == "liquidity") {
-			$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 3)->get();
-		} elseif ($request->input('group') == "other") {
-			$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 4)->get();
+		//only superadmin can see all sections
+		if (Gate::denies('superadmin')) {
+			if ($request->input('group') == "corep") {
+				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 1)->where('visible', 'True')->get();
+			} elseif ($request->input('group') == "finrep") {
+				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 2)->where('visible', 'True')->get();
+			} elseif ($request->input('group') == "liquidity") {
+				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 3)->where('visible', 'True')->get();
+			} elseif ($request->input('group') == "other") {
+				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 4)->where('visible', 'True')->get();
+			} else {
+				$sections = Section::orderBy('section_name', 'asc')->where('visible', 'True')->get();
+			}
 		} else {
-			$sections = Section::orderBy('section_name', 'asc')->get();
+			if ($request->input('group') == "corep") {
+				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 1)->get();
+			} elseif ($request->input('group') == "finrep") {
+				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 2)->get();
+			} elseif ($request->input('group') == "liquidity") {
+				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 3)->get();
+			} elseif ($request->input('group') == "other") {
+				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 4)->get();
+			} else {
+				$sections = Section::orderBy('section_name', 'asc')->get();
+			}		
 		}
 		return view('sections.index', compact('sections'));
     }
 	
     public function show(Section $section)
     {
-		$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->get();
+		//only superadmin can see all templates
+		if (Gate::denies('superadmin')) {
+			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->where('visible', 'True')->get();
+		} else {
+			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->get();		
+		}
 		return view('sections.show', compact('section', 'templates'));
     }
 

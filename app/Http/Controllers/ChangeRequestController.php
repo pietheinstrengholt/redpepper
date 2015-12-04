@@ -29,6 +29,10 @@ use Session;
 
 use App\Libraries\FineDiff;
 
+use Gate;
+use App\User;
+use Auth;
+
 class ChangeRequestController extends Controller
 {
 
@@ -198,7 +202,7 @@ class ChangeRequestController extends Controller
 								$HistoryRequirement->change_type = 'existing';
 								$HistoryRequirement->created_by = $ChangeRequest->creator_id;
 								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
-								$HistoryRequirement->approved_by = 1;
+								$HistoryRequirement->approved_by = Auth::user()->id;
 								$HistoryRequirement->save();								
 								
 							}
@@ -214,7 +218,7 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement->change_type = 'new';
 							$HistoryRequirement->created_by = $ChangeRequest->creator_id;
 							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
-							$HistoryRequirement->approved_by = 1;
+							$HistoryRequirement->approved_by = Auth::user()->id;
 							$HistoryRequirement->save();
 							
 						}
@@ -246,7 +250,7 @@ class ChangeRequestController extends Controller
 								$HistoryRequirement->change_type = 'existing';
 								$HistoryRequirement->created_by = $ChangeRequest->creator_id;
 								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
-								$HistoryRequirement->approved_by = 1;
+								$HistoryRequirement->approved_by = Auth::user()->id;
 								$HistoryRequirement->save();								
 								
 							}
@@ -262,7 +266,7 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement->change_type = 'new';
 							$HistoryRequirement->created_by = $ChangeRequest->creator_id;
 							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
-							$HistoryRequirement->approved_by = 1;
+							$HistoryRequirement->approved_by = Auth::user()->id;
 							$HistoryRequirement->save();								
 							
 						}						
@@ -294,7 +298,7 @@ class ChangeRequestController extends Controller
 								$HistoryRequirement->change_type = 'existing';
 								$HistoryRequirement->created_by = $ChangeRequest->creator_id;
 								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
-								$HistoryRequirement->approved_by = 1;
+								$HistoryRequirement->approved_by = Auth::user()->id;
 								$HistoryRequirement->save();									
 							}
 							
@@ -309,7 +313,7 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement->change_type = 'new';
 							$HistoryRequirement->created_by = $ChangeRequest->creator_id;
 							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
-							$HistoryRequirement->approved_by = 1;
+							$HistoryRequirement->approved_by = Auth::user()->id;
 							$HistoryRequirement->save();								
 							
 						}
@@ -341,7 +345,7 @@ class ChangeRequestController extends Controller
 								$HistoryRequirement->change_type = 'existing';
 								$HistoryRequirement->created_by = $ChangeRequest->creator_id;
 								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
-								$HistoryRequirement->approved_by = 1;
+								$HistoryRequirement->approved_by = Auth::user()->id;
 								$HistoryRequirement->save();									
 							}
 							
@@ -356,7 +360,7 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement->change_type = 'new';
 							$HistoryRequirement->created_by = $ChangeRequest->creator_id;
 							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
-							$HistoryRequirement->approved_by = 1;
+							$HistoryRequirement->approved_by = Auth::user()->id;
 							$HistoryRequirement->save();								
 							
 						}
@@ -389,7 +393,7 @@ class ChangeRequestController extends Controller
 								$HistoryRequirement->change_type = 'existing';
 								$HistoryRequirement->created_by = $ChangeRequest->creator_id;
 								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
-								$HistoryRequirement->approved_by = 1;
+								$HistoryRequirement->approved_by = Auth::user()->id;
 								$HistoryRequirement->save();
 							}
 							
@@ -404,7 +408,7 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement->change_type = 'new';
 							$HistoryRequirement->created_by = $ChangeRequest->creator_id;
 							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
-							$HistoryRequirement->approved_by = 1;
+							$HistoryRequirement->approved_by = Auth::user()->id;
 							$HistoryRequirement->save();								
 							
 						}
@@ -437,7 +441,7 @@ class ChangeRequestController extends Controller
 								$HistoryRequirement->change_type = 'existing';
 								$HistoryRequirement->created_by = $ChangeRequest->creator_id;
 								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
-								$HistoryRequirement->approved_by = 1;
+								$HistoryRequirement->approved_by = Auth::user()->id;
 								$HistoryRequirement->save();								
 							}
 							
@@ -452,7 +456,7 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement->change_type = 'new';
 							$HistoryRequirement->created_by = $ChangeRequest->creator_id;
 							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
-							$HistoryRequirement->approved_by = 1;
+							$HistoryRequirement->approved_by = Auth::user()->id;
 							$HistoryRequirement->save();								
 							
 						}
@@ -485,7 +489,7 @@ class ChangeRequestController extends Controller
 								$HistoryRequirement->change_type = 'existing';
 								$HistoryRequirement->created_by = $ChangeRequest->creator_id;
 								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
-								$HistoryRequirement->approved_by = 1;
+								$HistoryRequirement->approved_by = Auth::user()->id;
 								$HistoryRequirement->save();									
 							}
 							
@@ -500,7 +504,7 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement->change_type = 'new';
 							$HistoryRequirement->created_by = $ChangeRequest->creator_id;
 							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
-							$HistoryRequirement->approved_by = 1;
+							$HistoryRequirement->approved_by = Auth::user()->id;
 							$HistoryRequirement->save();							
 							
 						}
@@ -533,7 +537,7 @@ class ChangeRequestController extends Controller
 								$HistoryRequirement->change_type = 'existing';
 								$HistoryRequirement->created_by = $ChangeRequest->creator_id;
 								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
-								$HistoryRequirement->approved_by = 1;
+								$HistoryRequirement->approved_by = Auth::user()->id;
 								$HistoryRequirement->save();									
 							}
 							
@@ -548,7 +552,7 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement->change_type = 'new';
 							$HistoryRequirement->created_by = $ChangeRequest->creator_id;
 							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
-							$HistoryRequirement->approved_by = 1;
+							$HistoryRequirement->approved_by = Auth::user()->id;
 							$HistoryRequirement->save();
 						}
 						
@@ -574,7 +578,7 @@ class ChangeRequestController extends Controller
 									$HistoryTechnical->change_type = 'existing';
 									$HistoryTechnical->created_by = $ChangeRequest->creator_id;
 									$HistoryTechnical->submission_date = $ChangeRequest->created_at;
-									$HistoryTechnical->approved_by = 1;
+									$HistoryTechnical->approved_by = Auth::user()->id;
 									$HistoryTechnical->save();
 								}
 							}
@@ -604,7 +608,7 @@ class ChangeRequestController extends Controller
 								$HistoryTechnical->change_type = 'new';
 								$HistoryTechnical->created_by = $ChangeRequest->creator_id;
 								$HistoryTechnical->submission_date = $ChangeRequest->created_at;
-								$HistoryTechnical->approved_by = 1;
+								$HistoryTechnical->approved_by = Auth::user()->id;
 								$HistoryTechnical->save();
 							}
 						}
@@ -632,7 +636,7 @@ class ChangeRequestController extends Controller
 			$changerequest->template_id = $request->input('template_id');
 			$changerequest->row_number = $request->input('row_name');
 			$changerequest->column_number = $request->input('column_name');
-			$changerequest->creator_id = 1;
+			$changerequest->creator_id = Auth::user()->id;
 			$changerequest->status = 'pending';
 			$changerequest->save();
 
@@ -764,6 +768,10 @@ class ChangeRequestController extends Controller
 	
     public function cleanup()
     {
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }		
 		ChangeRequest::where('status', 'rejected')->orWhere('status', 'approved')->delete();
 		return Redirect::route('changerequests.index')->with('message', 'Cleanup performed.');
     }

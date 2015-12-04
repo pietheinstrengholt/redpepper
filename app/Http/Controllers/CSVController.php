@@ -29,11 +29,19 @@ use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 use Session;
 
+use Gate;
+use App\User;
+use Auth;
+
 class CSVController extends Controller
 {
-
 	public function uploadcsv(Request $request) 
 	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }		
+	
 		if ($request->isMethod('post')) {
 		
 			if ($request->hasFile('csv')) {
@@ -67,6 +75,7 @@ class CSVController extends Controller
 									$technical->type_id = $csv['type'];
 									$technical->content = $csv['value'];
 									$technical->description = $csv['description'];
+									$technical->created_by = Auth::user()->id;
 									$technical->save();
 								} else {
 									echo "Error: header mismatch!";
@@ -89,6 +98,7 @@ class CSVController extends Controller
 									$row->row_name = $csv['row_name'];
 									$row->row_description = $csv['row_description'];
 									//$row->row_reference = $rowline['row_reference'];
+									$row->created_by = Auth::user()->id;
 									$row->save();
 								} else {
 									echo "Error: header mismatch!";
@@ -110,6 +120,7 @@ class CSVController extends Controller
 									$column->column_num = $csv['column_num'];
 									$column->column_name = $csv['column_name'];
 									$column->column_description = $csv['column_description'];
+									$column->created_by = Auth::user()->id;
 									$column->save();
 								} else {
 									echo "Error: header mismatch!";
@@ -132,6 +143,7 @@ class CSVController extends Controller
 									$TemplateField->column_name = $csv['column_number'];
 									$TemplateField->property = $csv['property'];
 									$TemplateField->content = $csv['content'];
+									$TemplateField->created_by = Auth::user()->id;
 									$TemplateField->save();
 								} else {
 									echo "Error: header mismatch!";
@@ -153,6 +165,7 @@ class CSVController extends Controller
 									$Requirements->field_id = $csv['field_id'];
 									$Requirements->content_type = $csv['content_type'];
 									$Requirements->content = $csv['content'];
+									$Requirements->created_by = Auth::user()->id;
 									$Requirements->save();
 								} else {
 									echo "Error: header mismatch!";
@@ -174,30 +187,54 @@ class CSVController extends Controller
 
 	public function importtech() 
 	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }		
+	
 		$sections = Section::all();
 		return view('csv.importtech', compact('sections'));
 	}
 	
 	public function importrows() 
 	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }		
+	
 		$templates = Template::all();
 		return view('csv.importrows', compact('templates'));
 	}
 	
 	public function importcolumns() 
 	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }		
+	
 		$templates = Template::all();
 		return view('csv.importcolumns', compact('templates'));
 	}
 	
 	public function importfields() 
 	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }		
+	
 		$templates = Template::all();
 		return view('csv.importfields', compact('templates'));
 	}
 	
 	public function importcontent() 
 	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }		
 		$templates = Template::all();
 		return view('csv.importcontent', compact('templates'));
 	}		
