@@ -25,10 +25,12 @@
 						<td>{{ $template->section_shortdesc }}</td>
 						<td>{{ $template->template_longdesc }}</td>
 						<td>
+						<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $template->id }}">Export</a>
+						@if (!Auth::guest())
                             {!! link_to_route('sections.templates.edit', 'Edit', array($template->section_id, $template->id), array('class' => 'btn btn-info btn-xs')) !!}
 							<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('templatestructure') . '/' . $template->id }}">Structure</a>
-							<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $template->id }}">Export</a>
                             {!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:2px;')) !!}
+						@endif
 						</td>
                     {!! Form::close() !!}
                 </tr>

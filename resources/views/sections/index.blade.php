@@ -20,12 +20,16 @@
 		<tr>
 		<td><a href="{{ route('sections.show', $section->id) }}">{{ $section->section_name }}</a></td>
 		<td>{{ $section->section_description }}</td>
-		{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('sections.destroy', $section->id))) !!}
 		<td>
-			{!! link_to_route('sections.edit', 'Edit', array($section->id), array('class' => 'btn btn-info btn-xs')) !!}
-			{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
+		@if (!Auth::guest())
+			{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('sections.destroy', $section->id))) !!}
+
+				{!! link_to_route('sections.edit', 'Edit', array($section->id), array('class' => 'btn btn-info btn-xs')) !!}
+				{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
+			
+			{!! Form::close() !!}
+		@endif
 		</td>
-		{!! Form::close() !!}
 		</tr>
 		@endforeach
 

@@ -71,6 +71,7 @@
 	  </div>
 	  <button type="submit" class="btn btn-default">Submit</button>
 	</form>
+	@if (!Auth::guest())
 	<ul class="nav navbar-nav">
 	  <li class="dropdown">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin menu <span class="caret"></span></a>
@@ -92,6 +93,7 @@
 		</ul>
 	  </li>
 	</ul>
+	@endif
 	<ul class="nav navbar-nav navbar-right">
 	@if (Auth::guest())
 	  <li><a href="<?php echo url('/auth/login'); ?>">Login</a></li>

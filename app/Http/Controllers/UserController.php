@@ -35,7 +35,7 @@ class UserController extends Controller
 		$departments = Department::orderBy('department_name', 'asc')->get();
 		return view('users.edit', compact('departments','user'));
 	}
-	
+
 	public function rights($id)
 	{
 		//check for superadmin permissions

@@ -10,6 +10,7 @@ use App\TemplateField;
 use App\Requirement;
 
 use App\User;
+use App\UserRights;
 use Gate;
 use Auth;
 
@@ -34,9 +35,41 @@ use Validator;
 use Session;
 
 
-
 class ExcelController extends Controller
 {
+	public function sectionRights($id) {
+	
+		$userrights = UserRights::where('username_id', $id)->get();
+		
+		$sectionRights = array();
+		$userrights = $userrights->toArray();
+		if (!empty($userrights)) {
+			foreach ($userrights as $userright) {
+				array_push($sectionRights,$userright['section_id']);
+			}
+		}
+		return $sectionRights;
+	}
+
+	public function uploadform() 
+	{
+		//admin and builder are only permitted to upload to own sections
+		if (Auth::user()->role == "admin" || Auth::user()->role == "builder") {
+			$sectionList = $this->sectionRights(Auth::user()->id);
+			$sections = Section::whereIn('id', $sectionList)->orderBy('section_name', 'asc')->get();
+		}
+	
+		//only superadmin can see all sections
+		if (Auth::user()->role == "superadmin") {
+			$sections = Section::orderBy('section_name', 'asc')->get();
+		}
+		
+		if (Auth::user()->role == "contributor" || Auth::user()->role == "reviewer" || Auth::user()->role == "guest" || Auth::guest()) {
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');		
+		}		
+		
+		return view('excel.upload', compact('sections'));
+	}
 	
 	public function getExcelColumnNumber($num) 
 	{
@@ -1176,16 +1209,6 @@ class ExcelController extends Controller
 
 		})->download('xlsx');	
 		
-	}
-	public function uploadform() 
-	{
-		//only superadmin can see all sections
-		if (Gate::denies('superadmin')) {
-			$sections = Section::orderBy('section_name', 'asc')->where('visible', 'True')->get();
-		} else {
-			$sections = Section::orderBy('section_name', 'asc')->get();
-		}
-		return view('excel.upload', compact('sections'));
 	}
 	
     public function exportchanges()

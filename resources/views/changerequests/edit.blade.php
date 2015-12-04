@@ -141,25 +141,28 @@ code {
 	</table>
 @endif
 
-<textarea form="form" name="comment" style="width: 600px;" class="form-control" rows="3" id="user" class="comment" placeholder="Please enter a comment about this change"></textarea>
 
-{!! Form::open(array('action' => 'ChangeRequestController@update', 'id' => 'form')) !!}
-<div class="form-group">
-<button type="submit" class="changerequest btn btn-primary">Approve changerequest</button>
-<input type="hidden" name="_token" value="{!! csrf_token() !!}">	
-<input type="hidden" name="changerequest_id" value="{!! $changerequest->id !!}">	
-<input type="hidden" name="change_type" value="approved">	
-</div>
-{!! Form::close() !!}
+@if ($allowedToChange == 'yes')
+	<textarea form="form" name="comment" style="width: 600px;" class="form-control" rows="3" id="user" class="comment" placeholder="Please enter a comment about this change"></textarea>
 
-{!! Form::open(array('action' => 'ChangeRequestController@update', 'id' => 'form')) !!}
-<div class="form-group">
-<button type="submit" class="changerequest btn btn-danger">Reject changerequest</button>
-<input type="hidden" name="_token" value="{!! csrf_token() !!}">
-<input type="hidden" name="changerequest_id" value="{!! $changerequest->id !!}">	
-<input type="hidden" name="change_type" value="rejected">
-</div>
-{!! Form::close() !!}
+	{!! Form::open(array('action' => 'ChangeRequestController@update', 'id' => 'form')) !!}
+	<div class="form-group">
+	<button type="submit" class="changerequest btn btn-primary">Approve changerequest</button>
+	<input type="hidden" name="_token" value="{!! csrf_token() !!}">	
+	<input type="hidden" name="changerequest_id" value="{!! $changerequest->id !!}">	
+	<input type="hidden" name="change_type" value="approved">	
+	</div>
+	{!! Form::close() !!}
+
+	{!! Form::open(array('action' => 'ChangeRequestController@update', 'id' => 'form')) !!}
+	<div class="form-group">
+	<button type="submit" class="changerequest btn btn-danger">Reject changerequest</button>
+	<input type="hidden" name="_token" value="{!! csrf_token() !!}">
+	<input type="hidden" name="changerequest_id" value="{!! $changerequest->id !!}">	
+	<input type="hidden" name="change_type" value="rejected">
+	</div>
+	{!! Form::close() !!}
+@endif
 
 @endsection
 

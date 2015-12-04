@@ -12,7 +12,6 @@ TODO
 * system config?
 * definitions / hovers?
 * rewrite index (htaccess)
-* user_id when submitting content
 * data schema's, constraints
 * bread crumbs
 * technical draft order by, section_name, template_name, search orders

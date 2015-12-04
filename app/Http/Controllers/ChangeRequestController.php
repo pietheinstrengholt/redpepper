@@ -31,15 +31,111 @@ use App\Libraries\FineDiff;
 
 use Gate;
 use App\User;
+use App\UserRights;
 use Auth;
 
 class ChangeRequestController extends Controller
 {
 
+	public function templateRights($id) {
+	
+		$userrights = UserRights::where('username_id', $id)->get();
+		
+		$templatesRights = array();
+		$userrights = $userrights->toArray();
+		if (!empty($userrights)) {
+			foreach ($userrights as $userright) {
+				$templates = Template::where('section_id', $userright['section_id'])->get();
+				if (!empty($templates)) {
+					foreach ($templates as $template) {
+						array_push($templatesRights,$template->id);
+					}
+				}
+			}
+		}
+		return $templatesRights;
+	}
+	
     public function index()
     {
-		$changerequests = ChangeRequest::orderBy('created_at', 'desc')->get();
+		//exit when user is a guest
+		if (Auth::guest()) {
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
+		}
+		
+		//contributors and builders can only see own submitted changes
+		if (Auth::user()->role == "contributor" || Auth::user()->role == "builder") {
+			$changerequests = ChangeRequest::where('creator_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+		}
+		
+		if (Auth::user()->role == "admin" || Auth::user()->role == "reviewer") {
+			$templateList = $this->templateRights(Auth::user()->id);
+			$changerequests = ChangeRequest::whereIn('template_id', $templateList)->orderBy('created_at', 'desc')->get();
+		}
+		
+		//superadmin users can see all
+		if (Auth::user()->role == "superadmin") {
+			$changerequests = ChangeRequest::orderBy('created_at', 'desc')->get();
+		}
+
 		return view('changerequests.index', compact('changerequests'));
+    }	
+	
+    public function create()
+    {
+		//exit when user is a guest
+		if (Auth::guest()) {
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
+		}
+		
+		//abort if template_id and cell_id are not set
+		if (empty($_GET['template_id']) || empty($_GET['cell_id'])) {
+			abort(404, 'Content cannot be found with invalid arguments.');
+		}
+		
+		//split input into row and column
+		list($before, $after) = explode('-row', $_GET['cell_id'], 2);
+		$columnnum = str_ireplace("column", "", "$before");
+		$rownum = $after;
+		
+		//check if the admin, builder or reviewer user has the correct section rights
+		if (Auth::user()->role == "admin" || Auth::user()->role == "builder" || Auth::user()->role == "contributor") {
+			$templateList = $this->templateRights(Auth::user()->id);
+			if (!in_array($_GET['template_id'], $templateList)) {
+				abort(403, 'Unauthorized action. You don\'t have access to this template or section');
+			}
+		}
+		
+		if (Auth::user()->role == "reviewer" || Auth::user()->role == "guest" || Auth::guest()) {
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');		
+		}
+
+		return view('templates.cell-update', [
+			'template' => Template::find($_GET['template_id']),
+			'row' => TemplateRow::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->first(),
+			'column' => TemplateColumn::where('template_id', $_GET['template_id'])->where('column_name', $columnnum)->first(),
+			'regulation_row' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'R-' . $rownum)->where('content_type', 'regulation')->first(),
+			'regulation_column' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'C-' . $columnnum)->where('content_type', 'regulation')->first(),
+			'interpretation_row' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'R-' . $rownum)->where('content_type', 'interpretation')->first(),
+			'interpretation_column' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'C-' . $columnnum)->where('content_type', 'interpretation')->first(),
+			'technical' => Technical::where('template_id', $_GET['template_id'])->where('row_num', $rownum)->where('col_num', $columnnum)->get(),
+			'types' => TechnicalType::all(),
+			'sources' => TechnicalSource::all(),
+			'field_regulation' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'regulation')->first(),
+			'field_interpretation' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'interpretation')->first(),
+			'field_property1' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'property1')->first(),
+			'field_property2' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'property2')->first()
+		]);
+    }
+	
+    public function cleanup()
+    {
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }		
+		ChangeRequest::where('status', 'rejected')->orWhere('status', 'approved')->delete();
+		return Redirect::route('changerequests.index')->with('message', 'Cleanup performed.');
     }
 	
 	//set compare granularity level
@@ -63,6 +159,33 @@ class ChangeRequestController extends Controller
 	
 	public function edit(ChangeRequest $changerequest)
 	{
+	
+		if (Auth::guest()) {
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');		
+		}
+		
+		if (Auth::user()->role == "guest") {
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');		
+		}		
+	
+		//set allowed to change to yes
+		$allowedToChange = "yes";
+	
+		if (Auth::user()->role == "admin" || Auth::user()->role == "builder" || Auth::user()->role == "reviewer") {
+			if ($changerequest->creator_id == Auth::user()->id) {
+				$allowedToChange = "no";
+			}
+			
+			$templateList = $this->templateRights(Auth::user()->id);
+			
+			if (!in_array($changerequest->template_id, $templateList)) {
+				abort(403, 'Unauthorized action. You don\'t have access to this template or section');
+			}
+		}
+		
+		if (Auth::user()->role == "builder" || Auth::user()->role == "contributor") {
+			$allowedToChange = "no";
+		}
 		
 		//get current content
 		$current_regulation_row = Requirement::where('template_id', $changerequest->template_id)->where('field_id', 'R-' . $changerequest->row_number)->where('content_type', 'regulation')->first();
@@ -114,7 +237,8 @@ class ChangeRequestController extends Controller
 			'changerequest' => $changerequest,
 			'template' => Template::find($changerequest->template_id),
 			'template_row' => TemplateRow::where('template_id', $changerequest->template_id)->where('row_name', $changerequest->row_number)->first(),
-			'template_column' => TemplateColumn::where('template_id', $changerequest->template_id)->where('column_name', $changerequest->column_number)->first()
+			'template_column' => TemplateColumn::where('template_id', $changerequest->template_id)->where('column_name', $changerequest->column_number)->first(),
+			'allowedToChange' => $allowedToChange
 		]);
 		
 	}
@@ -203,8 +327,7 @@ class ChangeRequestController extends Controller
 								$HistoryRequirement->created_by = $ChangeRequest->creator_id;
 								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
 								$HistoryRequirement->approved_by = Auth::user()->id;
-								$HistoryRequirement->save();								
-								
+								$HistoryRequirement->save();
 							}
 							
 							//submit new content to archive table
@@ -735,45 +858,5 @@ class ChangeRequestController extends Controller
 
 		}
 	}
-	
-    public function create()
-    {
-		//abort if template_id and cell_id are not set
-		if (empty($_GET['template_id']) || empty($_GET['cell_id'])) {
-			abort(404, 'Content cannot be found with invalid arguments.');
-		}
-		
-		//split input into row and column
-		list($before, $after) = explode('-row', $_GET['cell_id'], 2);
-		$columnnum = str_ireplace("column", "", "$before");
-		$rownum = $after;
-
-		return view('templates.cell-update', [
-			'template' => Template::find($_GET['template_id']),
-			'row' => TemplateRow::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->first(),
-			'column' => TemplateColumn::where('template_id', $_GET['template_id'])->where('column_name', $columnnum)->first(),
-			'regulation_row' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'R-' . $rownum)->where('content_type', 'regulation')->first(),
-			'regulation_column' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'C-' . $columnnum)->where('content_type', 'regulation')->first(),
-			'interpretation_row' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'R-' . $rownum)->where('content_type', 'interpretation')->first(),
-			'interpretation_column' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'C-' . $columnnum)->where('content_type', 'interpretation')->first(),
-			'technical' => Technical::where('template_id', $_GET['template_id'])->where('row_num', $rownum)->where('col_num', $columnnum)->get(),
-			'types' => TechnicalType::all(),
-			'sources' => TechnicalSource::all(),
-			'field_regulation' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'regulation')->first(),
-			'field_interpretation' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'interpretation')->first(),
-			'field_property1' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'property1')->first(),
-			'field_property2' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'property2')->first()
-		]);
-    }
-	
-    public function cleanup()
-    {
-		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }		
-		ChangeRequest::where('status', 'rejected')->orWhere('status', 'approved')->delete();
-		return Redirect::route('changerequests.index')->with('message', 'Cleanup performed.');
-    }
 	
 }
