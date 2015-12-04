@@ -53,6 +53,10 @@ Route::bind('changerequests', function($value, $route) {
 	return App\ChangeRequest::whereId($value)->first();
 });
 
+// User routes...
+Route::get('users/{id}/rights', 'UserController@rights');
+Route::post('updaterights', 'UserController@updaterights');
+
 // Template routes...
 Route::get('templatestructure/{id}', 'TemplateController@structure');
 Route::post('changestructure', 'TemplateController@changestructure');

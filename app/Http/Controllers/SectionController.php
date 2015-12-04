@@ -41,7 +41,7 @@ class SectionController extends Controller
 	{
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action. Only superadmin users are allowed to edit sections.');
+            abort(403, 'Unauthorized action.');
         }
 	
 		return view('sections.edit', compact('section'));
@@ -49,11 +49,21 @@ class SectionController extends Controller
 	
 	public function create(Section $section)
 	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }	
+	
 		return view('sections.create', compact('section'));
 	}
 	
 	public function store()
 	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }	
+	
 		$input = Input::all();
 		Section::create($input);
 		return Redirect::route('sections.index')->with('message', 'Section created');
@@ -61,6 +71,11 @@ class SectionController extends Controller
 	 
 	public function update(Section $section)
 	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }
+
 		$input = array_except(Input::all(), '_method');
 		$section->update($input);
 		return Redirect::route('sections.show', $section->id)->with('message', 'Section updated.');
@@ -68,6 +83,27 @@ class SectionController extends Controller
 	 
 	public function destroy(Section $section)
 	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+		//remove all related templates and content
+		$templates = Template::where('section_id', $section->id)->get();
+		
+		if (!empty($templates)) {
+			foreach ($templates as $template) {
+				TemplateRow::where('template_id', $section->id)->delete();
+				TemplateColumn::where('template_id', $section->id)->delete();
+				TemplateField::where('template_id', $section->id)->delete();
+				Requirement::where('template_id', $section->id)->delete();
+				Technical::where('template_id', $section->id)->delete();
+				ChangeRequest::where('template_id', $section->id)->delete();				
+			}
+		}
+		
+		Template::where('section_id', $section->id)->delete();
+		
 		$section->delete();
 		return Redirect::route('sections.index')->with('message', 'Section deleted.');
 	}

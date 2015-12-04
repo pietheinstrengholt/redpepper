@@ -1,7 +1,7 @@
 TODO
 =======
 
-* user rights
+* user password change
 * line breaks in pop-up content
 * show warning before deleting content
 * manual pages (pdf?)
@@ -16,5 +16,5 @@ TODO
 * data schema's, constraints
 * bread crumbs
 * technical draft order by, section_name, template_name, search orders
-* delete all related content when template or section is delete
 * change row_num, row_number, row_name -> row_code
+* fix login register

@@ -36,6 +36,11 @@ class User extends Model implements AuthenticatableContract,
     public function changerequest()
     {
         return $this->hasMany('App\ChangeRequest');
+    }
+	
+    public function rights()
+    {
+        return $this->hasMany('App\UserRights', 'id', 'username_id');
     }	
 	
 	

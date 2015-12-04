@@ -50,8 +50,10 @@ class CSVController extends Controller
 							
 							$templates = Template::where('section_id', $request->has('section_id'))->get();
 							
-							foreach ($templates as $template) {
-								Template::where('section_id', $template->id)->delete();								
+							if (!empty($templates)) {
+								foreach ($templates as $template) {
+									Template::where('section_id', $template->id)->delete();
+								}
 							}
 
 							foreach ($csvarray as $csv) {

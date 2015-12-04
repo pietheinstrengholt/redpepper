@@ -17,20 +17,21 @@
 		<td class="header">E-mail address</td>
 		<td class="header">Role</td>
 		<td class="header">Department</td>
-		<td class="header" style="width: 120px;">Options</td>
+		<td class="header" style="width: 170px;">Options</td>
 		</tr>
 		
-		@foreach( $users as $users )
+		@foreach( $users as $user )
 		<tr>
-		<td>{{ $users->username }}</td>
-		<td>{{ $users->firstname }}</td>
-		<td>{{ $users->lastname }}</td>
-		<td>{{ $users->email }}</td>
-		<td>{{ $users->role }}</td>
-		<td>{{ $users->department->department_name }}</td>
-		{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('users.destroy', $users->id))) !!}
+		<td>{{ $user->username }}</td>
+		<td>{{ $user->firstname }}</td>
+		<td>{{ $user->lastname }}</td>
+		<td>{{ $user->email }}</td>
+		<td>{{ $user->role }}</td>
+		<td>{{ $user->department->department_name }}</td>
+		{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('users.destroy', $user->id))) !!}
 		<td>
-			{!! link_to_route('users.edit', 'Edit', array($users->id), array('class' => 'btn btn-info btn-xs')) !!}
+			{!! link_to_route('users.edit', 'Edit', array($user->id), array('class' => 'btn btn-info btn-xs')) !!}
+			<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('users') . '/' . $user->id . '/rights' }}">Rights</a>
 			{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
 		</td>
 		{!! Form::close() !!}

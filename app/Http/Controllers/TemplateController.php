@@ -16,6 +16,10 @@ use App\DraftField;
 use App\DraftRequirement;
 use App\DraftTechnical;
 use App\Http\Controllers\Controller;
+
+use Gate;
+use App\User;
+
 use Illuminate\Http\Request;
 use Input;
 use Redirect;
@@ -78,6 +82,11 @@ class TemplateController extends Controller
 	//function to edit template
 	public function edit(Section $section, Template $template)
 	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }
+	
 		$sections = Section::orderBy('section_name', 'asc')->get();
 		return view('templates.edit', compact('sections', 'section', 'template'));
 	}
@@ -171,6 +180,11 @@ class TemplateController extends Controller
 	//function to structure template
 	public function structure($id)
 	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }	
+	
 		$template = Template::find($id);
 		$disabledFields = $this->getDisabledFields($template);
 		return view('templates.structure', compact('section', 'template', 'disabledFields'));
@@ -188,6 +202,11 @@ class TemplateController extends Controller
 	//function to update template
 	public function update(Request $request)
 	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }	
+	
 		$input = array_except(Input::all(), '_method');
 		$template->update($input);
 		return Redirect::route('sections.templates.show', [$section->id, $template->id])->with('message', 'Template updated.');
@@ -196,6 +215,20 @@ class TemplateController extends Controller
 	//function to delete template
 	public function destroy(Section $section, Template $template)
 	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }	
+	
+		//remove all related template content
+		TemplateRow::where('template_id', $template->id)->delete();
+		TemplateColumn::where('template_id', $template->id)->delete();
+		TemplateField::where('template_id', $template->id)->delete();
+		Requirement::where('template_id', $template->id)->delete();
+		Technical::where('template_id', $template->id)->delete();
+		ChangeRequest::where('template_id', $template->id)->delete();	
+	
+		//delete template
 		$template->delete();
 		return Redirect::route('sections.show', $section->id)->with('message', 'Template deleted.');
 	}
