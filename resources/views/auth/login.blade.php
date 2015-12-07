@@ -24,11 +24,6 @@
 			<label for="caption">Username</label>
 			<input type="text" class="form-control" name="username" value="">
 		</div>
-		
-		<div class="form-group">
-			<label for="description">Email</label>
-			<input type="email" class="form-control" name="email" value="">
-		</div>				
 
 		<div class="form-group">
 			<label for="description">Password</label>

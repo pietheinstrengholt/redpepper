@@ -7,6 +7,9 @@ use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Contracts\Auth\Guard;
+use App\Http\Requests\Auth\LoginRequest; 
+use App\Http\Requests\Auth\RegisterRequest;
 
 class AuthController extends Controller
 {
@@ -21,6 +24,19 @@ class AuthController extends Controller
     |
     */
 
+    /**
+     * User model instance
+     * @var User
+     */
+    protected $user; 
+    
+    /**
+     * For Guard
+     *
+     * @var Authenticator
+     */
+    protected $auth;	
+	
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 	
 	protected $redirectPath = '/';
@@ -32,8 +48,10 @@ class AuthController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Guard $auth, User $user)
     {
+        $this->user = $user; 
+        $this->auth = $auth;	
         $this->middleware('guest', ['except' => 'getLogout']);
     }
 
@@ -49,7 +67,8 @@ class AuthController extends Controller
             'username' => 'required|max:255|unique:t_usernames',
 			'firstname' => 'required|max:255',
 			'lastname' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:t_usernames',
+			'department_id' => 'required',
+            //'email' => 'required|email|max:255|unique:t_usernames',
             'password' => 'required|confirmed|min:6',
         ]);
     }
@@ -77,6 +96,24 @@ class AuthController extends Controller
     protected function getRegister() {
 		$departments = Department::orderBy('department_name', 'asc')->get();
         return view('auth.register', compact('departments','user'));
+    }
+	
+    public function authenticate()
+    {
+        if (Auth::attempt(['username' => $username, 'password' => $password])) {
+            // Authentication passed...
+            return redirect('/');
+        }
+    }
+
+   protected function postLogin(LoginRequest $request) {
+        if ($this->auth->attempt($request->only('username', 'password'))) {
+            return redirect('/');
+        }
+ 
+        return redirect('users/login')->withErrors([
+            'email' => 'The email or the password is invalid. Please try again.',
+        ]);
     }	
 	
 }
