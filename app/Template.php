@@ -17,27 +17,27 @@ class Template extends Model
 	
     public function rows()
     {
-        return $this->hasMany('App\TemplateRow');
+        return $this->hasMany('App\TemplateRow', 'template_id', 'id');
     }
 	
     public function columns()
     {
-        return $this->hasMany('App\TemplateColumn');
+        return $this->hasMany('App\TemplateColumn', 'template_id', 'id');
     }
 	
     public function fields()
     {
-        return $this->hasMany('App\TemplateField');
+        return $this->hasMany('App\TemplateField', 'template_id', 'id');
     }
 	
-    public function requirement()
+    public function requirements()
     {
-        return $this->hasMany('App\Requirement');
+        return $this->hasMany('App\Requirement', 'template_id', 'id');
     }
 	
     public function technical()
     {
-        return $this->hasMany('App\Technical');
+        return $this->hasMany('App\Technical', 'template_id', 'id');
     }	
 	
 }

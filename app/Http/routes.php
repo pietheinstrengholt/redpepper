@@ -60,6 +60,7 @@ Route::post('updaterights', 'UserController@updaterights');
 // Template routes...
 Route::get('templatestructure/{id}', 'TemplateController@structure');
 Route::post('changestructure', 'TemplateController@changestructure');
+Route::post('newtemplate', 'TemplateController@newtemplate');
 
 // Model routes...
 Route::resource('sections', 'SectionController');
@@ -106,3 +107,7 @@ Route::get('/auth/logout', 'Auth\AuthController@getLogout');
 // Registration routes...
 Route::get('/auth/register', 'Auth\AuthController@getRegister');
 Route::post('/auth/register', 'Auth\AuthController@postRegister');
+
+//Manuals
+Route::get('/manuals', 'SectionController@manuals');
+Route::get('/manuals/{id}', 'SectionController@showmanual');

@@ -91,6 +91,87 @@ class TemplateController extends Controller
 		return view('templates.edit', compact('sections', 'section', 'template'));
 	}
 	
+	public function create()
+	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }
+		
+		$sections = Section::orderBy('section_name', 'asc')->get();
+		return view('templates.create', compact('sections'));
+	}
+	
+	//function to create new template
+	public function newtemplate(Request $request)
+	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+		if ($request->isMethod('post')) {
+			if (!($request->has('template_name') && $request->has('template_shortdesc') && $request->has('section_id') && $request->has('inputcolumns') && $request->has('inputrows'))) {
+				abort(403, 'Cannot create template. Some argument are missing.');
+			}
+				
+			if (!is_numeric($request->input('inputcolumns')) || !is_numeric($request->input('inputrows'))) {
+				abort(403, 'Argument for row and column numbers is not numeric.');
+			}
+			
+			$template = new Template;
+			$template->section_id = $request->input('section_id');
+			$template->template_name = $request->input('template_name');
+			$template->template_shortdesc = $request->input('template_shortdesc');
+			$template->template_longdesc = $request->input('template_longdesc');
+			$template->visible = 'No';
+			$template->save();
+			
+			$inputrows = $request->input('inputrows');
+			$inputcolumns = $request->input('inputcolumns');
+
+			//add tempate rows to database
+			$i = 1;
+			while ($i <= $inputrows) {
+				$j = $i;
+				if (strlen($j) == "1") {
+					$j = "0" . $j * 10;
+				} else {
+					$j = $j * 10;
+				}
+				
+				$row = new TemplateRow;
+				$row->template_id = $template->id;
+				$row->row_num = $i;
+				$row->row_name = $j;
+				$row->row_description = 'description row number ' . $j;
+				$row->row_reference = '';
+				$row->save();
+				$i++;
+			}
+			
+			//add tempate columns to database
+			$i = 1;
+			while ($i <= $inputcolumns) {
+				$j = $i;
+				if (strlen($j) == "1") {
+					$j = "0" . $j * 10;
+				} else {
+					$j = $j * 10;
+				}
+				$column = new TemplateColumn;
+				$column->template_id = $template->id;
+				$column->column_num = $i;
+				$column->column_name = $j;
+				$column->column_description = 'description column number ' . $j;
+				$column->save();
+				$i++;
+			}
+		}
+		return Redirect::to('/templatestructure/' . $template->id);
+
+	}
+	
 	//function to structure template
 	public function changestructure(Request $request)
 	{
