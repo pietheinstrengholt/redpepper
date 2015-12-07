@@ -65,6 +65,53 @@ class UserController extends Controller
 		
 		$sections = Section::orderBy('section_name', 'asc')->get();
 		return view('users.editrights', compact('user', 'roles', 'sections', 'sectionrights'));
+	}
+
+	public function password($id)
+	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+		$user = User::find($id);
+		return view('users.editpassword', compact('user'));
+	}
+	
+	public function updatepassword(Request $request)
+	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }
+		
+		if ($request->isMethod('post')) {
+
+			if (!($request->has('password') && $request->has('password_confirmation'))) {
+				abort(403, 'One of the password dialogs is empty.');
+			}
+			
+			if ($request->input('password') != $request->input('password_confirmation')) {
+				abort(403, 'Passwords are not equal.');
+			}
+			
+			if (strlen($request->input('password')) < 6) {
+				abort(403, 'Passwords are too short.');			
+			}
+			
+			if (!preg_match("#[0-9]+#", $request->input('password'))) {
+				abort(403, 'Password must include at least one number.');				
+			}
+			
+			if (!preg_match("#[a-zA-Z]+#", $request->input('password'))) {
+				abort(403, 'Password must include at least one letter.');				
+			}
+			
+			//update password
+			User::where('id', $request->input('username_id'))->update(['password' => bcrypt($request->input('password'))]);
+		}
+		//return to user overview
+		return Redirect::route('users.index')->with('message', 'Password updated.');
 	}	
  
 	public function update(User $user)

@@ -17,7 +17,7 @@
 		<td class="header">E-mail address</td>
 		<td class="header">Role</td>
 		<td class="header">Department</td>
-		<td class="header" style="width: 170px;">Options</td>
+		<td class="header" style="width: 242px;">Options</td>
 		</tr>
 		
 		@foreach( $users as $user )
@@ -32,6 +32,7 @@
 		<td>
 			{!! link_to_route('users.edit', 'Edit', array($user->id), array('class' => 'btn btn-info btn-xs')) !!}
 			<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('users') . '/' . $user->id . '/rights' }}">Rights</a>
+			<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('users') . '/' . $user->id . '/password' }}">Password</a>
 			{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
 		</td>
 		{!! Form::close() !!}

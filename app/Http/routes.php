@@ -55,7 +55,9 @@ Route::bind('changerequests', function($value, $route) {
 
 // User routes...
 Route::get('users/{id}/rights', 'UserController@rights');
+Route::get('users/{id}/password', 'UserController@password');
 Route::post('updaterights', 'UserController@updaterights');
+Route::post('updatepassword', 'UserController@updatepassword');
 
 // Template routes...
 Route::get('templatestructure/{id}', 'TemplateController@structure');
