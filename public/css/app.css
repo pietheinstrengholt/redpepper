@@ -75,3 +75,44 @@ button.changerequest.btn {
 search-table.table {
 	margin-buttom:20px;
 }
+
+/* Pop-up window and technical */
+table#technical th.source, table#technical th.type {
+	width: 15%;
+}
+
+table#technical th.action {
+	width: 10%;
+}
+
+table#technical td select.form-control, table#technical td input.form-control {
+	border: none;
+	box-shadow: none;
+	padding: 0px;
+	height: inherit;
+}
+
+table#technical div.checkbox {
+	margin-top: 1px ! important;
+    margin-bottom: 1px ! important;
+}
+
+table#technical textarea#field_property1 table#technical textarea#field_property2 {
+	width: 50%;
+}
+
+table#technical textarea#field_regulation table#technical textarea#field_interpretation {
+	width: 70%;
+}
+
+table.dialog  textarea#regulation_row, table.dialog  textarea#interpretation_row, table.dialog  textarea#regulation_column, table.dialog  textarea#interpretation_column {
+	width: 90%;
+}
+
+table.dialog {
+
+}
+
+div#cell-update {
+	margin-top:20px;
+}

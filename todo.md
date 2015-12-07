@@ -4,7 +4,7 @@ TODO
 * line breaks in submitted content?
 * show warning before deleting content
 * manual page per template (pdf?)
-* ie8 test 
+* ie8 test
 * css in all single app.css
 * reference tables
 * builder user? -> log table
