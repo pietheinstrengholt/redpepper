@@ -4,7 +4,7 @@ TODO
 * user password change
 * line breaks in pop-up content
 * show warning before deleting content
-* manual pages (pdf?)
+* manual page per template (pdf?)
 * ie8 test 
 * css in all single app.css
 * reference tables

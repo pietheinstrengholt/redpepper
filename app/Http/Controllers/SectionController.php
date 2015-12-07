@@ -46,6 +46,17 @@ class SectionController extends Controller
 		return view('sections.index', compact('sections'));
     }
 	
+    public function manuals()
+    {
+		//only superadmin can see all sections
+		if (Gate::denies('superadmin')) {
+			$sections = Section::orderBy('section_name', 'asc')->where('visible', 'True')->get();
+		} else {
+			$sections = Section::orderBy('section_name', 'asc')->get();	
+		}
+		return view('manuals.index', compact('sections'));
+    }	
+	
     public function show(Section $section)
     {
 		//only superadmin can see all templates
@@ -56,6 +67,13 @@ class SectionController extends Controller
 		}
 		return view('sections.show', compact('section', 'templates'));
     }
+	
+    public function showmanual($id)
+    {
+		$section = Section::where('id', $id)->first();
+		$templates = Template::with('requirements')->where('section_id', $id)->get();
+		return view('manuals.show', compact('section', 'templates'));
+    }	
 
 	public function edit(Section $section)
 	{
