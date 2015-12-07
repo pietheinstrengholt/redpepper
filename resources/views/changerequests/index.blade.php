@@ -28,7 +28,7 @@
 		@if ( $changerequest->status == "pending" )
 			<tr>
 				<td>{{ $changerequest->id }}</td>
-				<td>{{ $changerequest->template->template_name }}</td>
+				<td><a href="<?php echo url('sections/' . $changerequest->template->section_id . '/templates/' . $changerequest->template_id . '?row=' . $changerequest->row_number . '&column=' . $changerequest->column_number); ?>">{{ $changerequest->template->template_name }}</a></td>
 				<td>{{ $changerequest->creator->username }}</td>
 				<td></td>
 				<td>{{ $changerequest->template->section->section_name }}</td>
@@ -46,7 +46,7 @@
 		@else
 			<tr style="background-color:#F5F5F5;">
 				<td>{{ $changerequest->id }}</td>
-				<td>{{ $changerequest->template->template_name }}</td>
+				<td><a href="<?php echo url('sections/' . $changerequest->template->section_id . '/templates/' . $changerequest->template_id . '?row=' . $changerequest->row_number . '&column=' . $changerequest->column_number); ?>">{{ $changerequest->template->template_name }}</a></td>
 				<td>{{ $changerequest->creator->username }}</td>
 				<td></td>
 				<td>{{ $changerequest->template->section->section_name }}</td>
