@@ -29,28 +29,28 @@
 							<div class="form-group">
 								<label class="col-md-4 control-label">First Name</label>
 								<div class="col-md-6">
-									<input type="text" class="form-control" name="firstname" value="{{ old('first_name') }}">
+									<input type="text" class="form-control" name="firstname" value="">
 								</div>
 							</div>
 	 
 							<div class="form-group">
 								<label class="col-md-4 control-label">Last Name</label>
 								<div class="col-md-6">
-									<input type="text" class="form-control" name="lastname" value="{{ old('last_name') }}">
+									<input type="text" class="form-control" name="lastname" value="">
 								</div>
 							</div>
 	 
 							<div class="form-group">
 								<label class="col-md-4 control-label">E-Mail Address</label>
 								<div class="col-md-6">
-									<input type="email" class="form-control" name="email" value="{{ old('email') }}">
+									<input type="email" class="form-control" name="email" value="">
 								</div>
 							</div>
 							
 							<div class="form-group">
 								<label class="col-md-4 control-label">Username</label>
 								<div class="col-md-6">
-									<input type="text" class="form-control" name="username" value="{{ old('username') }}">
+									<input type="text" class="form-control" name="username" value="">
 								</div>
 							</div>							
 	 
