@@ -17,7 +17,7 @@
 	<!-- cell content -->
 	<table style="border: 1px solid #ddd;" class="table dialog table-striped">
 	<tr>
-	<td class="info-header"><h4><b>Specific Information: {{ $row->row_name }} - {{ $column->column_name }}</b></h4></td>
+	<td class="info-header"><h4><b>Specific Information: {{ $row['row_name'] }} - {{ $column['column_name'] }}</b></h4></td>
 	</tr>
 	<td>
 
@@ -48,26 +48,26 @@
 	<!-- legal and interpretations content -->
 	<table style="border: 1px solid #ddd;" border="0" class="table dialog table-striped">
 	<tr>
-		<td class="info-header"><h4><b>Row information: {{ $row->row_name }}</b></h4></td>
-		<td class="info-header"><h4><b>Column information: {{ $column->column_name }}</b></h4></td>
+		<td class="info-header"><h4><b>Row information: {{ $row['row_name'] }}</b></h4></td>
+		<td class="info-header"><h4><b>Column information: {{ $column['column_name'] }}</b></h4></td>
 	</tr>
 
 	<tr>
 		<td class="info-left im-content">
 			<h4><b>Name:</b></h4>
-			<div rows="1" id="rowname">{{ $row->row_description }}</div>
+			<div rows="1" id="rowname">{{ $row['row_description'] }}</div>
 			<h4><b>Regulation:</b></h4>
-			<textarea form="form" name="regulation_row" class="form-control" rows="6" id="regulation_row" style="width: 90%;">{{ $regulation_row->content }}</textarea>
+			<textarea form="form" name="regulation_row" class="form-control" rows="6" id="regulation_row" style="width: 90%;">{{ $regulation_row['content'] }}</textarea>
 			<h4><b>Interpretation:</b></h4>
-			<textarea form="form" name="interpretation_row" class="form-control" rows="5" id="interpretation_row" style="width: 90%;">{{ $interpretation_row->content }}</textarea>
+			<textarea form="form" name="interpretation_row" class="form-control" rows="5" id="interpretation_row" style="width: 90%;">{{ $interpretation_row['content'] }}</textarea>
 		</td>
 		<td class="info-right im-content">
 			<h4><b>Name:</b></h4>
-			<div rows="1" id="colname">{{ $column->column_description }}</div>
+			<div rows="1" id="colname">{{ $column['column_description'] }}</div>
 			<h4><b>Regulation:</b></h4>
-			<textarea form="form" name="regulation_column" class="form-control" rows="6" id="regulation_column" style="width: 90%;">{{ $regulation_column->content }}</textarea>
+			<textarea form="form" name="regulation_column" class="form-control" rows="6" id="regulation_column" style="width: 90%;">{{ $regulation_column['content'] }}</textarea>
 			<h4><b>Interpretation:</b></h4>
-			<textarea form="form" name="interpretation_column" class="form-control" rows="5" id="interpretation_column" style="width: 90%;">{{ $interpretation_column->content }}</textarea>
+			<textarea form="form" name="interpretation_column" class="form-control" rows="5" id="interpretation_column" style="width: 90%;">{{ $interpretation_column['content'] }}</textarea>
 		</td>
 	</tr>
 	</table>
