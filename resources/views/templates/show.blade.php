@@ -62,7 +62,7 @@
 					<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="disabled" style="background-color: LightGray ! important;" id="{{ $field }}"></td>
 				@else
 					@if (strpos($field,$searchvalue) !== false)
-						<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="highlight" id="{{ $field }}"></td>
+						<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="tablecell highlight" id="{{ $field }}"></td>
 					@else
 						<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="tablecell" id="{{ $field }}"></td>
 					@endif
