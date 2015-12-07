@@ -21,13 +21,13 @@
 @if ( $field_regulation->count() )
 	<dl class="dl-horizontal" style="margin-right: 30px;">
 	<dt>Regulation:</dt>
-	<dd><div class="content-box" style="float:left;">{{ $field_regulation{0}->content }}</div></dd>
+	<dd><div class="content-box" style="float:left;">{!! $field_regulation{0}->content !!}</div></dd>
 	</dl>
 @endif
 @if ( $field_interpretation->count() )
 	<dl class="dl-horizontal" style="margin-right: 30px;">
 	<dt>Interpretation:</dt>
-	<dd><div class="content-box" style="float:left;">{{ $field_interpretation{0}->content }}</div></dd>
+	<dd><div class="content-box" style="float:left;">{!! $field_interpretation{0}->content !!}</div></dd>
 	</dl>
 @endif
 </td>
@@ -45,17 +45,17 @@
 		<h4><b>Name:</b></h4>
 		<div rows="1" id="rowname">{{ $row->row_description }}</div>
 		<h4><b>Regulation:</b></h4>
-		<div rows="7" id="row_regulation">{{ $regulation_row['content'] }}</div>
+		<div rows="7" id="row_regulation">{!! nl2br(e($regulation_row['content'])) !!}</div>
 		<h4><b>Interpretation:</b></h4>
-		<div rows="6" id="row_interpretation">{{ $interpretation_row['content'] }}</div>
+		<div rows="6" id="row_interpretation">{!! nl2br(e($interpretation_row['content'])) !!}</div>
 	</td>
 	<td class="info-right im-content">
 		<h4><b>Name:</b></h4>
 		<div rows="1" id="colname">{{ $column->column_description }}</div>
 		<h4><b>Regulation:</b></h4>
-		<div rows="7" id="column_regulation">{{ $regulation_column['content'] }}</div>
+		<div rows="7" id="column_regulation">{!! nl2br(e($regulation_column['content'])) !!}</div>
 		<h4><b>Interpretation:</b></h4>
-		<div rows="6" id="column_interpretation">{{ $interpretation_column['content'] }}</div>
+		<div rows="6" id="column_interpretation">{!! nl2br(e($interpretation_column['content'])) !!}</div>
 	</td>
 </tr>
 </table>

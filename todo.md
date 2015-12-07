@@ -1,8 +1,7 @@
 TODO
 =======
 
-* user password change
-* line breaks in pop-up content
+* line breaks in submitted content?
 * show warning before deleting content
 * manual page per template (pdf?)
 * ie8 test 
