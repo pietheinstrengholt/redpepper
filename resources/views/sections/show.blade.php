@@ -19,7 +19,7 @@
 		</tr>
             @foreach( $templates as $template )
                 <tr>
-                    {!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('sections.templates.destroy', $template->section_id, $template->id))) !!}
+                    {!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('sections.templates.destroy', $template->section_id, $template->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this template?\')')) !!}
                         <td><a href="{{ route('sections.templates.show', [$section->id, $template->id]) }}">{{ $template->template_name }}</a></td>
 						<td>{{ $template->template_shortdesc }}</td>
 						<td>{{ $template->section_shortdesc }}</td>

@@ -20,7 +20,7 @@
 		<tr>
 		<td>{{ $department->department_name }}</td>
 		<td>{{ $department->department_description }}</td>
-		{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('departments.destroy', $department->id))) !!}
+		{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('departments.destroy', $department->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this department?\')')) !!}
 		<td>
 			{!! link_to_route('departments.edit', 'Edit', array($department->id), array('class' => 'btn btn-info btn-xs')) !!}
 			{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}

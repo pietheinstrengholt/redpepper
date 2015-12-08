@@ -28,7 +28,7 @@
 		<td>{{ $user->email }}</td>
 		<td>{{ $user->role }}</td>
 		<td>{{ $user->department->department_name }}</td>
-		{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('users.destroy', $user->id))) !!}
+		{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('users.destroy', $user->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this user?\')')) !!}
 		<td>
 			{!! link_to_route('users.edit', 'Edit', array($user->id), array('class' => 'btn btn-info btn-xs')) !!}
 			<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('users') . '/' . $user->id . '/rights' }}">Rights</a>

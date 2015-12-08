@@ -20,7 +20,7 @@
 		<tr>
 		<td>{{ $type->type_name }}</td>
 		<td>{{ $type->type_description }}</td>
-		{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('types.destroy', $type->id))) !!}
+		{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('types.destroy', $type->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this type?\')')) !!}
 		<td>
 			{!! link_to_route('types.edit', 'Edit', array($type->id), array('class' => 'btn btn-info btn-xs')) !!}
 			{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}

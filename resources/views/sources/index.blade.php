@@ -20,7 +20,7 @@
 		<tr>
 		<td>{{ $source->source_name }}</td>
 		<td>{{ $source->source_description }}</td>
-		{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('sources.destroy', $source->id))) !!}
+		{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('sources.destroy', $source->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this source?\')')) !!}
 		<td>
 			{!! link_to_route('sources.edit', 'Edit', array($source->id), array('class' => 'btn btn-info btn-xs')) !!}
 			{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
