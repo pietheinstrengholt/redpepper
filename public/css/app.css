@@ -42,6 +42,18 @@ table.template td.clicked {
 	background-color: #90EE90 ! important;
 }
 
+table.template td.propertybold {
+	font-weight: bold;
+}
+
+table.template td.propertytab {
+	padding-left: 20px;
+}
+
+table.template td.propertydoubletab {
+	padding-left: 40px;
+}
+
 .table .info-left, .table .info-right {
 	width: 50%;
 }

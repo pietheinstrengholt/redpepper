@@ -13,6 +13,7 @@
 	
 		{!! Form::open(array('action' => 'TemplateController@changestructure', 'id' => 'form')) !!}
 		<input name="template_id" type="hidden" value="{{ $template->id }}"/>
+		<input name="section_id" type="hidden" value="{{ $template->section_id }}"/>
 		<button style="margin-bottom:15px;" type="submit" class="btn btn-warning">Submit new template structure</button>
 	
 		<table class="table table-bordered template template-structure" border="1">
@@ -59,37 +60,26 @@
 			
 			<td style="background-color: #FAFAFA;">
 			<label style="padding-left:0px;" class="checkbox-inline">
-				@if ( !empty($row->row_property)) {
-					@if ( $row->row_property == "bold") {
-					<input class="rowproperty{{ $row->num }}" type="radio" name="row_property[{{ $row->name }}]" id="optionsRadios1" value="bold" checked> bold
-					@else
-					<input class="rowproperty{{ $row->num }}" type="radio" name="row_property[{{ $row->name }}]" id="optionsRadios1" value="bold"> bold
-					@endif
-				@else
-				<input class="rowproperty{{ $row->num }}" type="radio" name="row_property[{{ $row->name }}]" id="optionsRadios1" value="bold"> bold
-				@endif
+			@if ($row['row_property'] == "bold")
+				<input class="rowproperty{{ $row->row_name }}" type="radio" name="row_property[{{ $row->row_name }}]" id="radio{{ $row->row_name }}" value="bold" checked> bold
+			@else
+				<input class="rowproperty{{ $row->row_name }}" type="radio" name="row_property[{{ $row->row_name }}]" id="radio{{ $row->row_name }}" value="bold"> bold
+			@endif
+			</label>
+			
+			<label style="padding-left:0px;" class="checkbox-inline">
+			@if ($row['row_property'] == "tab")
+				<input class="rowproperty{{ $row->row_name }}" type="radio" name="row_property[{{ $row->row_name }}]" id="radio{{ $row->row_name }}" value="tab" checked> tab
+			@else
+				<input class="rowproperty{{ $row->row_name }}" type="radio" name="row_property[{{ $row->row_name }}]" id="radio{{ $row->row_name }}" value="tab"> tab
+			@endif
 			</label>
 			<label style="padding-left:0px;" class="checkbox-inline">
-				@if ( !empty($row->row_property)) {
-					@if ( $row->row_property == "tab") {
-					<input class="rowproperty{{ $row->num }}" type="radio" name="row_property[{{ $row->name }}]" id="optionsRadios1" value="tab" checked> tab
-					@else
-					<input class="rowproperty{{ $row->num }}" type="radio" name="row_property[{{ $row->name }}]" id="optionsRadios1" value="tab"> tab
-					@endif
-				@else
-				<input class="rowproperty{{ $row->num }}" type="radio" name="row_property[{{ $row->name }}]" id="optionsRadios1" value="tab"> tab
-				@endif
-			</label>
-			<label style="padding-left:0px;" class="checkbox-inline">
-				@if ( !empty($row->row_property)) {
-					@if ( $row->row_property == "doubletab") {
-					<input class="rowproperty{{ $row->num }}" type="radio" name="row_property[{{ $row->name }}]" id="optionsRadios1" value="doubletab" checked> doubletab
-					@else
-					<input class="rowproperty{{ $row->num }}" type="radio" name="row_property[{{ $row->name }}]" id="optionsRadios1" value="doubletab"> doubletab
-					@endif
-				@else
-				<input class="rowproperty{{ $row->num }}" type="radio" name="row_property[{{ $row->name }}]" id="optionsRadios1" value="doubletab"> doubletab
-				@endif
+			@if ($row['row_property'] == "doubletab")
+				<input class="rowproperty{{ $row->row_name }}" type="radio" name="row_property[{{ $row->row_name }}]" id="radio{{ $row->row_name }}" value="doubletab" checked> doubletab
+			@else
+				<input class="rowproperty{{ $row->row_name }}" type="radio" name="row_property[{{ $row->row_name }}]" id="radio{{ $row->row_name }}" value="doubletab"> doubletab
+			@endif
 			</label>
 			</td>			
 			

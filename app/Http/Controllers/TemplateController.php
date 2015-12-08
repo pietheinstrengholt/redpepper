@@ -177,7 +177,12 @@ class TemplateController extends Controller
 	{
 		if ($request->isMethod('post')) {
 			
-			if ($request->has('template_id')) {
+			if ($request->has('template_id') && $request->has('section_id')) {
+			
+			
+				echo "<pre>";
+				print_r($_POST);
+				echo "</pre>";
 
 				//update column numbers
 				if ($request->has('colnum')) {
@@ -216,6 +221,15 @@ class TemplateController extends Controller
 						}
 					}
 				}
+				
+				//update row desc
+				if ($request->has('row_property')) {
+					foreach($request->input('row_property') as $key => $value) {
+						if (!empty($value)) {
+							TemplateRow::where('template_id', $request->input('template_id'))->where('row_name', $key)->update(['row_property' => $value]);
+						}
+					}
+				}				
 
 				//delete disabled cells
 				TemplateField::where('template_id', $request->input('template_id'))->where('property', 'disabled')->delete();
@@ -254,8 +268,7 @@ class TemplateController extends Controller
 				
 			}
 		}
-		
-		return Redirect::route('sections.index')->with('message', 'Template structure updated.');
+		return Redirect::route('sections.show', $request->input('section_id'))->with('message', 'Template created.');
 	}
 	
 	//function to structure template

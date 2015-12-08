@@ -51,7 +51,7 @@
 		
 			<tr>
 			<td style="background-color: #FAFAFA;">{{ $row->row_name }}</td>
-			<td style="background-color: #FAFAFA;">{{ $row->row_description }}</td>
+			<td class="property{{ $row->row_property }}" style="background-color: #FAFAFA;">{{ $row->row_description }}</td>
 			<!-- Table cell information, column and row combination -->
 			@foreach( $template->columns as $column )
 			

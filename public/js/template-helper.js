@@ -11,59 +11,6 @@ jQuery(document).ready(function () {
 
 			//als de button oranje (warning) is, haal een nieuw formulier op vanuit de backend-template-update.php
 			if ($('button#modal-update').hasClass('btn-warning')) {
-
-				//retrieve content from the backend and fill in modal form
-				/* $.ajax({
-					cache: false,
-					type: 'GET',
-					url: "http://thuis.strengholt-online.nl/laravel/public/index.php/cell",
-					data: {
-						"template_id" : template_id, 
-						"cell_id" : cell_id,
-						"change" : "yes"
-					},
-					success: function(data) {
-					
-						console.log('change clicked');
-					
-						//show modal and set clone count
-						$('#modalContent').show().html(data);
-						var cloneCount = 1000;
-
-						//this functionality copies the hidden row when the add new row button is pressed
-						$("button#addnewrow").click(function(){
-
-							//increase clone count
-							cloneCount++;
-
-							//clone tr line and append to last line
-							$tableBody = $('table#technical').find("tbody");
-							$trLast = $tableBody.find("tr:last");
-							$trNew = $trLast.clone();
-							$trNew.show();
-							$trNew.attr( "id", cloneCount );
-							$trLast.before($trNew);
-
-							//change name attribute and to increased clonecount
-							$( 'tr#' + cloneCount + ' select#system.form-control').attr('name', 'technical[' + cloneCount + '][system]');
-							$( 'tr#' + cloneCount + ' select#type.form-control').attr('name', 'technical[' + cloneCount + '][type]');
-							$( 'tr#' + cloneCount + ' input#value.form-control').attr('name', 'technical[' + cloneCount + '][value]');
-							$( 'tr#' + cloneCount + ' input#description.form-control').attr('name', 'technical[' + cloneCount + '][description]');
-							$( 'tr#' + cloneCount + ' input#action').attr('name', 'technical[' + cloneCount + '][action]');
-
-						});
-						
-					//change class and text in button
-					$("button#modal-update").toggleClass('btn-warning btn-danger');
-					$("button#modal-update").text("Submit changes");
-
-					
-					
-					
-					
-						
-					
-				}); */
 				
 				window.location.replace('http://thuis.strengholt-online.nl/laravel/public/index.php/updatecell?template_id=' + template_id + '&cell_id=' + cell_id);
 
