@@ -299,7 +299,7 @@ class TemplateController extends Controller
 	}
 	
 	//function to update template
-	public function update(Request $request)
+	public function update(Section $section, Template $template)
 	{
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
