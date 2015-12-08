@@ -119,7 +119,7 @@ code {
 		<h4><b>Name:</b></h4>
 		<div rows="1" id="rowname">{{ $template_row->row_description }}</div>
 		<h4><b>Legal standard:</b></h4>
-		<div rows="7" id="row_legal">{!! nl2br($changerequest->regulation_row) !!}</div>
+		<div rows="7" id="row_regulation">{!! nl2br($changerequest->regulation_row) !!}</div>
 		<h4><b>Interpretation:</b></h4>
 		<div rows="6" id="row_interpretation">{!! nl2br($changerequest->interpretation_row) !!}</div>
 	</td>
@@ -127,9 +127,9 @@ code {
 		<h4><b>Name:</b></h4>
 		<div rows="1" id="colname">{{ $template_column->column_description }}</div>
 		<h4><b>Legal standard:</b></h4>
-		<div rows="7" id="column_legal">{!! nl2br($changerequest->regulation_column) !!}</div>
+		<div rows="7" id="column_regulation">{!! nl2br($changerequest->regulation_column) !!}</div>
 		<h4><b>Interpretation:</b></h4>
-		<div rows="6" id="row_interpretation">{!! nl2br($changerequest->interpretation_column) !!}</div>
+		<div rows="6" id="column_interpretation">{!! nl2br($changerequest->interpretation_column) !!}</div>
 	</td>
 </tr>
 </table>
