@@ -8,7 +8,7 @@ class Technical extends Model
 {
     protected $fillable = ['template_id','source_id','type_id','content','row_code','column_code','content','description'];
     protected $guarded = [];
-	protected $table = 't_technical_info';
+	protected $table = 't_technical';
 
     public function type()
     {

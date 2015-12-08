@@ -106,21 +106,21 @@ class CreateUsersTable extends Migration
             $table->timestamps();
         });
 		
-        Schema::create('t_technical_info_type', function (Blueprint $table) {
+        Schema::create('t_technical_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('type_name')->unique();
             $table->string('type_description')->nullable();
             $table->timestamps();
         });
 		
-        Schema::create('t_technical_info_souce', function (Blueprint $table) {
+        Schema::create('t_technical_souces', function (Blueprint $table) {
             $table->increments('id');
             $table->string('source_name')->unique();
             $table->string('source_description')->nullable();
             $table->timestamps();
         });
 
-        Schema::create('t_technical_info', function (Blueprint $table) {
+        Schema::create('t_technical', function (Blueprint $table) {
             $table->increments('id');
 			$table->integer('template_id')->unsigned();
 			$table->integer('source_id')->unsigned();
@@ -227,9 +227,9 @@ class CreateUsersTable extends Migration
 		Schema::drop('t_template_rows');
 		Schema::drop('t_template_cells');
 		Schema::drop('t_content');
-		Schema::drop('t_technical_info');
-		Schema::drop('t_technical_info_type');
-		Schema::drop('t_technical_info_souce');
+		Schema::drop('t_technical');
+		Schema::drop('t_technical_types');
+		Schema::drop('t_technical_souces');
 		Schema::drop('t_changes_cells');
 		Schema::drop('t_changes_content');
 		Schema::drop('t_changes_technical');	

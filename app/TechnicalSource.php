@@ -8,7 +8,7 @@ class TechnicalSource extends Model
 {
     protected $fillable = ['source_name','source_description'];
     protected $guarded = [];
-	protected $table = 't_technical_info_source';
+	protected $table = 't_technical_sources';
 }
 
 ?>
