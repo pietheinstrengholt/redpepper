@@ -33,10 +33,11 @@
 	<div class="form-group">
 		{!! Form::label('Visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
 		<div class="col-sm-6" style="margin-top: 11px;">
+		{!! Form::hidden('visible','False') !!}
 		@if ( $section->visible == "True" )
 			{!! Form::checkbox('visible', 'True', true) !!}
 		@else
-			{!! Form::checkbox('visible', 'True') !!}		
+			{!! Form::checkbox('visible', 'True') !!}
 		@endif
 		</div>
 	</div>
