@@ -59,6 +59,11 @@ class SectionController extends Controller
 	
     public function show(Section $section)
     {
+		//check if visible is set to false and user is a guest
+		if (Auth::guest() && $section->visible == "False") {
+			abort(403, 'Unauthorized action.');
+		}
+	
 		//only superadmin can see all templates
 		if (Gate::denies('superadmin')) {
 			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->where('visible', 'True')->get();

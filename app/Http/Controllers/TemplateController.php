@@ -19,7 +19,7 @@ use App\Http\Controllers\Controller;
 
 use Gate;
 use App\User;
-
+use Auth;
 use Illuminate\Http\Request;
 use Input;
 use Redirect;
@@ -31,6 +31,12 @@ class TemplateController extends Controller
 	//function to show template
     public function show(Section $section, Template $template, Request $request)
     {
+	
+		//check if visible is set to false and user is a guest
+		if (Auth::guest() && $template->visible == "False") {
+			abort(403, 'Unauthorized action.');
+		}	
+	
 		//set empty search value
 		$searchvalue = 'empty';
 		
