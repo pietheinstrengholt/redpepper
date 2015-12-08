@@ -11,3 +11,4 @@ TODO
 * definitions / hovers?
 * rewrite index (htaccess)
 * bread crumbs
+* visible op template secties, goed testen of dit juist wordt opgeslagen
