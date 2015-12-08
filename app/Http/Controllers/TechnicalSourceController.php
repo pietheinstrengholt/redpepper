@@ -21,7 +21,7 @@ class TechnicalSourceController extends Controller
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }	
-		$sources = TechnicalSource::all();
+		$sources = TechnicalSource::orderBy('source_name', 'asc')->get();
 		return view('sources.index', compact('sources'));
     }
 	

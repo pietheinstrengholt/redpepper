@@ -21,7 +21,7 @@ class TechnicalTypeController extends Controller
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }	
-		$types = TechnicalType::all();
+		$types = TechnicalType::orderBy('type_name', 'asc')->get();
 		return view('types.index', compact('types'));
     }
 	

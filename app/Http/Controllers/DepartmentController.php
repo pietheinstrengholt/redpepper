@@ -20,7 +20,7 @@ class DepartmentController extends Controller
             abort(403, 'Unauthorized action.');
         }	
 	
-		$departments = Department::all();
+		$departments = Department::orderBy('department_name', 'asc')->get();
 		return view('departments.index', compact('departments'));
     }
 	
