@@ -1,7 +1,6 @@
 TODO
 =======
 
-* line breaks in submitted content?
 * show warning before deleting content
 * manual page per template (pdf?)
 * ie8 test
@@ -11,6 +10,4 @@ TODO
 * system config?
 * definitions / hovers?
 * rewrite index (htaccess)
-* data schema's, constraints
 * bread crumbs
-* technical draft order by, section_name, template_name, search orders
