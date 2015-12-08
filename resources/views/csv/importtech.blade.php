@@ -7,7 +7,7 @@
 <h4>Please make use of the upload form below</h4>
 
 <strong>Example:</strong> The file needs to be in the following format, including header and stored as comma separated<br><br>
-<pre>template_id;source_id;type_id;content;row_code;col_code;description
+<pre>template_id;source_id;type_id;content;row_code;column_code;description
 999;5;1;10001010;020;010;Cash on hand
 999;5;1;10002010;030;010;Balances with central banks other than mandatory reserve deposits and readily convertible in cash
 999;5;1;10004011;040;010;Due from credit institutions - Current accounts (nostro accounts)

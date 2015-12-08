@@ -10,14 +10,14 @@
 
 		<tr class="success">
 		<td class="header">Template Name</td>
-		<td class="header">Row Name</td>
+		<td class="header">Row code</td>
 		<td class="header">Description</td>
 		</tr>
 		
 		@foreach( $rows as $row )
 			<tr>
-			<td><a href="<?php echo url('sections/' . $row->template->section_id . '/templates/' . $row->template_id . '?row=' . $row->row_name); ?>">{{ $row->template->template_name }}</a></td>
-			<td>{{ $row->row_name }}</td>
+			<td><a href="<?php echo url('sections/' . $row->template->section_id . '/templates/' . $row->template_id . '?row=' . $row->row_code); ?>">{{ $row->template->template_name }}</a></td>
+			<td>{{ $row->row_code }}</td>
 			<td>{{ $row->row_description }}</td>
 			</tr>
 		@endforeach
@@ -30,14 +30,14 @@
 
 		<tr class="success">
 		<td class="header">Template Name</td>
-		<td class="header">Column Name</td>
+		<td class="header">Column code</td>
 		<td class="header">Description</td>
 		</tr>
 		
 		@foreach( $columns as $column )
 			<tr>
-			<td><a href="<?php echo url('sections/' . $column->template->section_id . '/templates/' . $column->template_id . '?column=' . $column->column_name); ?>">{{ $column->template->template_name }}</a></td>
-			<td>{{ $column->column_name }}</td>
+			<td><a href="<?php echo url('sections/' . $column->template->section_id . '/templates/' . $column->template_id . '?column=' . $column->column_code); ?>">{{ $column->template->template_name }}</a></td>
+			<td>{{ $column->column_code }}</td>
 			<td>{{ $column->column_description }}</td>
 			</tr>
 		@endforeach
@@ -50,17 +50,17 @@
 
 		<tr class="success">
 		<td class="header">Template Name</td>
-		<td class="header">Row Name</td>
-		<td class="header">Column Name</td>
+		<td class="header">Row code</td>
+		<td class="header">Column code</td>
 		<td class="header">Property</td>
 		<td class="header">Content</td>
 		</tr>
 		
 		@foreach( $fields as $field )
 			<tr>
-			<td><a href="<?php echo url('sections/' . $field->template->section_id . '/templates/' . $field->template_id . '?row=' . $field->row_name . '&column=' . $field->column_name); ?>">{{ $field->template->template_name }}</a></td>
-			<td>{{ $field->row_name }}</td>
-			<td>{{ $field->column_name }}</td>
+			<td><a href="<?php echo url('sections/' . $field->template->section_id . '/templates/' . $field->template_id . '?row=' . $field->row_code . '&column=' . $field->column_code); ?>">{{ $field->template->template_name }}</a></td>
+			<td>{{ $field->row_code }}</td>
+			<td>{{ $field->column_code }}</td>
 			<td>{{ $field->property }}</td>
 			<td>{{ $field->content }}</td>
 			</tr>
@@ -96,8 +96,8 @@
 
 		<tr class="success">
 		<td class="header">Template Name</td>
-		<td class="header">Row name</td>
-		<td class="header">Column name</td>
+		<td class="header">Row code</td>
+		<td class="header">Column code</td>
 		<td class="header">Source</td>
 		<td class="header">Type</td>
 		<td class="header">Content</td>
