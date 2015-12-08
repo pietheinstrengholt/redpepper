@@ -11,8 +11,7 @@
 	<!-- External scripts are placed here -->
 	<script src="{{ URL::asset('js/jquery-1.11.3.min.js') }}"></script>
 	<script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
-	<script src="{{ URL::asset('js/cellupdate-helper.js') }}"></script>
-	<script src="{{ URL::asset('js/template-helper.js') }}"></script>
+	<script src="{{ URL::asset('js/app.js') }}"></script>
 
 	<!-- CSS -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
