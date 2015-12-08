@@ -175,14 +175,14 @@ class TemplateController extends Controller
 	//function to structure template
 	public function changestructure(Request $request)
 	{
+		//exit when user is a guest
+		if (Auth::guest()) {
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
+		}	
+	
 		if ($request->isMethod('post')) {
 			
 			if ($request->has('template_id') && $request->has('section_id')) {
-			
-			
-				echo "<pre>";
-				print_r($_POST);
-				echo "</pre>";
 
 				//update column numbers
 				if ($request->has('colnum')) {
@@ -274,10 +274,10 @@ class TemplateController extends Controller
 	//function to structure template
 	public function structure($id)
 	{
-		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }	
+		//exit when user is a guest
+		if (Auth::guest()) {
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
+		}
 	
 		$template = Template::find($id);
 		$disabledFields = $this->getDisabledFields($template);
@@ -287,6 +287,11 @@ class TemplateController extends Controller
 	//function to add new template
 	public function store(Section $section)
 	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }		
+	
 		$input = Input::all();
 		$input['section_id'] = $section->id;
 		Template::create( $input );
@@ -299,7 +304,7 @@ class TemplateController extends Controller
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }	
+        }
 	
 		$input = array_except(Input::all(), '_method');
 		$template->update($input);

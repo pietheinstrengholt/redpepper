@@ -40,7 +40,7 @@ class CSVController extends Controller
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }		
+        }
 	
 		if ($request->isMethod('post')) {
 		

@@ -53,6 +53,11 @@ class ExcelController extends Controller
 
 	public function uploadform() 
 	{
+		//exit when user is a guest
+		if (Auth::guest()) {
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
+		}	
+	
 		//admin and builder are only permitted to upload to own sections
 		if (Auth::user()->role == "admin" || Auth::user()->role == "builder") {
 			$sectionList = $this->sectionRights(Auth::user()->id);
@@ -85,6 +90,11 @@ class ExcelController extends Controller
 	
 	public function uploadexcel(Request $request) 
 	{
+		//exit when user is a guest
+		if (Auth::guest()) {
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
+		}	
+	
 		if ($request->isMethod('post')) {
 		
 			if ($request->hasFile('excel')) {
@@ -808,13 +818,8 @@ class ExcelController extends Controller
 								}
 							}
 						}
-						
-						//echo $template->id;
-						
 					});
-
 				}
-			
 			}
 
 			return Redirect::to('/sections');
@@ -1213,7 +1218,11 @@ class ExcelController extends Controller
 	
     public function exportchanges()
     {
-	
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }
+		
 		Excel::create('ChangeRequests', function($excel)  {
 
 			// Our first sheet

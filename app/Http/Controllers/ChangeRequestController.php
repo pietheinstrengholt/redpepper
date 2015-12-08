@@ -93,11 +93,6 @@ class ChangeRequestController extends Controller
 			abort(404, 'Content cannot be found with invalid arguments.');
 		}
 		
-		//split input into row and column
-		list($before, $after) = explode('-row', $_GET['cell_id'], 2);
-		$columnnum = str_ireplace("column", "", "$before");
-		$rownum = $after;
-		
 		//check if the admin, builder or reviewer user has the correct section rights
 		if (Auth::user()->role == "admin" || Auth::user()->role == "builder" || Auth::user()->role == "contributor") {
 			$templateList = $this->templateRights(Auth::user()->id);
@@ -105,6 +100,11 @@ class ChangeRequestController extends Controller
 				abort(403, 'Unauthorized action. You don\'t have access to this template or section');
 			}
 		}
+		
+		//split input into row and column
+		list($before, $after) = explode('-row', $_GET['cell_id'], 2);
+		$columnnum = str_ireplace("column", "", "$before");
+		$rownum = $after;		
 		
 		if (Auth::user()->role == "reviewer" || Auth::user()->role == "guest" || Auth::guest()) {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');		
