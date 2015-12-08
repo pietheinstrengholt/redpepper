@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class TemplateField extends Model
 {
-    protected $fillable = ['template_id','row_name','column_name','property','content'];
+    protected $fillable = ['template_id','row_code','column_code','property','content'];
     protected $guarded = [];
-	protected $table = 't_template_field_property';
+	protected $table = 't_template_cells';
 
     public function template()
     {

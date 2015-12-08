@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Technical extends Model
 {
-    protected $fillable = ['template_id','source_id','type_id','content','row_num','column_num','content','description'];
+    protected $fillable = ['template_id','source_id','type_id','content','row_code','column_code','content','description'];
     protected $guarded = [];
 	protected $table = 't_technical_info';
 

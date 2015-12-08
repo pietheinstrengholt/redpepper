@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class ChangeRequest extends Model
 {
-    protected $fillable = ['template_id','row_number','column_number','creator_id','approver_id','status','comment'];
+    protected $fillable = ['template_id','row_code','column_code','creator_id','approver_id','status','comment'];
     protected $guarded = [];
-	protected $table = 't_changerequests';
+	protected $table = 't_changes';
 
     public function drafttechnical()
     {

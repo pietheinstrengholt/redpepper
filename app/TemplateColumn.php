@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TemplateColumn extends Model
 {
-    protected $fillable = ['template_id','column_num','column_name','column_description','column_property'];
+    protected $fillable = ['template_id','column_num','column_code','column_description','column_property'];
     protected $guarded = [];
 	protected $table = 't_template_columns';
 
