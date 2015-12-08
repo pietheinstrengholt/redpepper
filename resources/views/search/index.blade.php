@@ -106,9 +106,9 @@
 		
 		@foreach( $technicals as $technical )
 			<tr>
-			<td><a href="<?php echo url('sections/' . $technical->template->section_id . '/templates/' . $technical->template_id . '?row=' . $technical->row_num . '&column=' . $technical->col_num); ?>">{{ $technical->template->template_name }}</a></td>
-			<td>{{ $technical->row_num }}</td>
-			<td>{{ $technical->col_num }}</td>
+			<td><a href="<?php echo url('sections/' . $technical->template->section_id . '/templates/' . $technical->template_id . '?row=' . $technical->row_code . '&column=' . $technical->column_code); ?>">{{ $technical->template->template_name }}</a></td>
+			<td>{{ $technical->row_code }}</td>
+			<td>{{ $technical->column_code }}</td>
 			<td>{{ $technical->source->source_name }}</td>
 			<td>{{ $technical->type->type_name }}</td>
 			<td>{{ $technical->content }}</td>
