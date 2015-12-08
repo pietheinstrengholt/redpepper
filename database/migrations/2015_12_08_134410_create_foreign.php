@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreateForeign extends Migration
 {
     /**
      * Run the migrations.
@@ -62,12 +62,12 @@ class CreateUsersTable extends Migration
 		
 		//on username_id
 		Schema::table('t_usernames_rights', function (Blueprint $table) {
-            $table->foreign('username_id')->references('id')->on('t_username')->onDelete('cascade');
+            $table->foreign('username_id')->references('id')->on('t_usernames')->onDelete('cascade');
         });
 		
 		//on source_id
 		Schema::table('t_technical', function (Blueprint $table) {
-            $table->foreign('source_id')->references('id')->on('t_t_technical_sources')->onDelete('cascade');
+            $table->foreign('source_id')->references('id')->on('t_technical_sources')->onDelete('cascade');
         });
 
 		//on type_id
