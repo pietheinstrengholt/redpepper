@@ -14,5 +14,3 @@ TODO
 * data schema's, constraints
 * bread crumbs
 * technical draft order by, section_name, template_name, search orders
-* change row_num, row_number, row_name -> row_code
-* remove hardcoded path in js
