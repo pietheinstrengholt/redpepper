@@ -1,7 +1,6 @@
 TODO
 =======
 
-* show warning before deleting content
 * manual page per template (pdf?)
 * ie8 test
 * css in all single app.css
