@@ -95,7 +95,9 @@
 				</div>
 			</div>
 			<div class="modal-footer">
+			  @if (!Auth::guest())
 				<button type="button" id="modal-update" class="btn btn-warning">Change content</button>
+			  @endif
 			  <button type="button" id="modal-close" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		  </div><!-- /.modal-content -->
