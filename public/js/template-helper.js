@@ -1,20 +1,22 @@
 jQuery(document).ready(function () {
 
+	//retrieve base_url from meta attribute from heading master blade template
+	var url = $('meta[name="base_url"]').attr('content');
+
 	//scroll to top on first load
 	document.body.scrollTop = document.documentElement.scrollTop = 0;
 
-	//set timeout function, don't fire any custom event or have to press the button twice
+	//set time-out function, don't fire any custom event or have to press the button twice
 	setTimeout(function() {
 
 		//call event when change button is clicked
 		$("button#modal-update").on("click", function(event){
 
-			//als de button oranje (warning) is, haal een nieuw formulier op vanuit de backend-template-update.php
+			//if the warning button is clicked, redirect user to edit cell screen
 			if ($('button#modal-update').hasClass('btn-warning')) {
 				
-				window.location.replace('http://thuis.strengholt-online.nl/laravel/public/index.php/updatecell?template_id=' + template_id + '&cell_id=' + cell_id);
+				window.location.replace(url + '/updatecell?template_id=' + template_id + '&cell_id=' + cell_id);
 
-			//if button color is red, submit changes to the backend
 			} else {
 
 				//trigger hidden submit button in template change form and close pop-up
@@ -45,6 +47,8 @@ jQuery(document).ready(function () {
 		$('.modal-body').css('height', size.height - (offset + offsetBody));
 		$('#myModal').css('top', 0);
 	}
+	
+	//open window and rescale
 	$(window).bind("resize", rescale);
 
 	//functionality when a field in the template is clicked
@@ -61,11 +65,11 @@ jQuery(document).ready(function () {
 		cell_id = $(this).attr('id');
 		template_id = $('div.templateId').attr('id');
 
-		//retrieve content from the backend and fill in modal form
+		//retrieve content from the back-end and fill in modal form
 		$.ajax({
 			cache: false,
 			type: 'GET',
-			url: "http://thuis.strengholt-online.nl/laravel/public/index.php/cell",
+			url: url + '/cell',
 			data: {
 				"template_id" : template_id, 
 				"cell_id" : cell_id
@@ -95,7 +99,7 @@ jQuery(document).ready(function () {
 	  $("html").css("overflow", "initial");
 	});
 	
-	//mark hidden checkbox if cell in table is clicked
+	//mark hidden check-box if cell in table is clicked
 	$("table.template-structure td.value").click(function() {
 		if ($(this).find('input').is(':checked')) {
 			$(this).find('input').prop('checked', false);
@@ -118,6 +122,4 @@ jQuery(document).ready(function () {
 			$(this).attr('previousValue', 'checked');
 		}
 	});
-	
-
 });
