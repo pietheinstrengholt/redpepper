@@ -3,7 +3,7 @@
 <!-- cell content -->
 <table class="table dialog table-striped">
 <tr>
-<td class="info-header"><h4><b>Specific Information: {{ $row->row_name }} - {{ $column->column_name }}</b></h4></td>
+<td class="info-header"><h4><b>Specific Information: {{ $row->row_code }} - {{ $column->column_code }}</b></h4></td>
 </tr>
 <td>
 @if ( $field_property1->count() )
@@ -36,8 +36,8 @@
 <!-- legal and interpretations content -->
 <table class="table dialog table-striped">
 <tr>
-	<td class="info-header"><h4><b>Row information: {{ $row->row_name }}</b></h4></td>
-	<td class="info-header"><h4><b>Column information: {{ $column->column_name }}</b></h4></td>
+	<td class="info-header"><h4><b>Row information: {{ $row->row_code }}</b></h4></td>
+	<td class="info-header"><h4><b>Column information: {{ $column->column_code }}</b></h4></td>
 </tr>
 
 <tr>

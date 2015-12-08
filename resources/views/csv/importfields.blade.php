@@ -7,7 +7,7 @@
 <h4>Please make use of the upload form below</h4>
 
 <strong>Example:</strong> The file needs to be in the following format, including header and stored as comma separated<br><br>
-<pre>template_id;row_num;column_num;property;content
+<pre>template_id;row_code;column_code;property;content
 5;1;010;010;legal_desc;100% minus the discount
 5;2;010;020;interpretation_desc;lowest percentage
 5;3;010;030;interpretation_desc;only to central bank

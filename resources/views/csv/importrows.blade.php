@@ -7,7 +7,7 @@
 <h4>Please make use of the upload form below</h4>
 
 <strong>Example:</strong> The file needs to be in the following format, including header and stored as comma separated<br><br>
-<pre>template_id;row_num;row_name;row_description
+<pre>template_id;row_num;row_code;row_description
 5;1;010;Row description 010
 5;2;020;Row description 020
 5;3;030;Row description 030

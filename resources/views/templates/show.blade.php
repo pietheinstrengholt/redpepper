@@ -23,7 +23,7 @@
 		<td class="header">Row description</td>
 	
 		@foreach( $template->columns as $column )
-			<td class="content header" id="$column->column_num" style="min-width: overflow-hidden; word-wrap: break-word;">
+			<td class="content header" id="$column->column_code" style="min-width: overflow-hidden; word-wrap: break-word;">
 			{{ $column->column_description }}
 			</td>
 		@endforeach
@@ -38,7 +38,7 @@
 
 		@foreach( $template->columns as $column )
 			<td style="text-align: center; font-weight: bold;">
-			{{ $column->column_name }}
+			{{ $column->column_code }}
 			</td>
 		@endforeach
 
@@ -50,13 +50,13 @@
 		@foreach( $template->rows as $row )
 		
 			<tr>
-			<td style="background-color: #FAFAFA;">{{ $row->row_name }}</td>
+			<td style="background-color: #FAFAFA;">{{ $row->row_code }}</td>
 			<td class="property{{ $row->row_property }}" style="background-color: #FAFAFA;">{{ $row->row_description }}</td>
 			<!-- Table cell information, column and row combination -->
 			@foreach( $template->columns as $column )
 			
 				<!-- Create a new variable, column and row combination -->
-				{{--*/ $field = 'column' . $column->column_name . '-row' . $row->row_name /*--}}
+				{{--*/ $field = 'column' . $column->column_code . '-row' . $row->row_code /*--}}
 			
 				@if (array_key_exists($field, $disabledFields))
 					<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="disabled" style="background-color: LightGray ! important;" id="{{ $field }}"></td>

@@ -167,7 +167,7 @@ class ExcelController extends Controller
 												//4th column is where column naming starts
 												if ($col > 4) {
 													$columnid = $col-3;
-													$templatestructure['columns'][$columnid]['column_name'] = $val;
+													$templatestructure['columns'][$columnid]['column_code'] = $val;
 												}
 											//2nd row is where the column numbers are stored
 											} elseif ($row == 2) {
@@ -183,14 +183,14 @@ class ExcelController extends Controller
 											} elseif ($row > 2 && $col == 1) {
 												echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
 												$rowid = $row-2;
-												$templatestructure['rows'][$rowid]['row_num'] = $val;
+												$templatestructure['rows'][$rowid]['row_code'] = $val;
 												//push to array for validation
 												array_push($templaterows, $val);
 											//more than 2 rows and 2nd column is where the row name is stored
 											} elseif ($row > 2 && $col == 2) {
 												echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
 												$rowid = $row-2;
-												$templatestructure['rows'][$rowid]['row_name'] = $val;
+												$templatestructure['rows'][$rowid]['row_code'] = $val;
 											//more than 2 rows and 3th column is where the row style is stored
 											} elseif ($row > 2 && $col == 3) {
 												echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
@@ -212,12 +212,12 @@ class ExcelController extends Controller
 												
 												//set cell column num and row num based on templatestructure
 												$cell_column_num = $templatestructure['columns'][$newcol]['column_num'];
-												$cell_row_num = $templatestructure['rows'][$newrow]['row_num'];
+												$cell_row_code = $templatestructure['rows'][$newrow]['row_code'];
 												//check if cell color is disabled: = D3D3D3
 												if ($cellcolor == 'D3D3D3' || $val == 'disabled') {
 													echo '<td style="background-color: LightGray ! important; padding: 5px;">disabled</td>';
 													$templatestructure['disabledcells'][$disabledcount]['column_num'] = $cell_column_num;
-													$templatestructure['disabledcells'][$disabledcount]['row_num'] = $cell_row_num;
+													$templatestructure['disabledcells'][$disabledcount]['row_code'] = $cell_row_code;
 													$disabledcount++;
 												} else {
 													echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
@@ -517,7 +517,7 @@ class ExcelController extends Controller
 											$val = $reader->getExcel()->getSheet(4)->getCell($columnLetter . $row)->getValue();
 											//1th row is the heading
 											if ($row == 1) {
-												if ($col == 1 && $val != 'column_number' || $col == 2 && $val != 'row_number' || $col == 3 && $val != 'type' || $col == 4 && $val != 'source' || $col == 5 && $val != 'value' || $col == 6 && $val != 'description') {
+												if ($col == 1 && $val != 'column_code' || $col == 2 && $val != 'row_code' || $col == 3 && $val != 'type' || $col == 4 && $val != 'source' || $col == 5 && $val != 'value' || $col == 6 && $val != 'description') {
 													echo '<td style="background-color: #FFB2B2; padding: 5px; font-weight: bold;">' . $val . '</td>';
 												} else {
 													echo '<td style="background-color: #dff0d8; padding: 5px; font-weight: bold;">' . $val . '</td>';
@@ -541,10 +541,10 @@ class ExcelController extends Controller
 													echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
 													//add content to templatestructure sourcing
 													if ($col == 1) {
-														$templatestructure['sourcing'][$sourcingcontentcount]['column_number'] = $val;
+														$templatestructure['sourcing'][$sourcingcontentcount]['column_code'] = $val;
 													}
 													if ($col == 2) {
-														$templatestructure['sourcing'][$sourcingcontentcount]['row_number'] = $val;
+														$templatestructure['sourcing'][$sourcingcontentcount]['row_code'] = $val;
 													}
 													if ($col == 3) {
 														$key = array_search($val, $type_array);
@@ -593,7 +593,7 @@ class ExcelController extends Controller
 											$val = $reader->getExcel()->getSheet(3)->getCell($columnLetter . $row)->getValue();
 											//1th row is the heading
 											if ($row == 1) {
-												if ($col == 1 && $val != 'column_number' || $col == 2 && $val != 'row_number' || $col == 3 && $val != 'content_type' || $col == 4 && $val != 'content') {
+												if ($col == 1 && $val != 'column_code' || $col == 2 && $val != 'row_code' || $col == 3 && $val != 'content_type' || $col == 4 && $val != 'content') {
 													echo '<td style="background-color: #FFB2B2; padding: 5px; font-weight: bold;">' . $val . '</td>';
 												} else {
 													echo '<td style="background-color: #dff0d8; padding: 5px; font-weight: bold;">' . $val . '</td>';
@@ -615,10 +615,10 @@ class ExcelController extends Controller
 													echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
 													//add content to templatestructure field_content
 													if ($col == 1) {
-														$templatestructure['field_content'][$fieldcontentcount]['column_number'] = $val;
+														$templatestructure['field_content'][$fieldcontentcount]['column_code'] = $val;
 													}
 													if ($col == 2) {
-														$templatestructure['field_content'][$fieldcontentcount]['row_number'] = $val;
+														$templatestructure['field_content'][$fieldcontentcount]['row_code'] = $val;
 													}
 													if ($col == 3) {
 														$templatestructure['field_content'][$fieldcontentcount]['content_type'] = $val;
@@ -673,8 +673,8 @@ class ExcelController extends Controller
 								$column = new TemplateColumn;
 								$column->template_id = $template->id;
 								$column->column_num = $i;
-								$column->column_name = $columnline['column_num'];
-								$column->column_description = $columnline['column_name'];
+								$column->column_code = $columnline['column_num'];
+								$column->column_description = $columnline['column_code'];
 								$column->save();
 								$i++;
 							}
@@ -685,8 +685,8 @@ class ExcelController extends Controller
 								$row = new TemplateRow;
 								$row->template_id = $template->id;
 								$row->row_num = $i;
-								$row->row_name = $rowline['row_num'];
-								$row->row_description = $rowline['row_name'];
+								$row->row_code = $rowline['row_code'];
+								$row->row_description = $rowline['row_code'];
 								$row->row_reference = $rowline['row_reference'];
 								$row->save();
 								$i++;
@@ -697,8 +697,8 @@ class ExcelController extends Controller
 								foreach($templatestructure['field_content'] as $field_content) {
 									$templatefield = new TemplateField;
 									$templatefield->template_id = $template->id;
-									$templatefield->row_name = $field_content['row_number'];
-									$templatefield->column_name = $field_content['column_number'];
+									$templatefield->row_code = $field_content['row_code'];
+									$templatefield->column_code = $field_content['column_code'];
 									$templatefield->property = $field_content['content_type'];
 									$templatefield->content = $field_content['content'];
 									$templatefield->save();
@@ -707,8 +707,8 @@ class ExcelController extends Controller
 									$HistoryRequirement = new HistoryRequirement;
 									$HistoryRequirement->changerequest_id = '0';
 									$HistoryRequirement->template_id = $template->id;
-									$HistoryRequirement->row_name = $field_content['row_number'];
-									$HistoryRequirement->column_name = $field_content['column_number'];
+									$HistoryRequirement->row_code = $field_content['row_code'];
+									$HistoryRequirement->column_code = $field_content['column_code'];
 									$HistoryRequirement->content_type = $field_content['content_type'];
 									$HistoryRequirement->content = $field_content['content'];
 									$HistoryRequirement->change_type = 'excel';
@@ -734,8 +734,8 @@ class ExcelController extends Controller
 									$HistoryRequirement = new HistoryRequirement;
 									$HistoryRequirement->changerequest_id = '0';
 									$HistoryRequirement->template_id = $template->id;
-									$HistoryRequirement->row_name = $field_content['row_number'];
-									$HistoryRequirement->column_name = '';
+									$HistoryRequirement->row_code = $field_content['row_code'];
+									$HistoryRequirement->column_code = '';
 									$HistoryRequirement->content_type = $field_content['content_type'];
 									$HistoryRequirement->content = $field_content['content'];
 									$HistoryRequirement->change_type = 'excel';
@@ -761,8 +761,8 @@ class ExcelController extends Controller
 									$HistoryRequirement = new HistoryRequirement;
 									$HistoryRequirement->changerequest_id = '0';
 									$HistoryRequirement->template_id = $template->id;
-									$HistoryRequirement->row_name = '';
-									$HistoryRequirement->column_name = $field_content['column_number'];
+									$HistoryRequirement->row_code = '';
+									$HistoryRequirement->column_code = $field_content['column_code'];
 									$HistoryRequirement->content_type = $field_content['content_type'];
 									$HistoryRequirement->content = $field_content['content'];
 									$HistoryRequirement->change_type = 'excel';
@@ -779,8 +779,8 @@ class ExcelController extends Controller
 								foreach($templatestructure['disabledcells'] as $disabledcell) {
 									$templatefield = new TemplateField;
 									$templatefield->template_id = $template->id;
-									$templatefield->row_name = $disabledcell['row_num'];
-									$templatefield->column_name = $disabledcell['column_num'];
+									$templatefield->row_code = $disabledcell['row_code'];
+									$templatefield->column_code = $disabledcell['column_num'];
 									$templatefield->property = 'disabled';
 									$templatefield->save();
 								}
@@ -791,8 +791,8 @@ class ExcelController extends Controller
 								foreach($templatestructure['sourcing'] as $sourcing) {
 									$technical = new Technical;
 									$technical->template_id = $template->id;
-									$technical->row_num = $sourcing['row_number'];
-									$technical->col_num = $sourcing['column_number'];									
+									$technical->row_code = $sourcing['row_code'];
+									$technical->column_code = $sourcing['column_code'];									
 									$technical->source_id = $sourcing['source'];
 									$technical->type_id = $sourcing['type'];
 									$technical->content = $sourcing['value'];
@@ -803,8 +803,8 @@ class ExcelController extends Controller
 									$HistoryTechnical = new HistoryTechnical;
 									$HistoryTechnical->changerequest_id = '0';
 									$HistoryTechnical->template_id = $template->id;
-									$HistoryTechnical->row_name = $sourcing['row_number'];
-									$HistoryTechnical->column_name = $sourcing['column_number'];
+									$HistoryTechnical->row_code = $sourcing['row_code'];
+									$HistoryTechnical->column_code = $sourcing['column_code'];
 									$HistoryTechnical->type_id = $sourcing['type'];
 									$HistoryTechnical->source_id = $sourcing['source'];
 									$HistoryTechnical->content = $sourcing['value'];
@@ -861,15 +861,15 @@ class ExcelController extends Controller
 				
 				//Add remaining columns
 				foreach ($template->columns as $column) {
-					//add column id and row_name to structure
-					$column_name = trim($column['column_name']);
-					$templatestructure['columns'][$column_name] = $i;
+					//add column id and row_code to structure
+					$column_code = trim($column['column_code']);
+					$templatestructure['columns'][$column_code] = $i;
 					$i++;
 					$letter++;
 					$sheet->SetCellValue($letter . '1', $column['column_description']);
 					$sheet->getStyle($letter . '1')->getFont()->setBold(true);
 					$sheet->getColumnDimension($letter)->setWidth(20);
-					$sheet->setCellValueExplicit($letter . '2', $column['column_name']);
+					$sheet->setCellValueExplicit($letter . '2', $column['column_code']);
 				}
 				
 				$sheet->cells('A1:' . $letter . '1', function($cells) {
@@ -892,13 +892,13 @@ class ExcelController extends Controller
 
 				//add rows to template
 				foreach ($template->rows as $row) {
-					//add row id and row_name to structure
-					$row_name = trim($row['row_name']);
-					$templatestructure['rows'][$row_name] = $i;
+					//add row id and row_code to structure
+					$row_code = trim($row['row_code']);
+					$templatestructure['rows'][$row_code] = $i;
 					$i++;
 					$sheet->getRowDimension($rownumber)->setRowHeight(20);
-					//row_num data as string
-					$sheet->setCellValueExplicit('A' . $rownumber, $row['row_name']);
+					//row_code data as string
+					$sheet->setCellValueExplicit('A' . $rownumber, $row['row_code']);
 					$sheet->SetCellValue('B' . $rownumber, $row['row_description']);
 					$sheet->SetCellValue('C' . $rownumber, $row['row_property']);
 					$sheet->SetCellValue('D' . $rownumber, $row['row_reference']);
@@ -922,12 +922,12 @@ class ExcelController extends Controller
 				//set grey fields, add two to put it correctly in the template
 				if (!empty($disabled)) {
 					foreach($disabled as $disabledrows) {
-						//get row_name and column_name from array
-						$disabled_row_name = $disabledrows['row_name'];
-						$disabled_column_name = $disabledrows['column_name'];
-						//get row_name and column name from structure
-						$structurerowid = $templatestructure['rows'][$disabled_row_name];
-						$structurecolumnid = $templatestructure['columns'][$disabled_column_name];
+						//get row_code and column_code from array
+						$disabled_row_code = $disabledrows['row_code'];
+						$disabled_column_code = $disabledrows['column_code'];
+						//get row_code and column name from structure
+						$structurerowid = $templatestructure['rows'][$disabled_row_code];
+						$structurecolumnid = $templatestructure['columns'][$disabled_column_code];
 						//jump in two from top and three from left
 						$structurerowid = $structurerowid + 2;
 						$structurecolumnid = $structurecolumnid + 3;
@@ -981,9 +981,9 @@ class ExcelController extends Controller
 				//add content to excel
 				if (!empty($column_content )) {
 					foreach($column_content  as $key => $value) {
-						$column_name = trim($value['field_id']);
-						$column_name = ltrim($column_name, 'C-');
-						$sheet->setCellValueExplicit('A' . $columncontentcount, $column_name)
+						$column_code = trim($value['field_id']);
+						$column_code = ltrim($column_code, 'C-');
+						$sheet->setCellValueExplicit('A' . $columncontentcount, $column_code)
 						->setCellValueExplicit('B' . $columncontentcount, $value['content_type'])
 						->setCellValueExplicit('C' . $columncontentcount, $value['content']);
 						$columncontentcount++;
@@ -1024,9 +1024,9 @@ class ExcelController extends Controller
 				//add content to excel
 				if (!empty($row_contents)) {
 					foreach($row_contents as $key => $value) {
-						$row_name = trim($value['field_id']);
-						$row_name = ltrim($row_name, 'R-');
-						$sheet->setCellValueExplicit('A' . $rowcontentcount, $row_name)
+						$row_code = trim($value['field_id']);
+						$row_code = ltrim($row_code, 'R-');
+						$sheet->setCellValueExplicit('A' . $rowcontentcount, $row_code)
 						->setCellValueExplicit('B' . $rowcontentcount, $value['content_type'])
 						->setCellValueExplicit('C' . $rowcontentcount, $value['content']);
 						$rowcontentcount++;
@@ -1040,11 +1040,11 @@ class ExcelController extends Controller
 			
 				//set first column for field_content
 				//Column part
-				$sheet->SetCellValue('A1', 'column_number');
+				$sheet->SetCellValue('A1', 'column_code');
 				$sheet->getStyle('A1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('A')->setWidth(16);
 
-				$sheet->SetCellValue('B1', 'row_number');
+				$sheet->SetCellValue('B1', 'row_code');
 				$sheet->getStyle('B1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('B')->setWidth(20);
 
@@ -1063,14 +1063,14 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1:D1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
 				
-				$field_contents   = TemplateField::where('template_id', 1)->where('property', '!=' , 'disabled')->orderBy('row_name', 'asc')->orderBy('column_name', 'asc')->get();
+				$field_contents   = TemplateField::where('template_id', 1)->where('property', '!=' , 'disabled')->orderBy('row_code', 'asc')->orderBy('column_code', 'asc')->get();
 				
 				$fieldcontentcount = 2;
 				//set grey fields, add two to put it correctly in the template
 				if (!empty($field_contents)) {
 					foreach($field_contents as $key => $value) {
-						$sheet->setCellValueExplicit('A' . $fieldcontentcount, $value['column_name'])
-						->setCellValueExplicit('B' . $fieldcontentcount, $value['row_name'])
+						$sheet->setCellValueExplicit('A' . $fieldcontentcount, $value['column_code'])
+						->setCellValueExplicit('B' . $fieldcontentcount, $value['row_code'])
 						->setCellValueExplicit('C' . $fieldcontentcount, $value['property'])
 						->setCellValueExplicit('D' . $fieldcontentcount, $value['content']);
 						$fieldcontentcount++;
@@ -1084,11 +1084,11 @@ class ExcelController extends Controller
 
 				//set first column for field_content
 				//Column part
-				$sheet->SetCellValue('A1', 'column_number');
+				$sheet->SetCellValue('A1', 'column_code');
 				$sheet->getStyle('A1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('A')->setWidth(16);
 
-				$sheet->SetCellValue('B1', 'row_number');
+				$sheet->SetCellValue('B1', 'row_code');
 				$sheet->getStyle('B1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('B')->setWidth(20);
 
@@ -1124,8 +1124,8 @@ class ExcelController extends Controller
 				//set grey fields, add two to put it correctly in the template
 				if (!empty($field_contents)) {
 					foreach($field_contents as $key => $value) {
-						$sheet->setCellValueExplicit('A' . $fieldcontentcount, $value['col_num'])
-						->setCellValueExplicit('B' . $fieldcontentcount, $value['row_num'])
+						$sheet->setCellValueExplicit('A' . $fieldcontentcount, $value['column_code'])
+						->setCellValueExplicit('B' . $fieldcontentcount, $value['row_code'])
 						->setCellValueExplicit('C' . $fieldcontentcount, $value->type->type_name)
 						->setCellValueExplicit('D' . $fieldcontentcount, $value->source->source_name)
 						->setCellValueExplicit('E' . $fieldcontentcount, $value['content'])
@@ -1236,11 +1236,11 @@ class ExcelController extends Controller
 				$sheet->getStyle('B1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('B')->setWidth(30);
 
-				$sheet->SetCellValue('C1', 'row_name');
+				$sheet->SetCellValue('C1', 'row_code');
 				$sheet->getStyle('C1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('C')->setWidth(15);
 
-				$sheet->SetCellValue('D1', 'column_name');
+				$sheet->SetCellValue('D1', 'column_code');
 				$sheet->getStyle('D1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('D')->setWidth(15);
 
@@ -1283,8 +1283,8 @@ class ExcelController extends Controller
 				
 					$sheet->setCellValueExplicit('A' . $i, $row['id'])
 						  ->setCellValueExplicit('B' . $i, $row['template_id'])
-						  ->setCellValueExplicit('C' . $i, $row['row_name'])
-						  ->setCellValueExplicit('D' . $i, $row['column_name'])
+						  ->setCellValueExplicit('C' . $i, $row['row_code'])
+						  ->setCellValueExplicit('D' . $i, $row['column_code'])
 						  ->setCellValueExplicit('E' . $i, $row['content_type'])
 						  ->setCellValueExplicit('F' . $i, $row['content'])
 						  ->setCellValueExplicit('G' . $i, $row['change_type'])
@@ -1317,11 +1317,11 @@ class ExcelController extends Controller
 				$sheet->getStyle('B1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('B')->setWidth(30);
 				
-				$sheet->SetCellValue('C1', 'row_name');
+				$sheet->SetCellValue('C1', 'row_code');
 				$sheet->getStyle('C1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('C')->setWidth(15);
 				
-				$sheet->SetCellValue('D1', 'column_name');
+				$sheet->SetCellValue('D1', 'column_code');
 				$sheet->getStyle('D1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('D')->setWidth(15);
 				
@@ -1372,8 +1372,8 @@ class ExcelController extends Controller
 
 					$sheet->setCellValueExplicit('A' . $i, $row['changerequest_id'])
 						  ->setCellValueExplicit('B' . $i, $row['template_id'])
-						  ->setCellValueExplicit('C' . $i, $row['row_name'])
-						  ->setCellValueExplicit('D' . $i, $row['column_name'])
+						  ->setCellValueExplicit('C' . $i, $row['row_code'])
+						  ->setCellValueExplicit('D' . $i, $row['column_code'])
 						  ->setCellValueExplicit('G' . $i, $row['content'])
 						  ->setCellValueExplicit('H' . $i, $row['description'])
 						  ->setCellValueExplicit('I' . $i, $row['change_type'])

@@ -75,7 +75,7 @@ code {
 @if ($changerequest->field_property1 !== '' || $changerequest->field_property2 !== '' || $changerequest->field_regulation !== '' || $changerequest->field_interpretation !== '')
 	<table style="border: 1px solid #ddd;" class="table dialog table-striped">
 	<tr>
-	<td class="info-header"><h4><b>Specific Information: {{ $template_row->row_name }} - {{ $template_column->column_name }}</b></h4></td>
+	<td class="info-header"><h4><b>Specific Information: {{ $template_row->row_code }} - {{ $template_column->column_code }}</b></h4></td>
 	</tr>
 	<td>
 	@if ($changerequest->field_property1 !== '')
@@ -110,8 +110,8 @@ code {
 <!-- legal and interpretations content -->
 <table style="border: 1px solid #ddd;" border="0" class="table dialog table-striped">
 <tr>
-	<td class="info-header"><h4><b>Row information: {{ $template_row->row_name }}</b></h4></td>
-	<td class="info-header"><h4><b>Column information: {{ $template_column->column_name }}</b></h4></td>
+	<td class="info-header"><h4><b>Row information: {{ $template_row->row_code }}</b></h4></td>
+	<td class="info-header"><h4><b>Column information: {{ $template_column->column_code }}</b></h4></td>
 </tr>
 
 <tr>
@@ -119,31 +119,31 @@ code {
 		<h4><b>Name:</b></h4>
 		<div rows="1" id="rowname">{{ $template_row->row_description }}</div>
 		<h4><b>Legal standard:</b></h4>
-		<div rows="7" id="row_legal">{!! $changerequest->regulation_row !!}</div>
+		<div rows="7" id="row_legal">{!! nl2br($changerequest->regulation_row) !!}</div>
 		<h4><b>Interpretation:</b></h4>
-		<div rows="6" id="row_interpretation">{!! $changerequest->interpretation_row !!}</div>
+		<div rows="6" id="row_interpretation">{!! nl2br($changerequest->interpretation_row) !!}</div>
 	</td>
 	<td class="info-right im-content">
 		<h4><b>Name:</b></h4>
 		<div rows="1" id="colname">{{ $template_column->column_description }}</div>
 		<h4><b>Legal standard:</b></h4>
-		<div rows="7" id="column_legal">{!! $changerequest->regulation_column !!}</div>
+		<div rows="7" id="column_legal">{!! nl2br($changerequest->regulation_column) !!}</div>
 		<h4><b>Interpretation:</b></h4>
-		<div rows="6" id="row_interpretation">{!! $changerequest->interpretation_column !!}</div>
+		<div rows="6" id="row_interpretation">{!! nl2br($changerequest->interpretation_column) !!}</div>
 	</td>
 </tr>
 </table>
 
 @if ($changerequest->technical !== '')
 	<table style="border: 1px solid #ddd;" class="table dialog table-striped">
-	<tr><td class="info-header"><h4><b>Additional Information for row {{ $template_row->row_name }} and column {{ $template_column->column_name }}:</b></h4></td></tr>
-	<td>{!! $changerequest->technical !!}</td>
+	<tr><td class="info-header"><h4><b>Additional Information for row {{ $template_row->row_code }} and column {{ $template_column->column_code }}:</b></h4></td></tr>
+	<td>{!! nl2br($changerequest->technical) !!}</td>
 	</table>
 @endif
 
 
-@if ($allowedToChange == 'yes')
-	<textarea form="form" name="comment" style="width: 600px;" class="form-control" rows="3" id="user" class="comment" placeholder="Please enter a comment about this change"></textarea>
+@if ($allowedToChange == 'yes' && $changerequest->status == 'pending')
+	<textarea form="form" name="comment" style="width: 600px;" class="form-control" rows="3" id="comment" class="comment" placeholder="Please enter a comment about this change"></textarea>
 
 	{!! Form::open(array('action' => 'ChangeRequestController@update', 'id' => 'form')) !!}
 	<div class="form-group">

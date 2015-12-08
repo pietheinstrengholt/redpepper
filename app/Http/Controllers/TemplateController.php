@@ -69,8 +69,8 @@ class TemplateController extends Controller
 		//Restructure array
 		if (!empty($disabledFields)) {
 			foreach ($disabledFields as $disabledField) {
-				$rowname = $disabledField->row_name;
-				$columnname = $disabledField->column_name;
+				$rowname = $disabledField->row_code;
+				$columnname = $disabledField->column_code;
 				$field = 'column' . trim($columnname) . '-' . 'row' . trim($rowname);
 				$arraydisabled[$field] = $disabledField->property;
 			}
@@ -143,7 +143,7 @@ class TemplateController extends Controller
 				$row = new TemplateRow;
 				$row->template_id = $template->id;
 				$row->row_num = $i;
-				$row->row_name = $j;
+				$row->row_code = $j;
 				$row->row_description = 'description row number ' . $j;
 				$row->row_reference = '';
 				$row->save();
@@ -162,7 +162,7 @@ class TemplateController extends Controller
 				$column = new TemplateColumn;
 				$column->template_id = $template->id;
 				$column->column_num = $i;
-				$column->column_name = $j;
+				$column->column_code = $j;
 				$column->column_description = 'description column number ' . $j;
 				$column->save();
 				$i++;
@@ -188,7 +188,7 @@ class TemplateController extends Controller
 				if ($request->has('colnum')) {
 					foreach($request->input('colnum') as $key => $value) {
 						if (!empty($value)) {
-							TemplateColumn::where('template_id', $request->input('template_id'))->where('column_name', $key)->update(['column_name' => $value]);
+							TemplateColumn::where('template_id', $request->input('template_id'))->where('column_code', $key)->update(['column_code' => $value]);
 							Requirement::where('template_id', $request->input('template_id'))->where('field_id', 'C-' . $key)->update(['field_id' => 'C-' . $value]);
 						}
 					}
@@ -198,7 +198,7 @@ class TemplateController extends Controller
 				if ($request->has('coldesc')) {
 					foreach($request->input('coldesc') as $key => $value) {
 						if (!empty($value)) {
-							TemplateColumn::where('template_id', $request->input('template_id'))->where('column_name', $key)->update(['column_description' => $value]);
+							TemplateColumn::where('template_id', $request->input('template_id'))->where('column_code', $key)->update(['column_description' => $value]);
 						}
 					}
 				}
@@ -207,7 +207,7 @@ class TemplateController extends Controller
 				if ($request->has('rownum')) {
 					foreach($request->input('rownum') as $key => $value) {
 						if (!empty($value)) {
-							TemplateRow::where('template_id', $request->input('template_id'))->where('row_name', $key)->update(['row_name' => $value]);
+							TemplateRow::where('template_id', $request->input('template_id'))->where('row_code', $key)->update(['row_code' => $value]);
 							Requirement::where('template_id', $request->input('template_id'))->where('field_id', 'R-' . $key)->update(['field_id' => 'R-' . $value]);
 						}
 					}
@@ -217,7 +217,7 @@ class TemplateController extends Controller
 				if ($request->has('rowdesc')) {
 					foreach($request->input('rowdesc') as $key => $value) {
 						if (!empty($value)) {
-							TemplateRow::where('template_id', $request->input('template_id'))->where('row_name', $key)->update(['row_description' => $value]);
+							TemplateRow::where('template_id', $request->input('template_id'))->where('row_code', $key)->update(['row_description' => $value]);
 						}
 					}
 				}
@@ -226,7 +226,7 @@ class TemplateController extends Controller
 				if ($request->has('row_property')) {
 					foreach($request->input('row_property') as $key => $value) {
 						if (!empty($value)) {
-							TemplateRow::where('template_id', $request->input('template_id'))->where('row_name', $key)->update(['row_property' => $value]);
+							TemplateRow::where('template_id', $request->input('template_id'))->where('row_code', $key)->update(['row_property' => $value]);
 						}
 					}
 				}				
@@ -237,13 +237,13 @@ class TemplateController extends Controller
 					foreach($request->input('options') as $disabled){
 						//split options into row and column
 						list($before, $after) = explode('-row', $disabled, 2);
-						$column = str_ireplace("column", "", "$before");
-						$row = $after;
+						$column_code = str_ireplace("column", "", "$before");
+						$row_code = $after;
 						//create new disabled field
 						$TemplateField = new TemplateField;
 						$TemplateField->template_id = $request->input('template_id');
-						$TemplateField->row_name = $row;
-						$TemplateField->column_name = $column;
+						$TemplateField->row_code = $row_code;
+						$TemplateField->column_code = $column_code;
 						$TemplateField->property = 'disabled';
 						$TemplateField->save();
 					}
@@ -256,9 +256,9 @@ class TemplateController extends Controller
 							if ($request->has('rownum')) {
 								foreach($request->input('rownum') as $rowkey => $rowvalue) {
 									if (!empty($rowvalue)) {
-										TemplateField::where('template_id', $request->input('template_id'))->where('row_name', $rowkey)->where('column_name', $columnkey)->where('property', '!=' , 'disabled')->update(['row_name' => $rowvalue, 'column_name' => $columnvalue]);
-										Technical::where('template_id', $request->input('template_id'))->where('row_num', $rowkey)->where('col_num', $columnkey)->update(['row_num' => $rowvalue, 'col_num' => $columnvalue]);
-										ChangeRequest::where('template_id', $request->input('template_id'))->where('row_number', $rowkey)->where('column_number', $columnkey)->update(['row_number' => $rowvalue, 'column_number' => $columnvalue]);
+										TemplateField::where('template_id', $request->input('template_id'))->where('row_code', $rowkey)->where('column_code', $columnkey)->where('property', '!=' , 'disabled')->update(['row_code' => $rowvalue, 'column_code' => $columnvalue]);
+										Technical::where('template_id', $request->input('template_id'))->where('row_code', $rowkey)->where('column_code', $columnkey)->update(['row_code' => $rowvalue, 'column_code' => $columnvalue]);
+										ChangeRequest::where('template_id', $request->input('template_id'))->where('row_code', $rowkey)->where('column_code', $columnkey)->update(['row_code' => $rowvalue, 'column_code' => $columnvalue]);
 									}
 								}
 							}
@@ -342,22 +342,22 @@ class TemplateController extends Controller
 		
 		//split input into row and column
 		list($before, $after) = explode('-row', $_GET['cell_id'], 2);
-		$columnnum = str_ireplace("column", "", "$before");
-		$rownum = $after;				
+		$column_code = str_ireplace("column", "", "$before");
+		$row_code = $after;				
 		
 		return view('templates.cell', [
 			'template' => Template::find($_GET['template_id']),
-			'row' => TemplateRow::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->first(),
-			'column' => TemplateColumn::where('template_id', $_GET['template_id'])->where('column_name', $columnnum)->first(),
-			'regulation_row' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'R-' . $rownum)->where('content_type', 'regulation')->first(),
-			'regulation_column' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'C-' . $columnnum)->where('content_type', 'regulation')->first(),
-			'interpretation_row' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'R-' . $rownum)->where('content_type', 'interpretation')->first(),
-			'interpretation_column' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'C-' . $columnnum)->where('content_type', 'interpretation')->first(),
-			'technical' => Technical::where('template_id', $_GET['template_id'])->where('row_num', $rownum)->where('col_num', $columnnum)->get(),
-			'field_regulation' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'regulation')->get(),
-			'field_interpretation' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'interpretation')->get(),
-			'field_property1' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'property1')->get(),
-			'field_property2' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'property2')->get()
+			'row' => TemplateRow::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->first(),
+			'column' => TemplateColumn::where('template_id', $_GET['template_id'])->where('column_code', $column_code)->first(),
+			'regulation_row' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'R-' . $row_code)->where('content_type', 'regulation')->first(),
+			'regulation_column' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'C-' . $column_code)->where('content_type', 'regulation')->first(),
+			'interpretation_row' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'R-' . $row_code)->where('content_type', 'interpretation')->first(),
+			'interpretation_column' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'C-' . $column_code)->where('content_type', 'interpretation')->first(),
+			'technical' => Technical::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', $column_code)->get(),
+			'field_regulation' => TemplateField::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', $column_code)->where('property', 'regulation')->get(),
+			'field_interpretation' => TemplateField::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', $column_code)->where('property', 'interpretation')->get(),
+			'field_property1' => TemplateField::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', $column_code)->where('property', 'property1')->get(),
+			'field_property2' => TemplateField::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', $column_code)->where('property', 'property2')->get()
 		]);
 		
     }

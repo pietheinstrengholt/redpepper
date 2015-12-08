@@ -7,8 +7,8 @@
 	{!! Form::open(array('action' => 'ChangeRequestController@create', 'id' => 'form')) !!}
 
 	<!-- hidden form data -->
-	<input name="column_name" type="hidden" value="{{ $column->column_name }}"/>
-	<input name="row_name" type="hidden" value="{{ $row->row_name }}"/>
+	<input name="column_code" type="hidden" value="{{ $column->column_code }}"/>
+	<input name="row_code" type="hidden" value="{{ $row->row_code }}"/>
 	<input name="section_id" type="hidden" value="{{ $template->section_id }}"/>
 	<input name="template_id" type="hidden" value="{{ $template->id }}"/>
 	<input name="username_id" type="hidden" value="1"/>
@@ -16,7 +16,7 @@
 	<!-- cell content -->
 	<table class="table dialog table-striped">
 	<tr>
-	<td class="info-header"><h4><b>Specific Information: {{ $row['row_name'] }} - {{ $column['column_name'] }}</b></h4></td>
+	<td class="info-header"><h4><b>Specific Information: {{ $row['row_code'] }} - {{ $column['column_code'] }}</b></h4></td>
 	</tr>
 	<td>
 
@@ -46,8 +46,8 @@
 	<!-- legal and interpretations content -->
 	<table class="table dialog table-striped">
 	<tr>
-		<td class="info-header"><h4><b>Row information: {{ $row['row_name'] }}</b></h4></td>
-		<td class="info-header"><h4><b>Column information: {{ $column['column_name'] }}</b></h4></td>
+		<td class="info-header"><h4><b>Row information: {{ $row['row_code'] }}</b></h4></td>
+		<td class="info-header"><h4><b>Column information: {{ $column['column_code'] }}</b></h4></td>
 	</tr>
 
 	<tr>
@@ -128,7 +128,7 @@
 								<td class="source">
 									<select name="technical[{{ $countrows }}][source_id]" class="form-control">
 									@foreach( $sources as $source )
-										@if ($row->source_name == $source->source_name) 
+										@if ($row->source_id == $source->id) 
 											<option selected value="{{ $source->id }}">{{ $source->source_name }}</option>
 										@else
 											<option value="{{ $source->id }}">{{ $source->source_name }}</option>
@@ -139,7 +139,7 @@
 								<td class="type">
 									<select name="technical[{{ $countrows }}][type_id]" class="form-control">
 									@foreach( $types as $type )
-										@if ($row->type_name == $type->type_name) 
+										@if ($row->type_id == $type->id) 
 											<option selected value="{{ $type->id }}">{{ $type->type_name }}</option>
 										@else
 											<option value="{{ $type->id }}">{{ $type->type_name }}</option>

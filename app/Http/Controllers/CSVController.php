@@ -66,11 +66,11 @@ class CSVController extends Controller
 
 							foreach ($csvarray as $csv) {
 								
-								if (array_key_exists('template_id', $csv) && array_key_exists('row_number', $csv) && array_key_exists('column_number', $csv) && array_key_exists('source', $csv) && array_key_exists('type', $csv)  && array_key_exists('value', $csv)  && array_key_exists('description', $csv)) {							
+								if (array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('column_code', $csv) && array_key_exists('source', $csv) && array_key_exists('type', $csv)  && array_key_exists('value', $csv)  && array_key_exists('description', $csv)) {							
 									$technical = new Technical;
 									$technical->template_id = $csv['template_id'];
-									$technical->row_num = $csv['row_number'];
-									$technical->col_num = $csv['column_number'];									
+									$technical->row_code = $csv['row_code'];
+									$technical->column_code = $csv['column_code'];									
 									$technical->source_id = $csv['source'];
 									$technical->type_id = $csv['type'];
 									$technical->content = $csv['value'];
@@ -91,11 +91,11 @@ class CSVController extends Controller
 
 							foreach ($csvarray as $csv) {
 								
-								if (array_key_exists('template_id', $csv) && array_key_exists('row_num', $csv) && array_key_exists('row_name', $csv) && array_key_exists('row_description', $csv)) {							
+								if (array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('row_code', $csv) && array_key_exists('row_description', $csv)) {							
 									$row = new TemplateRow;
 									$row->template_id = $csv['template_id'];
 									$row->row_num = $csv['row_num'];
-									$row->row_name = $csv['row_name'];
+									$row->row_code = $csv['row_code'];
 									$row->row_description = $csv['row_description'];
 									//$row->row_reference = $rowline['row_reference'];
 									$row->created_by = Auth::user()->id;
@@ -114,11 +114,11 @@ class CSVController extends Controller
 						
 							foreach ($csvarray as $csv) {
 								
-								if (array_key_exists('template_id', $csv) && array_key_exists('column_num', $csv) && array_key_exists('column_name', $csv) && array_key_exists('column_description', $csv)) {							
+								if (array_key_exists('template_id', $csv) && array_key_exists('column_num', $csv) && array_key_exists('column_code', $csv) && array_key_exists('column_description', $csv)) {							
 									$column = new TemplateColumn;
 									$column->template_id = $csv['template_id'];
 									$column->column_num = $csv['column_num'];
-									$column->column_name = $csv['column_name'];
+									$column->column_code = $csv['column_code'];
 									$column->column_description = $csv['column_description'];
 									$column->created_by = Auth::user()->id;
 									$column->save();
@@ -136,11 +136,11 @@ class CSVController extends Controller
 						
 							foreach ($csvarray as $csv) {
 								
-								if (array_key_exists('template_id', $csv) && array_key_exists('row_number', $csv) && array_key_exists('column_number', $csv) && array_key_exists('property', $csv) && array_key_exists('content', $csv)) {							
+								if (array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('column_code', $csv) && array_key_exists('property', $csv) && array_key_exists('content', $csv)) {							
 									$TemplateField = new TemplateField;
 									$TemplateField->template_id = $csv['template_id'];
-									$TemplateField->row_name = $csv['row_number'];
-									$TemplateField->column_name = $csv['column_number'];
+									$TemplateField->row_code = $csv['row_code'];
+									$TemplateField->column_code = $csv['column_code'];
 									$TemplateField->property = $csv['property'];
 									$TemplateField->content = $csv['content'];
 									$TemplateField->created_by = Auth::user()->id;

@@ -36,7 +36,6 @@ use Auth;
 
 class ChangeRequestController extends Controller
 {
-
 	public function templateRights($id) {
 	
 		$userrights = UserRights::where('username_id', $id)->get();
@@ -112,19 +111,19 @@ class ChangeRequestController extends Controller
 
 		return view('templates.cell-update', [
 			'template' => Template::find($_GET['template_id']),
-			'row' => TemplateRow::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->first(),
-			'column' => TemplateColumn::where('template_id', $_GET['template_id'])->where('column_name', $columnnum)->first(),
+			'row' => TemplateRow::where('template_id', $_GET['template_id'])->where('row_code', $rownum)->first(),
+			'column' => TemplateColumn::where('template_id', $_GET['template_id'])->where('column_code', $columnnum)->first(),
 			'regulation_row' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'R-' . $rownum)->where('content_type', 'regulation')->first(),
 			'regulation_column' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'C-' . $columnnum)->where('content_type', 'regulation')->first(),
 			'interpretation_row' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'R-' . $rownum)->where('content_type', 'interpretation')->first(),
 			'interpretation_column' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'C-' . $columnnum)->where('content_type', 'interpretation')->first(),
-			'technical' => Technical::where('template_id', $_GET['template_id'])->where('row_num', $rownum)->where('col_num', $columnnum)->get(),
+			'technical' => Technical::where('template_id', $_GET['template_id'])->where('row_code', $rownum)->where('column_code', $columnnum)->get(),
 			'types' => TechnicalType::all(),
 			'sources' => TechnicalSource::all(),
-			'field_regulation' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'regulation')->first(),
-			'field_interpretation' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'interpretation')->first(),
-			'field_property1' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'property1')->first(),
-			'field_property2' => TemplateField::where('template_id', $_GET['template_id'])->where('row_name', $rownum)->where('column_name', $columnnum)->where('property', 'property2')->first()
+			'field_regulation' => TemplateField::where('template_id', $_GET['template_id'])->where('row_code', $rownum)->where('column_code', $columnnum)->where('property', 'regulation')->first(),
+			'field_interpretation' => TemplateField::where('template_id', $_GET['template_id'])->where('row_code', $rownum)->where('column_code', $columnnum)->where('property', 'interpretation')->first(),
+			'field_property1' => TemplateField::where('template_id', $_GET['template_id'])->where('row_code', $rownum)->where('column_code', $columnnum)->where('property', 'property1')->first(),
+			'field_property2' => TemplateField::where('template_id', $_GET['template_id'])->where('row_code', $rownum)->where('column_code', $columnnum)->where('property', 'property2')->first()
 		]);
     }
 	
@@ -188,21 +187,21 @@ class ChangeRequestController extends Controller
 		}
 		
 		//get current content
-		$current_regulation_row = Requirement::where('template_id', $changerequest->template_id)->where('field_id', 'R-' . $changerequest->row_number)->where('content_type', 'regulation')->first();
-		$current_interpretation_row = Requirement::where('template_id', $changerequest->template_id)->where('field_id', 'R-' . $changerequest->row_number)->where('content_type', 'interpretation')->first();
-		$current_regulation_column = Requirement::where('template_id', $changerequest->template_id)->where('field_id', 'C-' . $changerequest->column_number)->where('content_type', 'regulation')->first();
-		$current_interpretation_column = Requirement::where('template_id', $changerequest->template_id)->where('field_id', 'C-' . $changerequest->column_number)->where('content_type', 'interpretation')->first();		
-		$current_technical = Technical::where('template_id', $changerequest->template_id)->where('row_num', $changerequest->row_number)->where('col_num', $changerequest->column_number)->orderBy('content', 'asc')->get();
-		$current_field_regulation = TemplateField::where('template_id', $changerequest->template_id)->where('row_name', $changerequest->row_number)->where('column_name', $changerequest->column_number)->where('property', 'regulation')->first();
-		$current_field_interpretation = TemplateField::where('template_id', $changerequest->template_id)->where('row_name', $changerequest->row_number)->where('column_name', $changerequest->column_number)->where('property', 'interpretation')->first();
-		$current_field_property1 = TemplateField::where('template_id', $changerequest->template_id)->where('row_name', $changerequest->row_number)->where('column_name', $changerequest->column_number)->where('property', 'property1')->first();
-		$current_field_property2 = TemplateField::where('template_id', $changerequest->template_id)->where('row_name', $changerequest->row_number)->where('column_name', $changerequest->column_number)->where('property', 'property2')->first();
+		$current_regulation_row = Requirement::where('template_id', $changerequest->template_id)->where('field_id', 'R-' . $changerequest->row_code)->where('content_type', 'regulation')->first();
+		$current_interpretation_row = Requirement::where('template_id', $changerequest->template_id)->where('field_id', 'R-' . $changerequest->row_code)->where('content_type', 'interpretation')->first();
+		$current_regulation_column = Requirement::where('template_id', $changerequest->template_id)->where('field_id', 'C-' . $changerequest->column_code)->where('content_type', 'regulation')->first();
+		$current_interpretation_column = Requirement::where('template_id', $changerequest->template_id)->where('field_id', 'C-' . $changerequest->column_code)->where('content_type', 'interpretation')->first();		
+		$current_technical = Technical::where('template_id', $changerequest->template_id)->where('row_code', $changerequest->row_code)->where('column_code', $changerequest->column_code)->orderBy('content', 'asc')->get();
+		$current_field_regulation = TemplateField::where('template_id', $changerequest->template_id)->where('row_code', $changerequest->row_code)->where('column_code', $changerequest->column_code)->where('property', 'regulation')->first();
+		$current_field_interpretation = TemplateField::where('template_id', $changerequest->template_id)->where('row_code', $changerequest->row_code)->where('column_code', $changerequest->column_code)->where('property', 'interpretation')->first();
+		$current_field_property1 = TemplateField::where('template_id', $changerequest->template_id)->where('row_code', $changerequest->row_code)->where('column_code', $changerequest->column_code)->where('property', 'property1')->first();
+		$current_field_property2 = TemplateField::where('template_id', $changerequest->template_id)->where('row_code', $changerequest->row_code)->where('column_code', $changerequest->column_code)->where('property', 'property2')->first();
 		
 		//get draft content
-		$draft_regulation_row = DraftRequirement::where('changerequest_id', $changerequest->id)->where('field_id', 'R-' . $changerequest->row_number)->where('content_type', 'regulation')->first();
-		$draft_interpretation_row = DraftRequirement::where('changerequest_id', $changerequest->id)->where('field_id', 'R-' . $changerequest->row_number)->where('content_type', 'interpretation')->first();
-		$draft_regulation_column = DraftRequirement::where('changerequest_id', $changerequest->id)->where('field_id', 'C-' . $changerequest->column_number)->where('content_type', 'regulation')->first();
-		$draft_interpretation_column = DraftRequirement::where('changerequest_id', $changerequest->id)->where('field_id', 'C-' . $changerequest->column_number)->where('content_type', 'interpretation')->first();
+		$draft_regulation_row = DraftRequirement::where('changerequest_id', $changerequest->id)->where('field_id', 'R-' . $changerequest->row_code)->where('content_type', 'regulation')->first();
+		$draft_interpretation_row = DraftRequirement::where('changerequest_id', $changerequest->id)->where('field_id', 'R-' . $changerequest->row_code)->where('content_type', 'interpretation')->first();
+		$draft_regulation_column = DraftRequirement::where('changerequest_id', $changerequest->id)->where('field_id', 'C-' . $changerequest->column_code)->where('content_type', 'regulation')->first();
+		$draft_interpretation_column = DraftRequirement::where('changerequest_id', $changerequest->id)->where('field_id', 'C-' . $changerequest->column_code)->where('content_type', 'interpretation')->first();
 		$draft_technical = DraftTechnical::where('changerequest_id', $changerequest->id)->orderBy('content', 'asc')->get();
 		$draft_field_regulation = DraftField::where('changerequest_id', $changerequest->id)->where('property', 'regulation')->first();
 		$draft_field_interpretation = DraftField::where('changerequest_id', $changerequest->id)->where('property', 'interpretation')->first();
@@ -236,8 +235,8 @@ class ChangeRequestController extends Controller
 		return view('changerequests.edit', [
 			'changerequest' => $changerequest,
 			'template' => Template::find($changerequest->template_id),
-			'template_row' => TemplateRow::where('template_id', $changerequest->template_id)->where('row_name', $changerequest->row_number)->first(),
-			'template_column' => TemplateColumn::where('template_id', $changerequest->template_id)->where('column_name', $changerequest->column_number)->first(),
+			'template_row' => TemplateRow::where('template_id', $changerequest->template_id)->where('row_code', $changerequest->row_code)->first(),
+			'template_column' => TemplateColumn::where('template_id', $changerequest->template_id)->where('column_code', $changerequest->column_code)->first(),
 			'allowedToChange' => $allowedToChange
 		]);
 		
@@ -254,28 +253,32 @@ class ChangeRequestController extends Controller
 	{
 	
 		if ($request->isMethod('post')) {
-		
+	
 			if ($request->has('changerequest_id')) {
+			
+				$changerequest_id = $request->input('changerequest_id');
+				$ChangeRequest = ChangeRequest::find($changerequest_id);
+				
+				if ($ChangeRequest['status'] <> 'pending') {
+					abort(403, 'Error: change request already processed!');
+				}
 			
 				//update change request
 				if ($request->input('change_type') == "rejected") {
-					$changerequest_id = $request->input('changerequest_id');
-					$ChangeRequest = ChangeRequest::find($changerequest_id);
-					ChangeRequest::where('id', $changerequest_id)->update(['status' => 'rejected']);			
-					
+					ChangeRequest::where('id', $changerequest_id)->update(['status' => 'rejected']);
+					ChangeRequest::where('id', $changerequest_id)->update(['comment' => $request->input('comment')]);
 				}
 				
 				//update change request
 				if ($request->input('change_type') == "approved") {
-					$changerequest_id = $request->input('changerequest_id');
-					$ChangeRequest = ChangeRequest::find($changerequest_id);
 					ChangeRequest::where('id', $changerequest_id)->update(['status' => 'approved']);
+					ChangeRequest::where('id', $changerequest_id)->update(['comment' => $request->input('comment')]);
 					
 					//get draft content
-					$DraftRegulation_row = DraftRequirement::where('changerequest_id', $changerequest_id)->where('field_id', 'R-' . $ChangeRequest->row_number)->where('content_type', 'regulation')->first();
-					$DraftInterpretation_row = DraftRequirement::where('changerequest_id', $changerequest_id)->where('field_id', 'R-' . $ChangeRequest->row_number)->where('content_type', 'interpretation')->first();
-					$DraftRegulation_column = DraftRequirement::where('changerequest_id', $changerequest_id)->where('field_id', 'C-' . $ChangeRequest->column_number)->where('content_type', 'regulation')->first();
-					$DraftInterpretation_column = DraftRequirement::where('changerequest_id', $changerequest_id)->where('field_id', 'C-' . $ChangeRequest->column_number)->where('content_type', 'interpretation')->first();
+					$DraftRegulation_row = DraftRequirement::where('changerequest_id', $changerequest_id)->where('field_id', 'R-' . $ChangeRequest->row_code)->where('content_type', 'regulation')->first();
+					$DraftInterpretation_row = DraftRequirement::where('changerequest_id', $changerequest_id)->where('field_id', 'R-' . $ChangeRequest->row_code)->where('content_type', 'interpretation')->first();
+					$DraftRegulation_column = DraftRequirement::where('changerequest_id', $changerequest_id)->where('field_id', 'C-' . $ChangeRequest->column_code)->where('content_type', 'regulation')->first();
+					$DraftInterpretation_column = DraftRequirement::where('changerequest_id', $changerequest_id)->where('field_id', 'C-' . $ChangeRequest->column_code)->where('content_type', 'interpretation')->first();
 
 					$DraftField_property1 = DraftField::where('changerequest_id', $changerequest_id)->where('property', 'property1')->first();
 					$DraftField_property2 = DraftField::where('changerequest_id', $changerequest_id)->where('property', 'property2')->first();
@@ -287,40 +290,40 @@ class ChangeRequestController extends Controller
 					if (!empty($ChangeRequest['template_id'])) {
 
 						//get existing content
-						$Regulation_row = Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'R-' . $ChangeRequest->row_number)->where('content_type', 'regulation')->first();
-						$Interpretation_row = Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'R-' . $ChangeRequest->row_number)->where('content_type', 'interpretation')->first();
-						$Regulation_column = Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'C-' . $ChangeRequest->column_number)->where('content_type', 'regulation')->first();
-						$Interpretation_column = Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'C-' . $ChangeRequest->column_number)->where('content_type', 'interpretation')->first();
+						$Regulation_row = Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'R-' . $ChangeRequest->row_code)->where('content_type', 'regulation')->first();
+						$Interpretation_row = Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'R-' . $ChangeRequest->row_code)->where('content_type', 'interpretation')->first();
+						$Regulation_column = Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'C-' . $ChangeRequest->column_code)->where('content_type', 'regulation')->first();
+						$Interpretation_column = Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'C-' . $ChangeRequest->column_code)->where('content_type', 'interpretation')->first();
 						
-						$field_property1 = TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_name', $ChangeRequest->row_number)->where('column_name', $ChangeRequest->column_number)->where('property', 'property1')->first();
-						$field_property2 = TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_name', $ChangeRequest->row_number)->where('column_name', $ChangeRequest->column_number)->where('property', 'property2')->first();
-						$field_regulation = TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_name', $ChangeRequest->row_number)->where('column_name', $ChangeRequest->column_number)->where('property', 'regulation')->first();
-						$field_interpretation = TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_name', $ChangeRequest->row_number)->where('column_name', $ChangeRequest->column_number)->where('property', 'interpretation')->first();
-						$technical = Technical::where('template_id', $ChangeRequest->template_id)->where('row_num', $ChangeRequest->row_number)->where('col_num', $ChangeRequest->column_number)->get();
+						$field_property1 = TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('property', 'property1')->first();
+						$field_property2 = TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('property', 'property2')->first();
+						$field_regulation = TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('property', 'regulation')->first();
+						$field_interpretation = TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('property', 'interpretation')->first();
+						$technical = Technical::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->get();
 
 						
 						//delete any existing if empty is proposed
 						if (count($DraftRegulation_row) == 0) {
-							Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'R-' . $ChangeRequest->row_number)->where('content_type', 'regulation')->delete();
+							Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'R-' . $ChangeRequest->row_code)->where('content_type', 'regulation')->delete();
 						} else {
 							//insert
 							if (count($Regulation_row) == 0) {
 								$Requirements = new Requirement;
 								$Requirements->template_id = $ChangeRequest->template_id;
-								$Requirements->field_id = 'R-' . $ChangeRequest->row_number;
+								$Requirements->field_id = 'R-' . $ChangeRequest->row_code;
 								$Requirements->content_type = 'regulation';
 								$Requirements->content = $DraftRegulation_row->content;
 								$Requirements->save();
 							//update
 							} else {
-								Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'R-' . $ChangeRequest->row_number)->where('content_type', 'regulation')->update(['content' => $DraftRegulation_row->content]);
+								Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'R-' . $ChangeRequest->row_code)->where('content_type', 'regulation')->update(['content' => $DraftRegulation_row->content]);
 
 								//submit existing content to archive table
 								$HistoryRequirement = new HistoryRequirement;
 								$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 								$HistoryRequirement->template_id = $ChangeRequest->template_id;
-								$HistoryRequirement->row_name = $ChangeRequest->row_number;
-								$HistoryRequirement->column_name = '';
+								$HistoryRequirement->row_code = $ChangeRequest->row_code;
+								$HistoryRequirement->column_code = '';
 								$HistoryRequirement->content_type = 'regulation';
 								$HistoryRequirement->content = $Regulation_row->content;
 								$HistoryRequirement->change_type = 'existing';
@@ -334,8 +337,8 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement = new HistoryRequirement;
 							$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 							$HistoryRequirement->template_id = $ChangeRequest->template_id;
-							$HistoryRequirement->row_name = $ChangeRequest->row_number;
-							$HistoryRequirement->column_name = '';
+							$HistoryRequirement->row_code = $ChangeRequest->row_code;
+							$HistoryRequirement->column_code = '';
 							$HistoryRequirement->content_type = 'regulation';
 							$HistoryRequirement->content = $DraftRegulation_row->content;
 							$HistoryRequirement->change_type = 'new';
@@ -348,26 +351,26 @@ class ChangeRequestController extends Controller
 						
 						//delete any existing if empty is proposed
 						if (count($DraftInterpretation_row) == 0) {
-							Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'R-' . $ChangeRequest->row_number)->where('content_type', 'interpretation')->delete();
+							Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'R-' . $ChangeRequest->row_code)->where('content_type', 'interpretation')->delete();
 						} else {
 							//insert
 							if (count($Interpretation_row) == 0) {
 								$Requirements = new Requirement;
 								$Requirements->template_id = $ChangeRequest->template_id;
-								$Requirements->field_id = 'R-' . $ChangeRequest->row_number;
+								$Requirements->field_id = 'R-' . $ChangeRequest->row_code;
 								$Requirements->content_type = 'interpretation';
 								$Requirements->content = $DraftInterpretation_row->content;
 								$Requirements->save();
 							//update
 							} else {
-								Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'R-' . $ChangeRequest->row_number)->where('content_type', 'interpretation')->update(['content' => $DraftInterpretation_row->content]);
+								Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'R-' . $ChangeRequest->row_code)->where('content_type', 'interpretation')->update(['content' => $DraftInterpretation_row->content]);
 								
 								//submit existing content to archive table
 								$HistoryRequirement = new HistoryRequirement;
 								$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 								$HistoryRequirement->template_id = $ChangeRequest->template_id;
-								$HistoryRequirement->row_name = $ChangeRequest->row_number;
-								$HistoryRequirement->column_name = '';
+								$HistoryRequirement->row_code = $ChangeRequest->row_code;
+								$HistoryRequirement->column_code = '';
 								$HistoryRequirement->content_type = 'interpretation';
 								$HistoryRequirement->content = $Interpretation_row->content;
 								$HistoryRequirement->change_type = 'existing';
@@ -382,8 +385,8 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement = new HistoryRequirement;
 							$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 							$HistoryRequirement->template_id = $ChangeRequest->template_id;
-							$HistoryRequirement->row_name = $ChangeRequest->row_number;
-							$HistoryRequirement->column_name = '';
+							$HistoryRequirement->row_code = $ChangeRequest->row_code;
+							$HistoryRequirement->column_code = '';
 							$HistoryRequirement->content_type = 'interpretation';
 							$HistoryRequirement->content = $DraftInterpretation_row->content;
 							$HistoryRequirement->change_type = 'new';
@@ -396,26 +399,26 @@ class ChangeRequestController extends Controller
 
 						//delete any existing if empty is proposed
 						if (count($DraftRegulation_column) == 0) {
-							Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'C-' . $ChangeRequest->column_number)->where('content_type', 'regulation')->delete();
+							Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'C-' . $ChangeRequest->column_code)->where('content_type', 'regulation')->delete();
 						} else {
 							//insert
 							if (count($Regulation_column) == 0) {
 								$Requirements = new Requirement;
 								$Requirements->template_id = $ChangeRequest->template_id;
-								$Requirements->field_id = 'C-' . $ChangeRequest->column_number;
+								$Requirements->field_id = 'C-' . $ChangeRequest->column_code;
 								$Requirements->content_type = 'regulation';
 								$Requirements->content = $DraftRegulation_column->content;
 								$Requirements->save();
 							//update
 							} else {
-								Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'C-' . $ChangeRequest->column_number)->where('content_type', 'regulation')->update(['content' => $DraftRegulation_column->content]);
+								Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'C-' . $ChangeRequest->column_code)->where('content_type', 'regulation')->update(['content' => $DraftRegulation_column->content]);
 								
 								//submit existing content to archive table
 								$HistoryRequirement = new HistoryRequirement;
 								$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 								$HistoryRequirement->template_id = $ChangeRequest->template_id;
-								$HistoryRequirement->row_name = '';
-								$HistoryRequirement->column_name = $ChangeRequest->column_number;
+								$HistoryRequirement->row_code = '';
+								$HistoryRequirement->column_code = $ChangeRequest->column_code;
 								$HistoryRequirement->content_type = 'regulation';
 								$HistoryRequirement->content = $Regulation_column->content;
 								$HistoryRequirement->change_type = 'existing';
@@ -429,8 +432,8 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement = new HistoryRequirement;
 							$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 							$HistoryRequirement->template_id = $ChangeRequest->template_id;
-							$HistoryRequirement->row_name = '';
-							$HistoryRequirement->column_name = $ChangeRequest->column_number;
+							$HistoryRequirement->row_code = '';
+							$HistoryRequirement->column_code = $ChangeRequest->column_code;
 							$HistoryRequirement->content_type = 'regulation';
 							$HistoryRequirement->content = $DraftRegulation_column->content;
 							$HistoryRequirement->change_type = 'new';
@@ -443,26 +446,26 @@ class ChangeRequestController extends Controller
 						
 						//delete any existing if empty is proposed
 						if (count($DraftInterpretation_column) == 0) {
-							Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'C-' . $ChangeRequest->column_number)->where('content_type', 'interpretation')->delete();
+							Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'C-' . $ChangeRequest->column_code)->where('content_type', 'interpretation')->delete();
 						} else {
 							//insert
 							if (count($Interpretation_column) == 0) {
 								$Requirements = new Requirement;
 								$Requirements->template_id = $ChangeRequest->template_id;
-								$Requirements->field_id = 'C-' . $ChangeRequest->column_number;
+								$Requirements->field_id = 'C-' . $ChangeRequest->column_code;
 								$Requirements->content_type = 'interpretation';
 								$Requirements->content = $DraftInterpretation_column->content;
 								$Requirements->save();
 							//update
 							} else {
-								Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'C-' . $ChangeRequest->column_number)->where('content_type', 'interpretation')->update(['content' => $DraftInterpretation_column->content]);
+								Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'C-' . $ChangeRequest->column_code)->where('content_type', 'interpretation')->update(['content' => $DraftInterpretation_column->content]);
 								
 								//submit existing content to archive table
 								$HistoryRequirement = new HistoryRequirement;
 								$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 								$HistoryRequirement->template_id = $ChangeRequest->template_id;
-								$HistoryRequirement->row_name = '';
-								$HistoryRequirement->column_name = $ChangeRequest->column_number;
+								$HistoryRequirement->row_code = '';
+								$HistoryRequirement->column_code = $ChangeRequest->column_code;
 								$HistoryRequirement->content_type = 'interpretation';
 								$HistoryRequirement->content = $Interpretation_column->content;
 								$HistoryRequirement->change_type = 'existing';
@@ -476,8 +479,8 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement = new HistoryRequirement;
 							$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 							$HistoryRequirement->template_id = $ChangeRequest->template_id;
-							$HistoryRequirement->row_name = '';
-							$HistoryRequirement->column_name = $ChangeRequest->column_number;
+							$HistoryRequirement->row_code = '';
+							$HistoryRequirement->column_code = $ChangeRequest->column_code;
 							$HistoryRequirement->content_type = 'interpretation';
 							$HistoryRequirement->content = $DraftInterpretation_column->content;
 							$HistoryRequirement->change_type = 'new';
@@ -490,27 +493,27 @@ class ChangeRequestController extends Controller
 
 						//delete any existing if empty is proposed
 						if (count($DraftField_property1) == 0) {
-							TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_name', $ChangeRequest->row_number)->where('column_name', $ChangeRequest->column_number)->where('property', 'property1')->delete();
+							TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('property', 'property1')->delete();
 						} else {
 							//insert
 							if (count($field_property1) == 0) {
 								$TemplateField = new TemplateField;
 								$TemplateField->template_id = $ChangeRequest->template_id;
-								$TemplateField->row_name = $ChangeRequest->row_number;
-								$TemplateField->column_name = $ChangeRequest->column_number;
+								$TemplateField->row_code = $ChangeRequest->row_code;
+								$TemplateField->column_code = $ChangeRequest->column_code;
 								$TemplateField->property = 'property1';
 								$TemplateField->content = $DraftField_property1->content;
 								$TemplateField->save();
 							//update
 							} else {
-								TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_name', $ChangeRequest->row_number)->where('column_name', $ChangeRequest->column_number)->where('property', 'property1')->update(['content' => $DraftField_property1->content]);
+								TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('property', 'property1')->update(['content' => $DraftField_property1->content]);
 								
 								//submit existing content to archive table
 								$HistoryRequirement = new HistoryRequirement;
 								$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 								$HistoryRequirement->template_id = $ChangeRequest->template_id;
-								$HistoryRequirement->row_name = $ChangeRequest->row_number;
-								$HistoryRequirement->column_name = $ChangeRequest->column_number;
+								$HistoryRequirement->row_code = $ChangeRequest->row_code;
+								$HistoryRequirement->column_code = $ChangeRequest->column_code;
 								$HistoryRequirement->content_type = 'property1';
 								$HistoryRequirement->content = $field_property1->content;
 								$HistoryRequirement->change_type = 'existing';
@@ -524,8 +527,8 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement = new HistoryRequirement;
 							$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 							$HistoryRequirement->template_id = $ChangeRequest->template_id;
-							$HistoryRequirement->row_name = $ChangeRequest->row_number;
-							$HistoryRequirement->column_name = $ChangeRequest->column_number;
+							$HistoryRequirement->row_code = $ChangeRequest->row_code;
+							$HistoryRequirement->column_code = $ChangeRequest->column_code;
 							$HistoryRequirement->content_type = 'property1';
 							$HistoryRequirement->content = $DraftField_property1->content;
 							$HistoryRequirement->change_type = 'new';
@@ -538,27 +541,27 @@ class ChangeRequestController extends Controller
 						
 						//delete any existing if empty is proposed
 						if (count($DraftField_property2) == 0) {
-							TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_name', $ChangeRequest->row_number)->where('column_name', $ChangeRequest->column_number)->where('property', 'property2')->delete();
+							TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('property', 'property2')->delete();
 						} else {
 							//insert
 							if (count($field_property2) == 0) {
 								$TemplateField = new TemplateField;
 								$TemplateField->template_id = $ChangeRequest->template_id;
-								$TemplateField->row_name = $ChangeRequest->row_number;
-								$TemplateField->column_name = $ChangeRequest->column_number;
+								$TemplateField->row_code = $ChangeRequest->row_code;
+								$TemplateField->column_code = $ChangeRequest->column_code;
 								$TemplateField->property = 'property2';
 								$TemplateField->content = $DraftField_property2->content;
 								$TemplateField->save();
 							//update
 							} else {
-								TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_name', $ChangeRequest->row_number)->where('column_name', $ChangeRequest->column_number)->where('property', 'property2')->update(['content' => $DraftField_property2->content]);
+								TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('property', 'property2')->update(['content' => $DraftField_property2->content]);
 								
 								//submit existing content to archive table
 								$HistoryRequirement = new HistoryRequirement;
 								$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 								$HistoryRequirement->template_id = $ChangeRequest->template_id;
-								$HistoryRequirement->row_name = $ChangeRequest->row_number;
-								$HistoryRequirement->column_name = $ChangeRequest->column_number;
+								$HistoryRequirement->row_code = $ChangeRequest->row_code;
+								$HistoryRequirement->column_code = $ChangeRequest->column_code;
 								$HistoryRequirement->content_type = 'property2';
 								$HistoryRequirement->content = $field_property2->content;
 								$HistoryRequirement->change_type = 'existing';
@@ -572,8 +575,8 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement = new HistoryRequirement;
 							$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 							$HistoryRequirement->template_id = $ChangeRequest->template_id;
-							$HistoryRequirement->row_name = $ChangeRequest->row_number;
-							$HistoryRequirement->column_name = $ChangeRequest->column_number;
+							$HistoryRequirement->row_code = $ChangeRequest->row_code;
+							$HistoryRequirement->column_code = $ChangeRequest->column_code;
 							$HistoryRequirement->content_type = 'property2';
 							$HistoryRequirement->content = $DraftField_property2->content;
 							$HistoryRequirement->change_type = 'new';
@@ -586,27 +589,27 @@ class ChangeRequestController extends Controller
 
 						//delete any existing if empty is proposed
 						if (count($DraftField_regulation) == 0) {
-							TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_name', $ChangeRequest->row_number)->where('column_name', $ChangeRequest->column_number)->where('property', 'regulation')->delete();
+							TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('property', 'regulation')->delete();
 						} else {
 							//insert
 							if (count($field_regulation) == 0) {
 								$TemplateField = new TemplateField;
 								$TemplateField->template_id = $ChangeRequest->template_id;
-								$TemplateField->row_name = $ChangeRequest->row_number;
-								$TemplateField->column_name = $ChangeRequest->column_number;
+								$TemplateField->row_code = $ChangeRequest->row_code;
+								$TemplateField->column_code = $ChangeRequest->column_code;
 								$TemplateField->property = 'regulation';
 								$TemplateField->content = $DraftField_regulation->content;
 								$TemplateField->save();
 							//update
 							} else {
-								TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_name', $ChangeRequest->row_number)->where('column_name', $ChangeRequest->column_number)->where('property', 'regulation')->update(['content' => $DraftField_regulation->content]);
+								TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('property', 'regulation')->update(['content' => $DraftField_regulation->content]);
 								
 								//submit existing content to archive table
 								$HistoryRequirement = new HistoryRequirement;
 								$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 								$HistoryRequirement->template_id = $ChangeRequest->template_id;
-								$HistoryRequirement->row_name = $ChangeRequest->row_number;
-								$HistoryRequirement->column_name = $ChangeRequest->column_number;
+								$HistoryRequirement->row_code = $ChangeRequest->row_code;
+								$HistoryRequirement->column_code = $ChangeRequest->column_code;
 								$HistoryRequirement->content_type = 'regulation';
 								$HistoryRequirement->content = $field_regulation->content;
 								$HistoryRequirement->change_type = 'existing';
@@ -620,8 +623,8 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement = new HistoryRequirement;
 							$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 							$HistoryRequirement->template_id = $ChangeRequest->template_id;
-							$HistoryRequirement->row_name = $ChangeRequest->row_number;
-							$HistoryRequirement->column_name = $ChangeRequest->column_number;
+							$HistoryRequirement->row_code = $ChangeRequest->row_code;
+							$HistoryRequirement->column_code = $ChangeRequest->column_code;
 							$HistoryRequirement->content_type = 'regulation';
 							$HistoryRequirement->content = $DraftField_regulation->content;
 							$HistoryRequirement->change_type = 'new';
@@ -634,27 +637,27 @@ class ChangeRequestController extends Controller
 
 						//delete any existing if empty is proposed
 						if (count($DraftField_interpretation) == 0) {
-							TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_name', $ChangeRequest->row_number)->where('column_name', $ChangeRequest->column_number)->where('property', 'interpretation')->delete();
+							TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('property', 'interpretation')->delete();
 						} else {
 							//insert
 							if (count($field_interpretation) == 0) {
 								$TemplateField = new TemplateField;
 								$TemplateField->template_id = $ChangeRequest->template_id;
-								$TemplateField->row_name = $ChangeRequest->row_number;
-								$TemplateField->column_name = $ChangeRequest->column_number;
+								$TemplateField->row_code = $ChangeRequest->row_code;
+								$TemplateField->column_code = $ChangeRequest->column_code;
 								$TemplateField->property = 'interpretation';
 								$TemplateField->content = $DraftField_interpretation->content;
 								$TemplateField->save();
 							//update
 							} else {
-								TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_name', $ChangeRequest->row_number)->where('column_name', $ChangeRequest->column_number)->where('property', 'interpretation')->update(['content' => $DraftField_interpretation->content]);
+								TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('property', 'interpretation')->update(['content' => $DraftField_interpretation->content]);
 								
 								//submit existing content to archive table
 								$HistoryRequirement = new HistoryRequirement;
 								$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 								$HistoryRequirement->template_id = $ChangeRequest->template_id;
-								$HistoryRequirement->row_name = $ChangeRequest->row_number;
-								$HistoryRequirement->column_name = $ChangeRequest->column_number;
+								$HistoryRequirement->row_code = $ChangeRequest->row_code;
+								$HistoryRequirement->column_code = $ChangeRequest->column_code;
 								$HistoryRequirement->content_type = 'interpretation';
 								$HistoryRequirement->content = $field_interpretation->content;
 								$HistoryRequirement->change_type = 'existing';
@@ -668,8 +671,8 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement = new HistoryRequirement;
 							$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 							$HistoryRequirement->template_id = $ChangeRequest->template_id;
-							$HistoryRequirement->row_name = $ChangeRequest->row_number;
-							$HistoryRequirement->column_name = $ChangeRequest->column_number;
+							$HistoryRequirement->row_code = $ChangeRequest->row_code;
+							$HistoryRequirement->column_code = $ChangeRequest->column_code;
 							$HistoryRequirement->content_type = 'interpretation';
 							$HistoryRequirement->content = $DraftField_interpretation->content;
 							$HistoryRequirement->change_type = 'new';
@@ -682,7 +685,7 @@ class ChangeRequestController extends Controller
 						
 						//delete any existing content
 						if (count($DraftTechnical) == 0) {
-							Technical::where('template_id', $ChangeRequest->template_id)->where('row_num', $ChangeRequest->row_number)->where('col_num', $ChangeRequest->column_number)->delete();
+							Technical::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->delete();
 						} else {
 						
 							//submit existing technical content to archive 
@@ -692,8 +695,8 @@ class ChangeRequestController extends Controller
 									$HistoryTechnical = new HistoryTechnical;
 									$HistoryTechnical->changerequest_id = $ChangeRequest->id;
 									$HistoryTechnical->template_id = $ChangeRequest->template_id;
-									$HistoryTechnical->row_name = $ChangeRequest->row_number;
-									$HistoryTechnical->column_name = $ChangeRequest->column_number;
+									$HistoryTechnical->row_code = $ChangeRequest->row_code;
+									$HistoryTechnical->column_code = $ChangeRequest->column_code;
 									$HistoryTechnical->type_id = $techexistingrow->type_id;
 									$HistoryTechnical->source_id = $techexistingrow->source_id;		
 									$HistoryTechnical->content = $techexistingrow->content;
@@ -706,12 +709,12 @@ class ChangeRequestController extends Controller
 								}
 							}
 						
-							Technical::where('template_id', $ChangeRequest->template_id)->where('row_num', $ChangeRequest->row_number)->where('col_num', $ChangeRequest->column_number)->delete();
+							Technical::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->delete();
 							foreach($DraftTechnical as $Technicalrow) {
 								$Technical = new Technical;
 								$Technical->template_id = $ChangeRequest->template_id;
-								$Technical->row_num = $ChangeRequest->row_number;
-								$Technical->col_num = $ChangeRequest->column_number;
+								$Technical->row_code = $ChangeRequest->row_code;
+								$Technical->column_code = $ChangeRequest->column_code;
 								$Technical->type_id = $Technicalrow->type_id;
 								$Technical->source_id = $Technicalrow->source_id;
 								$Technical->content = $Technicalrow->content;
@@ -722,8 +725,8 @@ class ChangeRequestController extends Controller
 								$HistoryTechnical = new HistoryTechnical;
 								$HistoryTechnical->changerequest_id = $ChangeRequest->id;
 								$HistoryTechnical->template_id = $ChangeRequest->template_id;
-								$HistoryTechnical->row_name = $ChangeRequest->row_number;
-								$HistoryTechnical->column_name = $ChangeRequest->column_number;
+								$HistoryTechnical->row_code = $ChangeRequest->row_code;
+								$HistoryTechnical->column_code = $ChangeRequest->column_code;
 								$HistoryTechnical->type_id = $Technicalrow->type_id;
 								$HistoryTechnical->source_id = $Technicalrow->source_id;		
 								$HistoryTechnical->content = $Technicalrow->content;
@@ -757,8 +760,8 @@ class ChangeRequestController extends Controller
 
 			$changerequest = new ChangeRequest;
 			$changerequest->template_id = $request->input('template_id');
-			$changerequest->row_number = $request->input('row_name');
-			$changerequest->column_number = $request->input('column_name');
+			$changerequest->row_code = $request->input('row_code');
+			$changerequest->column_code = $request->input('column_code');
 			$changerequest->creator_id = Auth::user()->id;
 			$changerequest->status = 'pending';
 			$changerequest->save();
@@ -766,7 +769,7 @@ class ChangeRequestController extends Controller
 			if ($request->has('regulation_row')) {
 				$draftrequirement = new DraftRequirement;
 				$draftrequirement->changerequest_id = $changerequest->id;
-				$draftrequirement->field_id = 'R-' . $request->input('row_name');
+				$draftrequirement->field_id = 'R-' . $request->input('row_code');
 				$draftrequirement->content_type = 'regulation';
 				$draftrequirement->content = $request->input('regulation_row');		
 				$draftrequirement->save();
@@ -775,7 +778,7 @@ class ChangeRequestController extends Controller
 			if ($request->has('interpretation_row')) {
 				$draftrequirement = new DraftRequirement;
 				$draftrequirement->changerequest_id = $changerequest->id;
-				$draftrequirement->field_id = 'R-' . $request->input('row_name');
+				$draftrequirement->field_id = 'R-' . $request->input('row_code');
 				$draftrequirement->content_type = 'interpretation';
 				$draftrequirement->content = $request->input('interpretation_row');		
 				$draftrequirement->save();
@@ -784,7 +787,7 @@ class ChangeRequestController extends Controller
 			if ($request->has('regulation_column')) {
 				$draftrequirement = new DraftRequirement;
 				$draftrequirement->changerequest_id = $changerequest->id;
-				$draftrequirement->field_id = 'C-' . $request->input('column_name');
+				$draftrequirement->field_id = 'C-' . $request->input('column_code');
 				$draftrequirement->content_type = 'regulation';
 				$draftrequirement->content = $request->input('regulation_column');		
 				$draftrequirement->save();
@@ -793,7 +796,7 @@ class ChangeRequestController extends Controller
 			if ($request->has('interpretation_column')) {
 				$draftrequirement = new DraftRequirement;
 				$draftrequirement->changerequest_id = $changerequest->id;
-				$draftrequirement->field_id = 'C-' . $request->input('column_name');
+				$draftrequirement->field_id = 'C-' . $request->input('column_code');
 				$draftrequirement->content_type = 'interpretation';
 				$draftrequirement->content = $request->input('interpretation_column');		
 				$draftrequirement->save();
@@ -818,7 +821,6 @@ class ChangeRequestController extends Controller
 					$drafttechnical->save();
 				
 				}
-			
 			}
 			
 			if ($request->has('field_property1')) {
