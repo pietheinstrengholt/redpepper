@@ -34,6 +34,9 @@ use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 use Session;
 
+use Event;
+use App\Events\ChangeEvent;
+
 
 class ExcelController extends Controller
 {
@@ -833,7 +836,7 @@ class ExcelController extends Controller
 					});
 				}
 			}
-
+			Event::fire(new ChangeEvent('Excel', $request->input('template_name') . ' template has been added', Auth::user()->id));
 			return Redirect::to('/sections');
 		}
 	}	

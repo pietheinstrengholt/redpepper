@@ -11,6 +11,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Input;
 use Redirect;
+use Auth;
+use Event;
+use App\Events\ChangeEvent;
+use App\Log;
 
 class UserController extends Controller
 {
@@ -94,6 +98,7 @@ class UserController extends Controller
 			
 			//update password
 			User::where('id', $request->input('username_id'))->update(['password' => bcrypt($request->input('password'))]);
+			Event::fire(new ChangeEvent('User password', 'User id ' . $request->has('username_id') . ' password has been changed', Auth::user()->id));
 		}
 		//return to user overview
 		return Redirect::route('users.index')->with('message', 'Password updated.');
@@ -116,6 +121,7 @@ class UserController extends Controller
 	
 		$input = array_except(Input::all(), '_method');
 		$user->update($input);
+		Event::fire(new ChangeEvent('User details', 'User id ' . $request->input('username_id') . ' details have been changed', Auth::user()->id));
 		return Redirect::route('users.show', $user->slug)->with('message', 'User updated.');
 	}
 	
@@ -149,7 +155,7 @@ class UserController extends Controller
 			}
 		
 		}
-		
+		Event::fire(new ChangeEvent('User rights', 'User id ' . $request->input('username_id') . ' rights have been changed', Auth::user()->id));
 		return Redirect::route('users.index')->with('message', 'User updated.');
 	}	
 	 
@@ -158,8 +164,12 @@ class UserController extends Controller
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }	
-	
+        }
+		
+		//delete logs
+		Log::where('created_by', $user->id)->delete();
+		
+		//delete user
 		$user->delete();
 		return Redirect::route('users.index')->with('message', 'User deleted.');
 	}

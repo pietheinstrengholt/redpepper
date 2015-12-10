@@ -13,6 +13,9 @@ use Gate;
 use App\User;
 use Auth;
 
+use Event;
+use App\Events\ChangeEvent;
+
 class SectionController extends Controller
 {
     public function index(Request $request)
@@ -86,7 +89,7 @@ class SectionController extends Controller
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }
-	
+		Event::fire(new ChangeEvent('Section', $section->section_name . ' has been changed', Auth::user()->id));
 		return view('sections.edit', compact('section'));
 	}	
 	
@@ -96,7 +99,7 @@ class SectionController extends Controller
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }	
-	
+		Event::fire(new ChangeEvent('Section', $section->section_name . ' has been added by', Auth::user()->id));
 		return view('sections.create', compact('section'));
 	}
 	

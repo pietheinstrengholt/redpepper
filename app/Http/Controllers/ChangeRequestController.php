@@ -34,6 +34,9 @@ use App\User;
 use App\UserRights;
 use Auth;
 
+use Event;
+use App\Events\ChangeEvent;
+
 class ChangeRequestController extends Controller
 {
 	public function templateRights($id) {
@@ -285,6 +288,9 @@ class ChangeRequestController extends Controller
 				if ($ChangeRequest['status'] <> 'pending') {
 					abort(403, 'Error: change request already processed!');
 				}
+				
+				//submit event to log
+				Event::fire(new ChangeEvent('Changerequest', 'Changerequest id ' . $request->input('changerequest_id') . ' has been ' . $request->input('status'), Auth::user()->id));
 			
 				//update change request
 				if ($request->input('change_type') == "rejected") {

@@ -26,6 +26,9 @@ use Redirect;
 use Validator;
 use Session;
 
+use Event;
+use App\Events\ChangeEvent;
+
 class TemplateController extends Controller
 {
 	//function to show template
@@ -124,6 +127,8 @@ class TemplateController extends Controller
 			'template_shortdesc' => 'required',
 			'section_id' => 'required'
 		]);
+		
+		Event::fire(new ChangeEvent('Template wizard', 'New template ' . $request->input('template_name') . ' has been created', Auth::user()->id));
 
 		if ($request->isMethod('post')) {
 			
@@ -186,7 +191,9 @@ class TemplateController extends Controller
 		//exit when user is a guest
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
-		}	
+		}
+		
+		Event::fire(new ChangeEvent('Template structure', 'Template id ' . $request->input('template_id') . ' structure has been created', Auth::user()->id));
 	
 		if ($request->isMethod('post')) {
 			
@@ -313,7 +320,7 @@ class TemplateController extends Controller
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }
-	
+		Event::fire(new ChangeEvent('Template details', 'Template ' . $template->template_name . ' details have been created', Auth::user()->id));
 		$input = array_except(Input::all(), '_method');
 		$template->update($input);
 		return Redirect::route('sections.templates.show', [$section->id, $template->id])->with('message', 'Template updated.');
@@ -333,7 +340,9 @@ class TemplateController extends Controller
 		TemplateField::where('template_id', $template->id)->delete();
 		Requirement::where('template_id', $template->id)->delete();
 		Technical::where('template_id', $template->id)->delete();
-		ChangeRequest::where('template_id', $template->id)->delete();	
+		ChangeRequest::where('template_id', $template->id)->delete();
+		
+		Event::fire(new ChangeEvent('Template delete', 'Template ' . $template->template_name . ' have been deleted', Auth::user()->id));
 	
 		//delete template
 		$template->delete();
