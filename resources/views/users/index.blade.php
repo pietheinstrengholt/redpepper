@@ -2,6 +2,12 @@
 @extends('layouts.master')
 
 @section('content')
+
+	<ul class="breadcrumb breadcrumb-section">
+	  <li><a href="{!! url('/'); !!}">Home</a></li>
+	  <li class="active">Users</li>
+	</ul>
+
     <h2>Users</h2>
 	<h4>Please make a selection of one of the following users</h4>
  

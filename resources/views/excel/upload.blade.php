@@ -3,6 +3,11 @@
 
 @section('content')
 
+	<ul class="breadcrumb breadcrumb-section">
+	  <li><a href="{!! url('/'); !!}">Home</a></li>
+	  <li class="active">Upload excel template</li>
+	</ul>
+
 	<h2>Upload a new template</h2>
 	<h4>Please make use of the upload form below</h4>
 

@@ -2,6 +2,13 @@
 @extends('layouts.master')
 
 @section('content')
+
+	<ul class="breadcrumb breadcrumb-section">
+	  <li><a href="{!! url('/'); !!}">Home</a></li>
+	  <li><a href="{!! url('/sections'); !!}">Sections</a></li>
+	  <li class="active">{{ $section->section_name }}</li>
+	</ul>
+
     <h2>{{ $section->section_name }}</h2>
 	<h4>{{ $section->section_description }}</h4>
 	<h4>{{ $section->section_longdesc }}</h4>

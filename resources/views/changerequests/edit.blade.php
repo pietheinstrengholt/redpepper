@@ -68,6 +68,12 @@
 	#htmldiff.onlyInsertions del {display:none}
 	</style>
 	</head>
+	
+	<ul class="breadcrumb breadcrumb-section">
+	  <li><a href="{!! url('/'); !!}">Home</a></li>
+	  <li><a href="{!! url('/changerequests'); !!}">Changerequests</a></li>
+	  <li class="active">{{ $template->template_name }}</li>
+	</ul>	
 
 	<h2>Review Changerequest</h2>
 

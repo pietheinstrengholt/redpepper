@@ -3,6 +3,13 @@
 
 @section('content')
 
+	<ul class="breadcrumb breadcrumb-section">
+	  <li><a href="{!! url('/'); !!}">Home</a></li>
+	  <li><a href="{!! url('/sections'); !!}">Sections</a></li>
+	  <li><a href="{!! url('/sections/' . $template->section->id); !!}">{{ $template->section->section_name }}</a></li>
+	  <li class="active">{{ $template->template_name }}</li>
+	</ul>
+
     <h2>{{ $template->template_name }}</h2>
 	<h4>{{ $template->template_shortdesc }}</h4>
 	<h4>{{ $template->template_longdesc }}</h4>

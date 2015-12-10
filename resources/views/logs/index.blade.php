@@ -2,6 +2,12 @@
 @extends('layouts.master')
 
 @section('content')
+
+	<ul class="breadcrumb breadcrumb-section">
+	  <li><a href="{!! url('/'); !!}">Home</a></li>
+	  <li class="active">User activities</li>
+	</ul>
+
     <h2>Logs</h2>
 	<h4>The table below represents an overview of all user activities</h4>
  
