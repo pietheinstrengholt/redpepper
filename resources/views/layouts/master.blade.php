@@ -37,6 +37,15 @@
 			}
 		}
 	</style>
+	
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="{{ URL::asset('js/html5shiv.js') }}"></script>
+	<script src="{{ URL::asset('js/respond.min.js') }}"></script>
+	<link href="{{ URL::asset('css/ie8.css') }}" rel="stylesheet" media="screen">
+	<![endif]-->	
+	
 	@show
 </head>
 
