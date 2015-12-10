@@ -48,12 +48,6 @@ class CreateForeign extends Migration
         Schema::table('t_changes_technical', function (Blueprint $table) {
             $table->foreign('changerequest_id')->references('id')->on('t_changes')->onDelete('cascade');
         });
-        Schema::table('t_history_content', function (Blueprint $table) {
-            $table->foreign('changerequest_id')->references('id')->on('t_changes')->onDelete('cascade');
-        });
-		Schema::table('t_history_technical', function (Blueprint $table) {
-            $table->foreign('changerequest_id')->references('id')->on('t_changes')->onDelete('cascade');
-        });
 		
 		//on section_id
 		Schema::table('t_templates', function (Blueprint $table) {
