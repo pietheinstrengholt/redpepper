@@ -4,7 +4,7 @@
 	@section('head')
 	<title>
 	@section('title')
-	Laravel
+	ABN AMRO FRC RADAR Tool
 	@show
 	</title>
 	
