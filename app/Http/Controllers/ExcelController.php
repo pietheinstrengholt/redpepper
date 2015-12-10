@@ -88,6 +88,7 @@ class ExcelController extends Controller
 		}
 	}	
 	
+	//TODO, use a blade instead of Controller debugging output
 	public function uploadexcel(Request $request) 
 	{
 		//exit when user is a guest
@@ -109,18 +110,10 @@ class ExcelController extends Controller
 				if ($request->file('excel')->isValid()) {
 					$file = array('excel' => Input::file('excel'));
 					
+					//show template name on top
 					echo "<h2>Excel import section_id: " . $request->input('section_id') . "</h2>";
-					
-					if ($request->has('template_name')) {
-						echo "<h2>Excel import template: " . $request->input('template_name') . "</h2>";
-					} else {
-						echo "Error: no template name entered!";
-						exit();
-					}
-					
-					if ($request->has('template_description')) {
-						echo "<h3>Template description: " . $request->input('template_description') . "</h3>";
-					}
+					echo "<h2>Excel import template: " . $request->input('template_name') . "</h2>";
+					echo "<h3>Template description: " . $request->input('template_description') . "</h3>";
 								
 					Excel::load(Input::file('excel'), function ($reader) use ($request) {
 
@@ -822,7 +815,6 @@ class ExcelController extends Controller
 									$HistoryTechnical->submission_date = null;
 									$HistoryTechnical->approved_by = Auth::user()->id;
 									$HistoryTechnical->save();
-									
 								}
 							}
 						}
@@ -1176,8 +1168,6 @@ class ExcelController extends Controller
 					->SetCellValue('B5', $template_content['main_changes_description'])
 					->SetCellValue('B6', $template_content['links_other_temp_description'])
 					->SetCellValue('B7', $template_content['process_and_organisation_description']);
-
-				
 			});
 
 			// Our seventh sheet
