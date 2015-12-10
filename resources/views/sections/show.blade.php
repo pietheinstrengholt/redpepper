@@ -10,13 +10,14 @@
 	</ul>
 
     <h2>{{ $section->section_name }}</h2>
-	<h4>{{ $section->section_description }}</h4>
-	<h4>{{ $section->section_longdesc }}</h4>
-	<h5>Total overview of all templates</h5>
  
     @if ( !$section->templates->count() )
-        This section has no templates.
+        This section has no templates.<br><br>
     @else
+		<h4>{{ $section->section_description }}</h4>
+		<h4>{{ $section->section_longdesc }}</h4>	
+		<h5>Total overview of all templates</h5>
+	
 		<table class="table section-table dialog table-striped" border="1">
         
 		<tr class="success">
@@ -46,8 +47,8 @@
     @endif
  
     <p>
-        {!! link_to_route('sections.index', 'Back to Sections') !!} |
-        {!! link_to_route('sections.templates.create', 'Create Template', $template->id) !!}
+        {!! link_to_route('sections.index', 'Back to Sections') !!}	| 
+		{!! link_to_route('sections.templates.create', 'Create Template', $section->id) !!}
     </p>
 
 @endsection
