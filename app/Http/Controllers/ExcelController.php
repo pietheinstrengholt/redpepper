@@ -76,13 +76,25 @@ class ExcelController extends Controller
 		return view('excel.upload', compact('sections'));
 	}
 	
-	public function getExcelColumnNumber($num) 
+	public function getNameFromNumber($num)
 	{
 		$numeric = ($num - 1) % 26;
 		$letter = chr(65 + $numeric);
 		$num2 = intval(($num - 1) / 26);
 		if ($num2 > 0) {
 			return getNameFromNumber($num2) . $letter;
+		} else {
+			return $letter;
+		}
+	}	
+	
+	public function getExcelColumnNumber($num) 
+	{
+		$numeric = ($num - 1) % 26;
+		$letter = chr(65 + $numeric);
+		$num2 = intval(($num - 1) / 26);
+		if ($num2 > 0) {
+			return $this->getNameFromNumber($num2) . $letter;
 		} else {
 			return $letter;
 		}
