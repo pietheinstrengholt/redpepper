@@ -25,10 +25,10 @@
 	</div>
 	
 	<div class="form-group">
-		<table class="table table-condensed">
-			<tr class="active">
-			<th style="width: 400px; text-align: left;"><h4>Section</h4></th>
-			<th style="width: 70px; text-align: center;"><h4>Selected rights</h4></th>
+		<table class="table table-striped table-condensed">
+			<tr class="success">
+			<th><h4>Section</h4></th>
+			<th style="text-align: center;"><h4>Selected rights</h4></th>
 			</tr>
 			
 			@foreach( $sections as $section )
@@ -44,7 +44,7 @@
 		</table>
 	</div>
 	
-	<button style="margin-bottom:15px;" type="submit" class="btn btn-warning">Submit rights</button>	
+	<button type="submit" class="btn btn-warning">Submit rights</button>	
 		
     {!! Form::close() !!}
 	

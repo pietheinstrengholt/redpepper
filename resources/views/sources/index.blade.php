@@ -8,10 +8,10 @@
     @if ( !$sources->count() )
         No sources found in the database!<br><br>
     @else
-		<table style="margin-bottom:20px;" class="table section-table dialog table-striped" border="1">
+		<table class="table section-table dialog table-striped" border="1">
 
 		<tr class="success">
-		<td style="width:40%;" class="header">Name</td>
+		<td class="header">Name</td>
 		<td class="header">Description</td>
 		<td class="header" style="width: 120px;">Options</td>
 		</tr>

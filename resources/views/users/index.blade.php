@@ -8,7 +8,7 @@
     @if ( !$users->count() )
         No users found in the database!<br><br>
     @else
-		<table style="margin-bottom:20px;" class="table section-table dialog table-striped" border="1">
+		<table class="table section-table dialog table-striped" border="1">
 
 		<tr class="success">
 		<td class="header">Username</td>

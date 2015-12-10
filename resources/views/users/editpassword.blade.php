@@ -26,7 +26,7 @@
 	<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 	<input type="hidden" name="username_id" value="{!! $user->id !!}">	
 	
-	<button style="margin-bottom:15px;" type="submit" class="btn btn-warning">Submit new password</button>	
+	<button type="submit" class="btn btn-warning">Submit new password</button>	
 		
     {!! Form::close() !!}
 	

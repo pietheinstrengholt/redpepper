@@ -10,16 +10,16 @@
     @else
 		<table class="section-table table table-condensed sortable" border="1">
 		
-		<tr class="success" style="background-color: #dff0d8;">
+		<tr class="success">
 			<td><b>ID</b></td>
-			<td style="width: 300px;"><b>Template</b></td>
+			<td><b>Template</b></td>
 			<td><b>Username</b></td>
 			<td><b>Name</b></td>
 			<td><b>Report</b></td>
-			<td style="width: 100px;"><b>Submission date</b></td>
-			<td style="width: 100px;"><b>Modified</b></td>
+			<td><b>Submission date</b></td>
+			<td><b>Modified</b></td>
 			<td><b>Status</b></td>
-			<td style="width: 300px;"><b>Comment</b></td>
+			<td><b>Comment</b></td>
 			<td class="header" style="width: 140px;">Options</td>			
 		</tr>
 		

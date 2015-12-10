@@ -8,7 +8,7 @@
     @if ( !$section->templates->count() )
         This section has no templates.
     @else
-		<table style="margin-bottom:20px;" class="table section-table dialog table-striped" border="1">
+		<table class="table section-table dialog table-striped" border="1">
         
 		<tr class="success">
 		<td class="header">Template</td>
