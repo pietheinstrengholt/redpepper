@@ -761,12 +761,9 @@ class ChangeRequestController extends Controller
 								$HistoryTechnical->save();
 							}
 						}
-						
 					}
-				}				
-				
+				}
 			}
-		
 		}
 		return Redirect::route('changerequests.index')->with('message', 'Changerequest updated.');
 	}
@@ -774,11 +771,18 @@ class ChangeRequestController extends Controller
 	public function destroy(ChangeRequest $type)
 	{
 		$type->delete();
-		return Redirect::route('changerequests.index')->with('message', 'Type deleted.');
+		return Redirect::route('changerequests.index')->with('message', 'ChangeRequest deleted.');
 	}
 
 	public function submit(Request $request)
 	{
+		//validate input form
+		$this->validate($request, [
+			'template_id' => 'required',
+			'row_code' => 'required',
+			'column_code' => 'required'
+		]);
+	
 		if ($request->isMethod('post')) {
 
 			$changerequest = new ChangeRequest;
