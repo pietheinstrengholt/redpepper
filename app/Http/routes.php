@@ -23,6 +23,7 @@ Route::model('types', 'TechnicalType');
 Route::model('departments', 'Department');
 Route::model('users', 'User');
 Route::model('changerequests', 'ChangeRequest');
+Route::model('logs', 'Log');
  
 // Use IDs in URLs
 Route::bind('sections', function($value, $route) {
@@ -53,6 +54,10 @@ Route::bind('changerequests', function($value, $route) {
 	return App\ChangeRequest::whereId($value)->first();
 });
 
+Route::bind('logs', function($value, $route) {
+	return App\Log::whereId($value)->first();
+});
+
 // User routes...
 Route::get('users/{id}/rights', 'UserController@rights');
 Route::get('users/{id}/password', 'UserController@password');
@@ -72,6 +77,7 @@ Route::resource('types', 'TechnicalTypeController');
 Route::resource('departments', 'DepartmentController');
 Route::resource('users', 'UserController');
 Route::resource('changerequests', 'ChangeRequestController');
+Route::resource('logs', 'LogController');
 
 //getCellContent api call
 Route::get('/cell', 'TemplateController@getCellContent');

@@ -81,8 +81,8 @@
 		  <li><a href="<?php echo url('types'); ?>">Edit types</a></li>
 		  <li><a href="<?php echo url('sources'); ?>">Edit sources</a></li>
 		  <li><a href="<?php echo url('departments'); ?>">Edit departments</a></li>
-		  <li><a href="<?php echo url('users'); ?>">Edit users</a></li>
-		  <li class="divider"></li>
+		  <li><a href="<?php echo url('users'); ?>">Edit users</a></li>  
+		  <li class="divider"></li>		  
 		  <li><a href="<?php echo url('csv/importcontent'); ?>">Import content</a></li>
 		  <li><a href="<?php echo url('csv/importfields'); ?>">Import fields</a></li>
 		  <li><a href="<?php echo url('csv/importrows'); ?>">Import rows</a></li>
@@ -90,6 +90,8 @@
 		  <li><a href="<?php echo url('csv/importtech'); ?>">Import technical</a></li>			  
 		  <li class="divider"></li>
 		  <li><a href="<?php echo url('changerequests'); ?>">Change requests</a></li>
+		  <li class="divider"></li>
+		  <li><a href="<?php echo url('logs'); ?>">User activities</a></li>		  
 		  <li class="divider"></li>
 		  <li><a href="<?php echo url('excel/upload'); ?>">Upload excel template</a></li>
 		</ul>
