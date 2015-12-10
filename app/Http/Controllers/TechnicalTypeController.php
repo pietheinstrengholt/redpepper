@@ -26,11 +26,12 @@ class TechnicalTypeController extends Controller
     }
 	
 	public function edit(TechnicalType $type)
-	{
+	{	
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }	
+        }
+		
 		return view('types.edit', compact('type'));
 	}
 	
@@ -39,28 +40,43 @@ class TechnicalTypeController extends Controller
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }	
+        }
+		
 		return view('types.create', compact('type'));
 	}	
 
-	public function store()
+	public function store(Request $request)
 	{
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }	
+        }		
+
+		//validate input form
+		$this->validate($request, [
+			'type_name' => 'required',
+			'type_description' => 'required'
+		]);
+		
 		$input = Input::all();
 		TechnicalType::create( $input );
 		return Redirect::route('types.index')->with('message', 'Type created');
 	}
 	 
-	public function update(TechnicalType $type)
+	public function update(TechnicalType $type, Request $request)
 	{
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }	
-		$input = array_except(Input::all(), '_method');
+        }
+		
+		//validate input form
+		$this->validate($request, [
+			'type_name' => 'required',
+			'type_description' => 'required'
+		]);		
+		
+		$input = array_except(Input::all(), '_method');	
 		$type->update($input);
 		return Redirect::route('types.show', $type->slug)->with('message', 'Type updated.');
 	}

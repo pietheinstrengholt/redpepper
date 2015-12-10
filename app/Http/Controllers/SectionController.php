@@ -100,24 +100,38 @@ class SectionController extends Controller
 		return view('sections.create', compact('section'));
 	}
 	
-	public function store()
+	public function store(Request $request)
 	{
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }	
+        }
+		
+		//validate input form
+		$this->validate($request, [
+			'section_name' => 'required',
+			'section_description' => 'required',
+			'subject_id' => 'required'
+		]);
 	
 		$input = Input::all();
 		Section::create($input);
 		return Redirect::route('sections.index')->with('message', 'Section created');
 	}
 	 
-	public function update(Section $section)
+	public function update(Section $section, Request $request)
 	{
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }
+		
+		//validate input form
+		$this->validate($request, [
+			'section_name' => 'required',
+			'section_description' => 'required',
+			'subject_id' => 'required'
+		]);		
 
 		$input = array_except(Input::all(), '_method');
 		$section->update($input);

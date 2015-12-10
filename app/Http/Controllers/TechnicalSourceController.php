@@ -20,7 +20,7 @@ class TechnicalSourceController extends Controller
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }	
+        }
 		$sources = TechnicalSource::orderBy('source_name', 'asc')->get();
 		return view('sources.index', compact('sources'));
     }
@@ -30,7 +30,8 @@ class TechnicalSourceController extends Controller
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }	
+        }		
+		
 		return view('sources.edit', compact('source'));
 	}
 	
@@ -39,27 +40,42 @@ class TechnicalSourceController extends Controller
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }	
+        }		
+		
 		return view('sources.create', compact('source'));
 	}	
 
-	public function store()
+	public function store(Request $request)
 	{
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }	
-		$input = Input::all();
+        }
+		
+		//validate input form
+		$this->validate($request, [
+			'source_name' => 'required',
+			'source_description' => 'required'
+		]);
+		
+		$input = Input::all();		
 		TechnicalSource::create( $input );
 		return Redirect::route('sources.index')->with('message', 'Source created');
 	}
 	 
-	public function update(TechnicalSource $source)
+	public function update(TechnicalSource $source, Request $request)
 	{
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }	
+        }
+		
+		//validate input form
+		$this->validate($request, [
+			'source_name' => 'required',
+			'source_description' => 'required'
+		]);		
+		
 		$input = array_except(Input::all(), '_method');
 		$source->update($input);
 		return Redirect::route('sources.show', $source->slug)->with('message', 'Source updated.');

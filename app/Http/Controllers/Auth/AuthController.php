@@ -64,7 +64,7 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'username' => 'required|max:255|unique:t_usernames',
+            'username' => 'required|min:4|max:255|unique:t_usernames',
 			'firstname' => 'required|max:255',
 			'lastname' => 'required|max:255',
 			'department_id' => 'required',

@@ -85,27 +85,12 @@ class UserController extends Controller
             abort(403, 'Unauthorized action.');
         }
 		
+		//validate input form
+		$this->validate($request, [
+			'password' => 'required|confirmed|min:6',
+		]);
+		
 		if ($request->isMethod('post')) {
-
-			if (!($request->has('password') && $request->has('password_confirmation'))) {
-				abort(403, 'One of the password dialogs is empty.');
-			}
-			
-			if ($request->input('password') != $request->input('password_confirmation')) {
-				abort(403, 'Passwords are not equal.');
-			}
-			
-			if (strlen($request->input('password')) < 6) {
-				abort(403, 'Passwords are too short.');			
-			}
-			
-			if (!preg_match("#[0-9]+#", $request->input('password'))) {
-				abort(403, 'Password must include at least one number.');				
-			}
-			
-			if (!preg_match("#[a-zA-Z]+#", $request->input('password'))) {
-				abort(403, 'Password must include at least one letter.');				
-			}
 			
 			//update password
 			User::where('id', $request->input('username_id'))->update(['password' => bcrypt($request->input('password'))]);
@@ -114,12 +99,20 @@ class UserController extends Controller
 		return Redirect::route('users.index')->with('message', 'Password updated.');
 	}	
  
-	public function update(User $user)
+	public function update(User $user, Request $request)
 	{
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }	
+        }
+		
+		//validate input form
+		$this->validate($request, [
+			'firstname' => 'required',
+			'lastname' => 'required',
+			'email' => 'required|email',
+			'department_id' => 'required'
+		]);	
 	
 		$input = array_except(Input::all(), '_method');
 		$user->update($input);
@@ -133,15 +126,17 @@ class UserController extends Controller
             abort(403, 'Unauthorized action.');
         }
 		
+		//validate input form
+		$this->validate($request, [
+			'username_id' => 'required',
+			'role' => 'required'
+		]);			
+		
 		if ($request->isMethod('post')) {
-			if ($request->has('username_id')) {
-				if ($request->has('role')) {
-					User::where('id', $request->input('username_id'))->update(['role' => $request->input('role')]);
-				}
-			}
+			User::where('id', $request->input('username_id'))->update(['role' => $request->input('role')]);
 			
 			UserRights::where('username_id', $request->input('username_id'))->delete();
-			
+
 			if ($request->has('section')) {
 				
 				foreach($request->input('section') as $key => $value) {

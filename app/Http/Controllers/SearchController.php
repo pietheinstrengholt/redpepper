@@ -74,6 +74,8 @@ class SearchController extends Controller
 						'fields' => TemplateField::where('content', 'like', '%' . $request->input('search') . '%')->where('property', '<>', 'disabled')->get()
 					]);
 				}
+			} else {
+				abort(403, 'No search argument entered.');
 			}
 		}
 	}

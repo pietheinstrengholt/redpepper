@@ -115,15 +115,17 @@ class TemplateController extends Controller
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }
+		
+		//validate input form
+		$this->validate($request, [
+			'inputrows' => 'required|numeric',
+			'inputcolumns' => 'required|numeric',
+			'template_name' => 'required',
+			'template_shortdesc' => 'required',
+			'section_id' => 'required'
+		]);
 
 		if ($request->isMethod('post')) {
-			if (!($request->has('template_name') && $request->has('template_shortdesc') && $request->has('section_id') && $request->has('inputcolumns') && $request->has('inputrows'))) {
-				abort(403, 'Cannot create template. Some argument are missing.');
-			}
-				
-			if (!is_numeric($request->input('inputcolumns')) || !is_numeric($request->input('inputrows'))) {
-				abort(403, 'Argument for row and column numbers is not numeric.');
-			}
 			
 			$template = new Template;
 			$template->section_id = $request->input('section_id');

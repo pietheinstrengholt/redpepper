@@ -93,7 +93,15 @@ class ExcelController extends Controller
 		//exit when user is a guest
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
-		}	
+		}
+		
+		//validate input form
+		$this->validate($request, [
+			'excel' => 'mimes:xls,xlsx',
+			'template_name' => 'required',
+			'section_id' => 'required|numeric',
+			'template_description' => 'required'
+		]);
 	
 		if ($request->isMethod('post')) {
 		

@@ -165,7 +165,7 @@ class ChangeRequestController extends Controller
 		
 		if (Auth::user()->role == "guest") {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');		
-		}		
+		}
 	
 		//set allowed to change to yes
 		$allowedToChange = "yes";
@@ -219,15 +219,28 @@ class ChangeRequestController extends Controller
 		$changerequest->field_property2 = $this->compare($current_field_property2['content'],$draft_field_property2['content']);
 		
 		$current_technical_string = "";
-		foreach ($current_technical as $current_technical_row) {
-			$str = $current_technical_row->source->source_name . " - " . $current_technical_row->type->type_name . " " . $current_technical_row->content . " " . $current_technical_row->description . "\n";
-			$current_technical_string = $current_technical_string . $str;
+		if (!empty($current_technical)) {
+			foreach ($current_technical as $current_technical_row) {
+				$str = $current_technical_row->source->source_name . " - " . $current_technical_row->type->type_name . " " . $current_technical_row->content . " " . $current_technical_row->description . "\n";
+				$current_technical_string = $current_technical_string . $str;
+			}
 		}
 
 		$draft_technical_string = "";
-		foreach ($draft_technical as $draft_technical_row) {
-			$str = $draft_technical_row->source->source_name . " - " . $draft_technical_row->type->type_name . " " . $draft_technical_row->content . " " . $draft_technical_row->description . "\n";
-			$draft_technical_string = $draft_technical_string . $str;
+		if (!empty($draft_technical)) {
+			foreach ($draft_technical as $draft_technical_row) {
+			
+				if (!is_object($draft_technical_row->source)) {
+					abort(403, 'The source name no longer exists in the database. Unable to view change request.');
+				}
+				
+				if (!is_object($draft_technical_row->type)) {
+					abort(403, 'The type name no longer exists in the database. Unable to view change request.');
+				}
+			
+				$str = $draft_technical_row->source->source_name . " - " . $draft_technical_row->type->type_name . " " . $draft_technical_row->content . " " . $draft_technical_row->description . "\n";
+				$draft_technical_string = $draft_technical_string . $str;
+			}
 		}
 		
 		$changerequest->technical = $this->compare($current_technical_string,$draft_technical_string);
@@ -251,6 +264,16 @@ class ChangeRequestController extends Controller
 	 
 	public function update(Request $request)
 	{
+		//check if user is logged on
+		if (Auth::guest()) {
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');		
+		}
+	
+		//validate input form
+		$this->validate($request, [
+			'changerequest_id' => 'required',
+			'comment' => 'required'
+		]);
 	
 		if ($request->isMethod('post')) {
 	

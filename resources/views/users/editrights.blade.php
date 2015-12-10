@@ -6,6 +6,16 @@
 <div class="form-horizontal">
 
     <h2>Edit User "{{ $user->username }}"</h2>
+	
+	@if (count($errors) > 0)
+		<div class="alert alert-danger">
+			<ul>
+				@foreach ($errors->all() as $error)
+					<li>{{ $error }}</li>
+				@endforeach
+			</ul>
+		</div>
+	@endif	
  
     {!! Form::open(array('action' => 'UserController@updaterights', 'id' => 'form')) !!}
 	<input name="username_id" type="hidden" value="{{ $user->id }}"/>

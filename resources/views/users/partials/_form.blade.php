@@ -4,7 +4,7 @@
 	<div class="form-group">
 		{!! Form::label('username', 'Username:', array('class' => 'col-sm-3 control-label')) !!}
 		<div class="col-sm-6">
-		{!! Form::text('username', null, ['class' => 'form-control']) !!}
+		{!! Form::text('username', null, ['class' => 'form-control', 'id' => 'disabledInput', 'disabled']) !!}
 		</div>
 	</div>
 
