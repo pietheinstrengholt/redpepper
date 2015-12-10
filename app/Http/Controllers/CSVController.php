@@ -41,6 +41,12 @@ class CSVController extends Controller
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }
+		
+		//validate input form
+		$this->validate($request, [
+			'csv' => 'mimes:csv',
+			'formname' => 'required'
+		]);
 	
 		if ($request->isMethod('post')) {
 		
