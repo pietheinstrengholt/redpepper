@@ -3,7 +3,9 @@
 
 @section('content')
     <h2>{{ $section->section_name }}</h2>
-	<h4>Total overview of all templates</h4>
+	<h4>{{ $section->section_description }}</h4>
+	<h4>{{ $section->section_longdesc }}</h4>
+	<h5>Total overview of all templates</h5>
  
     @if ( !$section->templates->count() )
         This section has no templates.
@@ -12,9 +14,8 @@
         
 		<tr class="success">
 		<td class="header">Template</td>
-		<td class="header">Name</td>
-		<td class="header">Type</td>
-		<td class="header">Description</td>
+		<td class="header">Short description</td>
+		<td class="header">Detailed description</td>
 		<td class="header" style="width: 245px;">Options</td>
 		</tr>
             @foreach( $templates as $template )
@@ -22,7 +23,6 @@
                     {!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('sections.templates.destroy', $template->section_id, $template->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this template?\')')) !!}
                         <td><a href="{{ route('sections.templates.show', [$section->id, $template->id]) }}">{{ $template->template_name }}</a></td>
 						<td>{{ $template->template_shortdesc }}</td>
-						<td>{{ $template->section_shortdesc }}</td>
 						<td>{{ $template->template_longdesc }}</td>
 						<td>
 						<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $template->id }}">Export</a>
