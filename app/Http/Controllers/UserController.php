@@ -34,7 +34,12 @@ class UserController extends Controller
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }	
+        }
+		
+		//check if id property exists
+		if (!$user->id) {
+			abort(403, 'This user no longer exists in the database.');
+		}		
 	
 		$departments = Department::orderBy('department_name', 'asc')->get();
 		return view('users.edit', compact('departments','user'));
@@ -56,7 +61,7 @@ class UserController extends Controller
 			"guest" => "guest",
 		);
 		
-		$user = User::find($id);
+		$user = User::findOrFail($id);
 		$userrights = UserRights::where('username_id', $id)->get();
 		
 		$sectionrights = array();
@@ -78,7 +83,7 @@ class UserController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-		$user = User::find($id);
+		$user = User::findOrFail($id);
 		return view('users.editpassword', compact('user'));
 	}
 	

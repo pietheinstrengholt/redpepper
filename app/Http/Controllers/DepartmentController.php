@@ -31,6 +31,11 @@ class DepartmentController extends Controller
             abort(403, 'Unauthorized action.');
         }
 		
+		//check if id property exists
+		if (!$department->id) {
+			abort(403, 'This department no longer exists in the database.');
+		}
+		
 		return view('departments.edit', compact('department'));
 	}
 	

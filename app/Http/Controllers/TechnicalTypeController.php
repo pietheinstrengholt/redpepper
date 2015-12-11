@@ -32,6 +32,11 @@ class TechnicalTypeController extends Controller
             abort(403, 'Unauthorized action.');
         }
 		
+		//check if id property exists
+		if (!$type->id) {
+			abort(403, 'This type no longer exists in the database.');
+		}
+		
 		return view('types.edit', compact('type'));
 	}
 	

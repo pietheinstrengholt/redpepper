@@ -172,6 +172,11 @@ class ChangeRequestController extends Controller
 	
 		//set allowed to change to yes
 		$allowedToChange = "yes";
+		
+		//check if id property exists
+		if (!$changerequest->id) {
+			abort(403, 'Change request no longer exists in the database.');
+		}
 	
 		if (Auth::user()->role == "admin" || Auth::user()->role == "builder" || Auth::user()->role == "reviewer") {
 			if ($changerequest->creator_id == Auth::user()->id) {

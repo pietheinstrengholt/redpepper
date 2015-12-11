@@ -30,7 +30,12 @@ class TechnicalSourceController extends Controller
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }		
+        }
+
+		//check if id property exists
+		if (!$source->id) {
+			abort(403, 'This source no longer exists in the database.');
+		}
 		
 		return view('sources.edit', compact('source'));
 	}

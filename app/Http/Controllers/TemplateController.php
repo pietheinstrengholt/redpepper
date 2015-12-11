@@ -38,7 +38,17 @@ class TemplateController extends Controller
 		//check if visible is set to false and user is a guest
 		if (Auth::guest() && $template->visible == "False") {
 			abort(403, 'Unauthorized action.');
-		}	
+		}
+		
+		//check if id property exists
+		if (!$template->id) {
+			abort(403, 'This template no longer exists in the database.');
+		}
+		
+		//check if id property exists
+		if (!$section->id) {
+			abort(403, 'This template no longer exists in the database.');
+		}		
 	
 		//set empty search value
 		$searchvalue = 'empty';
@@ -71,6 +81,12 @@ class TemplateController extends Controller
 	//function to disabled fields
 	public function getDisabledFields(Template $template)
 	{
+	
+		//check if id property exists
+		if (!$template->id) {
+			abort(403, 'This template no longer exists in the database.');
+		}	
+	
 		$disabledFields = TemplateField::where('template_id', $template->id)->where('property', 'disabled')->get();
 		
 		//Create new arrays to restructure result
@@ -95,6 +111,11 @@ class TemplateController extends Controller
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }
+		
+		//check if id property exists
+		if (!$template->id) {
+			abort(403, 'This template no longer exists in the database.');
+		}			
 	
 		$sections = Section::orderBy('section_name', 'asc')->get();
 		return view('templates.edit', compact('sections', 'section', 'template'));
@@ -193,7 +214,9 @@ class TemplateController extends Controller
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
 		}
 		
-		Event::fire(new ChangeEvent('Template structure', 'Template id ' . $request->input('template_id') . ' structure has been created', Auth::user()->id));
+		$template = Template::findOrFail($request->input('template_id'));
+		
+		Event::fire(new ChangeEvent('Template', 'Template id ' . $template->template_name . ' structure has been created', Auth::user()->id));
 	
 		if ($request->isMethod('post')) {
 			
@@ -294,7 +317,8 @@ class TemplateController extends Controller
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
 		}
 	
-		$template = Template::find($id);
+		$template = Template::findOrFail($id);
+		
 		$disabledFields = $this->getDisabledFields($template);
 		return view('templates.structure', compact('section', 'template', 'disabledFields'));
 	}	
@@ -305,11 +329,12 @@ class TemplateController extends Controller
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }		
+        }
 	
 		$input = Input::all();
 		$input['section_id'] = $section->id;
 		Template::create( $input );
+		Event::fire(new ChangeEvent('Template', 'Template ' . $template->template_name . ' has been added', Auth::user()->id));
 		return Redirect::route('sections.show', $section->id)->with('message', 'Template created.');
 	}
 	
@@ -320,7 +345,7 @@ class TemplateController extends Controller
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }
-		Event::fire(new ChangeEvent('Template details', 'Template ' . $template->template_name . ' details have been created', Auth::user()->id));
+		Event::fire(new ChangeEvent('Template', 'Template ' . $template->template_name . ' details have been created', Auth::user()->id));
 		$input = array_except(Input::all(), '_method');
 		$template->update($input);
 		return Redirect::route('sections.templates.show', [$section->id, $template->id])->with('message', 'Template updated.');
@@ -342,7 +367,7 @@ class TemplateController extends Controller
 		Technical::where('template_id', $template->id)->delete();
 		ChangeRequest::where('template_id', $template->id)->delete();
 		
-		Event::fire(new ChangeEvent('Template delete', 'Template ' . $template->template_name . ' have been deleted', Auth::user()->id));
+		Event::fire(new ChangeEvent('Template', 'Template ' . $template->template_name . ' has been deleted', Auth::user()->id));
 	
 		//delete template
 		$template->delete();

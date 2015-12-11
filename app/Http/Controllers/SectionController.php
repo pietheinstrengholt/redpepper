@@ -22,26 +22,14 @@ class SectionController extends Controller
     {
 		//only superadmin can see all sections
 		if (Gate::denies('superadmin')) {
-			if ($request->input('group') == "corep") {
-				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 1)->where('visible', 'True')->get();
-			} elseif ($request->input('group') == "finrep") {
-				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 2)->where('visible', 'True')->get();
-			} elseif ($request->input('group') == "liquidity") {
-				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 3)->where('visible', 'True')->get();
-			} elseif ($request->input('group') == "other") {
-				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 4)->where('visible', 'True')->get();
+			if ($request->has('subject_id')) {
+				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', $request->input('subject_id'))->where('visible', 'True')->get();
 			} else {
 				$sections = Section::orderBy('section_name', 'asc')->where('visible', 'True')->get();
 			}
 		} else {
-			if ($request->input('group') == "corep") {
-				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 1)->get();
-			} elseif ($request->input('group') == "finrep") {
-				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 2)->get();
-			} elseif ($request->input('group') == "liquidity") {
-				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 3)->get();
-			} elseif ($request->input('group') == "other") {
-				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', 4)->get();
+			if ($request->has('subject_id')) {
+				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', $request->input('subject_id'))->get();
 			} else {
 				$sections = Section::orderBy('section_name', 'asc')->get();
 			}		
@@ -62,6 +50,11 @@ class SectionController extends Controller
 	
     public function show(Section $section)
     {
+		//check if id property exists
+		if (!$section->id) {
+			abort(403, 'This section no longer exists in the database.');
+		}
+	
 		//check if visible is set to false and user is a guest
 		if (Auth::guest() && $section->visible == "False") {
 			abort(403, 'Unauthorized action.');
@@ -80,6 +73,11 @@ class SectionController extends Controller
     {
 		$section = Section::where('id', $id)->first();
 		$templates = Template::with('requirements')->where('section_id', $id)->get();
+		
+		if (!$section) { 
+			abort(403, 'This section no longer exists in the database.');
+		}
+		
 		return view('manuals.show', compact('section', 'templates'));
     }	
 
@@ -89,7 +87,12 @@ class SectionController extends Controller
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }
-		Event::fire(new ChangeEvent('Section', $section->section_name . ' has been changed', Auth::user()->id));
+		
+		//check if id property exists
+		if (!$section->id) {
+			abort(403, 'This section no longer exists in the database.');
+		}		
+
 		return view('sections.edit', compact('section'));
 	}	
 	
@@ -98,8 +101,8 @@ class SectionController extends Controller
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }	
-		Event::fire(new ChangeEvent('Section', $section->section_name . ' has been added by', Auth::user()->id));
+        }
+
 		return view('sections.create', compact('section'));
 	}
 	
@@ -119,6 +122,7 @@ class SectionController extends Controller
 	
 		$input = Input::all();
 		Section::create($input);
+		Event::fire(new ChangeEvent('Section', $request->input('section_name') . ' has been added by', Auth::user()->id));
 		return Redirect::route('sections.index')->with('message', 'Section created');
 	}
 	 
@@ -138,6 +142,7 @@ class SectionController extends Controller
 
 		$input = array_except(Input::all(), '_method');
 		$section->update($input);
+		Event::fire(new ChangeEvent('Section', $request->input('section_name') . ' has been added by', Auth::user()->id));
 		return Redirect::route('sections.show', $section->id)->with('message', 'Section updated.');
 	}
 	 
@@ -163,6 +168,7 @@ class SectionController extends Controller
 		}
 		
 		Template::where('section_id', $section->id)->delete();
+		Event::fire(new ChangeEvent('Section', $section->section_name . ' has been deleted by', Auth::user()->id));
 		
 		$section->delete();
 		return Redirect::route('sections.index')->with('message', 'Section deleted.');
