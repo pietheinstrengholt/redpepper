@@ -6,7 +6,7 @@
 	<h4>Total overview of all templates</h4>
  
     @if ( !$section->templates->count() )
-        This section has no templates.
+        This section has no templates.<br><br>
     @else
 		@foreach( $templates as $template )
 			<h4>{{ $template->template_name }}</h4>
