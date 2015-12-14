@@ -29,30 +29,30 @@ class AuthServiceProvider extends ServiceProvider
         $gate->define('superadmin', function ($user) {
             return $user->role === "superadmin";
         });
-		
+
         $gate->define('admin', function ($user) {
             if ($user->role === "superadmin" || $user->role === "admin") {
 				return true;
 			}
         });
-		
+
         $gate->define('contributor', function ($user) {
             if ($user->role === "superadmin" || $user->role === "admin" || $user->role === "contributor") {
 				return true;
 			}
         });
-		
+
         $gate->define('reviewer', function ($user) {
             if ($user->role === "superadmin" || $user->role === "admin" || $user->role === "reviewer") {
 				return true;
 			}
         });
-		
+
         $gate->define('builder', function ($user) {
             if ($user->role === "superadmin" || $user->role === "admin" || $user->role === "builder") {
 				return true;
 			}
-        });		
-		
+        });
+
     }
 }
