@@ -14,7 +14,7 @@
 		{!! Form::textarea('source_description', null, ['class' => 'form-control', 'rows' => '4']) !!}
 		</div>
 	</div>
-	 
+
 	<div class="form-group">
 		{!! Form::submit($submit_text, ['class' => 'btn btn-primary']) !!}
 	</div>

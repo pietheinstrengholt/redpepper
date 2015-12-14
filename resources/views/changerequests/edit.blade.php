@@ -68,12 +68,12 @@
 	#htmldiff.onlyInsertions del {display:none}
 	</style>
 	</head>
-	
+
 	<ul class="breadcrumb breadcrumb-section">
 	  <li><a href="{!! url('/'); !!}">Home</a></li>
 	  <li><a href="{!! url('/changerequests'); !!}">Changerequests</a></li>
 	  <li class="active">{{ $template->template_name }}</li>
-	</ul>	
+	</ul>
 
 	<h2>Review Changerequest</h2>
 
@@ -164,9 +164,9 @@
 		{!! Form::open(array('action' => 'ChangeRequestController@update', 'id' => 'form')) !!}
 		<div class="form-group">
 		<button type="submit" class="changerequest btn btn-primary">Approve changerequest</button>
-		<input type="hidden" name="_token" value="{!! csrf_token() !!}">	
-		<input type="hidden" name="changerequest_id" value="{!! $changerequest->id !!}">	
-		<input type="hidden" name="change_type" value="approved">	
+		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
+		<input type="hidden" name="changerequest_id" value="{!! $changerequest->id !!}">
+		<input type="hidden" name="change_type" value="approved">
 		</div>
 		{!! Form::close() !!}
 
@@ -174,7 +174,7 @@
 		<div class="form-group">
 		<button type="submit" class="changerequest btn btn-danger">Reject changerequest</button>
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
-		<input type="hidden" name="changerequest_id" value="{!! $changerequest->id !!}">	
+		<input type="hidden" name="changerequest_id" value="{!! $changerequest->id !!}">
 		<input type="hidden" name="change_type" value="rejected">
 		</div>
 		{!! Form::close() !!}

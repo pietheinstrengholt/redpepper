@@ -2,8 +2,8 @@
 @extends('layouts.master')
 
 @section('content')
-    <h2>Edit Type "{{ $type->type_name }}"</h2>
-	
+  <h2>Edit Type "{{ $type->type_name }}"</h2>
+
 	@if (count($errors) > 0)
 		<div class="alert alert-danger">
 			<ul>
@@ -12,11 +12,11 @@
 				@endforeach
 			</ul>
 		</div>
-	@endif	
- 
-    {!! Form::model($type, ['method' => 'PATCH', 'route' => ['types.update', $type->id]]) !!}
-        @include('types/partials/_form', ['submit_text' => 'Edit Type'])
-    {!! Form::close() !!}
+	@endif
+
+  {!! Form::model($type, ['method' => 'PATCH', 'route' => ['types.update', $type->id]]) !!}
+  @include('types/partials/_form', ['submit_text' => 'Edit Type'])
+  {!! Form::close() !!}
 @endsection
 
 @stop

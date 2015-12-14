@@ -32,7 +32,7 @@
 	<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 	<input type="hidden" name="formname" value="importrequirements">
 	{!! Form::close() !!}
-	
+
 @endsection
 
 @stop

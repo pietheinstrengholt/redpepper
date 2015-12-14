@@ -13,7 +13,7 @@
 		<div class="col-sm-6">
 		{!! Form::textarea('template_shortdesc', null, ['class' => 'form-control', 'rows' => '4']) !!}
 		</div>
-		
+
 	</div>
 
 	<div class="form-group">
@@ -57,7 +57,7 @@
 		{!! Form::textarea('process_and_organisation_description', null, ['class' => 'form-control', 'rows' => '4']) !!}
 		</div>
 	</div>
-	
+
 	<div class="form-group">
 		{!! Form::label('section_id', 'Section:', array('class' => 'col-sm-3 control-label')) !!}
 		<div class="col-sm-6">
@@ -72,11 +72,11 @@
 		@if ( $template->visible == "True" )
 			{!! Form::checkbox('visible', 'True', true) !!}
 		@else
-			{!! Form::checkbox('visible', 'True') !!}		
+			{!! Form::checkbox('visible', 'True') !!}
 		@endif
 		</div>
 	</div>
-	 
+
 	<div class="form-group">
 		{!! Form::submit($submit_text, ['class' => 'btn btn-primary']) !!}
 	</div>

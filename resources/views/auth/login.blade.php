@@ -5,7 +5,7 @@
 
 	<h2>Login</h2>
 	<h4>Please use the login form below</h4>
-	
+
 	@if (count($errors) > 0)
 		<div class="alert alert-danger">
 			<strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -19,7 +19,7 @@
 
 	<form method="POST" action="<?php echo url('/auth/login'); ?>">
 		{!! csrf_field() !!}
-	
+
 		<div class="form-group">
 			<label for="caption">Username</label>
 			<input type="text" class="form-control" name="username" value="">
@@ -35,7 +35,7 @@
 		</div>
 	</form>
 
-	
+
 @endsection
 
 @stop

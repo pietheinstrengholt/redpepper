@@ -85,9 +85,9 @@
 						<td class="description">{{ $row->description }}</td>
 					</tr>
 				@endforeach
-				
+
 			</table>
 		</td>
-	</table>			
+	</table>
 
 @endif

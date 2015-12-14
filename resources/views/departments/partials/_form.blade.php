@@ -13,9 +13,9 @@
 		<div class="col-sm-6">
 		{!! Form::textarea('department_description', null, ['class' => 'form-control', 'rows' => '4']) !!}
 		</div>
-		
+
 	</div>
-	 
+
 	<div class="form-group">
 		{!! Form::submit($submit_text, ['class' => 'btn btn-primary']) !!}
 	</div>

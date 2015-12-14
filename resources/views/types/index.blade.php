@@ -8,21 +8,21 @@
 	  <li class="active">Types</li>
 	</ul>
 
-    <h2>Types</h2>
+  <h2>Types</h2>
 	<h4>Please make a selection of one of the following types</h4>
- 
-    @if ( !$types->count() )
-        No types found in the database!<br><br>
-    @else
-		<table class="table section-table dialog table-striped" border="1">
 
-		<tr class="success">
-		<td class="header">Name</td>
-		<td class="header">Description</td>
-		<td class="header" style="width: 120px;">Options</td>
-		</tr>
-		
-		@foreach( $types as $type )
+  @if ( !$types->count() )
+    No types found in the database!<br><br>
+  @else
+	<table class="table section-table dialog table-striped" border="1">
+
+	<tr class="success">
+	<td class="header">Name</td>
+	<td class="header">Description</td>
+	<td class="header" style="width: 120px;">Options</td>
+	</tr>
+
+	@foreach( $types as $type )
 		<tr>
 		<td>{{ $type->type_name }}</td>
 		<td>{{ $type->type_description }}</td>
@@ -33,15 +33,15 @@
 		</td>
 		{!! Form::close() !!}
 		</tr>
-		@endforeach
+	@endforeach
 
-		</table>
-    @endif
-	
-    <p>
-        {!! link_to_route('types.create', 'Create Type') !!}
-    </p>	
-	
+	</table>
+  @endif
+
+  <p>
+  {!! link_to_route('types.create', 'Create Type') !!}
+  </p>
+
 @endsection
 
 @stop

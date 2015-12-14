@@ -7,7 +7,7 @@
 	ABN AMRO FRC RADAR Tool
 	@show
 	</title>
-	
+
 	<!-- External scripts are placed here -->
 	<script src="{{ URL::asset('js/jquery-1.11.3.min.js') }}"></script>
 	<script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
@@ -37,15 +37,15 @@
 			}
 		}
 	</style>
-	
+
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
 	<script src="{{ URL::asset('js/html5shiv.js') }}"></script>
 	<script src="{{ URL::asset('js/respond.min.js') }}"></script>
 	<link href="{{ URL::asset('css/ie8.css') }}" rel="stylesheet" media="screen">
-	<![endif]-->	
-	
+	<![endif]-->
+
 	@show
 </head>
 
@@ -90,17 +90,17 @@
 		  <li><a href="<?php echo url('types'); ?>">Edit types</a></li>
 		  <li><a href="<?php echo url('sources'); ?>">Edit sources</a></li>
 		  <li><a href="<?php echo url('departments'); ?>">Edit departments</a></li>
-		  <li><a href="<?php echo url('users'); ?>">Edit users</a></li>  
-		  <li class="divider"></li>		  
+		  <li><a href="<?php echo url('users'); ?>">Edit users</a></li>
+		  <li class="divider"></li>
 		  <li><a href="<?php echo url('csv/importcontent'); ?>">Import content</a></li>
 		  <li><a href="<?php echo url('csv/importfields'); ?>">Import fields</a></li>
 		  <li><a href="<?php echo url('csv/importrows'); ?>">Import rows</a></li>
 		  <li><a href="<?php echo url('csv/importcolumns'); ?>">Import columns</a></li>
-		  <li><a href="<?php echo url('csv/importtech'); ?>">Import technical</a></li>			  
+		  <li><a href="<?php echo url('csv/importtech'); ?>">Import technical</a></li>
 		  <li class="divider"></li>
 		  <li><a href="<?php echo url('changerequests'); ?>">Change requests</a></li>
 		  <li class="divider"></li>
-		  <li><a href="<?php echo url('logs'); ?>">User activities</a></li>		  
+		  <li><a href="<?php echo url('logs'); ?>">User activities</a></li>
 		  <li class="divider"></li>
 		  <li><a href="<?php echo url('excel/upload'); ?>">Upload excel template</a></li>
 		</ul>
@@ -122,7 +122,7 @@
 	<body>
 	<!-- Container -->
 	<div class="container">
-	
+
 	<!-- Session content -->
 	@if (Session::has('message'))
 		<div id="session-alert" class="alert alert-warning alert-dismissible" role="alert">
@@ -130,7 +130,7 @@
 			<p>{{ Session::get('message') }}</p>
 		</div>
 	@endif
-	
+
 
 	<!-- Content -->
 	@yield('content')

@@ -4,7 +4,7 @@
 @section('content')
 
 	<div id="cell-update">
-	
+
 	@if (count($errors) > 0)
 		<div class="alert alert-danger">
 			<ul>
@@ -13,8 +13,8 @@
 				@endforeach
 			</ul>
 		</div>
-	@endif	
-	
+	@endif
+
 	{!! Form::open(array('action' => 'ChangeRequestController@create', 'id' => 'form')) !!}
 
 	<!-- hidden form data -->
@@ -131,15 +131,15 @@
 							</div>
 						</td>
 					</tr>
-					
+
 					@else
 						<?php $countrows = 1; ?>
-						@foreach( $technical as $row )	
+						@foreach( $technical as $row )
 							<tr id="{{ $row->id }}">
 								<td class="source">
 									<select name="technical[{{ $countrows }}][source_id]" class="form-control">
 									@foreach( $sources as $source )
-										@if ($row->source_id == $source->id) 
+										@if ($row->source_id == $source->id)
 											<option selected value="{{ $source->id }}">{{ $source->source_name }}</option>
 										@else
 											<option value="{{ $source->id }}">{{ $source->source_name }}</option>
@@ -150,7 +150,7 @@
 								<td class="type">
 									<select name="technical[{{ $countrows }}][type_id]" class="form-control">
 									@foreach( $types as $type )
-										@if ($row->type_id == $type->id) 
+										@if ($row->type_id == $type->id)
 											<option selected value="{{ $type->id }}">{{ $type->type_name }}</option>
 										@else
 											<option value="{{ $type->id }}">{{ $type->type_name }}</option>
@@ -178,7 +178,7 @@
 							<?php $countrows++; ?>
 						@endforeach
 					@endif
-			
+
 
 					<!-- end of when technical information is found -->
 					<!-- following code is needed to hide a new row, this line will be copied with js when the add new row button is pressed -->
@@ -220,14 +220,14 @@
 					<!-- end of new line -->
 				</table>
 			</div>
-			
+
 			<button id="addnewrow" type="button" class="btn btn-info btn-sm">Add new row</button><br><br>
-			
+
 			</div>
-		
+
 		</td>
 	</table>
-	
+
 	<button class="btn btn-primary" id="approve-changes" name="formSubmit" value="Submit" type="submit">Submit changes</button>
 </form>
 

@@ -13,7 +13,7 @@
 		<div class="col-sm-6">
 		{!! Form::textarea('section_description', null, ['class' => 'form-control', 'rows' => '4']) !!}
 		</div>
-		
+
 	</div>
 
 	<div class="form-group">
@@ -22,13 +22,13 @@
 		{!! Form::textarea('section_longdesc', null, ['class' => 'form-control', 'rows' => '7']) !!}
 		</div>
 	</div>
-	
+
 	<div class="form-group">
 		{!! Form::label('subject_id', 'Section group:', array('class' => 'col-sm-3 control-label')) !!}
 		<div class="col-sm-6">
 		{!! Form::select('subject_id', ['1' => 'Corep','2' => 'Finrep','3' => 'Liquidity', '4' => 'Other'], null, ['id' => 'subject_id', 'class' => 'form-control']) !!}
 		</div>
-	</div>	
+	</div>
 
 	<div class="form-group">
 		{!! Form::label('Visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
@@ -41,7 +41,7 @@
 		@endif
 		</div>
 	</div>
-	 
+
 	<div class="form-group">
 		{!! Form::submit($submit_text, ['class' => 'btn btn-primary']) !!}
 	</div>

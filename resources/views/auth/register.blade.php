@@ -22,45 +22,45 @@
 								</ul>
 							</div>
 						@endif
-	 
+
 						<form class="form-horizontal" role="form" method="POST" action="<?php echo url('/auth/register'); ?>">
 							<input type="hidden" name="_token" value="{{ csrf_token() }}">
-	 
+
 							<div class="form-group">
 								<label class="col-md-4 control-label">First Name</label>
 								<div class="col-md-6">
 									<input type="text" class="form-control" name="firstname" value="{{ old('first_name') }}">
 								</div>
 							</div>
-	 
+
 							<div class="form-group">
 								<label class="col-md-4 control-label">Last Name</label>
 								<div class="col-md-6">
 									<input type="text" class="form-control" name="lastname" value="{{ old('last_name') }}">
 								</div>
 							</div>
-	 
+
 							<div class="form-group">
 								<label class="col-md-4 control-label">E-Mail Address</label>
 								<div class="col-md-6">
 									<input type="email" class="form-control" name="email" value="{{ old('email') }}">
 								</div>
 							</div>
-							
+
 							<div class="form-group">
 								<label class="col-md-4 control-label">Username</label>
 								<div class="col-md-6">
 									<input type="text" class="form-control" name="username" value="{{ old('username') }}">
 								</div>
-							</div>							
-	 
+							</div>
+
 							<div class="form-group">
 								<label class="col-md-4 control-label">Password</label>
 								<div class="col-md-6">
 									<input type="password" class="form-control" name="password">
 								</div>
 							</div>
-	 
+
 							<div class="form-group">
 								<label class="col-md-4 control-label">Confirm Password</label>
 								<div class="col-md-6">
@@ -73,8 +73,8 @@
 								<div class="col-md-6">
 								{!! Form::select('department_id', $departments->lists('department_name', 'id'), null, ['id' => 'department_id', 'class' => 'form-control']) !!}
 								</div>
-							</div>							
-	 
+							</div>
+
 							<div class="form-group">
 								<div class="col-md-6 col-md-offset-4">
 									<button type="submit" class="btn btn-primary">

@@ -12,7 +12,7 @@
 	<h4>The table below represents an overview of all user activities</h4>
 
     @if ( !$logs->count() )
-        No logs have been found in the database!<br><br>
+      No logs have been found in the database!<br><br>
     @else
 			<table class="table section-table dialog table-striped" border="1">
 
