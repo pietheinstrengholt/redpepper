@@ -20,8 +20,15 @@ div#session-alert {
 	margin-top:10px;
 }
 
+/* Section Breadcrumb */
+
 ul.breadcrumb-section {
 	margin-top: 20px ! important;
+}
+
+/* Sections and templates overview */
+tr.notvisible {
+  background-color:#FEF0C9 !important
 }
 
 /* Template */
@@ -30,7 +37,7 @@ table.template tr td {
 	border-color: black;
 }
 
-table.template td.tablecell:hover { 
+table.template td.tablecell:hover {
 	background-color: #ECF1EF;
 }
 
