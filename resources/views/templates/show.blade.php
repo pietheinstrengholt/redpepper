@@ -16,9 +16,9 @@
 	<!-- Hidden div to carry template id -->
 	<div class="templateId" id="{{ $template->id }}" style="display: none;"></div>
 
-    @if ( !$template->columns->count() || !$template->rows->count() )
-        Error: This template has no columns or no rows.
-    @else
+	@if ( !$template->columns->count() || !$template->rows->count() )
+		Error: This template has no columns or no rows.
+	@else
 
 		<table class="table table-bordered template" border="1">
 
@@ -85,29 +85,29 @@
 
     @endif
 
-    <p>
-        {!! link_to_route('sections.index', 'Back to Sections') !!}
-    </p>
+	<p>
+	{!! link_to_route('sections.index', 'Back to Sections') !!}
+	</p>
 
 	<!-- Modal pop-up -->
 	<div class="modal fade" id="template-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="overflow:hidden;">
 		<div class="modal-dialog" style="width: 90%;">
-		  <div class="modal-content">
-			<div class="modal-header">
-			  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			  <h4 class="modal-title"><b>Field information dialog</b></h4>
-			</div>
-			<div class="modal-body" style="overflow-y: scroll; margin-right: 1px;">
-				<div id="modalContent" style="display:none;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title"><b>Field information dialog</b></h4>
 				</div>
-			</div>
-			<div class="modal-footer">
-			  @if (!Auth::guest())
-				<button type="button" id="modal-update" class="btn btn-warning">Change content</button>
-			  @endif
-			  <button type="button" id="modal-close" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		  </div><!-- /.modal-content -->
+				<div class="modal-body" style="overflow-y: scroll; margin-right: 1px;">
+					<div id="modalContent" style="display:none;">
+					</div>
+				</div>
+				<div class="modal-footer">
+					@if (!Auth::guest())
+					<button type="button" id="modal-update" class="btn btn-warning">Change content</button>
+					@endif
+					<button type="button" id="modal-close" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 

@@ -4,8 +4,8 @@
 @section('content')
 
 	<ul class="breadcrumb breadcrumb-section">
-	  <li><a href="{!! url('/'); !!}">Home</a></li>
-	  <li class="active">Upload content</li>
+	<li><a href="{!! url('/'); !!}">Home</a></li>
+	<li class="active">Upload content</li>
 	</ul>
 
 	<h2>Upload technical line items</h2>
@@ -25,8 +25,8 @@
 	<p class="errors">{!!$errors->first('csv')!!}</p>
 
 	<div class="form-group">
-		<label for="caption">Section name</label>
-		{!! Form::select('section_id', $sections->lists('section_name', 'id'), null, ['id' => 'section_id', 'class' => 'form-control']) !!}
+	<label for="caption">Section name</label>
+	{!! Form::select('section_id', $sections->lists('section_name', 'id'), null, ['id' => 'section_id', 'class' => 'form-control']) !!}
 	</div>
 
 	<button type="submit" class="btn btn-primary">Upload</button>

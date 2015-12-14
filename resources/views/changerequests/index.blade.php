@@ -4,16 +4,16 @@
 @section('content')
 
 	<ul class="breadcrumb breadcrumb-section">
-	  <li><a href="{!! url('/'); !!}">Home</a></li>
-	  <li class="active">Changerequests</li>
+	<li><a href="{!! url('/'); !!}">Home</a></li>
+	<li class="active">Changerequests</li>
 	</ul>
 
-  <h2>Changerequests</h2>
+	<h2>Changerequests</h2>
 	<h4>Please make a selection of one of the following types</h4>
 
-  @if ( !$changerequests->count() )
-      No types found in the database!<br><br>
-  @else
+	@if ( !$changerequests->count() )
+		No types found in the database!<br><br>
+	@else
 		<table class="section-table table table-condensed sortable" border="1">
 
 		<tr class="success">
@@ -67,7 +67,7 @@
 		@endforeach
 
 		</table>
-  @endif
+	@endif
 
 	{!! Form::open(array('action' => 'ChangeRequestController@cleanup', 'id' => 'form')) !!}
 	<button type="submit" class="btn btn-primary changerequest">Cleanup changerequests</button>
