@@ -20,27 +20,27 @@ class UserController extends Controller
 {
     public function index()
     {
-		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }	
-	
+      //check for superadmin permissions
+      if (Gate::denies('superadmin')) {
+        abort(403, 'Unauthorized action.');
+      }
+
 		$users = User::orderBy('username', 'asc')->get();
 		return view('users.index', compact('users'));
     }
-	
+
 	public function edit(User $user)
 	{
-		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
-		
+    //check for superadmin permissions
+    if (Gate::denies('superadmin')) {
+      abort(403, 'Unauthorized action.');
+    }
+
 		//check if id property exists
 		if (!$user->id) {
 			abort(403, 'This user no longer exists in the database.');
-		}		
-	
+		}
+
 		$departments = Department::orderBy('department_name', 'asc')->get();
 		return view('users.edit', compact('departments','user'));
 	}
@@ -51,7 +51,7 @@ class UserController extends Controller
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }
-		
+
 		$roles = array(
 			"superadmin" => "superadmin",
 			"admin" => "admin",
@@ -60,10 +60,10 @@ class UserController extends Controller
 			"builder" => "builder",
 			"guest" => "guest",
 		);
-		
+
 		$user = User::findOrFail($id);
 		$userrights = UserRights::where('username_id', $id)->get();
-		
+
 		$sectionrights = array();
 		$userrights = $userrights->toArray();
 		if (!empty($userrights)) {
@@ -71,85 +71,85 @@ class UserController extends Controller
 				array_push($sectionrights,$userright['section_id']);
 			}
 		}
-		
+
 		$sections = Section::orderBy('section_name', 'asc')->get();
 		return view('users.editrights', compact('user', 'roles', 'sections', 'sectionrights'));
 	}
 
 	public function password($id)
 	{
-		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+    //check for superadmin permissions
+    if (Gate::denies('superadmin')) {
+      abort(403, 'Unauthorized action.');
+    }
 
 		$user = User::findOrFail($id);
 		return view('users.editpassword', compact('user'));
 	}
-	
+
 	public function updatepassword(Request $request)
 	{
-		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
-		
+    //check for superadmin permissions
+    if (Gate::denies('superadmin')) {
+      abort(403, 'Unauthorized action.');
+    }
+
 		//validate input form
 		$this->validate($request, [
 			'password' => 'required|confirmed|min:6',
 		]);
-		
+
 		if ($request->isMethod('post')) {
-			
+
 			//update password
 			User::where('id', $request->input('username_id'))->update(['password' => bcrypt($request->input('password'))]);
 			Event::fire(new ChangeEvent('User password', 'User id ' . $request->has('username_id') . ' password has been changed', Auth::user()->id));
 		}
 		//return to user overview
 		return Redirect::route('users.index')->with('message', 'Password updated.');
-	}	
- 
+	}
+
 	public function update(User $user, Request $request)
 	{
-		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
-		
+    //check for superadmin permissions
+    if (Gate::denies('superadmin')) {
+      abort(403, 'Unauthorized action.');
+    }
+
 		//validate input form
 		$this->validate($request, [
 			'firstname' => 'required',
 			'lastname' => 'required',
 			'email' => 'required|email',
 			'department_id' => 'required'
-		]);	
-	
+		]);
+
 		$input = array_except(Input::all(), '_method');
 		$user->update($input);
 		Event::fire(new ChangeEvent('User details', 'User id ' . $request->input('username_id') . ' details have been changed', Auth::user()->id));
 		return Redirect::route('users.show', $user->slug)->with('message', 'User updated.');
 	}
-	
+
 	public function updaterights(Request $request)
 	{
-		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
-		
+    //check for superadmin permissions
+    if (Gate::denies('superadmin')) {
+      abort(403, 'Unauthorized action.');
+    }
+
 		//validate input form
 		$this->validate($request, [
 			'username_id' => 'required',
 			'role' => 'required'
-		]);			
-		
+		]);
+
 		if ($request->isMethod('post')) {
 			User::where('id', $request->input('username_id'))->update(['role' => $request->input('role')]);
-			
+
 			UserRights::where('username_id', $request->input('username_id'))->delete();
 
 			if ($request->has('section')) {
-				
+
 				foreach($request->input('section') as $key => $value) {
 					//create new rights
 					$UserRights = new UserRights;
@@ -158,25 +158,25 @@ class UserController extends Controller
 					$UserRights->save();
 				}
 			}
-		
+
 		}
 		Event::fire(new ChangeEvent('User rights', 'User id ' . $request->input('username_id') . ' rights have been changed', Auth::user()->id));
 		return Redirect::route('users.index')->with('message', 'User updated.');
-	}	
-	 
+	}
+
 	public function destroy(User $user)
 	{
-		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
-		
+    //check for superadmin permissions
+    if (Gate::denies('superadmin')) {
+      abort(403, 'Unauthorized action.');
+    }
+
 		//delete logs
 		Log::where('created_by', $user->id)->delete();
-		
+
 		//delete user
 		$user->delete();
 		return Redirect::route('users.index')->with('message', 'User deleted.');
 	}
-	
+
 }

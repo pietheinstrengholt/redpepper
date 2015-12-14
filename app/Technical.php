@@ -14,16 +14,16 @@ class Technical extends Model
     {
 		return $this->hasOne('App\TechnicalType', 'id', 'type_id');
     }
-	
+
     public function source()
     {
 		return $this->hasOne('App\TechnicalSource', 'id', 'source_id');
     }
-	
+
     public function template()
     {
         return $this->belongsTo('App\Template');
-    }	
+    }
 }
 
 ?>

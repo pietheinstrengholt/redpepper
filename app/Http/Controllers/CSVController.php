@@ -38,33 +38,33 @@ use App\Events\ChangeEvent;
 
 class CSVController extends Controller
 {
-	public function uploadcsv(Request $request) 
+	public function uploadcsv(Request $request)
 	{
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }
-		
+
 		//validate input form
 		$this->validate($request, [
 			'csv' => 'mimes:csv',
 			'formname' => 'required'
 		]);
-	
+
 		if ($request->isMethod('post')) {
-		
+
 			if ($request->hasFile('csv')) {
 				if ($request->file('csv')->isValid()) {
 					$file = array('csv' => Input::file('csv'));
 
 					Excel::load(Input::file('csv'), function ($reader) use ($request) {
-	
+
 						//create array from csv content
 						$csvarray = $reader->toArray();
 
 						//import rows function
 						if ($request->input('formname') == "importtech" && $request->has('section_id')) {
-							
+
 							$templates = Template::where('section_id', $request->has('section_id'))->get();
 							Event::fire(new ChangeEvent('CSV Upload', 'Section id' . $request->input('section_id') . ' has been changed with new techncial content', Auth::user()->id));
 							if (!empty($templates)) {
@@ -74,12 +74,12 @@ class CSVController extends Controller
 							}
 
 							foreach ($csvarray as $csv) {
-								
-								if (array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('column_code', $csv) && array_key_exists('source', $csv) && array_key_exists('type', $csv)  && array_key_exists('value', $csv)  && array_key_exists('description', $csv)) {							
+
+								if (array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('column_code', $csv) && array_key_exists('source', $csv) && array_key_exists('type', $csv)  && array_key_exists('value', $csv)  && array_key_exists('description', $csv)) {
 									$technical = new Technical;
 									$technical->template_id = $csv['template_id'];
 									$technical->row_code = $csv['row_code'];
-									$technical->column_code = $csv['column_code'];									
+									$technical->column_code = $csv['column_code'];
 									$technical->source_id = $csv['source'];
 									$technical->type_id = $csv['type'];
 									$technical->content = $csv['value'];
@@ -92,15 +92,15 @@ class CSVController extends Controller
 								}
 							}
 						}
-						
+
 						//import rows function
 						if ($request->input('formname') == "importrows" && $request->has('template_id')) {
-							
+
 							TemplateRow::where('template_id', $request->has('template_id'))->delete();
 							Event::fire(new ChangeEvent('CSV Upload', 'Template id' . $request->input('template_id') . ' has been changed with new rows', Auth::user()->id));
 							foreach ($csvarray as $csv) {
-								
-								if (array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('row_code', $csv) && array_key_exists('row_description', $csv)) {							
+
+								if (array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('row_code', $csv) && array_key_exists('row_description', $csv)) {
 									$row = new TemplateRow;
 									$row->template_id = $csv['template_id'];
 									$row->row_num = $csv['row_num'];
@@ -115,15 +115,15 @@ class CSVController extends Controller
 								}
 							}
 						}
-						
+
 						//import columns function
 						if ($request->input('formname') == "importcolumns" && $request->has('template_id')) {
-							
+
 							TemplateColumn::where('template_id', $request->has('template_id'))->delete();
 							Event::fire(new ChangeEvent('CSV Upload', 'Template id' . $request->input('template_id') . ' has been changed with new columns', Auth::user()->id));
 							foreach ($csvarray as $csv) {
-								
-								if (array_key_exists('template_id', $csv) && array_key_exists('column_num', $csv) && array_key_exists('column_code', $csv) && array_key_exists('column_description', $csv)) {							
+
+								if (array_key_exists('template_id', $csv) && array_key_exists('column_num', $csv) && array_key_exists('column_code', $csv) && array_key_exists('column_description', $csv)) {
 									$column = new TemplateColumn;
 									$column->template_id = $csv['template_id'];
 									$column->column_num = $csv['column_num'];
@@ -137,15 +137,15 @@ class CSVController extends Controller
 								}
 							}
 						}
-						
+
 						//import fields function
 						if ($request->input('formname') == "importfields" && $request->has('template_id')) {
-							
+
 							TemplateField::where('template_id', $request->has('template_id'))->delete();
 							Event::fire(new ChangeEvent('CSV Upload', 'Template id' . $request->input('template_id') . ' has been changed with new fields', Auth::user()->id));
 							foreach ($csvarray as $csv) {
-								
-								if (array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('column_code', $csv) && array_key_exists('property', $csv) && array_key_exists('content', $csv)) {							
+
+								if (array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('column_code', $csv) && array_key_exists('property', $csv) && array_key_exists('content', $csv)) {
 									$TemplateField = new TemplateField;
 									$TemplateField->template_id = $csv['template_id'];
 									$TemplateField->row_code = $csv['row_code'];
@@ -160,15 +160,15 @@ class CSVController extends Controller
 								}
 							}
 						}
-						
+
 						//import content function
 						if ($request->input('formname') == "importcontent" && $request->has('template_id')) {
-							
+
 							Requirement::where('template_id', $request->has('template_id'))->delete();
 							Event::fire(new ChangeEvent('CSV Upload', 'Template id' . $request->input('template_id') . ' has been changed with new content', Auth::user()->id));
 							foreach ($csvarray as $csv) {
-								
-								if (array_key_exists('template_id', $csv) && array_key_exists('field_id', $csv) && array_key_exists('content_type', $csv) && array_key_exists('content', $csv)) {							
+
+								if (array_key_exists('template_id', $csv) && array_key_exists('field_id', $csv) && array_key_exists('content_type', $csv) && array_key_exists('content', $csv)) {
 									$Requirements = new Requirement;
 									$Requirements->template_id = $csv['template_id'];
 									$Requirements->field_id = $csv['field_id'];
@@ -181,71 +181,71 @@ class CSVController extends Controller
 									exit();
 								}
 							}
-						}						
-						
+						}
+
 					});
 
 				}
-			
+
 			}
 
 			return Redirect::to('/');
 		}
-	}	
+	}
 
 
-	public function importtech() 
+	public function importtech()
 	{
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }		
-	
+        }
+
 		$sections = Section::all();
 		return view('csv.importtech', compact('sections'));
 	}
-	
-	public function importrows() 
+
+	public function importrows()
 	{
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }		
-	
+        }
+
 		$templates = Template::all();
 		return view('csv.importrows', compact('templates'));
 	}
-	
-	public function importcolumns() 
+
+	public function importcolumns()
 	{
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }		
-	
+        }
+
 		$templates = Template::all();
 		return view('csv.importcolumns', compact('templates'));
 	}
-	
-	public function importfields() 
+
+	public function importfields()
 	{
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }		
-	
+        }
+
 		$templates = Template::all();
 		return view('csv.importfields', compact('templates'));
 	}
-	
-	public function importcontent() 
+
+	public function importcontent()
 	{
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
-        }		
+        }
 		$templates = Template::all();
 		return view('csv.importcontent', compact('templates'));
-	}		
+	}
 
 }

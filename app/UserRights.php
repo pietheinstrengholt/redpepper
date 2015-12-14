@@ -6,15 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserRights extends Model
 {
-    protected $fillable = ['username_id','section_id'];
-    protected $guarded = [];
-	protected $table = 't_usernames_rights';
+  protected $fillable = ['username_id','section_id'];
+  protected $guarded = [];
+  protected $table = 't_usernames_rights';
 
-    public function user()
-    {
-        return $this->belongsTo('App\User');
-    }
-	
+  public function user()
+  {
+    return $this->belongsTo('App\User');
+  }
 }
 
 ?>

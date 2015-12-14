@@ -32,20 +32,20 @@ use Session;
 class SearchController extends Controller
 {
 
-	public function search(Request $request) 
+	public function search(Request $request)
 	{
 		if ($request->isMethod('post')) {
-			
+
 			if ($request->has('search')) {
-			
+
 				if ($request->has('sections') && $request->has('types')) {
 
 					//set typeslist
 					$typeslist = $request->input('types');
-					
+
 					//create empty array to fill with template_id's
 					$templatesArray = array();
-					
+
 					//retrieve template_id's for each section selected
 					foreach($request->input('sections') as $section) {
 						$templates = Template::where('section_id', $section)->get();
@@ -55,7 +55,7 @@ class SearchController extends Controller
 							}
 						}
 					}
-				
+
 					return view('search.index', [
 						'rows' => TemplateRow::where('row_description', 'like', '%' . $request->input('search') . '%')->whereIn('template_id', $templatesArray)->get(),
 						'columns' => TemplateColumn::where('column_description', 'like', '%' . $request->input('search') . '%')->whereIn('template_id', $templatesArray)->get(),
@@ -63,7 +63,7 @@ class SearchController extends Controller
 						'technicals' => Technical::where('content', 'like', '%' . $request->input('search') . '%')->orWhere('description', 'like', '%' . $request->input('search') . '%')->whereIn('template_id', $templatesArray)->get(),
 						'fields' => TemplateField::where('content', 'like', '%' . $request->input('search') . '%')->where('property', '<>', 'disabled')->whereIn('template_id', $templatesArray)->whereIn('property', $typeslist)->get()
 					]);
-					
+
 				} else {
 					//no types and selections are selected
 					return view('search.index', [
@@ -79,12 +79,12 @@ class SearchController extends Controller
 			}
 		}
 	}
-	
-	public function advancedsearch() 
+
+	public function advancedsearch()
 	{
 		return view('search.advanced', [
 			'sections' => Section::where('visible', 'True')->orderBy('section_name', 'asc')->get()
 		]);
-	}	
+	}
 
 }

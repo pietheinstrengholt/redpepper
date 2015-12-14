@@ -35,47 +35,47 @@ class TemplateController extends Controller
     public function show(Section $section, Template $template, Request $request)
     {
 
-		//check if visible is set to false and user is a guest
-		if (Auth::guest() && $template->visible == "False") {
-			abort(403, 'Unauthorized action.');
-		}
+      //check if visible is set to false and user is a guest
+      if (Auth::guest() && $template->visible == "False") {
+      	abort(403, 'Unauthorized action.');
+      }
 
-		//check if id property exists
-		if (!$template->id) {
-			abort(403, 'This template no longer exists in the database.');
-		}
+      //check if id property exists
+      if (!$template->id) {
+      	abort(403, 'This template no longer exists in the database.');
+      }
 
-		//check if id property exists
-		if (!$section->id) {
-			abort(403, 'This template no longer exists in the database.');
-		}
+      //check if id property exists
+      if (!$section->id) {
+      	abort(403, 'This template no longer exists in the database.');
+      }
 
-		//set empty search value
-		$searchvalue = 'empty';
+      //set empty search value
+      $searchvalue = 'empty';
 
-		//return field_id, e.g. R-010 as row010 or column010
-		if ($request->has('field_id')) {
-			//replace R- or C- with row or column
-			if (preg_match('/R-/', $request->input('field_id'))) {
-				$searchvalue = str_ireplace("R-", "row", $request->input('field_id'));
-			}
+      //return field_id, e.g. R-010 as row010 or column010
+      if ($request->has('field_id')) {
+      	//replace R- or C- with row or column
+      	if (preg_match('/R-/', $request->input('field_id'))) {
+      		$searchvalue = str_ireplace("R-", "row", $request->input('field_id'));
+      	}
 
-			if (preg_match('/C-/', $request->input('field_id'))) {
-				$searchvalue = str_ireplace("C-", "column", $request->input('field_id'));
-			}
-		}
+      	if (preg_match('/C-/', $request->input('field_id'))) {
+      		$searchvalue = str_ireplace("C-", "column", $request->input('field_id'));
+      	}
+      }
 
-		//if both row and column are set, return combination, else only row or column
-		if ($request->has('row') && $request->has('column')) {
-			$searchvalue = "column" . $request->input('column') . "-row" . $request->input('row');
-		} else if ($request->has('row')) {
-			$searchvalue = "row" . $request->input('row');
-		} else if ($request->has('column')) {
-			$searchvalue = "column" . $request->input('column');
-		}
+      //if both row and column are set, return combination, else only row or column
+      if ($request->has('row') && $request->has('column')) {
+      	$searchvalue = "column" . $request->input('column') . "-row" . $request->input('row');
+      } else if ($request->has('row')) {
+      	$searchvalue = "row" . $request->input('row');
+      } else if ($request->has('column')) {
+      	$searchvalue = "column" . $request->input('column');
+      }
 
-		$disabledFields = $this->getDisabledFields($template);
-		return view('templates.show', compact('section', 'template', 'disabledFields', 'searchvalue'));
+      $disabledFields = $this->getDisabledFields($template);
+      return view('templates.show', compact('section', 'template', 'disabledFields', 'searchvalue'));
     }
 
 	//function to disabled fields
@@ -135,10 +135,10 @@ class TemplateController extends Controller
 	//function to create new template
 	public function newtemplate(Request $request)
 	{
-		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+    //check for superadmin permissions
+    if (Gate::denies('superadmin')) {
+      abort(403, 'Unauthorized action.');
+    }
 
 		//validate input form
 		$this->validate($request, [
@@ -303,7 +303,6 @@ class TemplateController extends Controller
 						}
 					}
 				}
-
 			}
 		}
 		return Redirect::route('sections.show', $request->input('section_id'))->with('message', 'Template created.');

@@ -15,45 +15,45 @@ class DepartmentController extends Controller
 
     public function index()
     {
-		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }	
-	
-		$departments = Department::orderBy('department_name', 'asc')->get();
-		return view('departments.index', compact('departments'));
+	    //check for superadmin permissions
+      if (Gate::denies('superadmin')) {
+          abort(403, 'Unauthorized action.');
+      }
+
+  		$departments = Department::orderBy('department_name', 'asc')->get();
+  		return view('departments.index', compact('departments'));
     }
-	
+
 	public function edit(Department $department)
 	{
-		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
-		
+    //check for superadmin permissions
+    if (Gate::denies('superadmin')) {
+      abort(403, 'Unauthorized action.');
+    }
+
 		//check if id property exists
 		if (!$department->id) {
 			abort(403, 'This department no longer exists in the database.');
 		}
-		
+
 		return view('departments.edit', compact('department'));
 	}
-	
+
 	public function create(Department $department)
 	{
-		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
-		
+    //check for superadmin permissions
+    if (Gate::denies('superadmin')) {
+      abort(403, 'Unauthorized action.');
+    }
+
 		//validate input form
 		$this->validate($department, [
 			'department_name' => 'required',
 			'department_description' => 'required'
-		]);		
-		
+		]);
+
 		return view('departments.create', compact('department'));
-	}	
+	}
 
 	public function store(Request $request)
 	{
@@ -67,38 +67,39 @@ class DepartmentController extends Controller
 			'department_name' => 'required',
 			'department_description' => 'required'
 		]);
-		
+
 		$input = Input::all();
 		Department::create( $input );
 		return Redirect::route('departments.index')->with('message', 'Department created');
 	}
-	 
+
 	public function update(Department $department, Request $request)
 	{
-		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
-		
+    //check for superadmin permissions
+    if (Gate::denies('superadmin')) {
+        abort(403, 'Unauthorized action.');
+    }
+
 		//validate input form
 		$this->validate($request, [
 			'department_name' => 'required',
 			'department_description' => 'required'
 		]);
-		
+
 		$input = array_except(Input::all(), '_method');
 		$department->update($input);
 		return Redirect::route('departments.show', $department->slug)->with('message', 'Department updated.');
 	}
-	 
+
 	public function destroy(Department $department)
 	{
-		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }	
+    //check for superadmin permissions
+    if (Gate::denies('superadmin')) {
+        abort(403, 'Unauthorized action.');
+    }
+    
 		$department->delete();
 		return Redirect::route('departments.index')->with('message', 'Department deleted.');
 	}
-	
+
 }

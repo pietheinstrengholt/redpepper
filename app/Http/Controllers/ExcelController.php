@@ -41,9 +41,9 @@ use App\Events\ChangeEvent;
 class ExcelController extends Controller
 {
 	public function sectionRights($id) {
-	
+
 		$userrights = UserRights::where('username_id', $id)->get();
-		
+
 		$sectionRights = array();
 		$userrights = $userrights->toArray();
 		if (!empty($userrights)) {
@@ -54,31 +54,31 @@ class ExcelController extends Controller
 		return $sectionRights;
 	}
 
-	public function uploadform() 
+	public function uploadform()
 	{
 		//exit when user is a guest
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
-		}	
-	
+		}
+
 		//admin and builder are only permitted to upload to own sections
 		if (Auth::user()->role == "admin" || Auth::user()->role == "builder") {
 			$sectionList = $this->sectionRights(Auth::user()->id);
 			$sections = Section::whereIn('id', $sectionList)->orderBy('section_name', 'asc')->get();
 		}
-	
+
 		//only superadmin can see all sections
 		if (Auth::user()->role == "superadmin") {
 			$sections = Section::orderBy('section_name', 'asc')->get();
 		}
-		
+
 		if (Auth::user()->role == "contributor" || Auth::user()->role == "reviewer" || Auth::user()->role == "guest" || Auth::guest()) {
-			abort(403, 'Unauthorized action. You don\'t have access to this template or section');		
-		}		
-		
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
+		}
+
 		return view('excel.upload', compact('sections'));
 	}
-	
+
 	public function getNameFromNumber($num)
 	{
 		$numeric = ($num - 1) % 26;
@@ -89,9 +89,9 @@ class ExcelController extends Controller
 		} else {
 			return $letter;
 		}
-	}	
-	
-	public function getExcelColumnNumber($num) 
+	}
+
+	public function getExcelColumnNumber($num)
 	{
 		$numeric = ($num - 1) % 26;
 		$letter = chr(65 + $numeric);
@@ -101,16 +101,16 @@ class ExcelController extends Controller
 		} else {
 			return $letter;
 		}
-	}	
-	
+	}
+
 	//TODO, use a blade instead of Controller debugging output
-	public function uploadexcel(Request $request) 
+	public function uploadexcel(Request $request)
 	{
 		//exit when user is a guest
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
 		}
-		
+
 		//validate input form
 		$this->validate($request, [
 			'excel' => 'mimes:xls,xlsx',
@@ -118,18 +118,18 @@ class ExcelController extends Controller
 			'section_id' => 'required|numeric',
 			'template_description' => 'required'
 		]);
-	
+
 		if ($request->isMethod('post')) {
-		
+
 			if ($request->hasFile('excel')) {
 				if ($request->file('excel')->isValid()) {
 					$file = array('excel' => Input::file('excel'));
-					
+
 					//show template name on top
 					echo "<h2>Excel import section_id: " . $request->input('section_id') . "</h2>";
 					echo "<h2>Excel import template: " . $request->input('template_name') . "</h2>";
 					echo "<h3>Template description: " . $request->input('template_description') . "</h3>";
-								
+
 					Excel::load(Input::file('excel'), function ($reader) use ($request) {
 
 						// Getting all results
@@ -137,25 +137,25 @@ class ExcelController extends Controller
 
 						//set error to zero
 						$error = 0;
-					
+
 						foreach($results as $sheet)
 						{
 
-							$worksheetTitle = $sheet->getTitle();							
+							$worksheetTitle = $sheet->getTitle();
 							$arraySheet = $sheet->toArray();
-							
+
 							if ($worksheetTitle == "structure") {
 								echo "<strong>Template structure</strong>";
-								
+
 								//get column and row count from imported excel
 								$highestRow         = count($arraySheet) + 1;
-								
-								if ($highestRow > 2) {								
-									
+
+								if ($highestRow > 2) {
+
 									$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
 									$highestColumnIndex = count($arraySheet[0]) + 1;
 									$nrColumns = ord($highestColumn) - 64;
-									
+
 									echo "<br><small>The worksheet ".$worksheetTitle." has ";
 									echo $nrColumns . ' columns (A-' . $highestColumn . ') ';
 									echo ' and ' . $highestRow . ' row.</small><br>';
@@ -165,7 +165,7 @@ class ExcelController extends Controller
 									$templaterows = array();
 									//start counting unique id for disabled cells in templatestructure array
 									$disabledcount = 1;
-									
+
 									//create table
 									echo '<table border="1">';
 
@@ -176,7 +176,7 @@ class ExcelController extends Controller
 											//set column letter and retrieve value
 											$columnLetter = $this->getExcelColumnNumber($col);
 											$val = $reader->getExcel()->getSheet()->getCell($columnLetter . $row)->getValue();
-											
+
 											//1th row is where the column names are stored
 											if ($row == 1) {
 												echo '<td style="background-color: #dff0d8; padding: 5px; font-weight: bold;">' . $val . '</td>';
@@ -222,10 +222,10 @@ class ExcelController extends Controller
 
 												$newcol = $col-3;
 												$newrow = $row-2;
-												
+
 												//todo update with cell color
 												$cellcolor = '';
-												
+
 												//set cell column num and row num based on templatestructure
 												$cell_column_num = $templatestructure['columns'][$newcol]['column_num'];
 												$cell_row_code = $templatestructure['rows'][$newrow]['row_code'];
@@ -239,31 +239,31 @@ class ExcelController extends Controller
 													echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
 												}
 											}
-											
+
 											echo '</td>';
 										}
 										echo '</tr>';
 									}
-									
+
 									echo '</table><br><br>';
 								} else {
 									$error = 1;
 								}
-								
+
 							}
-							
+
 							//validatie work sheet with the name column_content
 							if ($worksheetTitle == "column_content") {
 								echo "<strong>Column content</strong><br><br>";
 								//get column and row count from imported excel
 								$highestRow         = count($arraySheet) + 1;
-								
+
 								if ($highestRow > 1) {
-									
+
 									$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
 									$highestColumnIndex = count($arraySheet[0]) + 1;
 									$nrColumns = ord($highestColumn) - 64;
-									
+
 									//start counting unique id for column_content in templatestructure array
 									$columncontentcount = 0;
 									//create table
@@ -311,15 +311,15 @@ class ExcelController extends Controller
 									echo '</table><br>';
 								}
 							}
-							
+
 							//validatie work sheet with the name row_content
 							if ($worksheetTitle == "row_content") {
 								echo "<strong>Row content</strong><br><br>";
 								//get column and row count from imported excel
 								$highestRow         = count($arraySheet) + 1;
-								
+
 								if ($highestRow > 1) {
-									
+
 									$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
 									$highestColumnIndex = count($arraySheet[0]) + 1;
 									$nrColumns = ord($highestColumn) - 64;
@@ -370,7 +370,7 @@ class ExcelController extends Controller
 									echo '</table><br><br>';
 								}
 							}
-							
+
 							//validatie work sheet with the name column_content
 							if ($worksheetTitle == "template_content") {
 								echo "<strong>Template content</strong><br><br>";
@@ -487,10 +487,10 @@ class ExcelController extends Controller
 							if ($worksheetTitle == "sourcing") {
 
 								$type_results = TechnicalType::select('id', 'type_name')->get();
-								
+
 								//create empty array to lookup types
 								$type_array = array();
-								
+
 								//restructure array from database results
 								if (!empty($type_results)) {
 									foreach($type_results as $type_result) {
@@ -500,10 +500,10 @@ class ExcelController extends Controller
 								}
 
 								$source_results = TechnicalSource::select('id', 'source_name')->get();
-								
+
 								//create empty array to lookup sources
 								$source_array = array();
-								
+
 								//restructure array from database results
 								if (!empty($source_results)) {
 									foreach($source_results as $source_result) {
@@ -511,13 +511,13 @@ class ExcelController extends Controller
 										$source_array[$source_id] = $source_result['source_name'];
 									}
 								}
-							
+
 								echo "<strong>Sourcing content</strong><br><br>";
 								//get column and row count from imported excel
 								$highestRow         = count($arraySheet) + 1;
-								
+
 								if ($highestRow > 1) {
-								
+
 									$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
 									$highestColumnIndex = count($arraySheet[0]) + 1;
 									$nrColumns = ord($highestColumn) - 64;
@@ -570,7 +570,7 @@ class ExcelController extends Controller
 														$key = array_search($val, $source_array);
 														$templatestructure['sourcing'][$sourcingcontentcount]['source'] = $key;
 													}
-													
+
 													if ($col == 5) {
 														$templatestructure['sourcing'][$sourcingcontentcount]['value'] = $val;
 													}
@@ -591,9 +591,9 @@ class ExcelController extends Controller
 								echo "<strong>Field content</strong><br><br>";
 								//get column and row count from imported excel
 								$highestRow         = count($arraySheet) + 1;
-								
+
 								if ($highestRow > 1) {
-									
+
 									$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
 									$highestColumnIndex = count($arraySheet[0]) + 1;
 									$nrColumns = ord($highestColumn) - 64;
@@ -651,13 +651,13 @@ class ExcelController extends Controller
 									echo '</table><br><br>';
 								}
 							}
-						}				
-						
+						}
+
 						if ($error == 1) {
 							echo "Error: an error occurred while processing the template file.";
 							exit();
 						}
-						
+
 						//add new template to database
 						if ($request->has('section_id')) {
 							$template = new Template;
@@ -674,15 +674,15 @@ class ExcelController extends Controller
 								$template->links_other_temp_description = $templatestructure['template_content']['links_other_temp_description'];
 								$template->process_and_organisation_description = $templatestructure['template_content']['process_and_organisation_description'];
 							}
-							
+
 							$template->visible = 'No';
 							$template->save();
-							
+
 							if (empty($templatestructure['columns']) || empty($templatestructure['rows'])) {
 								echo "Error: a template needs a least one column or one row!";
-								exit();							
+								exit();
 							}
-							
+
 							//add template column to database
 							$i = 1;
 							foreach($templatestructure['columns'] as $columnline) {
@@ -694,7 +694,7 @@ class ExcelController extends Controller
 								$column->save();
 								$i++;
 							}
-							
+
 							//add template rows to database
 							$i = 1;
 							foreach($templatestructure['rows'] as $rowline) {
@@ -707,7 +707,7 @@ class ExcelController extends Controller
 								$row->save();
 								$i++;
 							}
-							
+
 							//add template field content to database
 							if (!empty($templatestructure['field_content'])) {
 								foreach($templatestructure['field_content'] as $field_content) {
@@ -718,7 +718,7 @@ class ExcelController extends Controller
 									$templatefield->property = $field_content['content_type'];
 									$templatefield->content = $field_content['content'];
 									$templatefield->save();
-									
+
 									//submit new content to archive table
 									$HistoryRequirement = new HistoryRequirement;
 									$HistoryRequirement->changerequest_id = '0';
@@ -731,11 +731,11 @@ class ExcelController extends Controller
 									$HistoryRequirement->created_by = Auth::user()->id;
 									$HistoryRequirement->submission_date = null;
 									$HistoryRequirement->approved_by = Auth::user()->id;
-									$HistoryRequirement->save();									
-									
+									$HistoryRequirement->save();
+
 								}
 							}
-							
+
 							//add template row content to database
 							if (!empty($templatestructure['row_content'])) {
 								foreach($templatestructure['row_content'] as $key => $requirement) {
@@ -745,7 +745,7 @@ class ExcelController extends Controller
 									$templaterequirement->content_type = $requirement['content_type'];
 									$templaterequirement->content = $requirement['content'];
 									$templaterequirement->save();
-									
+
 									//submit new content to archive table
 									$HistoryRequirement = new HistoryRequirement;
 									$HistoryRequirement->changerequest_id = '0';
@@ -758,11 +758,11 @@ class ExcelController extends Controller
 									$HistoryRequirement->created_by = Auth::user()->id;
 									$HistoryRequirement->submission_date = null;
 									$HistoryRequirement->approved_by = Auth::user()->id;
-									$HistoryRequirement->save();										
-									
+									$HistoryRequirement->save();
+
 								}
 							}
-							
+
 							//add template column content to database
 							if (!empty($templatestructure['column_content'])) {
 								foreach($templatestructure['column_content'] as $key => $requirement) {
@@ -772,7 +772,7 @@ class ExcelController extends Controller
 									$templaterequirement->content_type = $requirement['content_type'];
 									$templaterequirement->content = $requirement['content'];
 									$templaterequirement->save();
-									
+
 									//submit new content to archive table
 									$HistoryRequirement = new HistoryRequirement;
 									$HistoryRequirement->changerequest_id = '0';
@@ -785,11 +785,11 @@ class ExcelController extends Controller
 									$HistoryRequirement->created_by = Auth::user()->id;
 									$HistoryRequirement->submission_date = null;
 									$HistoryRequirement->approved_by = Auth::user()->id;
-									$HistoryRequirement->save();										
-									
+									$HistoryRequirement->save();
+
 								}
-							}							
-							
+							}
+
 							//add disabled cells to database
 							if (!empty($templatestructure['disabledcells'])) {
 								foreach($templatestructure['disabledcells'] as $disabledcell) {
@@ -801,20 +801,20 @@ class ExcelController extends Controller
 									$templatefield->save();
 								}
 							}
-							
+
 							//add technical content to database
 							if (!empty($templatestructure['sourcing'])) {
 								foreach($templatestructure['sourcing'] as $sourcing) {
 									$technical = new Technical;
 									$technical->template_id = $template->id;
 									$technical->row_code = $sourcing['row_code'];
-									$technical->column_code = $sourcing['column_code'];									
+									$technical->column_code = $sourcing['column_code'];
 									$technical->source_id = $sourcing['source'];
 									$technical->type_id = $sourcing['type'];
 									$technical->content = $sourcing['value'];
 									$technical->description = $sourcing['description'];
 									$technical->save();
-									
+
 									//submit new content to archive table
 									$HistoryTechnical = new HistoryTechnical;
 									$HistoryTechnical->changerequest_id = '0';
@@ -839,21 +839,21 @@ class ExcelController extends Controller
 			Event::fire(new ChangeEvent('Excel', $request->input('template_name') . ' template has been added', Auth::user()->id));
 			return Redirect::to('/sections');
 		}
-	}	
+	}
 
 	//function to export template to excel
 	public function export($id)
 	{
-	
+
 		$template = Template::find($id);
-	
+
 		Excel::create($template->template_name, function($excel) use ($id)  {
 
 			// Our first sheet
 			$excel->sheet('structure', function($sheet) use ($id) {
-			
+
 				$template = Template::find($id);
-			
+
 				$sheet->SetCellValue('A1', 'Row#');
 				$sheet->getStyle('A1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('A')->setWidth(6);
@@ -866,14 +866,14 @@ class ExcelController extends Controller
 				$sheet->SetCellValue('D1', 'Reference');
 				$sheet->getStyle('D1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('D')->setWidth(40);
-				
+
 				//starting column letter
 				$letter = "D";
 				//create empty array to store template structure content, needed to retrieve row and column id for disabled fields
 				$templatestructure = array();
 				//start counter
 				$i = 1;
-				
+
 				//Add remaining columns
 				foreach ($template->columns as $column) {
 					//add column id and row_code to structure
@@ -886,22 +886,22 @@ class ExcelController extends Controller
 					$sheet->getColumnDimension($letter)->setWidth(20);
 					$sheet->setCellValueExplicit($letter . '2', $column['column_code']);
 				}
-				
+
 				$sheet->cells('A1:' . $letter . '1', function($cells) {
 					$cells->setBackground('#18bc9c');
 				});
-				
+
 				$sheet->getRowDimension('1')->setRowHeight(20);
-				
+
 				$sheet->cells('A2:' . $letter . '2', function($cells) {
 					$cells->setBackground('#eeeeee');
 				});
-				
+
 				$sheet->getRowDimension('2')->setRowHeight(20);
 
 				//starting row number
 				$rownumber = "3";
-				
+
 				//start counter
 				$i = 1;
 
@@ -931,9 +931,9 @@ class ExcelController extends Controller
 						$rownumber++;
 					}
 				}
-				
+
 				$disabled = TemplateField::where('template_id', $template->id)->where('property', 'disabled')->get();
-				
+
 				//set grey fields, add two to put it correctly in the template
 				if (!empty($disabled)) {
 					foreach($disabled as $disabledrows) {
@@ -958,40 +958,40 @@ class ExcelController extends Controller
 						});
 					}
 				}
-				
+
 				// Set border for range
 				$sheet->setBorder('A1:' . $letter . $rownumber, 'thin');
-				
+
 
 			});
 
 			// Our second sheet
 			$excel->sheet('column_content', function($sheet) use ($id) {
-			
+
 				//set first column for column_content
 				//Column part
 				$sheet->SetCellValue('A1', 'number');
 				$sheet->getStyle('A1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('A')->setWidth(16);
-				
+
 				$sheet->SetCellValue('B1', 'content_type');
 				$sheet->getStyle('B1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('B')->setWidth(20);
-				
+
 				$sheet->SetCellValue('C1', 'content');
 				$sheet->getStyle('C1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('C')->setWidth(100);
 
-				
+
 				$sheet->cells('A1:C1', function($cells) {
 					$cells->setBackground('#18bc9c');
 				});
-				
+
 				$sheet->getStyle('A1:C1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
-				
+
 				$column_content  = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'C-%')->where('content', '!=' , '')->orderBy('field_id', 'asc')->get();
-				
+
 				$columncontentcount = 2;
 				//add content to excel
 				if (!empty($column_content )) {
@@ -1004,36 +1004,36 @@ class ExcelController extends Controller
 						$columncontentcount++;
 					}
 				}
-				
+
 			});
-			
+
 			// Our third sheet
 			$excel->sheet('row_content', function($sheet) use ($id) {
-			
+
 				//set first column for column_content
 				//Column part
 				$sheet->SetCellValue('A1', 'number');
 				$sheet->getStyle('A1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('A')->setWidth(16);
-				
+
 				$sheet->SetCellValue('B1', 'content_type');
 				$sheet->getStyle('B1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('B')->setWidth(20);
-				
+
 				$sheet->SetCellValue('C1', 'content');
 				$sheet->getStyle('C1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('C')->setWidth(100);
 
-				
+
 				$sheet->cells('A1:C1', function($cells) {
 					$cells->setBackground('#18bc9c');
 				});
-				
+
 				$sheet->getStyle('A1:C1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
-				
+
 				$row_contents  = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'R-%')->where('content', '!=' , '')->orderBy('field_id', 'asc')->get();
-				
+
 				$rowcontentcount = 2;
 
 				//add content to excel
@@ -1047,12 +1047,12 @@ class ExcelController extends Controller
 						$rowcontentcount++;
 					}
 				}
-				
-			});	
+
+			});
 
 			// Our fourth sheet
 			$excel->sheet('field_content', function($sheet) use ($id) {
-			
+
 				//set first column for field_content
 				//Column part
 				$sheet->SetCellValue('A1', 'column_code');
@@ -1074,12 +1074,12 @@ class ExcelController extends Controller
 				$sheet->cells('A1:D1', function($cells) {
 					$cells->setBackground('#18bc9c');
 				});
-				
+
 				$sheet->getStyle('A1:D1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
-				
+
 				$field_contents   = TemplateField::where('template_id', 1)->where('property', '!=' , 'disabled')->orderBy('row_code', 'asc')->orderBy('column_code', 'asc')->get();
-				
+
 				$fieldcontentcount = 2;
 				//set grey fields, add two to put it correctly in the template
 				if (!empty($field_contents)) {
@@ -1091,7 +1091,7 @@ class ExcelController extends Controller
 						$fieldcontentcount++;
 					}
 				}
-				
+
 			});
 
 			// Our firth sheet
@@ -1129,12 +1129,12 @@ class ExcelController extends Controller
 				$sheet->cells('A1:F1', function($cells) {
 					$cells->setBackground('#18bc9c');
 				});
-				
+
 				$sheet->getStyle('A1:F1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
-				
+
 				$field_contents = Technical::where('template_id', $id)->get();
-				
+
 				$fieldcontentcount = 2;
 				//set grey fields, add two to put it correctly in the template
 				if (!empty($field_contents)) {
@@ -1149,7 +1149,7 @@ class ExcelController extends Controller
 					}
 				}
 
-				
+
 			});
 
 			// Our sixth sheet
@@ -1162,11 +1162,11 @@ class ExcelController extends Controller
 				$sheet->getColumnDimension('B')->setWidth(80);
 				$sheet->getStyle('A1')->getFont()->setBold(true);
 				$sheet->getStyle('B1')->getFont()->setBold(true);
-				
+
 				$sheet->cells('A1:B1', function($cells) {
 					$cells->setBackground('#18bc9c');
 				});
-				
+
 				//set first column for field_content
 				//Column part
 				$sheet->SetCellValue('A1', 'content type:')
@@ -1211,7 +1211,7 @@ class ExcelController extends Controller
 				->SetCellValue('B8', 'Value highlighted in the report')
 				->SetCellValue('B9', 'Reporting Business Rule for the specific cell')
 				->SetCellValue('B10', 'Standard Operating Procedure for the specific cell');
-				
+
 				$sheet->getColumnDimension('A')->setWidth(35);
 
 				$sheet->getStyle('A1')->getFont()->setBold(true);
@@ -1222,25 +1222,25 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getStyle('A6')->getFill()->getStartColor()->setARGB('dff0d8');
 
-				
-			});				
 
-		})->download('xlsx');	
-		
+			});
+
+		})->download('xlsx');
+
 	}
-	
+
     public function exportchanges()
     {
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }
-		
+
 		Excel::create('ChangeRequests', function($excel)  {
 
 			// Our first sheet
 			$excel->sheet('regulatory_content', function($sheet) {
-			
+
 				$sheet->SetCellValue('A1', 'changerequest_id');
 				$sheet->getStyle('A1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('A')->setWidth(15);
@@ -1284,16 +1284,16 @@ class ExcelController extends Controller
 				$sheet->SetCellValue('K1', 'approval_date');
 				$sheet->getStyle('K1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('K')->setWidth(15);
-				
+
 				//start counter
 				$i = 1;
-				
+
 				$HistoryRequirement = HistoryRequirement::all();
-				
+
 				foreach($HistoryRequirement as $row) {
-				
+
 					$i++;
-				
+
 					$sheet->setCellValueExplicit('A' . $i, $row['id'])
 						  ->setCellValueExplicit('B' . $i, $row['template_id'])
 						  ->setCellValueExplicit('C' . $i, $row['row_code'])
@@ -1303,25 +1303,25 @@ class ExcelController extends Controller
 						  ->setCellValueExplicit('G' . $i, $row['change_type'])
 						  ->setCellValueExplicit('I' . $i, $row['submission_date'])
 						  ->setCellValueExplicit('K' . $i, $row['created_at']);
-						  
+
 					//query for user table
 					$created_by = User::where('id', $row['created_by'])->first();
 					if (!empty($created_by)) {
 						$sheet->setCellValueExplicit('H' . $i, $created_by['username']);
 					}
-					
+
 					//query for user table
 					$approved_by = User::where('id', $row['approved_by'])->first();
 					if (!empty($approved_by)) {
 						$sheet->setCellValueExplicit('J' . $i, $approved_by['username']);
-					} 
+					}
 				}
 			});
-			
+
 
 			// Our second sheet
 			$excel->sheet('technical_content', function($sheet) {
-			
+
 				$sheet->SetCellValue('A1', 'changerequest_id');
 				$sheet->getStyle('A1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('A')->setWidth(15);
@@ -1329,15 +1329,15 @@ class ExcelController extends Controller
 				$sheet->SetCellValue('B1', 'template');
 				$sheet->getStyle('B1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('B')->setWidth(30);
-				
+
 				$sheet->SetCellValue('C1', 'row_code');
 				$sheet->getStyle('C1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('C')->setWidth(15);
-				
+
 				$sheet->SetCellValue('D1', 'column_code');
 				$sheet->getStyle('D1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('D')->setWidth(15);
-				
+
 				$sheet->SetCellValue('E1', 'source_name');
 				$sheet->getStyle('E1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('E')->setWidth(15);
@@ -1345,15 +1345,15 @@ class ExcelController extends Controller
 				$sheet->SetCellValue('F1', 'type_name');
 				$sheet->getStyle('F1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('F')->setWidth(15);
-				
+
 				$sheet->SetCellValue('G1', 'content');
 				$sheet->getStyle('G1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('G')->setWidth(15);
-				
+
 				$sheet->SetCellValue('H1', 'description');
 				$sheet->getStyle('H1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('H')->setWidth(15);
-				
+
 				$sheet->SetCellValue('I1', 'change_type');
 				$sheet->getStyle('I1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('I')->setWidth(15);
@@ -1369,18 +1369,18 @@ class ExcelController extends Controller
 				$sheet->SetCellValue('L1', 'approved_by');
 				$sheet->getStyle('L1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('L')->setWidth(15);
-				
+
 				$sheet->SetCellValue('M1', 'approval_date');
 				$sheet->getStyle('M1')->getFont()->setBold(true);
 				$sheet->getColumnDimension('M')->setWidth(15);
-				
+
 				//start counter
 				$i = 1;
-				
+
 				$HistoryTechnical = HistoryTechnical::all();
-				
+
 				foreach($HistoryTechnical as $row) {
-				
+
 					$i++;
 
 					$sheet->setCellValueExplicit('A' . $i, $row['changerequest_id'])
@@ -1392,7 +1392,7 @@ class ExcelController extends Controller
 						  ->setCellValueExplicit('I' . $i, $row['change_type'])
 						  ->setCellValueExplicit('K' . $i, $row['submission_date'])
 						  ->setCellValueExplicit('M' . $i, $row['created_at']);
-						  
+
 					//query for user table
 					$created_by = User::where('id', $row['created_by'])->first();
 					if (!empty($created_by)) {
@@ -1417,9 +1417,9 @@ class ExcelController extends Controller
 						$sheet->setCellValueExplicit('F' . $i, $type_id['type_name']);
 					}
 				}
-				
-			});			
-			
+
+			});
+
 		})->download('xlsx');
     }
 }

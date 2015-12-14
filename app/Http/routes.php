@@ -24,7 +24,7 @@ Route::model('departments', 'Department');
 Route::model('users', 'User');
 Route::model('changerequests', 'ChangeRequest');
 Route::model('logs', 'Log');
- 
+
 // Use IDs in URLs
 Route::bind('sections', function($value, $route) {
 	return App\Section::whereId($value)->first();
