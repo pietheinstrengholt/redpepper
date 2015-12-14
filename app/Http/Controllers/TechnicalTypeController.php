@@ -14,23 +14,22 @@ use Gate;
 
 class TechnicalTypeController extends Controller
 {
-
     public function index()
     {
-      //check for superadmin permissions
-      if (Gate::denies('superadmin')) {
-        abort(403, 'Unauthorized action.');
-      }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
   		$types = TechnicalType::orderBy('type_name', 'asc')->get();
   		return view('types.index', compact('types'));
     }
 
 	public function edit(TechnicalType $type)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		//check if id property exists
 		if (!$type->id) {
@@ -42,20 +41,20 @@ class TechnicalTypeController extends Controller
 
 	public function create(TechnicalType $type)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		return view('types.create', compact('type'));
 	}
 
 	public function store(Request $request)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		//validate input form
 		$this->validate($request, [
@@ -70,10 +69,10 @@ class TechnicalTypeController extends Controller
 
 	public function update(TechnicalType $type, Request $request)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		//validate input form
 		$this->validate($request, [
@@ -88,10 +87,10 @@ class TechnicalTypeController extends Controller
 
 	public function destroy(TechnicalType $type)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 		$type->delete();
 		return Redirect::route('types.index')->with('message', 'Type deleted.');
 	}

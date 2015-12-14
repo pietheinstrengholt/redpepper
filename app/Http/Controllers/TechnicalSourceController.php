@@ -17,21 +17,20 @@ class TechnicalSourceController extends Controller
 
     public function index()
     {
-      //check for superadmin permissions
-      if (Gate::denies('superadmin')) {
-        abort(403, 'Unauthorized action.');
-      }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
   		$sources = TechnicalSource::orderBy('source_name', 'asc')->get();
   		return view('sources.index', compact('sources'));
     }
 
 	public function edit(TechnicalSource $source)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
-
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 		//check if id property exists
 		if (!$source->id) {
 			abort(403, 'This source no longer exists in the database.');
@@ -42,20 +41,20 @@ class TechnicalSourceController extends Controller
 
 	public function create(TechnicalSource $source)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		return view('sources.create', compact('source'));
 	}
 
 	public function store(Request $request)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		//validate input form
 		$this->validate($request, [
@@ -71,9 +70,9 @@ class TechnicalSourceController extends Controller
 	public function update(TechnicalSource $source, Request $request)
 	{
 		//check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		//validate input form
 		$this->validate($request, [
@@ -88,10 +87,10 @@ class TechnicalSourceController extends Controller
 
 	public function destroy(TechnicalSource $source)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 		$source->delete();
 		return Redirect::route('sources.index')->with('message', 'Source deleted.');
 	}

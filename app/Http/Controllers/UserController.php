@@ -20,10 +20,10 @@ class UserController extends Controller
 {
     public function index()
     {
-      //check for superadmin permissions
-      if (Gate::denies('superadmin')) {
-        abort(403, 'Unauthorized action.');
-      }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+		abort(403, 'Unauthorized action.');
+		}
 
 		$users = User::orderBy('username', 'asc')->get();
 		return view('users.index', compact('users'));
@@ -31,10 +31,10 @@ class UserController extends Controller
 
 	public function edit(User $user)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+		  abort(403, 'Unauthorized action.');
+		}
 
 		//check if id property exists
 		if (!$user->id) {
@@ -78,10 +78,10 @@ class UserController extends Controller
 
 	public function password($id)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+		  abort(403, 'Unauthorized action.');
+		}
 
 		$user = User::findOrFail($id);
 		return view('users.editpassword', compact('user'));
@@ -89,10 +89,10 @@ class UserController extends Controller
 
 	public function updatepassword(Request $request)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+		  abort(403, 'Unauthorized action.');
+		}
 
 		//validate input form
 		$this->validate($request, [
@@ -111,10 +111,10 @@ class UserController extends Controller
 
 	public function update(User $user, Request $request)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+		  abort(403, 'Unauthorized action.');
+		}
 
 		//validate input form
 		$this->validate($request, [
@@ -132,10 +132,10 @@ class UserController extends Controller
 
 	public function updaterights(Request $request)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+		  abort(403, 'Unauthorized action.');
+		}
 
 		//validate input form
 		$this->validate($request, [
@@ -166,10 +166,10 @@ class UserController extends Controller
 
 	public function destroy(User $user)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+		  abort(403, 'Unauthorized action.');
+		}
 
 		//delete logs
 		Log::where('created_by', $user->id)->delete();

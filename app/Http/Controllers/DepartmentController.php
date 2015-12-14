@@ -15,10 +15,10 @@ class DepartmentController extends Controller
 
     public function index()
     {
-	    //check for superadmin permissions
-      if (Gate::denies('superadmin')) {
-          abort(403, 'Unauthorized action.');
-      }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
   		$departments = Department::orderBy('department_name', 'asc')->get();
   		return view('departments.index', compact('departments'));
@@ -26,10 +26,10 @@ class DepartmentController extends Controller
 
 	public function edit(Department $department)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		//check if id property exists
 		if (!$department->id) {
@@ -41,10 +41,10 @@ class DepartmentController extends Controller
 
 	public function create(Department $department)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		//validate input form
 		$this->validate($department, [
@@ -58,9 +58,9 @@ class DepartmentController extends Controller
 	public function store(Request $request)
 	{
 		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		//validate input form
 		$this->validate($request, [
@@ -75,10 +75,10 @@ class DepartmentController extends Controller
 
 	public function update(Department $department, Request $request)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-        abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		//validate input form
 		$this->validate($request, [
@@ -93,10 +93,10 @@ class DepartmentController extends Controller
 
 	public function destroy(Department $department)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-        abort(403, 'Unauthorized action.');
-    }
+ 		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
     
 		$department->delete();
 		return Redirect::route('departments.index')->with('message', 'Department deleted.');

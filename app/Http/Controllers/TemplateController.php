@@ -34,7 +34,6 @@ class TemplateController extends Controller
 	//function to show template
 	public function show(Section $section, Template $template, Request $request)
 	{
-
 		//check if visible is set to false and user is a guest
 		if (Auth::guest() && $template->visible == "False") {
 			abort(403, 'Unauthorized action.');
@@ -81,7 +80,6 @@ class TemplateController extends Controller
 	//function to disabled fields
 	public function getDisabledFields(Template $template)
 	{
-
 		//check if id property exists
 		if (!$template->id) {
 			abort(403, 'This template no longer exists in the database.');
