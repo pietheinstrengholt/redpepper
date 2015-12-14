@@ -14,32 +14,30 @@ class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
                                     CanResetPasswordContract
 {
-  use Authenticatable, Authorizable, CanResetPassword;
+	use Authenticatable, Authorizable, CanResetPassword;
 
-  /**
-  * It looks like user table is defined in 3 different place out of the box Laravel 5.
-  * 1) /config/auth.php ('table' => 'users',)
-  * 2) In User.php (protected $table)
-  * 3) In AuthController.php (there is a unique field validator as in @Kollley reply )
-  */
-  protected $table = 't_usernames';
+	/**
+	* It looks like user table is defined in 3 different place out of the box Laravel 5.
+	* 1) /config/auth.php ('table' => 'users',)
+	* 2) In User.php (protected $table)
+	* 3) In AuthController.php (there is a unique field validator as in @Kollley reply )
+	*/
+	protected $table = 't_usernames';
+	protected $fillable = ['username', 'email', 'password', 'section_id', 'entity_id', 'role', 'firstname', 'lastname', 'department_id'];
+	protected $hidden = ['password', 'remember_token'];
 
-  protected $fillable = ['username', 'email', 'password', 'section_id', 'entity_id', 'role', 'firstname', 'lastname', 'department_id'];
+	public function department()
+	{
+		return $this->hasOne('App\Department', 'id', 'department_id');
+	}
 
-  protected $hidden = ['password', 'remember_token'];
+	public function changerequest()
+	{
+		return $this->hasMany('App\ChangeRequest');
+	}
 
-  public function department()
-  {
-    return $this->hasOne('App\Department', 'id', 'department_id');
-  }
-
-  public function changerequest()
-  {
-    return $this->hasMany('App\ChangeRequest');
-  }
-
-  public function rights()
-  {
-    return $this->hasMany('App\UserRights', 'id', 'username_id');
-  }
+	public function rights()
+	{
+		return $this->hasMany('App\UserRights', 'id', 'username_id');
+	}
 }

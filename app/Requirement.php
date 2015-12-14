@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Requirement extends Model
 {
-  protected $fillable = ['template_id','field_id','content_type','content'];
-  protected $guarded = [];
-  protected $table = 't_content';
+	protected $fillable = ['template_id','field_id','content_type','content'];
+	protected $guarded = [];
+	protected $table = 't_content';
 
-  public function template()
-  {
-    return $this->belongsTo('App\Template');
-  }
+	public function template()
+	{
+		return $this->belongsTo('App\Template');
+	}
 }
 
 ?>

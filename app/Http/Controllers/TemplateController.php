@@ -32,51 +32,51 @@ use App\Events\ChangeEvent;
 class TemplateController extends Controller
 {
 	//function to show template
-    public function show(Section $section, Template $template, Request $request)
-    {
+	public function show(Section $section, Template $template, Request $request)
+	{
 
-      //check if visible is set to false and user is a guest
-      if (Auth::guest() && $template->visible == "False") {
-      	abort(403, 'Unauthorized action.');
-      }
+		//check if visible is set to false and user is a guest
+		if (Auth::guest() && $template->visible == "False") {
+			abort(403, 'Unauthorized action.');
+		}
 
-      //check if id property exists
-      if (!$template->id) {
-      	abort(403, 'This template no longer exists in the database.');
-      }
+		//check if id property exists
+		if (!$template->id) {
+			abort(403, 'This template no longer exists in the database.');
+		}
 
-      //check if id property exists
-      if (!$section->id) {
-      	abort(403, 'This template no longer exists in the database.');
-      }
+		//check if id property exists
+		if (!$section->id) {
+			abort(403, 'This template no longer exists in the database.');
+		}
 
-      //set empty search value
-      $searchvalue = 'empty';
+		//set empty search value
+		$searchvalue = 'empty';
 
-      //return field_id, e.g. R-010 as row010 or column010
-      if ($request->has('field_id')) {
-      	//replace R- or C- with row or column
-      	if (preg_match('/R-/', $request->input('field_id'))) {
-      		$searchvalue = str_ireplace("R-", "row", $request->input('field_id'));
-      	}
+		//return field_id, e.g. R-010 as row010 or column010
+		if ($request->has('field_id')) {
+			//replace R- or C- with row or column
+			if (preg_match('/R-/', $request->input('field_id'))) {
+				$searchvalue = str_ireplace("R-", "row", $request->input('field_id'));
+			}
 
-      	if (preg_match('/C-/', $request->input('field_id'))) {
-      		$searchvalue = str_ireplace("C-", "column", $request->input('field_id'));
-      	}
-      }
+			if (preg_match('/C-/', $request->input('field_id'))) {
+				$searchvalue = str_ireplace("C-", "column", $request->input('field_id'));
+			}
+		}
 
-      //if both row and column are set, return combination, else only row or column
-      if ($request->has('row') && $request->has('column')) {
-      	$searchvalue = "column" . $request->input('column') . "-row" . $request->input('row');
-      } else if ($request->has('row')) {
-      	$searchvalue = "row" . $request->input('row');
-      } else if ($request->has('column')) {
-      	$searchvalue = "column" . $request->input('column');
-      }
+		//if both row and column are set, return combination, else only row or column
+		if ($request->has('row') && $request->has('column')) {
+			$searchvalue = "column" . $request->input('column') . "-row" . $request->input('row');
+		} else if ($request->has('row')) {
+			$searchvalue = "row" . $request->input('row');
+		} else if ($request->has('column')) {
+			$searchvalue = "column" . $request->input('column');
+		}
 
-      $disabledFields = $this->getDisabledFields($template);
-      return view('templates.show', compact('section', 'template', 'disabledFields', 'searchvalue'));
-    }
+		$disabledFields = $this->getDisabledFields($template);
+		return view('templates.show', compact('section', 'template', 'disabledFields', 'searchvalue'));
+	}
 
 	//function to disabled fields
 	public function getDisabledFields(Template $template)
@@ -108,9 +108,9 @@ class TemplateController extends Controller
 	public function edit(Section $section, Template $template)
 	{
 		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		//check if id property exists
 		if (!$template->id) {
@@ -124,9 +124,9 @@ class TemplateController extends Controller
 	public function create()
 	{
 		//check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-        abort(403, 'Unauthorized action.');
-    }
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		$sections = Section::orderBy('section_name', 'asc')->get();
 		return view('templates.create', compact('sections'));
@@ -135,10 +135,10 @@ class TemplateController extends Controller
 	//function to create new template
 	public function newtemplate(Request $request)
 	{
-    //check for superadmin permissions
-    if (Gate::denies('superadmin')) {
-      abort(403, 'Unauthorized action.');
-    }
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+		  abort(403, 'Unauthorized action.');
+		}
 
 		//validate input form
 		$this->validate($request, [
@@ -326,9 +326,9 @@ class TemplateController extends Controller
 	public function store(Section $section)
 	{
 		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		$input = Input::all();
 		$input['section_id'] = $section->id;
@@ -341,9 +341,9 @@ class TemplateController extends Controller
 	public function update(Section $section, Template $template)
 	{
 		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 		Event::fire(new ChangeEvent('Template', $template->template_name . ' details have been created', Auth::user()->id));
 		$input = array_except(Input::all(), '_method');
 		$template->update($input);
@@ -354,9 +354,9 @@ class TemplateController extends Controller
 	public function destroy(Section $section, Template $template)
 	{
 		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		//remove all related template content
 		TemplateRow::where('template_id', $template->id)->delete();
@@ -374,8 +374,8 @@ class TemplateController extends Controller
 	}
 
 	//content for the pop-up
-    public function getCellContent()
-    {
+	public function getCellContent()
+	{
 		//abort if template_id and cell_id are not set
 		if (empty($_GET['template_id']) || empty($_GET['cell_id'])) {
 			abort(404, 'Content cannot be found with invalid arguments.');
@@ -401,6 +401,6 @@ class TemplateController extends Controller
 			'field_property2' => TemplateField::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', $column_code)->where('property', 'property2')->get()
 		]);
 
-    }
+	}
 
 }
