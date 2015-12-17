@@ -35,8 +35,9 @@ startpage.h6 {
 
 .intro-message {
     position: relative;
-    padding-top: 10%;
+    padding-top: 8%;
     padding-bottom: 20%;
+	padding-left: 5%;
 }
 
 .intro-message > h1 {
@@ -55,7 +56,9 @@ hr.intro-divider {
 }
 
 #page-content {
-	margin-top:40px;
+	margin-top: 40px;
+	margin-left: 0px;
+	margin-right: 0px;
 }
 
 .intro-message > h3 {

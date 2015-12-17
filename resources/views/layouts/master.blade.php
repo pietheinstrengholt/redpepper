@@ -56,71 +56,71 @@
 
 <nav class="navbar navbar-default navbar-fixed-top">
 	<div class="container-fluid">
-	<div class="navbar-header">
-	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-	  <span class="sr-only">Toggle navigation</span>
-	  <span class="icon-bar"></span>
-	  <span class="icon-bar"></span>
-	  <span class="icon-bar"></span>
-	</button>
-	<a class="navbar-brand" href="{{ URL::to('/') }}">Home</a>
-	</div>
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			  <span class="sr-only">Toggle navigation</span>
+			  <span class="icon-bar"></span>
+			  <span class="icon-bar"></span>
+			  <span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="{{ URL::to('/') }}">Home</a>
+		</div>
 
-	<div class="collapse navbar-collapse" id="navbar-collapse">
-	<ul class="nav navbar-nav">
-	  <li><a href="{{ URL::to('/manuals') }}">Manuals</a></li>
-	  <li class="dropdown">
-		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sections <span class="caret"></span></a>
-		<ul class="dropdown-menu" role="menu">
-		  @if ( $sections->count() )
-			@foreach( $sections as $section )
-				<li><a href="{{ route('sections.show', $section->id) }}">{{ $section->section_name }}</a></li>
-			@endforeach
-		  @endif
-		</ul>
-	  </li>
-	</ul>
-	<form class="navbar-form navbar-left" role="search" action="{{ URL::to('/search') }}" method="post">
-	<input type="hidden" name="_token" value="{!! csrf_token() !!}">
-	  <div class="form-group">
-		<input type="text" name="search" class="form-control" placeholder="Search for content">
-	  </div>
-	  <button type="submit" class="btn btn-default">Submit</button>
-	</form>
-	@if (!Auth::guest())
-	<ul class="nav navbar-nav">
-	  <li class="dropdown">
-		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin menu <span class="caret"></span></a>
-		<ul class="dropdown-menu" role="menu">
-		  <li><a href="{{ URL::to('/types') }}">Edit types</a></li>
-		  <li><a href="{{ URL::to('/sources') }}">Edit sources</a></li>
-		  <li><a href="{{ URL::to('/departments') }}">Edit departments</a></li>
-		  <li><a href="{{ URL::to('/users') }}">Edit users</a></li>
-		  <li class="divider"></li>
-		  <li><a href="{{ URL::to('/csv/importcontent') }}">Import content</a></li>
-		  <li><a href="{{ URL::to('/csv/importfields') }}">Import fields</a></li>
-		  <li><a href="{{ URL::to('/csv/importrows') }}">Import rows</a></li>
-		  <li><a href="{{ URL::to('/csv/importcolumns') }}">Import columns</a></li>
-		  <li><a href="{{ URL::to('/csv/importtech') }}">Import technical</a></li>
-		  <li class="divider"></li>
-		  <li><a href="{{ URL::to('/changerequests') }}">Change requests</a></li>
-		  <li class="divider"></li>
-		  <li><a href="{{ URL::to('/logs') }}">User activities</a></li>
-		  <li class="divider"></li>
-		  <li><a href="{{ URL::to('/excel/upload') }}">Upload excel template</a></li>
-		</ul>
-	  </li>
-	</ul>
-	@endif
-	<ul class="nav navbar-nav navbar-right">
-	@if (Auth::guest())
-	  <li><a href="{{ URL::to('//auth/login') }}">Login</a></li>
-	  <li><a href="{{ URL::to('//auth/register') }}">Register</a></li>
-	@else
-	  <li><a href="{{ URL::to('//auth/logout') }}">Logout</a></li>
-	@endif
-	</ul>
-    </div><!-- /.navbar-collapse -->
+		<div class="collapse navbar-collapse" id="navbar-collapse">
+			<ul class="nav navbar-nav">
+			  <li><a href="{{ URL::to('/manuals') }}">Manuals</a></li>
+			  <li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sections <span class="caret"></span></a>
+				<ul class="dropdown-menu" role="menu">
+				  @if ( $sections->count() )
+					@foreach( $sections as $section )
+						<li><a href="{{ route('sections.show', $section->id) }}">{{ $section->section_name }}</a></li>
+					@endforeach
+				  @endif
+				</ul>
+			  </li>
+			</ul>
+			<form class="navbar-form navbar-left" role="search" action="{{ URL::to('/search') }}" method="post">
+			<input type="hidden" name="_token" value="{!! csrf_token() !!}">
+			  <div class="form-group">
+				<input type="text" name="search" class="form-control" placeholder="Search for content">
+			  </div>
+			  <button type="submit" class="btn btn-default">Submit</button>
+			</form>
+			@if (!Auth::guest())
+			<ul class="nav navbar-nav">
+			  <li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin menu <span class="caret"></span></a>
+				<ul class="dropdown-menu" role="menu">
+				  <li><a href="{{ URL::to('/types') }}">Edit types</a></li>
+				  <li><a href="{{ URL::to('/sources') }}">Edit sources</a></li>
+				  <li><a href="{{ URL::to('/departments') }}">Edit departments</a></li>
+				  <li><a href="{{ URL::to('/users') }}">Edit users</a></li>
+				  <li class="divider"></li>
+				  <li><a href="{{ URL::to('/csv/importcontent') }}">Import content</a></li>
+				  <li><a href="{{ URL::to('/csv/importfields') }}">Import fields</a></li>
+				  <li><a href="{{ URL::to('/csv/importrows') }}">Import rows</a></li>
+				  <li><a href="{{ URL::to('/csv/importcolumns') }}">Import columns</a></li>
+				  <li><a href="{{ URL::to('/csv/importtech') }}">Import technical</a></li>
+				  <li class="divider"></li>
+				  <li><a href="{{ URL::to('/changerequests') }}">Change requests</a></li>
+				  <li class="divider"></li>
+				  <li><a href="{{ URL::to('/logs') }}">User activities</a></li>
+				  <li class="divider"></li>
+				  <li><a href="{{ URL::to('/excel/upload') }}">Upload excel template</a></li>
+				</ul>
+			  </li>
+			</ul>
+			@endif
+			<ul class="nav navbar-nav navbar-right">
+			@if (Auth::guest())
+			  <li><a href="{{ URL::to('//auth/login') }}">Login</a></li>
+			  <li><a href="{{ URL::to('//auth/register') }}">Register</a></li>
+			@else
+			  <li><a href="{{ URL::to('//auth/logout') }}">Logout</a></li>
+			@endif
+			</ul>
+		</div><!-- /.navbar-collapse -->
 	</div><!-- /.container-fluid -->
 </nav>
 
