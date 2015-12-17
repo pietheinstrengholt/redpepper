@@ -74,7 +74,8 @@ class TemplateController extends Controller
 		}
 
 		$disabledFields = $this->getDisabledFields($template);
-		return view('templates.show', compact('section', 'template', 'disabledFields', 'searchvalue'));
+		$propertyFields = $this->getPropertyFields($template);
+		return view('templates.show', compact('section', 'template', 'disabledFields', 'propertyFields', 'searchvalue'));
 	}
 
 	//function to disabled fields
@@ -101,6 +102,31 @@ class TemplateController extends Controller
 
 		return $arraydisabled;
 	}
+	
+	//function to retrieve property2 fields
+	public function getPropertyFields(Template $template)
+	{
+		//check if id property exists
+		if (!$template->id) {
+			abort(403, 'This template no longer exists in the database.');
+		}
+
+		$propertyFields = TemplateField::where('template_id', $template->id)->where('property', 'property2')->get();
+
+		//Create new arrays to restructure result
+		$arrayproperty=array();
+		//Restructure array
+		if (!empty($propertyFields)) {
+			foreach ($propertyFields as $propertyField) {
+				$rowname = $propertyField->row_code;
+				$columnname = $propertyField->column_code;
+				$field = 'column' . trim($columnname) . '-' . 'row' . trim($rowname);
+				$arrayproperty[$field] = $propertyField->content;
+			}
+		}
+
+		return $arrayproperty;
+	}	
 
 	//function to edit template
 	public function edit(Section $section, Template $template)

@@ -86,6 +86,10 @@ table.template td.propertydoubletab {
 	margin-left: 100px;
 }
 
+td.tablecell {
+	text-align: center;
+}
+
 /* Changerequest page */
 
 button.changerequest.btn {
