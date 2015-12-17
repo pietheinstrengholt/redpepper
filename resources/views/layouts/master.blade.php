@@ -14,12 +14,17 @@
 	<script src="{{ URL::asset('js/app.js') }}"></script>
 
 	<!-- CSS -->
+	<link rel="stylesheet" href="{{ URL::asset('css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ URL::asset('css/app.css') }}">	
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
 	<!-- Meta base url, needed for javascript location -->
 	<meta name="base_url" content="{{ URL::to('/') }}">
-	<link rel="stylesheet" href="{{ URL::asset('css/bootstrap.min.css') }}">
-	<link rel="stylesheet" href="{{ URL::asset('css/app.css') }}">
+	
+	<!-- IE Console log fix -->
+    <script type="text/javascript"> if (!window.console) console = {log: function() {}}; </script>	
+	
 	<style type="text/css">
 		body {
 			padding-bottom: 40px;
@@ -58,12 +63,12 @@
 	  <span class="icon-bar"></span>
 	  <span class="icon-bar"></span>
 	</button>
-	<a class="navbar-brand" href="<?php echo url('/'); ?>">Home</a>
+	<a class="navbar-brand" href="{{ URL::to('/') }}">Home</a>
 	</div>
 
-	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	<div class="collapse navbar-collapse" id="navbar-collapse">
 	<ul class="nav navbar-nav">
-	  <li><a href="<?php echo url('manuals'); ?>">Manuals</a></li>
+	  <li><a href="{{ URL::to('/manuals') }}">Manuals</a></li>
 	  <li class="dropdown">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sections <span class="caret"></span></a>
 		<ul class="dropdown-menu" role="menu">
@@ -75,7 +80,7 @@
 		</ul>
 	  </li>
 	</ul>
-	<form class="navbar-form navbar-left" role="search" action="<?php echo url('search'); ?>" method="post">
+	<form class="navbar-form navbar-left" role="search" action="{{ URL::to('/search') }}" method="post">
 	<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 	  <div class="form-group">
 		<input type="text" name="search" class="form-control" placeholder="Search for content">
@@ -87,36 +92,36 @@
 	  <li class="dropdown">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin menu <span class="caret"></span></a>
 		<ul class="dropdown-menu" role="menu">
-		  <li><a href="<?php echo url('types'); ?>">Edit types</a></li>
-		  <li><a href="<?php echo url('sources'); ?>">Edit sources</a></li>
-		  <li><a href="<?php echo url('departments'); ?>">Edit departments</a></li>
-		  <li><a href="<?php echo url('users'); ?>">Edit users</a></li>
+		  <li><a href="{{ URL::to('/types') }}">Edit types</a></li>
+		  <li><a href="{{ URL::to('/sources') }}">Edit sources</a></li>
+		  <li><a href="{{ URL::to('/departments') }}">Edit departments</a></li>
+		  <li><a href="{{ URL::to('/users') }}">Edit users</a></li>
 		  <li class="divider"></li>
-		  <li><a href="<?php echo url('csv/importcontent'); ?>">Import content</a></li>
-		  <li><a href="<?php echo url('csv/importfields'); ?>">Import fields</a></li>
-		  <li><a href="<?php echo url('csv/importrows'); ?>">Import rows</a></li>
-		  <li><a href="<?php echo url('csv/importcolumns'); ?>">Import columns</a></li>
-		  <li><a href="<?php echo url('csv/importtech'); ?>">Import technical</a></li>
+		  <li><a href="{{ URL::to('/csv/importcontent') }}">Import content</a></li>
+		  <li><a href="{{ URL::to('/csv/importfields') }}">Import fields</a></li>
+		  <li><a href="{{ URL::to('/csv/importrows') }}">Import rows</a></li>
+		  <li><a href="{{ URL::to('/csv/importcolumns') }}">Import columns</a></li>
+		  <li><a href="{{ URL::to('/csv/importtech') }}">Import technical</a></li>
 		  <li class="divider"></li>
-		  <li><a href="<?php echo url('changerequests'); ?>">Change requests</a></li>
+		  <li><a href="{{ URL::to('/changerequests') }}">Change requests</a></li>
 		  <li class="divider"></li>
-		  <li><a href="<?php echo url('logs'); ?>">User activities</a></li>
+		  <li><a href="{{ URL::to('/logs') }}">User activities</a></li>
 		  <li class="divider"></li>
-		  <li><a href="<?php echo url('excel/upload'); ?>">Upload excel template</a></li>
+		  <li><a href="{{ URL::to('/excel/upload') }}">Upload excel template</a></li>
 		</ul>
 	  </li>
 	</ul>
 	@endif
 	<ul class="nav navbar-nav navbar-right">
 	@if (Auth::guest())
-	  <li><a href="<?php echo url('/auth/login'); ?>">Login</a></li>
-	  <li><a href="<?php echo url('/auth/register'); ?>">Register</a></li>
+	  <li><a href="{{ URL::to('//auth/login') }}">Login</a></li>
+	  <li><a href="{{ URL::to('//auth/register') }}">Register</a></li>
 	@else
-	  <li><a href="<?php echo url('/auth/logout'); ?>">Logout</a></li>
+	  <li><a href="{{ URL::to('//auth/logout') }}">Logout</a></li>
 	@endif
 	</ul>
-	</div>
-	</div>
+    </div><!-- /.navbar-collapse -->
+	</div><!-- /.container-fluid -->
 </nav>
 
 	<body>

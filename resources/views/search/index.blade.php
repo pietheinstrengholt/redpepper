@@ -16,7 +16,7 @@
 
 		@foreach( $rows as $row )
 			<tr>
-			<td><a href="<?php echo url('sections/' . $row->template->section_id . '/templates/' . $row->template_id . '?row=' . $row->row_code); ?>">{{ $row->template->template_name }}</a></td>
+			<td><a href="{!! url('sections/' . $row->template->section_id . '/templates/' . $row->template_id . '?row=' . $row->row_code); !!}">{{ $row->template->template_name }}</a></td>
 			<td>{{ $row->row_code }}</td>
 			<td>{{ $row->row_description }}</td>
 			</tr>
@@ -36,7 +36,7 @@
 
 		@foreach( $columns as $column )
 			<tr>
-			<td><a href="<?php echo url('sections/' . $column->template->section_id . '/templates/' . $column->template_id . '?column=' . $column->column_code); ?>">{{ $column->template->template_name }}</a></td>
+			<td><a href="{!! url('sections/' . $column->template->section_id . '/templates/' . $column->template_id . '?column=' . $column->column_code); !!}">{{ $column->template->template_name }}</a></td>
 			<td>{{ $column->column_code }}</td>
 			<td>{{ $column->column_description }}</td>
 			</tr>
@@ -58,7 +58,7 @@
 
 		@foreach( $fields as $field )
 			<tr>
-			<td><a href="<?php echo url('sections/' . $field->template->section_id . '/templates/' . $field->template_id . '?row=' . $field->row_code . '&column=' . $field->column_code); ?>">{{ $field->template->template_name }}</a></td>
+			<td><a href="{!! url('sections/' . $field->template->section_id . '/templates/' . $field->template_id . '?row=' . $field->row_code . '&column=' . $field->column_code); !!}">{{ $field->template->template_name }}</a></td>
 			<td>{{ $field->row_code }}</td>
 			<td>{{ $field->column_code }}</td>
 			<td>{{ $field->property }}</td>
@@ -81,7 +81,7 @@
 
 		@foreach( $requirements as $requirement )
 			<tr>
-			<td><a href="<?php echo url('sections/' . $requirement->template->section_id . '/templates/' . $requirement->template_id . '?field_id=' . $requirement->field_id); ?>">{{ $requirement->template->template_name }}</a></td>
+			<td><a href="{!! url('sections/' . $requirement->template->section_id . '/templates/' . $requirement->template_id . '?field_id=' . $requirement->field_id); !!}">{{ $requirement->template->template_name }}</a></td>
 			<td>{{ $requirement->field_id }}</td>
 			<td>{{ $requirement->content_type }}</td>
 			<td>{{ $requirement->content }}</td>
@@ -106,7 +106,7 @@
 
 		@foreach( $technicals as $technical )
 			<tr>
-			<td><a href="<?php echo url('sections/' . $technical->template->section_id . '/templates/' . $technical->template_id . '?row=' . $technical->row_code . '&column=' . $technical->column_code); ?>">{{ $technical->template->template_name }}</a></td>
+			<td><a href="{!! url('sections/' . $technical->template->section_id . '/templates/' . $technical->template_id . '?row=' . $technical->row_code . '&column=' . $technical->column_code); !!}">{{ $technical->template->template_name }}</a></td>
 			<td>{{ $technical->row_code }}</td>
 			<td>{{ $technical->column_code }}</td>
 			<td>{{ $technical->source->source_name }}</td>
