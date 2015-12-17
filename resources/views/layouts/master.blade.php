@@ -23,41 +23,19 @@
 	<meta name="base_url" content="{{ URL::to('/') }}">
 	
 	<!-- IE Console log fix -->
-    <script type="text/javascript"> if (!window.console) console = {log: function() {}}; </script>	
-	
-	<style type="text/css">
-		body {
-			padding-bottom: 40px;
-		}
-		.sidebar-nav {
-			padding: 9px 0;
-		}
-		@media (max-width: 980px) {
-			/* Enable use of floated navbar text */
-			padding-top: 0px;
-			.navbar-text.pull-right {
-				float: none;
-				padding-left: 5px;
-				padding-right: 5px;
-			}
-		}
-	</style>
-
-	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-	<script src="{{ URL::asset('js/html5shiv.js') }}"></script>
-	<script src="{{ URL::asset('js/respond.min.js') }}"></script>
-	<link href="{{ URL::asset('css/ie8.css') }}" rel="stylesheet" media="screen">
-	<![endif]-->
+    <script type="text/javascript"> if (!window.console) console = {log: function() {}}; </script>
 
 	@show
 </head>
 
+<!--[if lt IE 9]>
+	<div id="ie8"><p>IE8 is no longer supported. You're using a unsupported version of Internet Explorer. Please upgrade or use Google Chrome instead.</p></div>
+<![endif]-->
+
 <nav class="navbar navbar-default navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="navbar-collapse-1">
 			  <span class="sr-only">Toggle navigation</span>
 			  <span class="icon-bar"></span>
 			  <span class="icon-bar"></span>
@@ -66,7 +44,7 @@
 			<a class="navbar-brand" href="{{ URL::to('/') }}">Home</a>
 		</div>
 
-		<div class="collapse navbar-collapse" id="navbar-collapse">
+		<div class="collapse navbar-collapse" id="navbar-collapse-2">
 			<ul class="nav navbar-nav">
 			  <li><a href="{{ URL::to('/manuals') }}">Manuals</a></li>
 			  <li class="dropdown">
@@ -124,28 +102,22 @@
 	</div><!-- /.container-fluid -->
 </nav>
 
-	<body>
+<body>
 	<!-- Container -->
 	<div class="container">
 
-	<!-- Session content -->
-	@if (Session::has('message'))
-		<div id="session-alert" class="alert alert-warning alert-dismissible" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<p>{{ Session::get('message') }}</p>
-		</div>
-	@endif
+		<!-- Session content -->
+		@if (Session::has('message'))
+			<div id="session-alert" class="alert alert-warning alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<p>{{ Session::get('message') }}</p>
+			</div>
+		@endif
 
-
-	<!-- Content -->
-	@yield('content')
+		<!-- Content -->
+		@yield('content')
 
 	</div>
 
-	@section('footer_scripts')
-	<!-- Add Internet Explorer console log function -->
-	<script type="text/javascript"> if (!window.console) console = {log: function() {}}; </script>
-	@show
-
-    </body>
+	</body>
 </html>

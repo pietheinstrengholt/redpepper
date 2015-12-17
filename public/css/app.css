@@ -8,16 +8,39 @@
   }
 }
 
+@media (max-width: 980px) {
+	/* Enable use of floated navbar text */
+	padding-top: 0px;
+	.navbar-text.pull-right {
+		float: none;
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+}
+
 body {
 	line-height: 1.25em ! important;
 }
 
 div.container {
 	margin-top: 60px;
+	margin-bottom: 20px;
 }
 
 div#session-alert {
 	margin-top:10px;
+}
+
+div#ie8 {
+	top: 60px;
+	position: fixed;
+	background-color: yellow;
+	width: 100%;
+	height: 30px;
+}
+
+div#ie8 p {
+	padding: 8px;
 }
 
 /* Section Breadcrumb */
