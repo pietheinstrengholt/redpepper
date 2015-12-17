@@ -74,7 +74,7 @@ table.template td.propertydoubletab {
 }
 
 .modal-body #row_regulation, .modal-body #row_interpretation,  .modal-body #column_regulation,  .modal-body #column_interpretation {
-	min-height:20px;
+	min-height: 20px;
 }
 
  .modal-body div.technical-info {
@@ -93,14 +93,18 @@ td.tablecell {
 /* Changerequest page */
 
 button.changerequest.btn {
-	float:left;
-	margin-right:20px;
+	float: left;
+	margin-right: 20px;
 }
 
 /* Search */
 
 search-table.table {
-	margin-buttom:20px;
+	margin-buttom: 20px;
+}
+
+button#advanced-search {
+	margin-bottom: 20px;
 }
 
 /* Pop-up window and technical */
@@ -136,10 +140,6 @@ table.dialog  textarea#regulation_row, table.dialog  textarea#interpretation_row
 	width: 90%;
 }
 
-table.dialog {
-
-}
-
 div#cell-update {
-	margin-top:20px;
+	margin-top: 20px;
 }
