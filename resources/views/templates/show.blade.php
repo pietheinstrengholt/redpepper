@@ -86,7 +86,7 @@
     @endif
 
 	<p>
-	{!! link_to_route('sections.index', 'Back to Sections') !!}
+	<a href="{!! url('/sections/' . $template->section->id); !!}">Back to Sections</a>
 	</p>
 
 	<!-- Modal pop-up -->
