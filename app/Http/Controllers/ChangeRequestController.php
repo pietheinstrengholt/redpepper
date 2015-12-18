@@ -79,6 +79,11 @@ class ChangeRequestController extends Controller
 		if (Auth::user()->role == "superadmin") {
 			$changerequests = ChangeRequest::orderBy('created_at', 'desc')->get();
 		}
+		
+		//check if any change request are found
+		if (empty($changerequests)) {
+			abort(403, 'No changerequests found, based on user credentials and submitted content by other users.');
+		}
 
 		return view('changerequests.index', compact('changerequests'));
     }
