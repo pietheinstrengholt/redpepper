@@ -70,32 +70,38 @@
 			  <li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin menu <span class="caret"></span></a>
 				<ul class="dropdown-menu" role="menu">
-				  <li><a href="{{ URL::to('/types') }}">Edit types</a></li>
-				  <li><a href="{{ URL::to('/sources') }}">Edit sources</a></li>
-				  <li><a href="{{ URL::to('/departments') }}">Edit departments</a></li>
-				  <li><a href="{{ URL::to('/users') }}">Edit users</a></li>
-				  <li class="divider"></li>
-				  <li><a href="{{ URL::to('/csv/importcontent') }}">Import content</a></li>
-				  <li><a href="{{ URL::to('/csv/importfields') }}">Import fields</a></li>
-				  <li><a href="{{ URL::to('/csv/importrows') }}">Import rows</a></li>
-				  <li><a href="{{ URL::to('/csv/importcolumns') }}">Import columns</a></li>
-				  <li><a href="{{ URL::to('/csv/importtech') }}">Import technical</a></li>
-				  <li class="divider"></li>
+				  @if (Auth::user()->role == "superadmin")				
+					  <li><a href="{{ URL::to('/types') }}">Edit types</a></li>
+					  <li><a href="{{ URL::to('/sources') }}">Edit sources</a></li>
+					  <li><a href="{{ URL::to('/departments') }}">Edit departments</a></li>
+					  <li><a href="{{ URL::to('/users') }}">Edit users</a></li>
+					  <li class="divider"></li>
+					  <li><a href="{{ URL::to('/csv/importcontent') }}">Import content</a></li>
+					  <li><a href="{{ URL::to('/csv/importfields') }}">Import fields</a></li>
+					  <li><a href="{{ URL::to('/csv/importrows') }}">Import rows</a></li>
+					  <li><a href="{{ URL::to('/csv/importcolumns') }}">Import columns</a></li>
+					  <li><a href="{{ URL::to('/csv/importtech') }}">Import technical</a></li>
+					  <li class="divider"></li>
+				  @endif
 				  <li><a href="{{ URL::to('/changerequests') }}">Change requests</a></li>
-				  <li class="divider"></li>
-				  <li><a href="{{ URL::to('/logs') }}">User activities</a></li>
-				  <li class="divider"></li>
-				  <li><a href="{{ URL::to('/excel/upload') }}">Upload excel template</a></li>
+				  @if (Auth::user()->role == "superadmin" || Auth::user()->role == "admin")
+					  <li class="divider"></li>					  
+					  <li><a href="{{ URL::to('/logs') }}">User activities</a></li>
+					  <li class="divider"></li>
+				  @endif
+				  @if (Auth::user()->role == "superadmin" || Auth::user()->role == "admin" || Auth::user()->role == "builder")
+					<li><a href="{{ URL::to('/excel/upload') }}">Upload excel template</a></li>
+				  @endif
 				</ul>
 			  </li>
 			</ul>
 			@endif
 			<ul class="nav navbar-nav navbar-right">
 			@if (Auth::guest())
-			  <li><a href="{{ URL::to('//auth/login') }}">Login</a></li>
-			  <li><a href="{{ URL::to('//auth/register') }}">Register</a></li>
+			  <li><a href="{{ URL::to('/auth/login') }}">Login</a></li>
+			  <li><a href="{{ URL::to('/auth/register') }}">Register</a></li>
 			@else
-			  <li><a href="{{ URL::to('//auth/logout') }}">Logout</a></li>
+			  <li><a href="{{ URL::to('/auth/logout') }}">Logout</a></li>
 			@endif
 			</ul>
 		</div><!-- /.navbar-collapse -->
