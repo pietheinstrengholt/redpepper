@@ -32,10 +32,12 @@
 			<td>{{ $section->section_description }}</td>
 			<td>
 			@if (!Auth::guest())
-				{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('sections.destroy', $section->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this section?\')')) !!}
-				{!! link_to_route('sections.edit', 'Edit', array($section->id), array('class' => 'btn btn-info btn-xs')) !!}
-				{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
-				{!! Form::close() !!}
+				@if (Auth::user()->role == "superadmin" || Auth::user()->role == "admin")
+					{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('sections.destroy', $section->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this section?\')')) !!}
+					{!! link_to_route('sections.edit', 'Edit', array($section->id), array('class' => 'btn btn-info btn-xs')) !!}
+					{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
+					{!! Form::close() !!}
+				@endif
 			@endif
 			</td>
 			</tr>
