@@ -178,5 +178,10 @@ class UserController extends Controller
 		$user->delete();
 		return Redirect::route('users.index')->with('message', 'User deleted.');
 	}
+	
+	public function show(User $user)
+	{
+		abort(403, 'Incorrect username and password combination.');
+	}	
 
 }
