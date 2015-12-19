@@ -58,5 +58,3 @@
 	</p>
 
 @endsection
-
-@stop

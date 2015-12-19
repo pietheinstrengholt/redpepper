@@ -90,5 +90,3 @@
 	</div>
 
 @endsection
-
-@stop

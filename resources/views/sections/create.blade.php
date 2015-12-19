@@ -18,5 +18,3 @@
 	@include('sections/partials/_form', ['submit_text' => 'Create Section'])
 	{!! Form::close() !!}
 @endsection
-
-@stop

@@ -18,5 +18,3 @@
 	@include('departments/partials/_form', ['submit_text' => 'Create Department'])
 	{!! Form::close() !!}
 @endsection
-
-@stop

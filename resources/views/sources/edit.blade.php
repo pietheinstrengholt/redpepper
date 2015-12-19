@@ -18,5 +18,3 @@
 	@include('sources/partials/_form', ['submit_text' => 'Edit Source'])
 	{!! Form::close() !!}
 @endsection
-
-@stop

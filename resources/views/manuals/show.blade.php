@@ -37,5 +37,3 @@
 	<p><a href="{{ url('manuals') }}">Back to manuals</a></p>
 
 @endsection
-
-@stop

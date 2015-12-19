@@ -113,5 +113,3 @@
 	</p>
 
 @endsection
-
-@stop

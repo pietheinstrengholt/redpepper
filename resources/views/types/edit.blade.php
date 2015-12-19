@@ -18,5 +18,3 @@
 	@include('types/partials/_form', ['submit_text' => 'Edit Type'])
 	{!! Form::close() !!}
 @endsection
-
-@stop

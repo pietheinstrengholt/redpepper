@@ -8,5 +8,3 @@
 	@include('templates/partials/_form', ['submit_text' => 'Edit Template'])
 	{!! Form::close() !!}
 @endsection
-
-@stop

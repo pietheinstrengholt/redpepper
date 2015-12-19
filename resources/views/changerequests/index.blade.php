@@ -80,5 +80,3 @@
 	{!! Form::close() !!}
 
 @endsection
-
-@stop

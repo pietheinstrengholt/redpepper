@@ -18,5 +18,3 @@
 	@include('users/partials/_form', ['submit_text' => 'Edit User'])
 	{!! Form::close() !!}
 @endsection
-
-@stop

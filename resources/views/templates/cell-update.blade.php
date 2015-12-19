@@ -232,5 +232,3 @@
 </form>
 
 @endsection
-
-@stop

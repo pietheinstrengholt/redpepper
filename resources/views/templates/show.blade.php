@@ -121,5 +121,3 @@
 	</div><!-- /.modal -->
 
 @endsection
-
-@stop
