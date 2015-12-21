@@ -46,7 +46,7 @@ class TemplateController extends Controller
 
 		//check if id property exists
 		if (!$section->id) {
-			abort(403, 'This template no longer exists in the database.');
+			abort(403, 'This section no longer exists in the database.');
 		}
 
 		//set empty search value
