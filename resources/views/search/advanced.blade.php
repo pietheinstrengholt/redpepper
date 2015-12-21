@@ -4,6 +4,16 @@
 @section('content')
 	<h2>Advanced search</h2>
 	<h4>Use the search form below</h4>
+	
+	@if (count($errors) > 0)
+		<div class="alert alert-danger">
+		<ul>
+		@foreach ($errors->all() as $error)
+			<li>{{ $error }}</li>
+		@endforeach
+		</ul>
+		</div>
+	@endif	
 
 	{!! Form::open(array('action' => 'SearchController@search', 'id' => 'form')) !!}
 
@@ -13,7 +23,7 @@
 
 	<div class="form-group">
 	<label for="caption">Search for:</label>
-	<input type="text" class="form-control" name="search" value="">
+	<input type="text" class="form-control" name="search" value="{{ old('search') }}">
 	</div>
 
 	<div class="row">
@@ -47,7 +57,7 @@
 	<button type="submit" class="btn btn-primary" id="advanced-search">Search</button>
 
 	</div>
-
+	<input type="hidden" name="advanced-search" value="yes">
 	<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 	{!! Form::close() !!}
 

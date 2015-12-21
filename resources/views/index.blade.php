@@ -11,6 +11,17 @@
 		<div id="intro-header-row" class="row">
 			<div id="intro-header-col-lg-12" class="col-lg-12">
 				<div class="intro-message">
+				
+					@if (count($errors) > 0)
+						<div class="alert alert-danger">
+						<ul>
+						@foreach ($errors->all() as $error)
+							<li>{{ $error }}</li>
+						@endforeach
+						</ul>
+						</div>
+					@endif
+				
 					<h1>FRC RADAR Tool</h1>
 					<h3>Zichtbaar in control</h3>
 					<hr style="margin-right:1000px;" class="intro-divider">
@@ -18,7 +29,6 @@
 						<li><a href="{{ url('sections') }}" class="btn btn-default btn-lg"><span class="network-name"><span style="margin-right:3px;" class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>All regulatory reports</span></a></li>
 						<li><a href="doc/FRC_RADAR_Tooling_User_Manual.pdf" class="btn btn-default btn-lg"><span class="network-name"><span style="margin-right:3px;" class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>Instruction manual</span></a></li>
 						<li><a href="{{ url('advancedsearch') }}" class="btn btn-default btn-lg"><span class="network-name"><span style="margin-right:3px;" class="glyphicon glyphicon-search" aria-hidden="true"></span>Advanced search</span></a></li>
-
 					</ul>
 				</div>
 			</div>
