@@ -369,6 +369,12 @@ class TemplateController extends Controller
 		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');
 		}
+		
+		//validate input form
+		$this->validate($request, [
+			'template_name' => 'required|min:6',
+			'template_shortdesc' => 'required'
+		]);		
 
 		$input = Input::all();
 		$input['section_id'] = $section->id;
@@ -388,12 +394,18 @@ class TemplateController extends Controller
 	}
 
 	//function to update template
-	public function update(Section $section, Template $template)
+	public function update(Section $section, Template $template, Request $request)
 	{
 		//check for superadmin permissions
 		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');
 		}
+		
+		//validate input form
+		$this->validate($request, [
+			'template_name' => 'required|min:6',
+			'template_shortdesc' => 'required'
+		]);			
 		
 		//log Event
 		$event = array(

@@ -141,6 +141,12 @@ class SectionController extends Controller
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }
+		
+		//validate input form
+		$this->validate($request, [
+			'section_name' => 'required|min:4',
+			'section_description' => 'required'
+		]);
 
 		$input = array_except(Input::all(), '_method');
 		$section->update($input);
