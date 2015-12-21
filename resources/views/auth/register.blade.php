@@ -29,14 +29,14 @@
 							<div class="form-group">
 								<label class="col-md-4 control-label">First Name</label>
 								<div class="col-md-6">
-									<input type="text" class="form-control" name="firstname" value="{{ old('first_name') }}">
+									<input type="text" class="form-control" name="firstname" value="{{ old('firstname') }}">
 								</div>
 							</div>
 
 							<div class="form-group">
 								<label class="col-md-4 control-label">Last Name</label>
 								<div class="col-md-6">
-									<input type="text" class="form-control" name="lastname" value="{{ old('last_name') }}">
+									<input type="text" class="form-control" name="lastname" value="{{ old('lastname') }}">
 								</div>
 							</div>
 
