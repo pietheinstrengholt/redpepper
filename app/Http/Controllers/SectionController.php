@@ -19,7 +19,7 @@ use App\Events\ChangeEvent;
 class SectionController extends Controller
 {
     public function index(Request $request)
-    {
+    {	
 		//only superadmin can see all sections
 		if (Gate::denies('superadmin')) {
 			if ($request->has('subject_id')) {
@@ -122,7 +122,16 @@ class SectionController extends Controller
 
 		$input = Input::all();
 		Section::create($input);
-		Event::fire(new ChangeEvent('Section', $request->input('section_name') . ' has been added by', Auth::user()->id));
+
+		//log Event		
+		$event = array(
+			"content_type" => "Section",
+			"content_action" => "created",
+			"content_name" => $request->input('section_name'),
+			"created_by" => Auth::user()->id
+		);
+		
+		Event::fire(new ChangeEvent($event));
 		return Redirect::route('sections.index')->with('message', 'Section created');
 	}
 
@@ -133,16 +142,19 @@ class SectionController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-		//validate input form
-		$this->validate($request, [
-			'section_name' => 'required',
-			'section_description' => 'required',
-			'subject_id' => 'required'
-		]);
-
 		$input = array_except(Input::all(), '_method');
 		$section->update($input);
-		Event::fire(new ChangeEvent('Section', $request->input('section_name') . ' has been added by', Auth::user()->id));
+
+		//log Event
+		$event = array(
+			"content_type" => "Section",
+			"content_action" => "updated",
+			"content_name" => $request->input('section_name'),
+			"created_by" => Auth::user()->id
+		);
+		
+		Event::fire(new ChangeEvent($event));		
+		
 		return Redirect::route('sections.show', $section->id)->with('message', 'Section updated.');
 	}
 
@@ -168,7 +180,16 @@ class SectionController extends Controller
 		}
 
 		Template::where('section_id', $section->id)->delete();
-		Event::fire(new ChangeEvent('Section', $section->section_name . ' has been deleted by', Auth::user()->id));
+		
+		//log Event
+		$event = array(
+			"content_type" => "Section",
+			"content_action" => "deleted",
+			"content_name" => $section->section_name,
+			"created_by" => Auth::user()->id
+		);
+		
+		Event::fire(new ChangeEvent($event));
 
 		$section->delete();
 		return Redirect::route('sections.index')->with('message', 'Section deleted.');

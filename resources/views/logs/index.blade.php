@@ -14,19 +14,21 @@
 	@if ( !$logs->count() )
 		No logs have been found in the database!<br><br>
 	@else
-		<table class="table section-table dialog table-striped" border="1">
+		<table class="table section-table dialog table-striped table-condensed" border="1">
 
 		<tr class="success">
-		<td class="header">Action type</td>
-		<td class="header">Description</td>
+		<td class="header">Content type</td>
+		<td class="header">Action</td>		
+		<td class="header">Content name</td>
 		<td class="header" style="width: 20%;">User</td>
 		<td class="header">Created</td>
 		</tr>
 
 		@foreach( $logs as $log )
 			<tr>
-			<td>{{ $log->content }}</a></td>
-			<td>{{ $log->description }}</a></td>
+			<td>{{ $log->content_type }}</a></td>
+			<td>{{ $log->content_action }}</a></td>
+			<td>{{ $log->content_name }}</a></td>			
 			<td>{{ $log->user->firstname }} {{ $log->user->lastname }} ({{ $log->user->username }})</a></td>
 			<td>{{ $log->created_at }}</a></td>
 			</tr>

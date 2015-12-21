@@ -299,8 +299,15 @@ class ChangeRequestController extends Controller
 					abort(403, 'Error: change request already processed!');
 				}
 
-				//submit event to log
-				Event::fire(new ChangeEvent('Changerequest', 'Changerequest id ' . $request->input('changerequest_id') . ' has been ' . $request->input('status'), Auth::user()->id));
+				//log Event
+				$event = array(
+					"content_type" => "ChangeRequest",
+					"content_action" => $request->input('change_type'),
+					"content_name" => $request->input('changerequest_id'),
+					"created_by" => Auth::user()->id
+				);
+				
+				Event::fire(new ChangeEvent($event));				
 
 				//update change request
 				if ($request->input('change_type') == "rejected") {
@@ -339,8 +346,7 @@ class ChangeRequestController extends Controller
 						$field_regulation = TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('property', 'regulation')->first();
 						$field_interpretation = TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('property', 'interpretation')->first();
 						$technical = Technical::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->get();
-
-
+						
 						//delete any existing if empty is proposed
 						if (count($DraftRegulation_row) == 0) {
 							Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'R-' . $ChangeRequest->row_code)->where('content_type', 'regulation')->delete();
@@ -808,6 +814,16 @@ class ChangeRequestController extends Controller
 			$changerequest->creator_id = Auth::user()->id;
 			$changerequest->status = 'pending';
 			$changerequest->save();
+			
+			//log Event
+			$event = array(
+				"content_type" => "ChangeRequest",
+				"content_action" => "created",
+				"content_name" => $changerequest->id,
+				"created_by" => Auth::user()->id
+			);
+			
+			Event::fire(new ChangeEvent($event));		
 
 			if ($request->has('regulation_row')) {
 				$draftrequirement = new DraftRequirement;

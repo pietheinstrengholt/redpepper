@@ -836,7 +836,18 @@ class ExcelController extends Controller
 					});
 				}
 			}
-			Event::fire(new ChangeEvent('Excel', $request->input('template_name') . ' template has been added', Auth::user()->id));
+			
+			
+			//log Event
+			$event = array(
+				"content_type" => "Template Excel",
+				"content_action" => "created",
+				"content_name" => $request->input('template_name'),
+				"created_by" => Auth::user()->id
+			);
+			
+			Event::fire(new ChangeEvent($event));
+
 			return Redirect::to('/sections');
 		}
 	}

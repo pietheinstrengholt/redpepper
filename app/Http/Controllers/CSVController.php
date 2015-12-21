@@ -65,8 +65,20 @@ class CSVController extends Controller
 						//import rows function
 						if ($request->input('formname') == "importtech" && $request->has('section_id')) {
 
+						
+							$section = Section::findOrFail($request->input('section_id'));
 							$templates = Template::where('section_id', $request->has('section_id'))->get();
-							Event::fire(new ChangeEvent('CSV Upload', 'Section id' . $request->input('section_id') . ' has been changed with new techncial content', Auth::user()->id));
+							
+							//log Event
+							$event = array(
+								"content_type" => "CSV Section",
+								"content_action" => "technical imported",
+								"content_name" => $section->section_name,
+								"created_by" => Auth::user()->id
+							);
+							
+							Event::fire(new ChangeEvent($event));
+							
 							if (!empty($templates)) {
 								foreach ($templates as $template) {
 									Technical::where('section_id', $template->id)->delete();
@@ -95,9 +107,20 @@ class CSVController extends Controller
 
 						//import rows function
 						if ($request->input('formname') == "importrows" && $request->has('template_id')) {
+							
+							$template = Template::findOrFail($request->input('template_id'));
+							
+							//log Event
+							$event = array(
+								"content_type" => "CSV Template",
+								"content_action" => "rows imported",
+								"content_name" => $template->template_name,
+								"created_by" => Auth::user()->id
+							);
+							
+							Event::fire(new ChangeEvent($event));
 
 							TemplateRow::where('template_id', $request->has('template_id'))->delete();
-							Event::fire(new ChangeEvent('CSV Upload', 'Template id' . $request->input('template_id') . ' has been changed with new rows', Auth::user()->id));
 							foreach ($csvarray as $csv) {
 
 								if (array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('row_code', $csv) && array_key_exists('row_description', $csv)) {
@@ -118,9 +141,20 @@ class CSVController extends Controller
 
 						//import columns function
 						if ($request->input('formname') == "importcolumns" && $request->has('template_id')) {
+							
+							$template = Template::findOrFail($request->input('template_id'));
+							
+							//log Event
+							$event = array(
+								"content_type" => "CSV Template",
+								"content_action" => "columns imported",
+								"content_name" => $template->template_name,
+								"created_by" => Auth::user()->id
+							);
+							
+							Event::fire(new ChangeEvent($event));
 
 							TemplateColumn::where('template_id', $request->has('template_id'))->delete();
-							Event::fire(new ChangeEvent('CSV Upload', 'Template id' . $request->input('template_id') . ' has been changed with new columns', Auth::user()->id));
 							foreach ($csvarray as $csv) {
 
 								if (array_key_exists('template_id', $csv) && array_key_exists('column_num', $csv) && array_key_exists('column_code', $csv) && array_key_exists('column_description', $csv)) {
@@ -141,8 +175,19 @@ class CSVController extends Controller
 						//import fields function
 						if ($request->input('formname') == "importfields" && $request->has('template_id')) {
 
+							$template = Template::findOrFail($request->input('template_id'));
+							
+							//log Event
+							$event = array(
+								"content_type" => "CSV Template",
+								"content_action" => "columns imported",
+								"content_name" => $template->template_name,
+								"created_by" => Auth::user()->id
+							);
+							
+							Event::fire(new ChangeEvent($event));
+						
 							TemplateField::where('template_id', $request->has('template_id'))->delete();
-							Event::fire(new ChangeEvent('CSV Upload', 'Template id' . $request->input('template_id') . ' has been changed with new fields', Auth::user()->id));
 							foreach ($csvarray as $csv) {
 
 								if (array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('column_code', $csv) && array_key_exists('property', $csv) && array_key_exists('content', $csv)) {
@@ -164,8 +209,20 @@ class CSVController extends Controller
 						//import content function
 						if ($request->input('formname') == "importcontent" && $request->has('template_id')) {
 
+							$template = Template::findOrFail($request->input('template_id'));
+							
+							//log Event
+							$event = array(
+								"content_type" => "CSV Template",
+								"content_action" => "rows imported",
+								"content_name" => $template->template_name,
+								"created_by" => Auth::user()->id
+							);
+							
+							Event::fire(new ChangeEvent($event));
+						
 							Requirement::where('template_id', $request->has('template_id'))->delete();
-							Event::fire(new ChangeEvent('CSV Upload', 'Template id' . $request->input('template_id') . ' has been changed with new content', Auth::user()->id));
+
 							foreach ($csvarray as $csv) {
 
 								if (array_key_exists('template_id', $csv) && array_key_exists('field_id', $csv) && array_key_exists('content_type', $csv) && array_key_exists('content', $csv)) {

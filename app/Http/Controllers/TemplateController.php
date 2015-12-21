@@ -172,8 +172,16 @@ class TemplateController extends Controller
 			'template_shortdesc' => 'required',
 			'section_id' => 'required'
 		]);
-
-		Event::fire(new ChangeEvent('Template wizard', $request->input('template_name') . ' has been created', Auth::user()->id));
+		
+		//log Event
+		$event = array(
+			"content_type" => "Template Wizard",
+			"content_action" => "created",
+			"content_name" => $request->input('template_name'),
+			"created_by" => Auth::user()->id
+		);
+		
+		Event::fire(new ChangeEvent($event));
 
 		if ($request->isMethod('post')) {
 
@@ -240,7 +248,15 @@ class TemplateController extends Controller
 
 		$template = Template::findOrFail($request->input('template_id'));
 
-		Event::fire(new ChangeEvent('Template', $template->template_name . ' structure has been created', Auth::user()->id));
+		//log Event
+		$event = array(
+			"content_type" => "Template Structure",
+			"content_action" => "updated",
+			"content_name" => $template->template_name,
+			"created_by" => Auth::user()->id
+		);
+		
+		Event::fire(new ChangeEvent($event));
 
 		if ($request->isMethod('post')) {
 
@@ -357,7 +373,17 @@ class TemplateController extends Controller
 		$input = Input::all();
 		$input['section_id'] = $section->id;
 		Template::create( $input );
-		Event::fire(new ChangeEvent('Template', $template->template_name . ' has been added', Auth::user()->id));
+		
+		//log Event
+		$event = array(
+			"content_type" => "Template",
+			"content_action" => "created",
+			"content_name" => $template->template_name,
+			"created_by" => Auth::user()->id
+		);
+		
+		Event::fire(new ChangeEvent($event));		
+
 		return Redirect::route('sections.show', $section->id)->with('message', 'Template created.');
 	}
 
@@ -368,7 +394,17 @@ class TemplateController extends Controller
 		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');
 		}
-		Event::fire(new ChangeEvent('Template', $template->template_name . ' details have been created', Auth::user()->id));
+		
+		//log Event
+		$event = array(
+			"content_type" => "Template",
+			"content_action" => "updated",
+			"content_name" => $template->template_name,
+			"created_by" => Auth::user()->id
+		);
+		
+		Event::fire(new ChangeEvent($event));		
+
 		$input = array_except(Input::all(), '_method');
 		$template->update($input);
 		return Redirect::route('sections.templates.show', [$section->id, $template->id])->with('message', 'Template updated.');
@@ -390,7 +426,15 @@ class TemplateController extends Controller
 		Technical::where('template_id', $template->id)->delete();
 		ChangeRequest::where('template_id', $template->id)->delete();
 
-		Event::fire(new ChangeEvent('Template', $template->template_name . ' has been deleted', Auth::user()->id));
+		//log Event
+		$event = array(
+			"content_type" => "Template",
+			"content_action" => "deleted",
+			"content_name" => $template->template_name,
+			"created_by" => Auth::user()->id
+		);
+		
+		Event::fire(new ChangeEvent($event));
 
 		//delete template
 		$template->delete();

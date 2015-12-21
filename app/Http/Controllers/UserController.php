@@ -100,10 +100,22 @@ class UserController extends Controller
 		]);
 
 		if ($request->isMethod('post')) {
+			
+			//find user
+			$user = User::findOrFail($request->input('username_id'));
 
 			//update password
 			User::where('id', $request->input('username_id'))->update(['password' => bcrypt($request->input('password'))]);
-			Event::fire(new ChangeEvent('User password', 'User id ' . $request->has('username_id') . ' password has been changed', Auth::user()->id));
+			
+			//log Event
+			$event = array(
+				"content_type" => "User",
+				"content_action" => "password",
+				"content_name" => $user->username,
+				"created_by" => Auth::user()->id
+			);
+			
+			Event::fire(new ChangeEvent($event));
 		}
 		//return to user overview
 		return Redirect::route('users.index')->with('message', 'Password updated.');
@@ -126,8 +138,18 @@ class UserController extends Controller
 
 		$input = array_except(Input::all(), '_method');
 		$user->update($input);
-		Event::fire(new ChangeEvent('User details', 'User id ' . $request->input('username_id') . ' details have been changed', Auth::user()->id));
-		return Redirect::route('users.show', $user->slug)->with('message', 'User updated.');
+		
+		//log Event
+		$event = array(
+			"content_type" => "User",
+			"content_action" => "updated",
+			"content_name" => $user->username,
+			"created_by" => Auth::user()->id
+		);
+		
+		Event::fire(new ChangeEvent($event));		
+
+		return Redirect::route('users.index')->with('message', 'User updated.');
 	}
 
 	public function updaterights(Request $request)
@@ -144,8 +166,8 @@ class UserController extends Controller
 		]);
 
 		if ($request->isMethod('post')) {
+			
 			User::where('id', $request->input('username_id'))->update(['role' => $request->input('role')]);
-
 			UserRights::where('username_id', $request->input('username_id'))->delete();
 
 			if ($request->has('section')) {
@@ -160,7 +182,20 @@ class UserController extends Controller
 			}
 
 		}
-		Event::fire(new ChangeEvent('User rights', 'User id ' . $request->input('username_id') . ' rights have been changed', Auth::user()->id));
+
+		//find user
+		$user = User::findOrFail($request->input('username_id'));	
+		
+		//log Event
+		$event = array(
+			"content_type" => "User",
+			"content_action" => "rights",
+			"content_name" => $user->username,
+			"created_by" => Auth::user()->id
+		);
+		
+		Event::fire(new ChangeEvent($event));			
+		
 		return Redirect::route('users.index')->with('message', 'User updated.');
 	}
 
@@ -176,6 +211,20 @@ class UserController extends Controller
 
 		//delete user
 		$user->delete();
+		
+		//find user
+		$user = User::findOrFail($request->input('username_id'));	
+		
+		//log Event
+		$event = array(
+			"content_type" => "User",
+			"content_action" => "rights",
+			"content_name" => $user->username,
+			"created_by" => Auth::user()->id
+		);
+		
+		Event::fire(new ChangeEvent($event));
+		
 		return Redirect::route('users.index')->with('message', 'User deleted.');
 	}
 	
