@@ -22,7 +22,7 @@ class UserController extends Controller
     {
 		//check for superadmin permissions
 		if (Gate::denies('superadmin')) {
-		abort(403, 'Unauthorized action.');
+			abort(403, 'Unauthorized action.');
 		}
 
 		$users = User::orderBy('username', 'asc')->get();
@@ -33,7 +33,7 @@ class UserController extends Controller
 	{
 		//check for superadmin permissions
 		if (Gate::denies('superadmin')) {
-		  abort(403, 'Unauthorized action.');
+			abort(403, 'Unauthorized action.');
 		}
 
 		//check if id property exists
@@ -48,9 +48,9 @@ class UserController extends Controller
 	public function rights($id)
 	{
 		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		$roles = array(
 			"superadmin" => "superadmin",
@@ -80,7 +80,7 @@ class UserController extends Controller
 	{
 		//check for superadmin permissions
 		if (Gate::denies('superadmin')) {
-		  abort(403, 'Unauthorized action.');
+			abort(403, 'Unauthorized action.');
 		}
 
 		$user = User::findOrFail($id);
@@ -91,7 +91,7 @@ class UserController extends Controller
 	{
 		//check for superadmin permissions
 		if (Gate::denies('superadmin')) {
-		  abort(403, 'Unauthorized action.');
+			abort(403, 'Unauthorized action.');
 		}
 
 		//validate input form
@@ -113,7 +113,7 @@ class UserController extends Controller
 	{
 		//check for superadmin permissions
 		if (Gate::denies('superadmin')) {
-		  abort(403, 'Unauthorized action.');
+			abort(403, 'Unauthorized action.');
 		}
 
 		//validate input form
@@ -134,7 +134,7 @@ class UserController extends Controller
 	{
 		//check for superadmin permissions
 		if (Gate::denies('superadmin')) {
-		  abort(403, 'Unauthorized action.');
+			abort(403, 'Unauthorized action.');
 		}
 
 		//validate input form
@@ -168,7 +168,7 @@ class UserController extends Controller
 	{
 		//check for superadmin permissions
 		if (Gate::denies('superadmin')) {
-		  abort(403, 'Unauthorized action.');
+			abort(403, 'Unauthorized action.');
 		}
 
 		//delete logs
@@ -182,6 +182,6 @@ class UserController extends Controller
 	public function show(User $user)
 	{
 		abort(403, 'Incorrect username and password combination.');
-	}	
+	}
 
 }
