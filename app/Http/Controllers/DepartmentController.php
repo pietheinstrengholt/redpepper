@@ -46,12 +46,6 @@ class DepartmentController extends Controller
 			abort(403, 'Unauthorized action.');
 		}
 
-		//validate input form
-		$this->validate($department, [
-			'department_name' => 'required',
-			'department_description' => 'required'
-		]);
-
 		return view('departments.create', compact('department'));
 	}
 
