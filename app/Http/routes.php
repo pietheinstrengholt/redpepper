@@ -59,15 +59,15 @@ Route::bind('logs', function($value, $route) {
 });
 
 // User routes...
-Route::get('users/{id}/rights', 'UserController@rights');
-Route::get('users/{id}/password', 'UserController@password');
-Route::post('updaterights', 'UserController@updaterights');
-Route::post('updatepassword', 'UserController@updatepassword');
+Route::get('users/{id}/rights', ['middleware' => 'auth', 'uses' => 'UserController@rights']);
+Route::get('users/{id}/password', ['middleware' => 'auth', 'uses' => 'UserController@password']);
+Route::post('updaterights', ['middleware' => 'auth', 'uses' => 'UserController@updaterights']);
+Route::post('updatepassword', ['middleware' => 'auth', 'uses' => 'UserController@updatepassword']);
 
 // Template routes...
-Route::get('templatestructure/{id}', 'TemplateController@structure');
-Route::post('changestructure', 'TemplateController@changestructure');
-Route::post('newtemplate', 'TemplateController@newtemplate');
+Route::get('templatestructure/{id}', ['middleware' => 'auth', 'uses' => 'TemplateController@structure']);
+Route::post('changestructure', ['middleware' => 'auth', 'uses' => 'TemplateController@changestructure']);
+Route::post('newtemplate', ['middleware' => 'auth', 'uses' => 'TemplateController@newtemplate']);
 
 // Model routes...
 Route::resource('sections', 'SectionController');
@@ -86,22 +86,22 @@ Route::post('/updatecell', 'ChangeRequestController@submit');
 
 // Excel routes...
 Route::get('exporttemplate/{id}', 'ExcelController@export');
-Route::get('uploadtemplate', 'ExcelController@upload');
-Route::get('/excel/upload', 'ExcelController@uploadform');
-Route::post('/excel/uploadexcel', 'ExcelController@uploadexcel');
+Route::get('uploadtemplate', ['middleware' => 'auth', 'uses' => 'ExcelController@upload']);
+Route::get('/excel/upload', ['middleware' => 'auth', 'uses' => 'ExcelController@uploadform']);
+Route::post('/excel/uploadexcel', ['middleware' => 'auth', 'uses' => 'ExcelController@uploadexcel']);
 
 // CSV routes...
-Route::get('/csv/importtech', 'CSVController@importtech');
-Route::get('/csv/importrows', 'CSVController@importrows');
-Route::get('/csv/importcolumns', 'CSVController@importcolumns');
-Route::get('/csv/importfields', 'CSVController@importfields');
-Route::get('/csv/importcontent', 'CSVController@importcontent');
-Route::post('/csv/uploadcsv', 'CSVController@uploadcsv');
+Route::get('/csv/importtech', ['middleware' => 'auth', 'uses' => 'CSVController@importtech']);
+Route::get('/csv/importrows', ['middleware' => 'auth', 'uses' => 'CSVController@importrows']);
+Route::get('/csv/importcolumns', ['middleware' => 'auth', 'uses' => 'CSVController@importcolumns']);
+Route::get('/csv/importfields', ['middleware' => 'auth', 'uses' => 'CSVController@importfields']);
+Route::get('/csv/importcontent', ['middleware' => 'auth', 'uses' => 'CSVController@importcontent']);
+Route::post('/csv/uploadcsv', ['middleware' => 'auth', 'uses' => 'CSVController@uploadcsv']);
 
 // Changerequest routes...
-Route::post('/changerequests/uploadexcel', 'ChangeRequestController@update');
-Route::post('/changerequests/cleanup', 'ChangeRequestController@cleanup');
-Route::post('/changerequests/exportchanges', 'ExcelController@exportchanges');
+Route::post('/changerequests/uploadexcel', ['middleware' => 'auth', 'uses' => 'ChangeRequestController@update']);
+Route::post('/changerequests/cleanup', ['middleware' => 'auth', 'uses' => 'ChangeRequestController@cleanup']);
+Route::post('/changerequests/exportchanges', ['middleware' => 'auth', 'uses' => 'ExcelController@exportchanges']);
 
 // Search routes...
 Route::post('/search', 'SearchController@search');

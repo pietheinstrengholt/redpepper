@@ -56,11 +56,6 @@ class ExcelController extends Controller
 
 	public function uploadform()
 	{
-		//exit when user is a guest
-		if (Auth::guest()) {
-			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
-		}
-
 		//admin and builder are only permitted to upload to own sections
 		if (Auth::user()->role == "admin" || Auth::user()->role == "builder") {
 			$sectionList = $this->sectionRights(Auth::user()->id);
@@ -106,11 +101,6 @@ class ExcelController extends Controller
 	//TODO, use a blade instead of Controller debugging output
 	public function uploadexcel(Request $request)
 	{
-		//exit when user is a guest
-		if (Auth::guest()) {
-			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
-		}
-
 		//validate input form
 		$this->validate($request, [
 			'excel' => 'mimes:xls,xlsx',
@@ -856,14 +846,14 @@ class ExcelController extends Controller
 	public function export($id)
 	{
 
-		$template = Template::find($id);
+		$template = Template::findOrFail($id);
 
 		Excel::create($template->template_name, function($excel) use ($id)  {
 
 			// Our first sheet
 			$excel->sheet('structure', function($sheet) use ($id) {
 
-				$template = Template::find($id);
+				$template = Template::findOrFail($id);
 
 				$sheet->SetCellValue('A1', 'Row#');
 				$sheet->getStyle('A1')->getFont()->setBold(true);
