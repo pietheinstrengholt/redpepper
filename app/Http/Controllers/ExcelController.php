@@ -56,19 +56,22 @@ class ExcelController extends Controller
 
 	public function uploadform()
 	{
+		if (Auth::user()->role == "contributor" || Auth::user()->role == "reviewer" || Auth::user()->role == "guest") {
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
+		}
+		
 		//admin and builder are only permitted to upload to own sections
 		if (Auth::user()->role == "admin" || Auth::user()->role == "builder") {
 			$sectionList = $this->sectionRights(Auth::user()->id);
 			$sections = Section::whereIn('id', $sectionList)->orderBy('section_name', 'asc')->get();
+			if (empty($sections)) {
+				abort(403, 'Unauthorized action. You don\'t have access to any sections');
+			}
 		}
 
 		//only superadmin can see all sections
 		if (Auth::user()->role == "superadmin") {
 			$sections = Section::orderBy('section_name', 'asc')->get();
-		}
-
-		if (Auth::user()->role == "contributor" || Auth::user()->role == "reviewer" || Auth::user()->role == "guest" || Auth::guest()) {
-			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
 		}
 
 		return view('excel.upload', compact('sections'));
