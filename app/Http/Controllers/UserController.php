@@ -230,7 +230,7 @@ class UserController extends Controller
 	
 	public function show(User $user)
 	{
-		abort(403, 'Incorrect username and password combination.');
+		abort(403, 'There is no page to retrieve the user details yet..');
 	}
 
 }
