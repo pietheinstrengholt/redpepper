@@ -10,6 +10,16 @@
 
 	<h2>Upload technical line items</h2>
 	<h4>Please make use of the upload form below</h4>
+	
+	@if (count($errors) > 0)
+		<div class="alert alert-danger">
+		<ul>
+		@foreach ($errors->all() as $error)
+			<li>{{ $error }}</li>
+		@endforeach
+		</ul>
+		</div>
+	@endif	
 
 	<strong>Example:</strong> The file needs to be in the following format, including header and stored as comma separated<br><br>
 	<pre>template_id;source_id;type_id;content;row_code;column_code;description

@@ -47,7 +47,7 @@ class CSVController extends Controller
 
 		//validate input form
 		$this->validate($request, [
-			'csv' => 'mimes:csv',
+			'csv' => 'required|mimes:csv',
 			'formname' => 'required'
 		]);
 
@@ -246,7 +246,7 @@ class CSVController extends Controller
 
 			}
 
-			return Redirect::to('/');
+			//return Redirect::to('/');
 		}
 	}
 

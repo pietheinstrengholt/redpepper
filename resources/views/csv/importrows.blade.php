@@ -10,6 +10,16 @@
 
 	<h2>Upload template rows</h2>
 	<h4>Please make use of the upload form below</h4>
+	
+	@if (count($errors) > 0)
+		<div class="alert alert-danger">
+		<ul>
+		@foreach ($errors->all() as $error)
+			<li>{{ $error }}</li>
+		@endforeach
+		</ul>
+		</div>
+	@endif	
 
 	<strong>Example:</strong> The file needs to be in the following format, including header and stored as comma separated<br><br>
 	<pre>template_id;row_num;row_code;row_description
