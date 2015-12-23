@@ -64,18 +64,24 @@
 		{!! Form::select('section_id', $sections->lists('section_name', 'id'), null, ['id' => 'section_id', 'class' => 'form-control']) !!}
 		</div>
 	</div>
-
-	<div class="form-group">
-		{!! Form::label('Visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
-		<div class="col-sm-6" style="margin-top: 11px;">
+	
+	@if (Auth::user()->role == "builder")
 		{!! Form::hidden('visible','False') !!}
-		@if ( $template->visible == "True" )
-			{!! Form::checkbox('visible', 'True', true) !!}
-		@else
-			{!! Form::checkbox('visible', 'True') !!}
-		@endif
+	@endif	
+
+	@if (Auth::user()->role == "superadmin")
+		<div class="form-group">
+			{!! Form::label('Visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
+			<div class="col-sm-6" style="margin-top: 11px;">
+			{!! Form::hidden('visible','False') !!}
+			@if ( $template->visible == "True" )
+				{!! Form::checkbox('visible', 'True', true) !!}
+			@else
+				{!! Form::checkbox('visible', 'True') !!}
+			@endif
+			</div>
 		</div>
-	</div>
+	@endif
 
 	<div class="form-group">
 		{!! Form::submit($submit_text, ['class' => 'btn btn-primary']) !!}

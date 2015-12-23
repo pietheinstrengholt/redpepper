@@ -31,6 +31,21 @@ use App\Events\ChangeEvent;
 
 class TemplateController extends Controller
 {
+	//function to retrieve section rights based on user id
+	public function sectionRights($id) {
+
+		$userrights = UserRights::where('username_id', $id)->get();
+
+		$sectionRights = array();
+		$userrights = $userrights->toArray();
+		if (!empty($userrights)) {
+			foreach ($userrights as $userright) {
+				array_push($sectionRights,$userright['section_id']);
+			}
+		}
+		return $sectionRights;
+	}
+	
 	//function to show template
 	public function show(Section $section, Template $template, Request $request)
 	{
@@ -131,37 +146,67 @@ class TemplateController extends Controller
 	//function to edit template
 	public function edit(Section $section, Template $template)
 	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-			abort(403, 'Unauthorized action.');
-		}
-
+		//exit when user is a guest
+		if (Auth::guest()) {
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
+		}	
+		
 		//check if id property exists
 		if (!$template->id) {
 			abort(403, 'This template no longer exists in the database.');
 		}
 
-		$sections = Section::orderBy('section_name', 'asc')->get();
+		//builder is only permitted to upload to own sections
+		if (Auth::user()->role == "builder") {
+			$sectionList = $this->sectionRights(Auth::user()->id);
+			$sections = Section::whereIn('id', $sectionList)->orderBy('section_name', 'asc')->get();
+			if (empty($sections)) {
+				abort(403, 'Unauthorized action. You don\'t have access to any sections');
+			}
+		}
+
+		//only superadmin can see all sections
+		if (Auth::user()->role == "superadmin") {
+			$sections = Section::orderBy('section_name', 'asc')->get();
+		}
+
 		return view('templates.edit', compact('sections', 'section', 'template'));
 	}
 
 	public function create()
 	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-			abort(403, 'Unauthorized action.');
+		//exit when user is a guest
+		if (Auth::guest()) {
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
 		}
 
-		$sections = Section::orderBy('section_name', 'asc')->get();
+		//builder is only permitted to upload to own sections
+		if (Auth::user()->role == "builder") {
+			$sectionList = $this->sectionRights(Auth::user()->id);
+			$sections = Section::whereIn('id', $sectionList)->orderBy('section_name', 'asc')->get();
+			if (empty($sections)) {
+				abort(403, 'Unauthorized action. You don\'t have access to any sections');
+			}
+		}
+
+		//only superadmin can see all sections
+		if (Auth::user()->role == "superadmin") {
+			$sections = Section::orderBy('section_name', 'asc')->get();
+		}
+
 		return view('templates.create', compact('sections'));
 	}
 
 	//function to create new template
 	public function newtemplate(Request $request)
 	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-		  abort(403, 'Unauthorized action.');
+		//exit when user is a guest
+		if (Auth::guest()) {
+			abort(403, 'Unauthorized action.');
+		}
+		
+		if (!(Auth::user()->role == "builder" || Auth::user()->role == "superadmin")) {
+			abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');	
 		}
 
 		//validate input form
@@ -184,6 +229,14 @@ class TemplateController extends Controller
 		Event::fire(new ChangeEvent($event));
 
 		if ($request->isMethod('post')) {
+			
+			//validate if builder is permitted to upload to own sections
+			if (Auth::user()->role == "builder") {
+				$sectionList = $this->sectionRights(Auth::user()->id);
+				if (!(in_array($request->input('section_id'), $sectionList))) {
+					abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');
+				}
+			}
 
 			$template = new Template;
 			$template->section_id = $request->input('section_id');
@@ -245,8 +298,20 @@ class TemplateController extends Controller
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
 		}
+		
+		if (!(Auth::user()->role == "builder" || Auth::user()->role == "superadmin")) {
+			abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');			
+		}
 
 		$template = Template::findOrFail($request->input('template_id'));
+		
+		//validate if builder is permitted to upload to own sections
+		if (Auth::user()->role == "builder") {
+			$sectionList = $this->sectionRights(Auth::user()->id);
+			if (!(in_array($template->section_id, $sectionList))) {
+				abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');
+			}
+		}
 
 		//log Event
 		$event = array(
@@ -355,8 +420,20 @@ class TemplateController extends Controller
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
 		}
+		
+		if (!(Auth::user()->role == "builder" || Auth::user()->role == "superadmin")) {
+			abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');			
+		}
 
 		$template = Template::findOrFail($id);
+		
+		//validate if builder is permitted to upload to own sections
+		if (Auth::user()->role == "builder") {
+			$sectionList = $this->sectionRights(Auth::user()->id);
+			if (!(in_array($template->section_id, $sectionList))) {
+				abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');
+			}
+		}		
 
 		$disabledFields = $this->getDisabledFields($template);
 		return view('templates.structure', compact('section', 'template', 'disabledFields'));
@@ -365,16 +442,20 @@ class TemplateController extends Controller
 	//function to add new template
 	public function store(Section $section)
 	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-			abort(403, 'Unauthorized action.');
+		//exit when user is a guest
+		if (Auth::guest()) {
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
+		}
+		
+		if (!(Auth::user()->role == "builder" || Auth::user()->role == "superadmin")) {
+			abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');			
 		}
 		
 		//validate input form
 		$this->validate($request, [
 			'template_name' => 'required|min:4',
 			'template_shortdesc' => 'required|min:4'
-		]);		
+		]);
 
 		$input = Input::all();
 		$input['section_id'] = $section->id;
@@ -396,16 +477,20 @@ class TemplateController extends Controller
 	//function to update template
 	public function update(Section $section, Template $template, Request $request)
 	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-			abort(403, 'Unauthorized action.');
+		//exit when user is a guest
+		if (Auth::guest()) {
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
+		}
+		
+		if (!(Auth::user()->role == "builder" || Auth::user()->role == "superadmin")) {
+			abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');			
 		}
 		
 		//validate input form
 		$this->validate($request, [
 			'template_name' => 'required|min:4',
 			'template_shortdesc' => 'required|min:4'
-		]);			
+		]);
 		
 		//log Event
 		$event = array(

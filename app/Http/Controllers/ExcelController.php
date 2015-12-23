@@ -40,6 +40,7 @@ use App\Events\ChangeEvent;
 
 class ExcelController extends Controller
 {
+	//function to retrieve section rights based on user id
 	public function sectionRights($id) {
 
 		$userrights = UserRights::where('username_id', $id)->get();
