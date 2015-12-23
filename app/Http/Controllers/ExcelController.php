@@ -106,10 +106,10 @@ class ExcelController extends Controller
 	{
 		//validate input form
 		$this->validate($request, [
-			'excel' => 'mimes:xls,xlsx',
-			'template_name' => 'required',
+			'excel' => 'required|mimes:xls,xlsx',
+			'template_name' => 'required|min:4',
 			'section_id' => 'required|numeric',
-			'template_description' => 'required'
+			'template_description' => 'required|min:4'
 		]);
 
 		if ($request->isMethod('post')) {

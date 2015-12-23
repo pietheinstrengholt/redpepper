@@ -115,8 +115,8 @@ class SectionController extends Controller
 
 		//validate input form
 		$this->validate($request, [
-			'section_name' => 'required',
-			'section_description' => 'required',
+			'section_name' => 'required|min:4',
+			'section_description' => 'required|min:4',
 			'subject_id' => 'required'
 		]);
 
@@ -145,7 +145,7 @@ class SectionController extends Controller
 		//validate input form
 		$this->validate($request, [
 			'section_name' => 'required|min:4',
-			'section_description' => 'required'
+			'section_description' => 'required|min:4'
 		]);
 
 		$input = array_except(Input::all(), '_method');

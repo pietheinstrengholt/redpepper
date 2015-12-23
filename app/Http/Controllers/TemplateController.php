@@ -168,8 +168,8 @@ class TemplateController extends Controller
 		$this->validate($request, [
 			'inputrows' => 'required|numeric',
 			'inputcolumns' => 'required|numeric',
-			'template_name' => 'required',
-			'template_shortdesc' => 'required',
+			'template_name' => 'required|min:4',
+			'template_shortdesc' => 'required|min:4',
 			'section_id' => 'required'
 		]);
 		
@@ -372,8 +372,8 @@ class TemplateController extends Controller
 		
 		//validate input form
 		$this->validate($request, [
-			'template_name' => 'required|min:6',
-			'template_shortdesc' => 'required'
+			'template_name' => 'required|min:4',
+			'template_shortdesc' => 'required|min:4'
 		]);		
 
 		$input = Input::all();
@@ -403,8 +403,8 @@ class TemplateController extends Controller
 		
 		//validate input form
 		$this->validate($request, [
-			'template_name' => 'required|min:6',
-			'template_shortdesc' => 'required'
+			'template_name' => 'required|min:4',
+			'template_shortdesc' => 'required|min:4'
 		]);			
 		
 		//log Event
