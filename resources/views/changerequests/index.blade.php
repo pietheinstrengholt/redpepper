@@ -12,7 +12,7 @@
 	<h4>Please make a selection of one of the following types</h4>
 
 	@if ( !$changerequests->count() )
-		No types found in the database!<br><br>
+		No change requests found in the database!<br><br>
 	@else
 		<table class="section-table table table-condensed sortable" border="1">
 
@@ -72,15 +72,17 @@
 	<div class="pagination">
 		{!! $changerequests->render() !!}
 	</div>
+	
+	@if (Auth::user()->role == "superadmin")
+		{!! Form::open(array('action' => 'ChangeRequestController@cleanup', 'id' => 'form')) !!}
+		<button type="submit" class="btn btn-primary changerequest">Cleanup changerequests</button>
+		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
+		{!! Form::close() !!}
 
-	{!! Form::open(array('action' => 'ChangeRequestController@cleanup', 'id' => 'form')) !!}
-	<button type="submit" class="btn btn-primary changerequest">Cleanup changerequests</button>
-	<input type="hidden" name="_token" value="{!! csrf_token() !!}">
-	{!! Form::close() !!}
-
-	{!! Form::open(array('action' => 'ExcelController@exportchanges', 'id' => 'form')) !!}
-	<button type="submit" class="btn btn-warning changerequest">Export changerequests</button>
-	<input type="hidden" name="_token" value="{!! csrf_token() !!}">
-	{!! Form::close() !!}
+		{!! Form::open(array('action' => 'ExcelController@exportchanges', 'id' => 'form')) !!}
+		<button type="submit" class="btn btn-warning changerequest">Export changerequests</button>
+		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
+		{!! Form::close() !!}
+	@endif	
 
 @endsection

@@ -16,34 +16,51 @@ use App\DraftField;
 use App\DraftRequirement;
 use App\DraftTechnical;
 use App\Http\Controllers\Controller;
-
 use Gate;
 use App\User;
+use App\UserRights;
 use Auth;
 use Illuminate\Http\Request;
 use Input;
 use Redirect;
 use Validator;
 use Session;
-
 use Event;
 use App\Events\ChangeEvent;
 
 class TemplateController extends Controller
 {
 	//function to retrieve section rights based on user id
-	public function sectionRights($id) {
-
-		$userrights = UserRights::where('username_id', $id)->get();
-
-		$sectionRights = array();
-		$userrights = $userrights->toArray();
-		if (!empty($userrights)) {
-			foreach ($userrights as $userright) {
-				array_push($sectionRights,$userright['section_id']);
-			}
+	public function sectionRights() {
+		
+		if (Auth::guest()) {
+			abort(403, 'Unauthorized action.');
 		}
-		return $sectionRights;
+		
+		if (!(Auth::user()->role == "builder" || Auth::user()->role == "superadmin")) {
+			abort(403, 'Unauthorized action. You are not allowed to make changes for this section.');			
+		}		
+		
+		if (Auth::user()->role == "builder") {
+
+			$userrights = UserRights::where('username_id', Auth::user()->id)->get();
+
+			$sectionRights = array();
+			$userrights = $userrights->toArray();
+			if (!empty($userrights)) {
+				foreach ($userrights as $userright) {
+					array_push($sectionRights,$userright['section_id']);
+				}
+			}
+			
+			$sections = Section::whereIn('id', $sectionRights)->where('visible','True')->orderBy('section_name', 'asc')->get();
+		}
+		
+		if (Auth::user()->role == "superadmin") {
+			$sections = Section::orderBy('section_name', 'asc')->get();
+		}
+		
+		return $sections;
 	}
 	
 	//function to show template
@@ -146,32 +163,23 @@ class TemplateController extends Controller
 	//function to edit template
 	public function edit(Section $section, Template $template)
 	{
-		//exit when user is a guest
-		if (Auth::guest()) {
-			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
-		}	
-		
 		//check if id property exists
 		if (!$template->id) {
 			abort(403, 'This template no longer exists in the database.');
 		}
+		
+		//retrieve list with sections based on user id and user role
+		$sections = $this->sectionRights();
+		
+		if (empty($sections)) {
+			abort(403, 'Unauthorized action. You don\'t have access to any sections');
+		}
 
 		//builder is only permitted to upload to own sections
 		if (Auth::user()->role == "builder") {
-			$sectionList = $this->sectionRights(Auth::user()->id);
-			$sections = Section::whereIn('id', $sectionList)->orderBy('section_name', 'asc')->get();
-			if (empty($sections)) {
-				abort(403, 'Unauthorized action. You don\'t have access to any sections');
-			}
-			
 			if ($template->visible == "True") {
 				abort(403, 'Unauthorized action. The template is already published.');
 			}
-		}
-
-		//only superadmin can see all sections
-		if (Auth::user()->role == "superadmin") {
-			$sections = Section::orderBy('section_name', 'asc')->get();
 		}
 
 		return view('templates.edit', compact('sections', 'section', 'template'));
@@ -179,27 +187,39 @@ class TemplateController extends Controller
 
 	public function create()
 	{
-		//exit when user is a guest
-		if (Auth::guest()) {
-			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
+		//retrieve list with sections based on user id and user role
+		$sections = $this->sectionRights();
+		
+		if (empty($sections)) {
+			abort(403, 'Unauthorized action. You don\'t have access to any sections');
+		}	
+
+		return view('templates.create', compact('sections'));
+	}
+	
+
+	//function to structure template
+	public function structure($id)
+	{
+		$template = Template::findOrFail($id);
+		
+		//retrieve list with sections based on user id and user role
+		$sections = $this->sectionRights();
+		
+		if (empty($sections)) {
+			abort(403, 'Unauthorized action. You don\'t have access to any sections');
 		}
 
 		//builder is only permitted to upload to own sections
 		if (Auth::user()->role == "builder") {
-			$sectionList = $this->sectionRights(Auth::user()->id);
-			$sections = Section::whereIn('id', $sectionList)->orderBy('section_name', 'asc')->get();
-			if (empty($sections)) {
-				abort(403, 'Unauthorized action. You don\'t have access to any sections');
+			if ($template->visible == "True") {
+				abort(403, 'Unauthorized action. The template is already published.');
 			}
 		}
 
-		//only superadmin can see all sections
-		if (Auth::user()->role == "superadmin") {
-			$sections = Section::orderBy('section_name', 'asc')->get();
-		}
-
-		return view('templates.create', compact('sections'));
-	}
+		$disabledFields = $this->getDisabledFields($template);
+		return view('templates.structure', compact('section', 'template', 'disabledFields'));
+	}	
 
 	//function to create new template
 	public function newtemplate(Request $request)
@@ -207,10 +227,6 @@ class TemplateController extends Controller
 		//exit when user is a guest
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action.');
-		}
-		
-		if (!(Auth::user()->role == "builder" || Auth::user()->role == "superadmin")) {
-			abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');	
 		}
 
 		//validate input form
@@ -233,14 +249,6 @@ class TemplateController extends Controller
 		Event::fire(new ChangeEvent($event));
 
 		if ($request->isMethod('post')) {
-			
-			//validate if builder is permitted to upload to own sections
-			if (Auth::user()->role == "builder") {
-				$sectionList = $this->sectionRights(Auth::user()->id);
-				if (!(in_array($request->input('section_id'), $sectionList))) {
-					abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');
-				}
-			}
 
 			$template = new Template;
 			$template->section_id = $request->input('section_id');
@@ -292,7 +300,6 @@ class TemplateController extends Controller
 			}
 		}
 		return Redirect::to('/templatestructure/' . $template->id);
-
 	}
 
 	//function to structure template
@@ -302,24 +309,8 @@ class TemplateController extends Controller
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
 		}
-		
-		if (!(Auth::user()->role == "builder" || Auth::user()->role == "superadmin")) {
-			abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');			
-		}
 
 		$template = Template::findOrFail($request->input('template_id'));
-		
-		//validate if builder is permitted to upload to own sections
-		if (Auth::user()->role == "builder") {
-			$sectionList = $this->sectionRights(Auth::user()->id);
-			if (!(in_array($template->section_id, $sectionList))) {
-				abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');
-			}
-			
-			if ($template->visible == "True") {
-				abort(403, 'Unauthorized action. The template is already published.');
-			}
-		}
 
 		if ($request->isMethod('post')) {
 
@@ -422,47 +413,12 @@ class TemplateController extends Controller
 		return Redirect::route('sections.show', $request->input('section_id'))->with('message', 'Template structure updated.');
 	}
 
-	//function to structure template
-	public function structure($id)
-	{
-		//exit when user is a guest
-		if (Auth::guest()) {
-			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
-		}
-		
-		if (!(Auth::user()->role == "builder" || Auth::user()->role == "superadmin")) {
-			abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');			
-		}
-
-		$template = Template::findOrFail($id);
-		
-		//validate if builder is permitted to upload to own sections
-		if (Auth::user()->role == "builder") {
-			$sectionList = $this->sectionRights(Auth::user()->id);
-			if (!(in_array($template->section_id, $sectionList))) {
-				abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');
-			}
-			
-			if ($template->visible == "True") {
-				abort(403, 'Unauthorized action. The template is already published.');
-			}			
-			
-		}		
-
-		$disabledFields = $this->getDisabledFields($template);
-		return view('templates.structure', compact('section', 'template', 'disabledFields'));
-	}
-
 	//function to add new template
 	public function store(Section $section)
 	{
 		//exit when user is a guest
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
-		}
-		
-		if (!(Auth::user()->role == "builder" || Auth::user()->role == "superadmin")) {
-			abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');			
 		}
 		
 		//validate input form
@@ -494,10 +450,6 @@ class TemplateController extends Controller
 		//exit when user is a guest
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
-		}
-		
-		if (!(Auth::user()->role == "builder" || Auth::user()->role == "superadmin")) {
-			abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');			
 		}
 		
 		//validate input form
@@ -553,12 +505,11 @@ class TemplateController extends Controller
 	}
 
 	//content for the pop-up
-	public function getCellContent()
-	{
-		//abort if template_id and cell_id are not set
-		if (empty($_GET['template_id']) || empty($_GET['cell_id'])) {
+	public function getCellContent(Request $request)
+	{	
+		if (!($request->has('template_id') && $request->has('cell_id'))) {
 			abort(404, 'Content cannot be found with invalid arguments.');
-		}
+		}			
 
 		//split input into row and column
 		list($before, $after) = explode('-row', $_GET['cell_id'], 2);
@@ -566,18 +517,18 @@ class TemplateController extends Controller
 		$row_code = $after;
 
 		return view('templates.cell', [
-			'template' => Template::find($_GET['template_id']),
-			'row' => TemplateRow::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->first(),
-			'column' => TemplateColumn::where('template_id', $_GET['template_id'])->where('column_code', $column_code)->first(),
-			'regulation_row' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'R-' . $row_code)->where('content_type', 'regulation')->first(),
-			'regulation_column' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'C-' . $column_code)->where('content_type', 'regulation')->first(),
-			'interpretation_row' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'R-' . $row_code)->where('content_type', 'interpretation')->first(),
-			'interpretation_column' => Requirement::where('template_id', $_GET['template_id'])->where('field_id', 'C-' . $column_code)->where('content_type', 'interpretation')->first(),
-			'technical' => Technical::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', $column_code)->get(),
-			'field_regulation' => TemplateField::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', $column_code)->where('property', 'regulation')->get(),
-			'field_interpretation' => TemplateField::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', $column_code)->where('property', 'interpretation')->get(),
-			'field_property1' => TemplateField::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', $column_code)->where('property', 'property1')->get(),
-			'field_property2' => TemplateField::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', $column_code)->where('property', 'property2')->get()
+			'template' => Template::find($request->input('template_id')),
+			'row' => TemplateRow::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->first(),
+			'column' => TemplateColumn::where('template_id', $request->input('template_id'))->where('column_code', $column_code)->first(),
+			'regulation_row' => Requirement::where('template_id', $request->input('template_id'))->where('field_id', 'R-' . $row_code)->where('content_type', 'regulation')->first(),
+			'regulation_column' => Requirement::where('template_id', $request->input('template_id'))->where('field_id', 'C-' . $column_code)->where('content_type', 'regulation')->first(),
+			'interpretation_row' => Requirement::where('template_id', $request->input('template_id'))->where('field_id', 'R-' . $row_code)->where('content_type', 'interpretation')->first(),
+			'interpretation_column' => Requirement::where('template_id', $request->input('template_id'))->where('field_id', 'C-' . $column_code)->where('content_type', 'interpretation')->first(),
+			'technical' => Technical::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', $column_code)->get(),
+			'field_regulation' => TemplateField::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', $column_code)->where('property', 'regulation')->get(),
+			'field_interpretation' => TemplateField::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', $column_code)->where('property', 'interpretation')->get(),
+			'field_property1' => TemplateField::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', $column_code)->where('property', 'property1')->get(),
+			'field_property2' => TemplateField::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', $column_code)->where('property', 'property2')->get()
 		]);
 
 	}

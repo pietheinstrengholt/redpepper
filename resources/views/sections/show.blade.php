@@ -39,7 +39,7 @@
 			<td>
 			<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $template->id }}">Export</a>
 			@if (!Auth::guest())
-				@if (Auth::user()->role == "superadmin" || Auth::user()->role == "admin")
+				@if (Auth::user()->role == "superadmin" || Auth::user()->role == "builder")
 					{!! link_to_route('sections.templates.edit', 'Edit', array($template->section_id, $template->id), array('class' => 'btn btn-info btn-xs')) !!}
 					<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('templatestructure') . '/' . $template->id }}">Structure</a>
 					{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:2px;')) !!}

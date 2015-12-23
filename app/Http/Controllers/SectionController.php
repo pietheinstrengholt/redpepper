@@ -59,9 +59,9 @@ class SectionController extends Controller
 		if (Auth::guest() && $section->visible == "False") {
 			abort(403, 'Unauthorized action.');
 		}
-
-		//only superadmin can see all templates
-		if (Gate::denies('superadmin')) {
+		
+		//only non guests will see the hidden templates
+		if (Auth::guest()) {
 			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->where('visible', 'True')->get();
 		} else {
 			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->get();
