@@ -53,8 +53,10 @@
 	@endif
 
 	<p>
-	{!! link_to_route('sections.index', 'Back to Sections') !!}	|
-	{!! link_to_route('sections.templates.create', 'Create Template', $section->id) !!}
+	{!! link_to_route('sections.index', 'Back to Sections') !!}
+	@if (!Auth::guest())
+		| {!! link_to_route('sections.templates.create', 'Create Template', $section->id) !!}
+	@endif	
 	</p>
 
 @endsection

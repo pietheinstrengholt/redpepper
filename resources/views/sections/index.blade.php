@@ -46,8 +46,10 @@
 		</table>
 	@endif
 
-	<p>
-	{!! link_to_route('sections.create', 'Create Section') !!}
-	</p>
+	@if (!Auth::guest())
+		<p>
+		{!! link_to_route('sections.create', 'Create Section') !!}
+		</p>
+	@endif	
 
 @endsection
