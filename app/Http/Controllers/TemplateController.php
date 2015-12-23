@@ -163,6 +163,10 @@ class TemplateController extends Controller
 			if (empty($sections)) {
 				abort(403, 'Unauthorized action. You don\'t have access to any sections');
 			}
+			
+			if ($template->visible == "True") {
+				abort(403, 'Unauthorized action. The template is already published.');
+			}
 		}
 
 		//only superadmin can see all sections
@@ -311,17 +315,11 @@ class TemplateController extends Controller
 			if (!(in_array($template->section_id, $sectionList))) {
 				abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');
 			}
+			
+			if ($template->visible == "True") {
+				abort(403, 'Unauthorized action. The template is already published.');
+			}
 		}
-
-		//log Event
-		$event = array(
-			"content_type" => "Template Structure",
-			"content_action" => "updated",
-			"content_name" => $template->template_name,
-			"created_by" => Auth::user()->id
-		);
-		
-		Event::fire(new ChangeEvent($event));
 
 		if ($request->isMethod('post')) {
 
@@ -408,9 +406,20 @@ class TemplateController extends Controller
 						}
 					}
 				}
+
+			//log Event
+			$event = array(
+				"content_type" => "Template Structure",
+				"content_action" => "updated",
+				"content_name" => $template->template_name,
+				"created_by" => Auth::user()->id
+			);
+			
+			Event::fire(new ChangeEvent($event));				
+				
 			}
 		}
-		return Redirect::route('sections.show', $request->input('section_id'))->with('message', 'Template created.');
+		return Redirect::route('sections.show', $request->input('section_id'))->with('message', 'Template structure updated.');
 	}
 
 	//function to structure template
@@ -433,6 +442,11 @@ class TemplateController extends Controller
 			if (!(in_array($template->section_id, $sectionList))) {
 				abort(403, 'Unauthorized action. You are not allowed to create a new template for this section.');
 			}
+			
+			if ($template->visible == "True") {
+				abort(403, 'Unauthorized action. The template is already published.');
+			}			
+			
 		}		
 
 		$disabledFields = $this->getDisabledFields($template);
