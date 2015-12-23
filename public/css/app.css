@@ -170,3 +170,11 @@ table.dialog  textarea#regulation_row, table.dialog  textarea#interpretation_row
 div#cell-update {
 	margin-top: 20px;
 }
+
+/* Pagination results */
+
+div.pagination {
+	text-align: center;
+	width: 100%;
+	margin-top: 0px;
+}

@@ -67,17 +67,17 @@ class ChangeRequestController extends Controller
 
 		//contributors and builders can only see own submitted changes
 		if (Auth::user()->role == "contributor" || Auth::user()->role == "builder") {
-			$changerequests = ChangeRequest::where('creator_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+			$changerequests = ChangeRequest::where('creator_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(15);
 		}
 
 		if (Auth::user()->role == "admin" || Auth::user()->role == "reviewer") {
 			$templateList = $this->templateRights(Auth::user()->id);
-			$changerequests = ChangeRequest::whereIn('template_id', $templateList)->orderBy('created_at', 'desc')->get();
+			$changerequests = ChangeRequest::whereIn('template_id', $templateList)->orderBy('created_at', 'desc')->paginate(15);
 		}
 
 		//superadmin users can see all
 		if (Auth::user()->role == "superadmin") {
-			$changerequests = ChangeRequest::orderBy('created_at', 'desc')->get();
+			$changerequests = ChangeRequest::orderBy('created_at', 'desc')->paginate(15);
 		}
 		
 		//check if any change request are found
@@ -85,7 +85,7 @@ class ChangeRequestController extends Controller
 			abort(403, 'No changerequests found, based on user credentials and submitted content by other users.');
 		}
 
-		return view('changerequests.index', compact('changerequests'));
+		return view('changerequests.index', ['changerequests' => $changerequests]);
     }
 
     public function create()

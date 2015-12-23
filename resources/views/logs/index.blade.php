@@ -36,5 +36,9 @@
 
 		</table>
 	@endif
+	
+	<div class="pagination">
+		{!! $logs->render() !!}
+	</div>	
 
 @endsection

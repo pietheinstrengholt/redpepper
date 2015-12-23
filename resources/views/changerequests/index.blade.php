@@ -68,6 +68,10 @@
 
 		</table>
 	@endif
+	
+	<div class="pagination">
+		{!! $changerequests->render() !!}
+	</div>
 
 	{!! Form::open(array('action' => 'ChangeRequestController@cleanup', 'id' => 'form')) !!}
 	<button type="submit" class="btn btn-primary changerequest">Cleanup changerequests</button>
