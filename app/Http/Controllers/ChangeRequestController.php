@@ -306,6 +306,7 @@ class ChangeRequestController extends Controller
 					"log_event" => "ChangeRequest",
 					"action" => $request->input('change_type'),
 					"changerequest_id" => $request->input('changerequest_id'),
+					"template_id" => $ChangeRequest->template_id,
 					"created_by" => Auth::user()->id
 				);
 				
@@ -800,6 +801,7 @@ class ChangeRequestController extends Controller
 			"log_event" => "ChangeRequest",
 			"action" => "deleted",
 			"changerequest_id" => $changerequest->id,
+			"template_id" => $changerequest->template_id,
 			"created_by" => Auth::user()->id
 		);
 		
@@ -833,6 +835,7 @@ class ChangeRequestController extends Controller
 				"log_event" => "ChangeRequest",
 				"action" => "created",
 				"changerequest_id" => $changerequest->id,
+				"template_id" => $request->input('template_id'),
 				"created_by" => Auth::user()->id
 			);
 			
@@ -883,7 +886,6 @@ class ChangeRequestController extends Controller
 				if(isset($technical['source_id'])) { $row_system = $technical['source_id']; } else { $row_system = 0; }
 
 				if ($row_action != "delete" && $row_system != 0 && $row_hidden == "no") {
-
 					$drafttechnical = new DraftTechnical;
 					$drafttechnical->changerequest_id = $changerequest->id;
 					$drafttechnical->source_id = $technical['source_id'];
@@ -891,7 +893,6 @@ class ChangeRequestController extends Controller
 					$drafttechnical->content = $technical['content'];
 					$drafttechnical->description = $technical['description'];
 					$drafttechnical->save();
-
 				}
 			}
 

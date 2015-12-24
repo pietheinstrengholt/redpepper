@@ -294,6 +294,7 @@ class TemplateController extends Controller
 			$event = array(
 				"log_event" => "Template Wizard",
 				"action" => "created",
+				"section_id" => $template->section_id,
 				"template_id" => $template->id,
 				"created_by" => Auth::user()->id
 			);
@@ -404,6 +405,7 @@ class TemplateController extends Controller
 				$event = array(
 					"log_event" => "Template Structure",
 					"action" => "updated",
+					"section_id" => $template->section_id,
 					"template_id" => $template->id,
 					"created_by" => Auth::user()->id
 				);
@@ -465,6 +467,7 @@ class TemplateController extends Controller
 		$event = array(
 			"log_event" => "Template",
 			"action" => "updated",
+			"section_id" => $template->section_id,
 			"template_id" => $template->id,
 			"created_by" => Auth::user()->id
 		);
@@ -496,6 +499,7 @@ class TemplateController extends Controller
 		$event = array(
 			"log_event" => "Template",
 			"action" => "deleted",
+			"section_id" => $template->section_id,
 			"template_id" => $template->id,
 			"created_by" => Auth::user()->id
 		);
