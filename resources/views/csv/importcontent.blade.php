@@ -23,9 +23,9 @@
 
 	<strong>Example:</strong> The file needs to be in the following format, including header and stored as comma separated<br><br>
 	<pre>template_id;field_id;content_type;content
-	5;C-010;reference;IFRS 5.33(b)(i)
-	5;R-010;regulation;;This row is a residual category...
-	5;R-020;interpretation;Internal policy follows..</pre>
+5;C-010;reference;IFRS 5.33(b)(i)
+5;R-010;regulation;;This row is a residual category...
+5;R-020;interpretation;Internal policy follows..</pre>
 
 	{!! Form::open(array('action' => 'CSVController@uploadcsv', 'id' => 'form', 'files'=> 'true')) !!}
 

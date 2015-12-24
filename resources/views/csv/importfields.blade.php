@@ -23,10 +23,10 @@
 
 	<strong>Example:</strong> The file needs to be in the following format, including header and stored as comma separated<br><br>
 	<pre>template_id;row_code;column_code;property;content
-	5;1;010;010;legal_desc;100% minus the discount
-	5;2;010;020;interpretation_desc;lowest percentage
-	5;3;010;030;interpretation_desc;only to central bank
-	5;4;010;040;legal_desc;lowest percentage</pre>
+5;010;010;legal_desc;100% minus the discount
+5;010;020;interpretation_desc;lowest percentage
+5;010;030;interpretation_desc;only to central bank
+5;010;040;legal_desc;lowest percentage</pre>
 
 	{!! Form::open(array('action' => 'CSVController@uploadcsv', 'id' => 'form', 'files'=> 'true')) !!}
 

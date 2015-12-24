@@ -158,7 +158,7 @@ class TemplateController extends Controller
 		}
 
 		return $arrayproperty;
-	}	
+	}
 
 	//function to edit template
 	public function edit(Section $section, Template $template)

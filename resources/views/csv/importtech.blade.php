@@ -22,11 +22,11 @@
 	@endif	
 
 	<strong>Example:</strong> The file needs to be in the following format, including header and stored as comma separated<br><br>
-	<pre>template_id;source_id;type_id;content;row_code;column_code;description
-	999;5;1;10001010;020;010;Cash on hand
-	999;5;1;10002010;030;010;Balances with central banks other than mandatory reserve deposits and readily convertible in cash
-	999;5;1;10004011;040;010;Due from credit institutions - Current accounts (nostro accounts)
-	999;5;1;11007010;040;010;Due from credit institutions - Overdrafts current accounts</pre>
+	<pre>template_id;row_code;column_code;source_id;type_id;content;description
+999;020;010;5;1;10001010;Cash on hand
+999;030;010;5;1;10002010;Balances with central banks other than mandatory reserve deposits and readily convertible in cash
+999;040;010;5;1;10004011;Due from credit institutions - Current accounts (nostro accounts)
+999;040;010;5;1;11007010;Due from credit institutions - Overdrafts current accounts</pre>
 
 	{!! Form::open(array('action' => 'CSVController@uploadcsv', 'id' => 'form', 'files'=> 'true')) !!}
 
