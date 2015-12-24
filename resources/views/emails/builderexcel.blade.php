@@ -78,6 +78,7 @@
 							<tr>
 								<td align="left" valign="top">
 								<h2>A new template {{ $content_name }} has been imported with Excel by {{ $username }}. The template is pending for approval.</h2>
+								<h4><a href="{!! url('sections/' . $section_id . '/templates' . $template_id .  '/edit'); !!}">Click here</a> to edit the template</h4>
 								</td>
 							</tr>
 						</table>
