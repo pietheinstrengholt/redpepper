@@ -7,3 +7,5 @@ TODO
 * builder rechten via Middleware?
 * system config?
 * definitions / hovers?
+* hyperlinks after submission of a change request
+* superadmin can approve own changes
