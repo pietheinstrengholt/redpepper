@@ -40,13 +40,22 @@ class ChangeEvent extends Event
 			$template = Template::findOrFail($changerequest->template_id);
 			$event['template_name'] = $template->template_name;
 			
-			Mail::send('emails.notification', $event, function($message)
+			Mail::send('emails.changerequest', $event, function($message)
 			{
 				$message->from(env('MAIL_USERNAME'));
 				$message->to(env('MAIL_TO'), env('MAIL_NAME'));
 				$message->subject('RADAR notification');
 			});
 			
+		}
+		
+		if ($event['content_type'] == "Template Excel" && $user->role == "builder") {
+			Mail::send('emails.builderexcel', $event, function($message)
+			{
+				$message->from(env('MAIL_USERNAME'));
+				$message->to(env('MAIL_TO'), env('MAIL_NAME'));
+				$message->subject('RADAR notification');
+			});
 		}
 		
 	}
