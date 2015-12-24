@@ -826,21 +826,22 @@ class ExcelController extends Controller
 									$HistoryTechnical->save();
 								}
 							}
+							
+							//log Event
+							$event = array(
+								"log_event" => "Template Excel",
+								"action" => "created",
+								"section_id" => $request->input('section_id'),
+								"template_id" => $template->id,
+								"created_by" => Auth::user()->id
+							);
+							
+							Event::fire(new ChangeEvent($event));							
+							
 						}
 					});
 				}
 			}
-			
-			
-			//log Event
-			$event = array(
-				"content_type" => "Template Excel",
-				"content_action" => "created",
-				"content_name" => $request->input('template_name'),
-				"created_by" => Auth::user()->id
-			);
-			
-			Event::fire(new ChangeEvent($event));
 
 			return Redirect::to('/sections');
 		}

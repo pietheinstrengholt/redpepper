@@ -109,9 +109,9 @@ class UserController extends Controller
 			
 			//log Event
 			$event = array(
-				"content_type" => "User",
-				"content_action" => "password",
-				"content_name" => $user->username,
+				"log_event" => "User",
+				"action" => "password",
+				"username_id" => $request->input('username_id'),
 				"created_by" => Auth::user()->id
 			);
 			
@@ -141,9 +141,9 @@ class UserController extends Controller
 		
 		//log Event
 		$event = array(
-			"content_type" => "User",
-			"content_action" => "updated",
-			"content_name" => $user->username,
+			"log_event" => "User",
+			"action" => "updated",
+			"content_name" => $user->id,
 			"created_by" => Auth::user()->id
 		);
 		
@@ -188,9 +188,9 @@ class UserController extends Controller
 		
 		//log Event
 		$event = array(
-			"content_type" => "User",
-			"content_action" => "rights",
-			"content_name" => $user->username,
+			"log_event" => "User",
+			"action" => "rights",
+			"username_id" => $request->input('username_id'),
 			"created_by" => Auth::user()->id
 		);
 		
@@ -217,9 +217,9 @@ class UserController extends Controller
 		
 		//log Event
 		$event = array(
-			"content_type" => "User",
-			"content_action" => "rights",
-			"content_name" => $user->username,
+			"log_event" => "User",
+			"action" => "rights",
+			"username_id" => $request->input('username_id'),
 			"created_by" => Auth::user()->id
 		);
 		

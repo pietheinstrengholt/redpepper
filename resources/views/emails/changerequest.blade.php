@@ -78,7 +78,7 @@
 							<tr>
 								<td align="left" valign="top">
 								<h2>A change request has been submitted for template {{ $template_name }} by {{ $username }}. The changerequest is pending for review</h2>
-								<h4><a href="{!! url('changerequests/' . $content_name . '/edit'); !!}">Click here</a> to review the change request</h4>
+								<h4><a href="{!! url('changerequests/' . $changerequest_id . '/edit'); !!}">Click here</a> to review the change request</h4>
 								</td>
 							</tr>
 						</table>

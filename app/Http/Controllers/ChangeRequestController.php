@@ -303,9 +303,9 @@ class ChangeRequestController extends Controller
 
 				//log Event
 				$event = array(
-					"content_type" => "ChangeRequest",
-					"content_action" => $request->input('change_type'),
-					"content_name" => $request->input('changerequest_id'),
+					"log_event" => "ChangeRequest",
+					"action" => $request->input('change_type'),
+					"changerequest_id" => $request->input('changerequest_id'),
 					"created_by" => Auth::user()->id
 				);
 				
@@ -792,9 +792,20 @@ class ChangeRequestController extends Controller
 		return Redirect::route('changerequests.index')->with('message', 'Changerequest updated.');
 	}
 
-	public function destroy(ChangeRequest $type)
+	public function destroy(ChangeRequest $changerequest)
 	{
-		$type->delete();
+		
+		//log Event
+		$event = array(
+			"log_event" => "ChangeRequest",
+			"action" => "deleted",
+			"changerequest_id" => $changerequest->id,
+			"created_by" => Auth::user()->id
+		);
+		
+		Event::fire(new ChangeEvent($event));
+		
+		$changerequest->delete();
 		return Redirect::route('changerequests.index')->with('message', 'ChangeRequest deleted.');
 	}
 
@@ -819,9 +830,9 @@ class ChangeRequestController extends Controller
 			
 			//log Event
 			$event = array(
-				"content_type" => "ChangeRequest",
-				"content_action" => "created",
-				"content_name" => $changerequest->id,
+				"log_event" => "ChangeRequest",
+				"action" => "created",
+				"changerequest_id" => $changerequest->id,
 				"created_by" => Auth::user()->id
 			);
 			

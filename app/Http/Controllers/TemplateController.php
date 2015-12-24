@@ -237,16 +237,6 @@ class TemplateController extends Controller
 			'template_shortdesc' => 'required|min:4',
 			'section_id' => 'required'
 		]);
-		
-		//log Event
-		$event = array(
-			"content_type" => "Template Wizard",
-			"content_action" => "created",
-			"content_name" => $request->input('template_name'),
-			"created_by" => Auth::user()->id
-		);
-		
-		Event::fire(new ChangeEvent($event));
 
 		if ($request->isMethod('post')) {
 
@@ -298,6 +288,18 @@ class TemplateController extends Controller
 				$column->save();
 				$i++;
 			}
+			
+			
+			//log Event
+			$event = array(
+				"log_event" => "Template Wizard",
+				"action" => "created",
+				"template_id" => $template->id,
+				"created_by" => Auth::user()->id
+			);
+			
+			Event::fire(new ChangeEvent($event));			
+			
 		}
 		return Redirect::to('/templatestructure/' . $template->id);
 	}
@@ -398,15 +400,15 @@ class TemplateController extends Controller
 					}
 				}
 
-			//log Event
-			$event = array(
-				"content_type" => "Template Structure",
-				"content_action" => "updated",
-				"content_name" => $template->template_name,
-				"created_by" => Auth::user()->id
-			);
-			
-			Event::fire(new ChangeEvent($event));				
+				//log Event
+				$event = array(
+					"log_event" => "Template Structure",
+					"action" => "updated",
+					"template_id" => $template->id,
+					"created_by" => Auth::user()->id
+				);
+				
+				Event::fire(new ChangeEvent($event));				
 				
 			}
 		}
@@ -429,13 +431,14 @@ class TemplateController extends Controller
 
 		$input = Input::all();
 		$input['section_id'] = $section->id;
-		Template::create( $input );
+		$template = Template::create($input);
 		
 		//log Event
 		$event = array(
-			"content_type" => "Template",
-			"content_action" => "created",
-			"content_name" => $template->template_name,
+			"log_event" => "Template",
+			"action" => "created",
+			"section_id" => $section->id,
+			"template_id" => $template->id,
 			"created_by" => Auth::user()->id
 		);
 		
@@ -460,9 +463,9 @@ class TemplateController extends Controller
 		
 		//log Event
 		$event = array(
-			"content_type" => "Template",
-			"content_action" => "updated",
-			"content_name" => $template->template_name,
+			"log_event" => "Template",
+			"action" => "updated",
+			"template_id" => $template->id,
 			"created_by" => Auth::user()->id
 		);
 		
@@ -491,9 +494,9 @@ class TemplateController extends Controller
 
 		//log Event
 		$event = array(
-			"content_type" => "Template",
-			"content_action" => "deleted",
-			"content_name" => $template->template_name,
+			"log_event" => "Template",
+			"action" => "deleted",
+			"template_id" => $template->id,
 			"created_by" => Auth::user()->id
 		);
 		

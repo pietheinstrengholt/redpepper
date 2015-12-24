@@ -121,13 +121,13 @@ class SectionController extends Controller
 		]);
 
 		$input = Input::all();
-		Section::create($input);
+		$section = Section::create($input);
 
 		//log Event		
 		$event = array(
-			"content_type" => "Section",
-			"content_action" => "created",
-			"content_name" => $request->input('section_name'),
+			"log_event" => "Section",
+			"action" => "created",
+			"section_id" => $section->id,
 			"created_by" => Auth::user()->id
 		);
 		
@@ -153,9 +153,9 @@ class SectionController extends Controller
 
 		//log Event
 		$event = array(
-			"content_type" => "Section",
-			"content_action" => "updated",
-			"content_name" => $request->input('section_name'),
+			"log_event" => "Section",
+			"action" => "updated",
+			"section_id" => $section->id,
 			"created_by" => Auth::user()->id
 		);
 		
@@ -189,9 +189,9 @@ class SectionController extends Controller
 		
 		//log Event
 		$event = array(
-			"content_type" => "Section",
-			"content_action" => "deleted",
-			"content_name" => $section->section_name,
+			"log_event" => "Section",
+			"action" => "deleted",
+			"section_id" => $section->id,
 			"created_by" => Auth::user()->id
 		);
 		

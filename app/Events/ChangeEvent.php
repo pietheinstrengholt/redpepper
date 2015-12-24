@@ -24,9 +24,25 @@ class ChangeEvent extends Event
 	public function __construct($event)
 	{
 		$log = new Log;
-		$log->content_type = $event['content_type'];
-		$log->content_action = $event['content_action'];
-		$log->content_name = $event['content_name'];
+		$log->log_event = $event['log_event'];
+		$log->action = $event['action'];
+		
+		if (!empty($event['changerequest_id'])) {
+			$log->changerequest_id = $event['changerequest_id'];
+		}
+		
+		if (!empty($event['section_id'])) {
+			$log->section_id = $event['section_id'];
+		}
+
+		if (!empty($event['template_id'])) {
+			$log->template_id = $event['template_id'];
+		}
+
+		if (!empty($event['username_id'])) {
+			$log->username_id = $event['username_id'];
+		}		
+
 		$log->created_by = $event['created_by'];
 		$log->save();
 		
@@ -34,9 +50,9 @@ class ChangeEvent extends Event
 		
 		$event['username'] = $user->username;
 		
-		if ($event['content_type'] == "ChangeRequest") {
+		if ($event['log_event'] == "ChangeRequest") {
 			
-			$changerequest = ChangeRequest::findOrFail($event['content_name']);
+			$changerequest = ChangeRequest::findOrFail($event['changerequest_id']);
 			$template = Template::findOrFail($changerequest->template_id);
 			$event['template_name'] = $template->template_name;
 			
@@ -49,7 +65,7 @@ class ChangeEvent extends Event
 			
 		}
 		
-		if ($event['content_type'] == "Template Excel" && $user->role == "builder") {
+		if ($event['log_event'] == "Template Excel" && $user->role == "builder") {
 			Mail::send('emails.builderexcel', $event, function($message)
 			{
 				$message->from(env('MAIL_USERNAME'));

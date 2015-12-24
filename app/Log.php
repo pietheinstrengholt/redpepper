@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Log extends Model
 {
-    protected $fillable = ['content_type','content_action','content_name','created_by'];
+    protected $fillable = ['log_event','action','changerequest_id','section_id','template_id','username_id','created_by'];
     protected $guarded = [];
 	protected $table = 't_logs';
 

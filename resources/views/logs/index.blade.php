@@ -17,18 +17,24 @@
 		<table class="table section-table dialog table-striped table-condensed" border="1">
 
 		<tr class="success">
-		<td class="header">Content type</td>
+		<td class="header">Event type</td>
 		<td class="header">Action</td>		
-		<td class="header">Content name</td>
+		<td class="header">Changerequest id</td>
+		<td class="header">Section id</td>
+		<td class="header">Template id</td>
+		<td class="header">Username id</td>		
 		<td class="header" style="width: 20%;">User</td>
 		<td class="header">Created</td>
 		</tr>
 
 		@foreach( $logs as $log )
 			<tr>
-			<td>{{ $log->content_type }}</a></td>
-			<td>{{ $log->content_action }}</a></td>
-			<td>{{ $log->content_name }}</a></td>			
+			<td>{{ $log->log_event }}</a></td>
+			<td>{{ $log->action }}</a></td>
+			<td>{{ $log->changerequest_id }}</a></td>
+			<td>{{ $log->section_id }}</a></td>
+			<td>{{ $log->template_id }}</a></td>
+			<td>{{ $log->username_id }}</a></td>
 			<td>{{ $log->user->firstname }} {{ $log->user->lastname }} ({{ $log->user->username }})</a></td>
 			<td>{{ $log->created_at }}</a></td>
 			</tr>

@@ -67,13 +67,13 @@ class CSVController extends Controller
 
 						
 							$section = Section::findOrFail($request->input('section_id'));
-							$templates = Template::where('section_id', $request->has('section_id'))->get();
+							$templates = Template::where('section_id', $request->input('section_id'))->get();
 							
 							//log Event
 							$event = array(
-								"content_type" => "CSV Section",
-								"content_action" => "technical imported",
-								"content_name" => $section->section_name,
+								"log_event" => "CSV Section",
+								"action" => "technical imported",
+								"section_id" => $request->input('section_id'),
 								"created_by" => Auth::user()->id
 							);
 							
@@ -112,15 +112,15 @@ class CSVController extends Controller
 							
 							//log Event
 							$event = array(
-								"content_type" => "CSV Template",
-								"content_action" => "rows imported",
-								"content_name" => $template->template_name,
+								"log_event" => "CSV Template",
+								"action" => "rows imported",
+								"template_id" => $request->input('template_id'),
 								"created_by" => Auth::user()->id
 							);
 							
 							Event::fire(new ChangeEvent($event));
 
-							TemplateRow::where('template_id', $request->has('template_id'))->delete();
+							TemplateRow::where('template_id', $request->input('template_id'))->delete();
 							foreach ($csvarray as $csv) {
 
 								if (array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('row_code', $csv) && array_key_exists('row_description', $csv)) {
@@ -146,15 +146,15 @@ class CSVController extends Controller
 							
 							//log Event
 							$event = array(
-								"content_type" => "CSV Template",
-								"content_action" => "columns imported",
-								"content_name" => $template->template_name,
+								"log_event" => "CSV Template",
+								"action" => "columns imported",
+								"template_id" => $request->input('template_id'),
 								"created_by" => Auth::user()->id
 							);
 							
 							Event::fire(new ChangeEvent($event));
 
-							TemplateColumn::where('template_id', $request->has('template_id'))->delete();
+							TemplateColumn::where('template_id', $request->input('template_id'))->delete();
 							foreach ($csvarray as $csv) {
 
 								if (array_key_exists('template_id', $csv) && array_key_exists('column_num', $csv) && array_key_exists('column_code', $csv) && array_key_exists('column_description', $csv)) {
@@ -179,15 +179,15 @@ class CSVController extends Controller
 							
 							//log Event
 							$event = array(
-								"content_type" => "CSV Template",
-								"content_action" => "columns imported",
-								"content_name" => $template->template_name,
+								"log_event" => "CSV Template",
+								"action" => "columns imported",
+								"template_id" => $request->input('template_id'),
 								"created_by" => Auth::user()->id
 							);
 							
 							Event::fire(new ChangeEvent($event));
 						
-							TemplateField::where('template_id', $request->has('template_id'))->delete();
+							TemplateField::where('template_id', $request->input('template_id'))->delete();
 							foreach ($csvarray as $csv) {
 
 								if (array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('column_code', $csv) && array_key_exists('property', $csv) && array_key_exists('content', $csv)) {
@@ -213,15 +213,15 @@ class CSVController extends Controller
 							
 							//log Event
 							$event = array(
-								"content_type" => "CSV Template",
-								"content_action" => "rows imported",
-								"content_name" => $template->template_name,
+								"log_event" => "CSV Template",
+								"action" => "rows imported",
+								"template_id" => $request->input('template_id'),
 								"created_by" => Auth::user()->id
 							);
 							
 							Event::fire(new ChangeEvent($event));
 						
-							Requirement::where('template_id', $request->has('template_id'))->delete();
+							Requirement::where('template_id', $request->input('template_id'))->delete();
 
 							foreach ($csvarray as $csv) {
 
