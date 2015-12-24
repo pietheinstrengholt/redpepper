@@ -193,7 +193,7 @@ class ExcelController extends Controller
 											} elseif ($row > 2 && $col == 1) {
 												echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
 												$rowid = $row-2;
-												$templatestructure['rows'][$rowid]['row_code'] = $val;
+												$templatestructure['rows'][$rowid]['row_num'] = $val;
 												//push to array for validation
 												array_push($templaterows, $val);
 											//more than 2 rows and 2nd column is where the row name is stored
@@ -695,7 +695,7 @@ class ExcelController extends Controller
 								$row = new TemplateRow;
 								$row->template_id = $template->id;
 								$row->row_num = $i;
-								$row->row_code = $rowline['row_code'];
+								$row->row_code = $rowline['row_num'];
 								$row->row_description = $rowline['row_code'];
 								$row->row_reference = $rowline['row_reference'];
 								$row->save();
@@ -948,9 +948,9 @@ class ExcelController extends Controller
 						//get row_code and column name from structure
 						$structurerowid = $templatestructure['rows'][$disabled_row_code];
 						$structurecolumnid = $templatestructure['columns'][$disabled_column_code];
-						//jump in two from top and three from left
+						//jump in two from top and four from left
 						$structurerowid = $structurerowid + 2;
-						$structurecolumnid = $structurecolumnid + 3;
+						$structurecolumnid = $structurecolumnid + 4;
 						//convert columnid to letter
 						//$columnLetter = PHPExcel_Cell::stringFromColumnIndex($structurecolumnid);
 						$columnLetter = $this->getExcelColumnNumber($structurecolumnid);
