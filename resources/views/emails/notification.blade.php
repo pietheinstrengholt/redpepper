@@ -57,13 +57,13 @@
 </head>
 <body>
 
-<table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable">
+<table border="0" cellpadding="0" cellspacing="30" height="100%" width="100%" id="bodyTable">
 	<tr>
 		<td align="center" valign="top">
-			<table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer">
+			<table border="0" cellpadding="10" cellspacing="0" width="600" id="emailContainer">
 				<tr>
 					<td align="center" valign="top">
-						<table border="0" cellpadding="10" cellspacing="0" width="100%" id="emailHeader">
+						<table border="0" cellpadding="0" cellspacing="0" width="100%" id="emailHeader">
 							<tr>
 								<td align="left" valign="top" >
 									<small>This is an automatically generated delivery status notification from the RADAR application.</small>
@@ -74,10 +74,10 @@
 				</tr>
 				<tr>
 					<td align="center" valign="top">
-						<table border="0" cellpadding="10" cellspacing="0" width="100%" id="emailBody">
+						<table border="0" cellpadding="0" cellspacing="0" width="100%" id="emailBody">
 							<tr>
 								<td align="left" valign="top">
-								<h2>A change request has been submitted for review</h2>
+								<h2>A change request has been submitted for template {{ $template_name }} by {{ $username }}. The changerequest is pending for review</h2>
 								<h4><a href="{!! url('changerequests/' . $content_name . '/edit'); !!}">Click here</a> to review the change request</h4>
 								</td>
 							</tr>
@@ -86,7 +86,7 @@
 				</tr>
 				<tr>
 					<td align="center" valign="top">
-						<table border="0" cellpadding="10" cellspacing="0" width="100%" id="emailFooter">
+						<table border="0" cellpadding="0" cellspacing="0" width="100%" id="emailFooter">
 							<tr>
 								<td align="left" valign="top">
 								If you have any questions, please send an email to: <a href="mailto:frc@nl.abnamro.com">FRC RADAR</A>

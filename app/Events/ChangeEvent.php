@@ -7,8 +7,10 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 use App\Log;
-
+use App\User;
 use Mail;
+use App\ChangeRequest;
+use App\Template;
 
 class ChangeEvent extends Event
 {
@@ -28,7 +30,15 @@ class ChangeEvent extends Event
 		$log->created_by = $event['created_by'];
 		$log->save();
 		
+		$user = User::findOrFail($event['created_by']);
+		
+		$event['username'] = $user->username;
+		
 		if ($event['content_type'] == "ChangeRequest") {
+			
+			$changerequest = ChangeRequest::findOrFail($event['content_name']);
+			$template = Template::findOrFail($changerequest->template_id);
+			$event['template_name'] = $template->template_name;
 			
 			Mail::send('emails.notification', $event, function($message)
 			{
