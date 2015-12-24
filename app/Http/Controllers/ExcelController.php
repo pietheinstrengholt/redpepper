@@ -177,7 +177,7 @@ class ExcelController extends Controller
 												//4th column is where column naming starts
 												if ($col > 4) {
 													$columnid = $col-3;
-													$templatestructure['columns'][$columnid]['column_code'] = $val;
+													$templatestructure['columns'][$columnid]['column_description'] = $val;
 												}
 											//2nd row is where the column numbers are stored
 											} elseif ($row == 2) {
@@ -185,7 +185,7 @@ class ExcelController extends Controller
 												//4th column is where column numbering starts
 												if ($col > 4) {
 													$columnid = $col-3;
-													$templatestructure['columns'][$columnid]['column_num'] = $val;
+													$templatestructure['columns'][$columnid]['column_code'] = $val;
 													//push to array for validation
 													array_push($templatecolumns, $val);
 												}
@@ -193,14 +193,14 @@ class ExcelController extends Controller
 											} elseif ($row > 2 && $col == 1) {
 												echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
 												$rowid = $row-2;
-												$templatestructure['rows'][$rowid]['row_num'] = $val;
+												$templatestructure['rows'][$rowid]['row_code'] = $val;
 												//push to array for validation
 												array_push($templaterows, $val);
 											//more than 2 rows and 2nd column is where the row name is stored
 											} elseif ($row > 2 && $col == 2) {
 												echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
 												$rowid = $row-2;
-												$templatestructure['rows'][$rowid]['row_code'] = $val;
+												$templatestructure['rows'][$rowid]['row_description'] = $val;
 											//more than 2 rows and 3th column is where the row style is stored
 											} elseif ($row > 2 && $col == 3) {
 												echo '<td style="background-color: #FAFAFA; padding: 5px;">' . $val . '</td>';
@@ -221,12 +221,12 @@ class ExcelController extends Controller
 												$cellcolor = '';
 
 												//set cell column num and row num based on templatestructure
-												$cell_column_num = $templatestructure['columns'][$newcol]['column_num'];
+												$cell_column_code = $templatestructure['columns'][$newcol]['column_code'];
 												$cell_row_code = $templatestructure['rows'][$newrow]['row_code'];
 												//check if cell color is disabled: = D3D3D3
 												if ($cellcolor == 'D3D3D3' || $val == 'disabled') {
 													echo '<td style="background-color: LightGray ! important; padding: 5px;">disabled</td>';
-													$templatestructure['disabledcells'][$disabledcount]['column_num'] = $cell_column_num;
+													$templatestructure['disabledcells'][$disabledcount]['column_code'] = $cell_column_code;
 													$templatestructure['disabledcells'][$disabledcount]['row_code'] = $cell_row_code;
 													$disabledcount++;
 												} else {
@@ -683,8 +683,8 @@ class ExcelController extends Controller
 								$column = new TemplateColumn;
 								$column->template_id = $template->id;
 								$column->column_num = $i;
-								$column->column_code = $columnline['column_num'];
-								$column->column_description = $columnline['column_code'];
+								$column->column_code = $columnline['column_code'];
+								$column->column_description = $columnline['column_description'];
 								$column->save();
 								$i++;
 							}
@@ -695,8 +695,8 @@ class ExcelController extends Controller
 								$row = new TemplateRow;
 								$row->template_id = $template->id;
 								$row->row_num = $i;
-								$row->row_code = $rowline['row_num'];
-								$row->row_description = $rowline['row_code'];
+								$row->row_code = $rowline['row_code'];
+								$row->row_description = $rowline['row_description'];
 								$row->row_reference = $rowline['row_reference'];
 								$row->save();
 								$i++;
@@ -790,7 +790,7 @@ class ExcelController extends Controller
 									$templatefield = new TemplateField;
 									$templatefield->template_id = $template->id;
 									$templatefield->row_code = $disabledcell['row_code'];
-									$templatefield->column_code = $disabledcell['column_num'];
+									$templatefield->column_code = $disabledcell['column_code'];
 									$templatefield->property = 'disabled';
 									$templatefield->save();
 								}
@@ -1083,7 +1083,7 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1:D1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
 
-				$field_contents   = TemplateField::where('template_id', 1)->where('property', '!=' , 'disabled')->orderBy('row_code', 'asc')->orderBy('column_code', 'asc')->get();
+				$field_contents   = TemplateField::where('template_id', $id)->where('property', '!=' , 'disabled')->orderBy('row_code', 'asc')->orderBy('column_code', 'asc')->get();
 
 				$fieldcontentcount = 2;
 				//set grey fields, add two to put it correctly in the template
