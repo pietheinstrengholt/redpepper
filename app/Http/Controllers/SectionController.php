@@ -174,17 +174,6 @@ class SectionController extends Controller
 		//remove all related templates and content
 		$templates = Template::where('section_id', $section->id)->get();
 
-		if (!empty($templates)) {
-			foreach ($templates as $template) {
-				TemplateRow::where('template_id', $section->id)->delete();
-				TemplateColumn::where('template_id', $section->id)->delete();
-				TemplateField::where('template_id', $section->id)->delete();
-				Requirement::where('template_id', $section->id)->delete();
-				Technical::where('template_id', $section->id)->delete();
-				ChangeRequest::where('template_id', $section->id)->delete();
-			}
-		}
-
 		Template::where('section_id', $section->id)->delete();
 		
 		//log Event
