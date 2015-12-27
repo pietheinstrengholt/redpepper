@@ -76,7 +76,7 @@ class TechnicalTypeController extends Controller
 
 		//validate input form
 		$this->validate($request, [
-			'type_name' => 'required|min:3|unique:t_technical_types',
+			'type_name' => 'required|min:3',
 			'type_description' => 'required'
 		]);
 

@@ -76,7 +76,7 @@ class DepartmentController extends Controller
 
 		//validate input form
 		$this->validate($request, [
-			'department_name' => 'required|min:3|unique:t_departments',
+			'department_name' => 'required|min:3',
 			'department_description' => 'required'
 		]);
 

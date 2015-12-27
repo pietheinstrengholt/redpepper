@@ -76,7 +76,7 @@ class TechnicalSourceController extends Controller
 
 		//validate input form
 		$this->validate($request, [
-			'source_name' => 'required|min:3|unique:t_technical_sources',
+			'source_name' => 'required|min:3',
 			'source_description' => 'required'
 		]);
 
