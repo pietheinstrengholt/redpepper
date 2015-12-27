@@ -1402,13 +1402,13 @@ class ExcelController extends Controller
 					}
 
 					//query for technical source table
-					$source_id  = TechnicalSource::where('id ', $row['source_id '])->first();
+					$source_id  = TechnicalSource::where('id', $row['source_id'])->first();
 					if (!empty($source_id )) {
 						$sheet->setCellValueExplicit('E' . $i, $source_id['source_name']);
 					}
 
 					//query for technical type table
-					$type_id   = TechnicalType::where('id ', $row['type_id '])->first();
+					$type_id   = TechnicalType::where('id', $row['type_id'])->first();
 					if (!empty($type_id )) {
 						$sheet->setCellValueExplicit('F' . $i, $type_id['type_name']);
 					}
