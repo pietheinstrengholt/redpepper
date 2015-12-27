@@ -208,22 +208,22 @@ class UserController extends Controller
 
 		//delete logs
 		Log::where('created_by', $user->id)->delete();
-
-		//delete user
-		$user->delete();
 		
 		//find user
-		$user = User::findOrFail($request->input('username_id'));	
+		$user = User::findOrFail($user->id);	
 		
 		//log Event
 		$event = array(
 			"log_event" => "User",
 			"action" => "rights",
-			"username_id" => $request->input('username_id'),
+			"username_id" => $user->id,
 			"created_by" => Auth::user()->id
 		);
 		
 		Event::fire(new ChangeEvent($event));
+		
+		//delete user
+		$user->delete();
 		
 		return Redirect::route('users.index')->with('message', 'User deleted.');
 	}
