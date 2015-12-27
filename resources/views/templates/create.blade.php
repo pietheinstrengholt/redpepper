@@ -2,7 +2,7 @@
 @extends('layouts.master')
 
 @section('content')
-  <h2>Create Template</h2>
+	<h2>Create Template</h2>
 
 	@if (count($errors) > 0)
 		<div class="alert alert-danger">
