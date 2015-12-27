@@ -915,7 +915,7 @@ class ChangeRequestController extends Controller
 			if ($request->has('field_interpretation')) {
 				$draftfield = new DraftField;
 				$draftfield->changerequest_id = $changerequest->id;
-				$draftfield->property = 'regulation';
+				$draftfield->property = 'interpretation';
 				$draftfield->content = $request->input('field_interpretation');
 				$draftfield->save();
 			}
@@ -923,7 +923,7 @@ class ChangeRequestController extends Controller
 			if ($request->has('field_regulation')) {
 				$draftfield = new DraftField;
 				$draftfield->changerequest_id = $changerequest->id;
-				$draftfield->property = 'interpretation';
+				$draftfield->property = 'regulation';
 				$draftfield->content = $request->input('field_regulation');
 				$draftfield->save();
 			}
