@@ -41,11 +41,11 @@ class Handler extends ExceptionHandler
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $e)
-    {	
+    {
 		if ($e instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException) {
 			abort(405, 'MethodNotAllowedHttpException. It seems that a POST method has been used without the proper use of a FORM. Please contact the administrator if you see this more often.');
 		}
-		
+
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
         }

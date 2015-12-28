@@ -65,10 +65,9 @@ class CSVController extends Controller
 						//import rows function
 						if ($request->input('formname') == "importtech" && $request->has('section_id')) {
 
-						
 							$section = Section::findOrFail($request->input('section_id'));
 							$templates = Template::where('section_id', $request->input('section_id'))->get();
-							
+
 							//log Event
 							$event = array(
 								"log_event" => "CSV Section",
@@ -76,9 +75,9 @@ class CSVController extends Controller
 								"section_id" => $request->input('section_id'),
 								"created_by" => Auth::user()->id
 							);
-							
+
 							Event::fire(new ChangeEvent($event));
-							
+
 							if (!empty($templates)) {
 								foreach ($templates as $template) {
 									Technical::where('section_id', $template->id)->delete();
@@ -107,9 +106,9 @@ class CSVController extends Controller
 
 						//import rows function
 						if ($request->input('formname') == "importrows" && $request->has('template_id')) {
-							
+
 							$template = Template::findOrFail($request->input('template_id'));
-							
+
 							//log Event
 							$event = array(
 								"log_event" => "CSV Template",
@@ -117,7 +116,7 @@ class CSVController extends Controller
 								"template_id" => $request->input('template_id'),
 								"created_by" => Auth::user()->id
 							);
-							
+
 							Event::fire(new ChangeEvent($event));
 
 							TemplateRow::where('template_id', $request->input('template_id'))->delete();
@@ -141,9 +140,9 @@ class CSVController extends Controller
 
 						//import columns function
 						if ($request->input('formname') == "importcolumns" && $request->has('template_id')) {
-							
+
 							$template = Template::findOrFail($request->input('template_id'));
-							
+
 							//log Event
 							$event = array(
 								"log_event" => "CSV Template",
@@ -151,7 +150,7 @@ class CSVController extends Controller
 								"template_id" => $request->input('template_id'),
 								"created_by" => Auth::user()->id
 							);
-							
+
 							Event::fire(new ChangeEvent($event));
 
 							TemplateColumn::where('template_id', $request->input('template_id'))->delete();
@@ -176,7 +175,7 @@ class CSVController extends Controller
 						if ($request->input('formname') == "importfields" && $request->has('template_id')) {
 
 							$template = Template::findOrFail($request->input('template_id'));
-							
+
 							//log Event
 							$event = array(
 								"log_event" => "CSV Template",
@@ -184,9 +183,9 @@ class CSVController extends Controller
 								"template_id" => $request->input('template_id'),
 								"created_by" => Auth::user()->id
 							);
-							
+
 							Event::fire(new ChangeEvent($event));
-						
+
 							TemplateField::where('template_id', $request->input('template_id'))->delete();
 							foreach ($csvarray as $csv) {
 
@@ -210,7 +209,7 @@ class CSVController extends Controller
 						if ($request->input('formname') == "importcontent" && $request->has('template_id')) {
 
 							$template = Template::findOrFail($request->input('template_id'));
-							
+
 							//log Event
 							$event = array(
 								"log_event" => "CSV Template",
@@ -218,9 +217,9 @@ class CSVController extends Controller
 								"template_id" => $request->input('template_id'),
 								"created_by" => Auth::user()->id
 							);
-							
+
 							Event::fire(new ChangeEvent($event));
-						
+
 							Requirement::where('template_id', $request->input('template_id'))->delete();
 
 							foreach ($csvarray as $csv) {

@@ -91,7 +91,7 @@ class DepartmentController extends Controller
 		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');
 		}
-    
+
 		$department->delete();
 		return Redirect::route('departments.index')->with('message', 'Department deleted.');
 	}

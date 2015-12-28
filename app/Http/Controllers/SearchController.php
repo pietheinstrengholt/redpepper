@@ -34,18 +34,15 @@ class SearchController extends Controller
 
 	public function search(Request $request)
 	{
-		
 		//validate input form
 		$this->validate($request, [
 			'search' => 'required'
-		]);	
-		
+		]);
+
 		if ($request->isMethod('post')) {
-
 			if ($request->has('search')) {
-
 				if ($request->has('advanced-search')) {
-					
+
 					//validate input form
 					$this->validate($request, [
 						'sections' => 'required',

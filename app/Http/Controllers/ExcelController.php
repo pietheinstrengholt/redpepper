@@ -60,7 +60,7 @@ class ExcelController extends Controller
 		if (Auth::user()->role == "contributor" || Auth::user()->role == "reviewer" || Auth::user()->role == "guest") {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
 		}
-		
+
 		//admin and builder are only permitted to upload to own sections
 		if (Auth::user()->role == "admin" || Auth::user()->role == "builder") {
 			$sectionList = $this->sectionRights(Auth::user()->id);
@@ -117,7 +117,7 @@ class ExcelController extends Controller
 
 			//create an empty array for the structure
 			$templatestructure = array();
-			
+
 			//create an empty array to capture validation problems
 			$errors = array();
 
@@ -152,7 +152,7 @@ class ExcelController extends Controller
 
 							for ($row = 1; $row <= $highestRow; ++ $row) {
 								for ($column = 1; $column < $highestColumnIndex; ++ $column) {
-									
+
 									//4th column is where column naming starts, 3th row is where the row content starts
 									$columnid = $column-3;
 									$rowid = $row-2;
@@ -171,12 +171,12 @@ class ExcelController extends Controller
 										} else {
 											$templatestructure['columns'][$columnid]['column_description'] = $val;
 										}
-									} 
-									
+									}
+
 									//2nd row is where the column numbers are stored, 4th column is where column numbering starts
 									if ($row == 2 && $column > 4) {
 										//validate if column code is not empty
-										if (empty($val)) {													
+										if (empty($val)) {
 											$templatestructure['columns'][$columnid]['column_code'] = $val;
 											$templatestructure['columns'][$columnid]['error'] = "1";
 											array_push($errors, "empty column_code in template structure");
@@ -185,8 +185,8 @@ class ExcelController extends Controller
 											//push to array for validation
 											array_push($templatecolumns, $val);
 										}
-									} 
-									
+									}
+
 									//more than 2 rows and 1st column is where the row number is stored
 									if ($row > 2 && $column == 1) {
 										//validate if row code is not empty
@@ -200,7 +200,7 @@ class ExcelController extends Controller
 											array_push($templaterows, $val);
 										}
 									}
-									
+
 									//more than 2 rows and 2nd column is where the row description is stored
 									if ($row > 2 && $column == 2) {
 										//validate if row description is not empty
@@ -211,18 +211,18 @@ class ExcelController extends Controller
 										} else {
 											$templatestructure['rows'][$rowid]['row_description'] = $val;
 										}
-									} 
-									
+									}
+
 									//more than 2 rows and 3th column is where the row style is stored
 									if ($row > 2 && $column == 3) {
 										$templatestructure['rows'][$rowid]['row_style'] = $val;
-									} 
-									
+									}
+
 									//more than 2 rows and 4th column is where the row reference is stored
 									if ($row > 2 && $column == 4) {
 										$templatestructure['rows'][$rowid]['row_reference'] = $val;
-									} 
-									
+									}
+
 									//more than 2 rows and 2 columns is where the disabled cells might be stored
 									if ($row > 2 && $column > 4) {
 
@@ -266,18 +266,18 @@ class ExcelController extends Controller
 									//set column letter and retrieve value
 									$columnLetter = $this->getExcelColumnNumber($column);
 									$val = $reader->getExcel()->getSheet(1)->getCell($columnLetter . $row)->getValue();
-									
+
 									//1th row is the heading
 									if ($row == 1 && ($column == 1 && $val != 'number' || $column == 2 && $val != 'content_type' || $column == 3 && $val != 'content')) {
 										//validate if heading is correct
 										array_push($errors, "incorrect heading on column content sheet");
-									} 
+									}
 									//add content to template structure column_content
 									if ($row > 1 && $column == 1) {
 										//validate if column_code exists in template columns
 										if (!(in_array($val, $templatecolumns, true))) {
 											$templatestructure['column_content'][$columncontentcount]['error'] = "1";
-											array_push($errors, "column_code cannot be found in template structure");	
+											array_push($errors, "column_code cannot be found in template structure");
 										}
 										$templatestructure['column_content'][$columncontentcount]['column_code'] = $val;
 									}
@@ -285,7 +285,7 @@ class ExcelController extends Controller
 										//validate if content_type contains regulation or interpretation
 										if (!($val == 'regulation' || $val == 'interpretation' || $val == 'reference')) {
 											$templatestructure['column_content'][$columncontentcount]['error'] = "1";
-											array_push($errors, "content_type not a valid value");	
+											array_push($errors, "content_type not a valid value");
 										}
 										$templatestructure['column_content'][$columncontentcount]['content_type'] = $val;
 									}
@@ -551,7 +551,7 @@ class ExcelController extends Controller
 									//1th row is the heading
 									if ($row == 1 && ($column == 1 && $val != 'column_code' || $column == 2 && $val != 'row_code' || $column == 3 && $val != 'content_type' || $column == 4 && $val != 'content')) {
 										array_push($errors, "incorrect heading on field content sheet");
-									} 
+									}
 									if ($row > 1 && $column == 1) {
 										if (!(in_array($val, $templatecolumns, true))) {
 											$templatestructure['field_content'][$fieldcontentcount]['error'] = "1";
@@ -584,9 +584,8 @@ class ExcelController extends Controller
 						}
 					}
 				}
-				
 			});
-			
+
 			if (!empty($errors)) {
 				//Create new arrays to restructure result
 				$arraydisabled=array();
@@ -599,8 +598,7 @@ class ExcelController extends Controller
 						$arraydisabled[$field] = 'disabled';
 					}
 				}
-				
-				return view('errors.excelupload', compact('templatestructure','errors','arraydisabled'));			
+				return view('errors.excelupload', compact('templatestructure','errors','arraydisabled'));
 			} else {
 
 				$template = new Template;
@@ -775,7 +773,7 @@ class ExcelController extends Controller
 						$HistoryTechnical->save();
 					}
 				}
-				
+
 				//log Event
 				$event = array(
 					"log_event" => "Template Excel",
@@ -784,9 +782,9 @@ class ExcelController extends Controller
 					"template_id" => $template->id,
 					"created_by" => Auth::user()->id
 				);
-				
+
 				Event::fire(new ChangeEvent($event));
-				
+
 				return Redirect::to('/sections');
 			}
 		}
@@ -1172,8 +1170,6 @@ class ExcelController extends Controller
 				$sheet->getStyle('A16')->getFill()->getStartColor()->setARGB('D3D3D3');
 				$sheet->getStyle('A1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getStyle('A6')->getFill()->getStartColor()->setARGB('dff0d8');
-
-
 			});
 
 		})->download('xlsx');

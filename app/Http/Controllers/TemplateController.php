@@ -32,15 +32,15 @@ class TemplateController extends Controller
 {
 	//function to retrieve section rights based on user id
 	public function sectionRights() {
-		
+
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action.');
 		}
-		
+
 		if (!(Auth::user()->role == "builder" || Auth::user()->role == "superadmin")) {
-			abort(403, 'Unauthorized action. You are not allowed to make changes for this section.');			
-		}		
-		
+			abort(403, 'Unauthorized action. You are not allowed to make changes for this section.');
+		}
+
 		if (Auth::user()->role == "builder") {
 
 			$userrights = UserRights::where('username_id', Auth::user()->id)->get();
@@ -52,17 +52,14 @@ class TemplateController extends Controller
 					array_push($sectionRights,$userright['section_id']);
 				}
 			}
-			
 			$sections = Section::whereIn('id', $sectionRights)->where('visible','True')->orderBy('section_name', 'asc')->get();
 		}
-		
 		if (Auth::user()->role == "superadmin") {
 			$sections = Section::orderBy('section_name', 'asc')->get();
 		}
-		
 		return $sections;
 	}
-	
+
 	//function to show template
 	public function show(Section $section, Template $template, Request $request)
 	{
@@ -134,7 +131,7 @@ class TemplateController extends Controller
 
 		return $arraydisabled;
 	}
-	
+
 	//function to retrieve property2 fields
 	public function getPropertyFields(Template $template)
 	{
@@ -167,10 +164,9 @@ class TemplateController extends Controller
 		if (!$template->id) {
 			abort(403, 'This template no longer exists in the database.');
 		}
-		
 		//retrieve list with sections based on user id and user role
 		$sections = $this->sectionRights();
-		
+
 		if (empty($sections)) {
 			abort(403, 'Unauthorized action. You don\'t have access to any sections');
 		}
@@ -189,23 +185,23 @@ class TemplateController extends Controller
 	{
 		//retrieve list with sections based on user id and user role
 		$sections = $this->sectionRights();
-		
+
 		if (empty($sections)) {
 			abort(403, 'Unauthorized action. You don\'t have access to any sections');
-		}	
+		}
 
 		return view('templates.create', compact('sections'));
 	}
-	
+
 
 	//function to structure template
 	public function structure($id)
 	{
 		$template = Template::findOrFail($id);
-		
+
 		//retrieve list with sections based on user id and user role
 		$sections = $this->sectionRights();
-		
+
 		if (empty($sections)) {
 			abort(403, 'Unauthorized action. You don\'t have access to any sections');
 		}
@@ -219,7 +215,7 @@ class TemplateController extends Controller
 
 		$disabledFields = $this->getDisabledFields($template);
 		return view('templates.structure', compact('section', 'template', 'disabledFields'));
-	}	
+	}
 
 	//function to create new template
 	public function newtemplate(Request $request)
@@ -288,8 +284,7 @@ class TemplateController extends Controller
 				$column->save();
 				$i++;
 			}
-			
-			
+
 			//log Event
 			$event = array(
 				"log_event" => "Template Wizard",
@@ -298,9 +293,9 @@ class TemplateController extends Controller
 				"template_id" => $template->id,
 				"created_by" => Auth::user()->id
 			);
-			
-			Event::fire(new ChangeEvent($event));			
-			
+
+			Event::fire(new ChangeEvent($event));
+
 		}
 		return Redirect::to('/templatestructure/' . $template->id);
 	}
@@ -409,9 +404,9 @@ class TemplateController extends Controller
 					"template_id" => $template->id,
 					"created_by" => Auth::user()->id
 				);
-				
-				Event::fire(new ChangeEvent($event));				
-				
+
+				Event::fire(new ChangeEvent($event));
+
 			}
 		}
 		return Redirect::route('sections.show', $request->input('section_id'))->with('message', 'Template structure updated.');
@@ -424,7 +419,7 @@ class TemplateController extends Controller
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
 		}
-		
+
 		//validate input form
 		$this->validate($request, [
 			'template_name' => 'required|min:4',
@@ -434,7 +429,7 @@ class TemplateController extends Controller
 		$input = Input::all();
 		$input['section_id'] = $section->id;
 		$template = Template::create($input);
-		
+
 		//log Event
 		$event = array(
 			"log_event" => "Template",
@@ -443,8 +438,8 @@ class TemplateController extends Controller
 			"template_id" => $template->id,
 			"created_by" => Auth::user()->id
 		);
-		
-		Event::fire(new ChangeEvent($event));		
+
+		Event::fire(new ChangeEvent($event));
 
 		return Redirect::route('sections.show', $section->id)->with('message', 'Template created.');
 	}
@@ -456,13 +451,13 @@ class TemplateController extends Controller
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
 		}
-		
+
 		//validate input form
 		$this->validate($request, [
 			'template_name' => 'required|min:4',
 			'template_shortdesc' => 'required|min:4'
 		]);
-		
+
 		//log Event
 		$event = array(
 			"log_event" => "Template",
@@ -471,8 +466,8 @@ class TemplateController extends Controller
 			"template_id" => $template->id,
 			"created_by" => Auth::user()->id
 		);
-		
-		Event::fire(new ChangeEvent($event));		
+
+		Event::fire(new ChangeEvent($event));
 
 		$input = array_except(Input::all(), '_method');
 		$template->update($input);
@@ -503,7 +498,7 @@ class TemplateController extends Controller
 			"template_id" => $template->id,
 			"created_by" => Auth::user()->id
 		);
-		
+
 		Event::fire(new ChangeEvent($event));
 
 		//delete template
@@ -513,10 +508,10 @@ class TemplateController extends Controller
 
 	//content for the pop-up
 	public function getCellContent(Request $request)
-	{	
+	{
 		if (!($request->has('template_id') && $request->has('cell_id'))) {
 			abort(404, 'Content cannot be found with invalid arguments.');
-		}			
+		}
 
 		//split input into row and column
 		list($before, $after) = explode('-row', $_GET['cell_id'], 2);

@@ -100,13 +100,13 @@ class UserController extends Controller
 		]);
 
 		if ($request->isMethod('post')) {
-			
+
 			//find user
 			$user = User::findOrFail($request->input('username_id'));
 
 			//update password
 			User::where('id', $request->input('username_id'))->update(['password' => bcrypt($request->input('password'))]);
-			
+
 			//log Event
 			$event = array(
 				"log_event" => "User",
@@ -114,7 +114,7 @@ class UserController extends Controller
 				"username_id" => $request->input('username_id'),
 				"created_by" => Auth::user()->id
 			);
-			
+
 			Event::fire(new ChangeEvent($event));
 		}
 		//return to user overview
@@ -138,7 +138,7 @@ class UserController extends Controller
 
 		$input = array_except(Input::all(), '_method');
 		$user->update($input);
-		
+
 		//log Event
 		$event = array(
 			"log_event" => "User",
@@ -146,8 +146,8 @@ class UserController extends Controller
 			"content_name" => $user->id,
 			"created_by" => Auth::user()->id
 		);
-		
-		Event::fire(new ChangeEvent($event));		
+
+		Event::fire(new ChangeEvent($event));
 
 		return Redirect::route('users.index')->with('message', 'User updated.');
 	}
@@ -166,7 +166,7 @@ class UserController extends Controller
 		]);
 
 		if ($request->isMethod('post')) {
-			
+
 			User::where('id', $request->input('username_id'))->update(['role' => $request->input('role')]);
 			UserRights::where('username_id', $request->input('username_id'))->delete();
 
@@ -184,8 +184,8 @@ class UserController extends Controller
 		}
 
 		//find user
-		$user = User::findOrFail($request->input('username_id'));	
-		
+		$user = User::findOrFail($request->input('username_id'));
+
 		//log Event
 		$event = array(
 			"log_event" => "User",
@@ -193,9 +193,9 @@ class UserController extends Controller
 			"username_id" => $request->input('username_id'),
 			"created_by" => Auth::user()->id
 		);
-		
-		Event::fire(new ChangeEvent($event));			
-		
+
+		Event::fire(new ChangeEvent($event));
+
 		return Redirect::route('users.index')->with('message', 'User updated.');
 	}
 
@@ -208,10 +208,10 @@ class UserController extends Controller
 
 		//delete logs
 		Log::where('created_by', $user->id)->delete();
-		
+
 		//find user
-		$user = User::findOrFail($user->id);	
-		
+		$user = User::findOrFail($user->id);
+
 		//log Event
 		$event = array(
 			"log_event" => "User",
@@ -219,15 +219,15 @@ class UserController extends Controller
 			"username_id" => $user->id,
 			"created_by" => Auth::user()->id
 		);
-		
+
 		Event::fire(new ChangeEvent($event));
-		
+
 		//delete user
 		$user->delete();
-		
+
 		return Redirect::route('users.index')->with('message', 'User deleted.');
 	}
-	
+
 	public function show(User $user)
 	{
 		abort(403, 'There is no page to retrieve the user details yet..');

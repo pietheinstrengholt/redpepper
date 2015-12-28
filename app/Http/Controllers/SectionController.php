@@ -19,7 +19,7 @@ use App\Events\ChangeEvent;
 class SectionController extends Controller
 {
     public function index(Request $request)
-    {	
+    {
 		//only superadmin can see all sections
 		if (Gate::denies('superadmin')) {
 			if ($request->has('subject_id')) {
@@ -59,7 +59,7 @@ class SectionController extends Controller
 		if (Auth::guest() && $section->visible == "False") {
 			abort(403, 'Unauthorized action.');
 		}
-		
+
 		//only non guests will see the hidden templates
 		if (Auth::guest()) {
 			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->where('visible', 'True')->get();
@@ -123,14 +123,14 @@ class SectionController extends Controller
 		$input = Input::all();
 		$section = Section::create($input);
 
-		//log Event		
+		//log Event
 		$event = array(
 			"log_event" => "Section",
 			"action" => "created",
 			"section_id" => $section->id,
 			"created_by" => Auth::user()->id
 		);
-		
+
 		Event::fire(new ChangeEvent($event));
 		return Redirect::route('sections.index')->with('message', 'Section created');
 	}
@@ -141,7 +141,7 @@ class SectionController extends Controller
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }
-		
+
 		//validate input form
 		$this->validate($request, [
 			'section_name' => 'required|min:4',
@@ -158,9 +158,9 @@ class SectionController extends Controller
 			"section_id" => $section->id,
 			"created_by" => Auth::user()->id
 		);
-		
-		Event::fire(new ChangeEvent($event));		
-		
+
+		Event::fire(new ChangeEvent($event));
+
 		return Redirect::route('sections.show', $section->id)->with('message', 'Section updated.');
 	}
 
@@ -175,7 +175,7 @@ class SectionController extends Controller
 		$templates = Template::where('section_id', $section->id)->get();
 
 		Template::where('section_id', $section->id)->delete();
-		
+
 		//log Event
 		$event = array(
 			"log_event" => "Section",
@@ -183,7 +183,7 @@ class SectionController extends Controller
 			"section_id" => $section->id,
 			"created_by" => Auth::user()->id
 		);
-		
+
 		Event::fire(new ChangeEvent($event));
 
 		$section->delete();

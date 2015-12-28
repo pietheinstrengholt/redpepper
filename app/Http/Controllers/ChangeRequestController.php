@@ -79,7 +79,7 @@ class ChangeRequestController extends Controller
 		if (Auth::user()->role == "superadmin") {
 			$changerequests = ChangeRequest::orderBy('created_at', 'desc')->paginate(15);
 		}
-		
+
 		//check if any change request are found
 		if (empty($changerequests)) {
 			abort(403, 'No changerequests found, based on user credentials and submitted content by other users.');
@@ -180,9 +180,9 @@ class ChangeRequestController extends Controller
 		if (!$changerequest->id) {
 			abort(403, 'Change request no longer exists in the database.');
 		}
-		
+
 		//set allowed to change to yes
-		$allowedToChange = "yes";		
+		$allowedToChange = "yes";
 
 		//check for admin, builder, reviewer if not own submitted changerequest is reviewed
 		if (Auth::user()->role == "admin" || Auth::user()->role == "builder" || Auth::user()->role == "reviewer") {
@@ -190,7 +190,7 @@ class ChangeRequestController extends Controller
 				$allowedToChange = "no";
 			}
 
-			//check if users have section rights 
+			//check if users have section rights
 			$templateList = $this->templateRights(Auth::user()->id);
 			if (!in_array($changerequest->template_id, $templateList)) {
 				abort(403, 'Unauthorized action. You don\'t have access to this template or section');
@@ -309,8 +309,8 @@ class ChangeRequestController extends Controller
 					"template_id" => $ChangeRequest->template_id,
 					"created_by" => Auth::user()->id
 				);
-				
-				Event::fire(new ChangeEvent($event));				
+
+				Event::fire(new ChangeEvent($event));
 
 				//update change request
 				if ($request->input('change_type') == "rejected") {
@@ -349,7 +349,7 @@ class ChangeRequestController extends Controller
 						$field_regulation = TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('property', 'regulation')->first();
 						$field_interpretation = TemplateField::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('property', 'interpretation')->first();
 						$technical = Technical::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->get();
-						
+
 						//delete any existing if empty is proposed
 						if (count($DraftRegulation_row) == 0) {
 							Requirement::where('template_id', $ChangeRequest->template_id)->where('field_id', 'R-' . $ChangeRequest->row_code)->where('content_type', 'regulation')->delete();
@@ -426,7 +426,6 @@ class ChangeRequestController extends Controller
 								$HistoryRequirement->submission_date = $ChangeRequest->created_at;
 								$HistoryRequirement->approved_by = Auth::user()->id;
 								$HistoryRequirement->save();
-
 							}
 
 							//submit new content to archive table
@@ -442,7 +441,6 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
 							$HistoryRequirement->approved_by = Auth::user()->id;
 							$HistoryRequirement->save();
-
 						}
 
 						//delete any existing if empty is proposed
@@ -489,7 +487,6 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
 							$HistoryRequirement->approved_by = Auth::user()->id;
 							$HistoryRequirement->save();
-
 						}
 
 						//delete any existing if empty is proposed
@@ -536,7 +533,6 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
 							$HistoryRequirement->approved_by = Auth::user()->id;
 							$HistoryRequirement->save();
-
 						}
 
 						//delete any existing if empty is proposed
@@ -584,7 +580,6 @@ class ChangeRequestController extends Controller
 							$HistoryRequirement->submission_date = $ChangeRequest->created_at;
 							$HistoryRequirement->approved_by = Auth::user()->id;
 							$HistoryRequirement->save();
-
 						}
 
 						//delete any existing if empty is proposed
@@ -795,7 +790,6 @@ class ChangeRequestController extends Controller
 
 	public function destroy(ChangeRequest $changerequest)
 	{
-		
 		//log Event
 		$event = array(
 			"log_event" => "ChangeRequest",
@@ -804,9 +798,9 @@ class ChangeRequestController extends Controller
 			"template_id" => $changerequest->template_id,
 			"created_by" => Auth::user()->id
 		);
-		
+
 		Event::fire(new ChangeEvent($event));
-		
+
 		$changerequest->delete();
 		return Redirect::route('changerequests.index')->with('message', 'ChangeRequest deleted.');
 	}
@@ -829,7 +823,7 @@ class ChangeRequestController extends Controller
 			$changerequest->creator_id = Auth::user()->id;
 			$changerequest->status = 'pending';
 			$changerequest->save();
-			
+
 			//log Event
 			$event = array(
 				"log_event" => "ChangeRequest",
@@ -838,8 +832,8 @@ class ChangeRequestController extends Controller
 				"template_id" => $request->input('template_id'),
 				"created_by" => Auth::user()->id
 			);
-			
-			Event::fire(new ChangeEvent($event));		
+
+			Event::fire(new ChangeEvent($event));
 
 			if ($request->has('regulation_row')) {
 				$draftrequirement = new DraftRequirement;

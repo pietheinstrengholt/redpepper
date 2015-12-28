@@ -26,11 +26,11 @@ class ChangeEvent extends Event
 		$log = new Log;
 		$log->log_event = $event['log_event'];
 		$log->action = $event['action'];
-		
+
 		if (!empty($event['changerequest_id'])) {
 			$log->changerequest_id = $event['changerequest_id'];
 		}
-		
+
 		if (!empty($event['section_id'])) {
 			$log->section_id = $event['section_id'];
 		}
@@ -41,30 +41,29 @@ class ChangeEvent extends Event
 
 		if (!empty($event['username_id'])) {
 			$log->username_id = $event['username_id'];
-		}		
+		}
 
 		$log->created_by = $event['created_by'];
 		$log->save();
-		
+
 		$user = User::findOrFail($event['created_by']);
-		
+
 		$event['username'] = $user->username;
-		
+
 		if ($event['log_event'] == "ChangeRequest") {
-			
+
 			$changerequest = ChangeRequest::findOrFail($event['changerequest_id']);
 			$template = Template::findOrFail($changerequest->template_id);
 			$event['template_name'] = $template->template_name;
-			
+
 			Mail::send('emails.changerequest', $event, function($message)
 			{
 				$message->from(env('MAIL_USERNAME'));
 				$message->to(env('MAIL_TO'), env('MAIL_NAME'));
 				$message->subject('RADAR notification');
 			});
-			
 		}
-		
+
 		if ($event['log_event'] == "Template Excel" && $user->role == "builder") {
 			Mail::send('emails.builderexcel', $event, function($message)
 			{
@@ -73,7 +72,6 @@ class ChangeEvent extends Event
 				$message->subject('RADAR notification');
 			});
 		}
-		
 	}
 
 	/**
@@ -83,6 +81,6 @@ class ChangeEvent extends Event
 	*/
 	public function broadcastOn()
 	{
-	return [];
+		return [];
 	}
 }
