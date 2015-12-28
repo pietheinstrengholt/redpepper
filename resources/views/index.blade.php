@@ -11,7 +11,7 @@
 		<div id="intro-header-row" class="row">
 			<div id="intro-header-col-lg-12" class="col-lg-12">
 				<div class="intro-message">
-				
+
 					@if (count($errors) > 0)
 						<div class="alert alert-danger">
 						<ul>
@@ -21,7 +21,7 @@
 						</ul>
 						</div>
 					@endif
-				
+
 					<h1>FRC RADAR Tool</h1>
 					<h3>Zichtbaar in control</h3>
 					<hr style="margin-right:1000px;" class="intro-divider">

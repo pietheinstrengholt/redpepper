@@ -15,7 +15,7 @@
 		</ul>
 		</div>
 	@endif
-	
+
 	@if (empty($templatestructure['columns']) || empty($templatestructure['rows']))
 		Error: This template has no columns or no rows.
 	@else
@@ -92,7 +92,7 @@
 		</table>
 
     @endif
-	
+
 	@if (!empty($templatestructure['column_content']))
 		<strong>Column content</strong>
 		<table class="table table-bordered template" style="width:70%" border="1">
@@ -101,12 +101,12 @@
 		<td class="header">content_type</td>
 		<td class="header">content</td>
 		</tr>
-		
+
 		@foreach($templatestructure['column_content'] as $row)
 			@if (array_key_exists('error', $row))
 				<tr style="background-color:#e74c3c; color:#ffffff;">
 			@else
-				<tr>			
+				<tr>
 			@endif
 			<td>{{ $row['column_code'] }}</td>
 			<td>{{ $row['content_type'] }}</td>
@@ -115,7 +115,7 @@
 		@endforeach
 		</table>
     @endif
-	
+
 	@if (!empty($templatestructure['row_content']))
 		<strong>Column content</strong>
 		<table class="table table-bordered template" style="width:70%" border="1">
@@ -124,12 +124,12 @@
 		<td class="header">content_type</td>
 		<td class="header">content</td>
 		</tr>
-		
+
 		@foreach($templatestructure['row_content'] as $row)
 			@if (array_key_exists('error', $row))
 				<tr style="background-color:#e74c3c; color:#ffffff;">
 			@else
-				<tr>			
+				<tr>
 			@endif
 			<td>{{ $row['row_code'] }}</td>
 			<td>{{ $row['content_type'] }}</td>
@@ -138,7 +138,7 @@
 		@endforeach
 		</table>
     @endif
-	
+
 	@if (!empty($templatestructure['field_content']))
 		<strong>Field content</strong>
 		<table class="table table-bordered template" style="width:80%" border="1">
@@ -148,12 +148,12 @@
 		<td class="header">content_type</td>
 		<td class="header">content</td>
 		</tr>
-		
+
 		@foreach($templatestructure['field_content'] as $row)
 			@if (array_key_exists('error', $row))
 				<tr style="background-color:#e74c3c; color:#ffffff;">
 			@else
-				<tr>			
+				<tr>
 			@endif
 			<td>{{ $row['column_code'] }}</td>
 			<td>{{ $row['row_code'] }}</td>
@@ -163,7 +163,7 @@
 		@endforeach
 		</table>
     @endif
-	
+
 	@if (!empty($templatestructure['sourcing']))
 		<strong>Sourcing</strong>
 		<table class="table table-bordered template" style="width:95%" border="1">
@@ -175,12 +175,12 @@
 		<td class="header">value</td>
 		<td class="header">description</td>
 		</tr>
-		
+
 		@foreach($templatestructure['sourcing'] as $row)
 			@if (array_key_exists('error', $row))
 				<tr style="background-color:#e74c3c; color:#ffffff;">
 			@else
-				<tr>			
+				<tr>
 			@endif
 			<td>{{ $row['column_code'] }}</td>
 			<td>{{ $row['row_code'] }}</td>
@@ -192,7 +192,7 @@
 		@endforeach
 		</table>
     @endif
-	
+
 	@if (!empty($templatestructure['template_content']))
 		<strong>Template attributes</strong>
 		<table class="table table-bordered template" style="width:65%" border="1">
@@ -200,18 +200,18 @@
 		<td class="header">attribute</td>
 		<td class="header">description</td>
 		</tr>
-		
+
 		@foreach($templatestructure['template_content'] as $key => $row)
 			@if (array_key_exists('error', $templatestructure['template_content']))
 				<tr style="background-color:#e74c3c; color:#ffffff;">
 			@else
-				<tr>			
+				<tr>
 			@endif
 			<td>{{ $key }}</td>
 			<td>{{ $row }}</td>
 			</tr>
 		@endforeach
 		</table>
-    @endif	
+    @endif
 
 @endsection

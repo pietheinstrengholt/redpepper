@@ -9,23 +9,23 @@
 		-webkit-text-size-adjust: 100%;
 		-ms-text-size-adjust: 100%;
 	}
-	
+
 	body {
 		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 		font-size: 14px;
 		line-height: 1.42857143;
 		color: #333;
 		background-color: #fff;
-		margin: 0;		
+		margin: 0;
 	}
-	
+
 	h1, h2,	h3, h4 {
 	  font-family: inherit;
 	  font-weight: 500;
 	  line-height: 1.1;
 	  color: inherit;
 	}
-	
+
 	h1 {
 		font-size: 36px;
 	}
@@ -38,11 +38,11 @@
 	h4 {
 		font-size: 18px;
 	}
-	
+
 	small {
 		font-size: 80%;
 	}
-	
+
 	a, a:visited {
 		text-decoration: underline;
 		color: #337ab7;
@@ -99,4 +99,3 @@
 		</td>
 	</tr>
 </table>
-

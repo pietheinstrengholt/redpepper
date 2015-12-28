@@ -15,15 +15,15 @@
 
 	<!-- CSS -->
 	<link rel="stylesheet" href="{{ URL::asset('css/bootstrap.min.css') }}">
-	<link rel="stylesheet" href="{{ URL::asset('css/app.css') }}">	
+	<link rel="stylesheet" href="{{ URL::asset('css/app.css') }}">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 	<!-- Meta base url, needed for javascript location -->
 	<meta name="base_url" content="{{ URL::to('/') }}">
-	
+
 	<!-- IE Console log fix -->
-    <script type="text/javascript"> if (!window.console) console = {log: function() {}}; </script>
+	<script type="text/javascript"> if (!window.console) console = {log: function() {}}; </script>
 
 	@show
 </head>
@@ -70,7 +70,7 @@
 			  <li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin menu <span class="caret"></span></a>
 				<ul class="dropdown-menu" role="menu">
-				  @if (Auth::user()->role == "superadmin")				
+				  @if (Auth::user()->role == "superadmin")
 					  <li><a href="{{ URL::to('/types') }}">Edit types</a></li>
 					  <li><a href="{{ URL::to('/sources') }}">Edit sources</a></li>
 					  <li><a href="{{ URL::to('/departments') }}">Edit departments</a></li>
@@ -85,7 +85,7 @@
 				  @endif
 				  <li><a href="{{ URL::to('/changerequests') }}">Change requests</a></li>
 				  @if (Auth::user()->role == "superadmin" || Auth::user()->role == "admin")
-					  <li class="divider"></li>					  
+					  <li class="divider"></li>
 					  <li><a href="{{ URL::to('/logs') }}">User activities</a></li>
 					  <li class="divider"></li>
 				  @endif

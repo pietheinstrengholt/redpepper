@@ -10,7 +10,7 @@
 
 	<h2>Upload template columns</h2>
 	<h4>Please make use of the upload form below</h4>
-	
+
 	@if (count($errors) > 0)
 		<div class="alert alert-danger">
 		<ul>

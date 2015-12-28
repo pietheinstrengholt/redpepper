@@ -10,7 +10,7 @@
 
 	<h2>Upload technical line items</h2>
 	<h4>Please make use of the upload form below</h4>
-	
+
 	@if (count($errors) > 0)
 		<div class="alert alert-danger">
 		<ul>
@@ -19,7 +19,7 @@
 		@endforeach
 		</ul>
 		</div>
-	@endif	
+	@endif
 
 	<strong>Example:</strong> The file needs to be in the following format, including header and stored as comma separated<br><br>
 	<pre>template_id;row_code;column_code;source_id;type_id;content;description
