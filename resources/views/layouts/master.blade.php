@@ -114,7 +114,7 @@
 
 		<!-- Session content -->
 		@if (Session::has('message'))
-			<div id="session-alert" class="alert alert-warning alert-dismissible" role="alert">
+			<div id="session-alert" class="alert alert-info alert-dismissible" role="alert">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<p>{{ Session::get('message') }}</p>
 			</div>
