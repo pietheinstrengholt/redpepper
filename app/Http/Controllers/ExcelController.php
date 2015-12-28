@@ -102,7 +102,6 @@ class ExcelController extends Controller
 		}
 	}
 
-	//TODO, use a blade instead of Controller debugging output
 	public function uploadexcel(Request $request)
 	{
 		//validate input form
@@ -152,50 +151,44 @@ class ExcelController extends Controller
 							$disabledcount = 1;
 
 							for ($row = 1; $row <= $highestRow; ++ $row) {
-								echo '<tr>';
 								for ($column = 1; $column < $highestColumnIndex; ++ $column) {
+									
+									//4th column is where column naming starts, 3th row is where the row content starts
+									$columnid = $column-3;
+									$rowid = $row-2;
 
 									//set column letter and retrieve value
 									$columnLetter = $this->getExcelColumnNumber($column);
 									$val = $reader->getExcel()->getSheet()->getCell($columnLetter . $row)->getValue();
 
-									//1th row is where the column names are stored
-									if ($row == 1) {
-										//4th column is where column naming starts
-										if ($column > 4) {
-											$columnid = $column-3;
-											//validate if column_description is not empty
-											if (empty($val)) {
-												$templatestructure['columns'][$columnid]['column_description'] = $val;
-												$templatestructure['columns'][$columnid]['error'] = "1";
-												array_push($errors, "empty column_description in template structure");
-											} else {
-												$templatestructure['columns'][$columnid]['column_description'] = $val;
-											}
+									//1th row is where the column names are stored, , 4th column is where column numbering starts
+									if ($row == 1 && $column > 4) {
+										//validate if column_description is not empty
+										if (empty($val)) {
+											$templatestructure['columns'][$columnid]['column_description'] = $val;
+											$templatestructure['columns'][$columnid]['error'] = "1";
+											array_push($errors, "empty column_description in template structure");
+										} else {
+											$templatestructure['columns'][$columnid]['column_description'] = $val;
 										}
 									} 
 									
-									//2nd row is where the column numbers are stored
-									if ($row == 2) {
-										//4th column is where column numbering starts
-										if ($column > 4) {
-											$columnid = $column-3;
-											//validate if column code is not empty
-											if (empty($val)) {													
-												$templatestructure['columns'][$columnid]['column_code'] = $val;
-												$templatestructure['columns'][$columnid]['error'] = "1";
-												array_push($errors, "empty column_code in template structure");
-											} else {
-												$templatestructure['columns'][$columnid]['column_code'] = $val;
-												//push to array for validation
-												array_push($templatecolumns, $val);
-											}
+									//2nd row is where the column numbers are stored, 4th column is where column numbering starts
+									if ($row == 2 && $column > 4) {
+										//validate if column code is not empty
+										if (empty($val)) {													
+											$templatestructure['columns'][$columnid]['column_code'] = $val;
+											$templatestructure['columns'][$columnid]['error'] = "1";
+											array_push($errors, "empty column_code in template structure");
+										} else {
+											$templatestructure['columns'][$columnid]['column_code'] = $val;
+											//push to array for validation
+											array_push($templatecolumns, $val);
 										}
 									} 
 									
 									//more than 2 rows and 1st column is where the row number is stored
 									if ($row > 2 && $column == 1) {
-										$rowid = $row-2;
 										//validate if row code is not empty
 										if (empty($val)) {
 											$templatestructure['rows'][$rowid]['row_code'] = $val;
@@ -210,7 +203,6 @@ class ExcelController extends Controller
 									
 									//more than 2 rows and 2nd column is where the row description is stored
 									if ($row > 2 && $column == 2) {
-										$rowid = $row-2;
 										//validate if row description is not empty
 										if (empty($val)) {
 											$templatestructure['rows'][$rowid]['row_description'] = $val;
@@ -223,28 +215,23 @@ class ExcelController extends Controller
 									
 									//more than 2 rows and 3th column is where the row style is stored
 									if ($row > 2 && $column == 3) {
-										$rowid = $row-2;
 										$templatestructure['rows'][$rowid]['row_style'] = $val;
 									} 
 									
 									//more than 2 rows and 4th column is where the row reference is stored
 									if ($row > 2 && $column == 4) {
-										$rowid = $row-2;
 										$templatestructure['rows'][$rowid]['row_reference'] = $val;
 									} 
 									
 									//more than 2 rows and 2 columns is where the disabled cells might be stored
 									if ($row > 2 && $column > 4) {
 
-										$newcol = $column-3;
-										$newrow = $row-2;
-
 										//todo update with cell color
 										$cellcolor = '';
 
 										//set cell column num and row num based on templatestructure
-										$cell_column_code = $templatestructure['columns'][$newcol]['column_code'];
-										$cell_row_code = $templatestructure['rows'][$newrow]['row_code'];
+										$cell_column_code = $templatestructure['columns'][$columnid]['column_code'];
+										$cell_row_code = $templatestructure['rows'][$rowid]['row_code'];
 										//check if cell color is disabled: = D3D3D3
 										if ($cellcolor == 'D3D3D3' || $val == 'disabled') {
 											$templatestructure['disabledcells'][$disabledcount]['column_code'] = $cell_column_code;
@@ -281,36 +268,29 @@ class ExcelController extends Controller
 									$val = $reader->getExcel()->getSheet(1)->getCell($columnLetter . $row)->getValue();
 									
 									//1th row is the heading
-									if ($row == 1) {
+									if ($row == 1 && ($column == 1 && $val != 'number' || $column == 2 && $val != 'content_type' || $column == 3 && $val != 'content')) {
 										//validate if heading is correct
-										if ($column == 1 && $val != 'number' || $column == 2 && $val != 'content_type' || $column == 3 && $val != 'content') {
-											array_push($errors, "incorrect heading on column content sheet");
-										}
+										array_push($errors, "incorrect heading on column content sheet");
 									} 
-
-									if ($row > 1) {
-										//validate if content_type contains legal_desc or interpretation_desc
-										if ($column == 2 && !($val == 'regulation' || $val == 'interpretation' || $val == 'reference')) {
-											$templatestructure['column_content'][$columncontentcount]['content_type'] = $val;
+									//add content to template structure column_content
+									if ($row > 1 && $column == 1) {
+										//validate if column_code exists in template columns
+										if (!(in_array($val, $templatecolumns, true))) {
 											$templatestructure['column_content'][$columncontentcount]['error'] = "1";
-											array_push($errors, "content_type not a valid value");
-										//validate if column number exists in template columns
-										} elseif ($column == 1 && !(in_array($val, $templatecolumns, true))) {
-											$templatestructure['column_content'][$columncontentcount]['column_code'] = $val;
-											$templatestructure['column_content'][$columncontentcount]['error'] = "1";
-											array_push($errors, "column_code cannot be found in template structure");
-										} else {
-											//add content to template structure column_content
-											if ($column == 1) {
-												$templatestructure['column_content'][$columncontentcount]['column_code'] = $val;
-											}
-											if ($column == 2) {
-												$templatestructure['column_content'][$columncontentcount]['content_type'] = $val;
-											}
-											if ($column == 3) {
-												$templatestructure['column_content'][$columncontentcount]['content'] = $val;
-											}
+											array_push($errors, "column_code cannot be found in template structure");	
 										}
+										$templatestructure['column_content'][$columncontentcount]['column_code'] = $val;
+									}
+									if ($row > 1 && $column == 2) {
+										//validate if content_type contains regulation or interpretation
+										if (!($val == 'regulation' || $val == 'interpretation' || $val == 'reference')) {
+											$templatestructure['column_content'][$columncontentcount]['error'] = "1";
+											array_push($errors, "content_type not a valid value");	
+										}
+										$templatestructure['column_content'][$columncontentcount]['content_type'] = $val;
+									}
+									if ($row > 1 && $column == 3) {
+										$templatestructure['column_content'][$columncontentcount]['content'] = $val;
 									}
 								}
 								$columncontentcount++;
@@ -337,36 +317,26 @@ class ExcelController extends Controller
 									$columnLetter = $this->getExcelColumnNumber($column);
 									$val = $reader->getExcel()->getSheet(2)->getCell($columnLetter . $row)->getValue();
 									//1th row is the heading
-									if ($row == 1) {
-										//validate if heading is correct
-										if ($column == 1 && $val != 'number' || $column == 2 && $val != 'content_type' || $column == 3 && $val != 'content') {
-											array_push($errors, "incorrect heading on row content sheet");
-										}
+									if ($row == 1 && ($column == 1 && $val != 'number' || $column == 2 && $val != 'content_type' || $column == 3 && $val != 'content')) {
+										array_push($errors, "incorrect heading on row content sheet");
 									}
-									
-									if ($row > 1) {
-										//validate if content_type contains legal_desc or interpretation_desc
-										if ($column == 2 && !($val == 'regulation' || $val == 'interpretation' || $val == 'reference')) {
-											$templatestructure['row_content'][$rowcontentcount]['content_type'] = $val;
-											$templatestructure['row_content'][$rowcontentcount]['error'] = "1";
-											array_push($errors, "content_type not a valid value");
-										//validate if row number exists in templaterow
-										} elseif ($column == 1 && !(in_array($val, $templaterows, true))) {
-											$templatestructure['row_content'][$rowcontentcount]['row_code'] = $val;
+									if ($row > 1 && $column == 1) {
+										if (!(in_array($val, $templaterows, true))) {
 											$templatestructure['row_content'][$rowcontentcount]['error'] = "1";
 											array_push($errors, "row_code cannot be found in template structure");
-										} else {
-											//add content to templatestructure row_content
-											if ($column == 1) {
-												$templatestructure['row_content'][$rowcontentcount]['row_code'] = $val;
-											}
-											if ($column == 2) {
-												$templatestructure['row_content'][$rowcontentcount]['content_type'] = $val;
-											}
-											if ($column == 3) {
-												$templatestructure['row_content'][$rowcontentcount]['content'] = $val;
-											}
 										}
+										$templatestructure['row_content'][$rowcontentcount]['row_code'] = $val;
+									}
+									if ($row > 1 && $column == 2) {
+										//validate if content_type contains regulation or interpretation
+										if (!($val == 'regulation' || $val == 'interpretation' || $val == 'reference')) {
+											$templatestructure['row_content'][$rowcontentcount]['error'] = "1";
+											array_push($errors, "content_type not a valid value");
+										}
+										$templatestructure['row_content'][$rowcontentcount]['content_type'] = $val;
+									}
+									if ($row > 1 && $column == 3) {
+										$templatestructure['row_content'][$rowcontentcount]['content'] = $val;
 									}
 								}
 								$rowcontentcount++;
@@ -516,50 +486,44 @@ class ExcelController extends Controller
 										if ($column == 1 && $val != 'column_code' || $column == 2 && $val != 'row_code' || $column == 3 && $val != 'type' || $column == 4 && $val != 'source' || $column == 5 && $val != 'value' || $column == 6 && $val != 'description') {
 											array_push($errors, "incorrect heading on sourcing sheet");
 										}
-									} 
-									
-									if ($row > 1) {
-										//validate if column number exists in templatecolumns
-										if ($column == 1 && !(in_array($val, $templatecolumns, true))) {
-											$templatestructure['sourcing'][$sourcingcontentcount]['column_code'] = $val;
+									}
+									if ($row > 1 && $column == 1) {
+										//validate if column number exists in template columns
+										if (!(in_array($val, $templatecolumns, true))) {
 											$templatestructure['sourcing'][$sourcingcontentcount]['error'] = "1";
 											array_push($errors, "column_code cannot be found in template structure");
-										//validate if row number exists in templaterow
-										} elseif ($column == 2 && !(in_array($val, $templaterows, true))) {
-											$templatestructure['sourcing'][$sourcingcontentcount]['row_code'] = $val;
+										}
+										$templatestructure['sourcing'][$sourcingcontentcount]['column_code'] = $val;
+									}
+									if ($row > 1 && $column == 2) {
+										//validate if column number exists in template rows
+										if (!(in_array($val, $templaterows, true))) {
 											$templatestructure['sourcing'][$sourcingcontentcount]['error'] = "1";
 											array_push($errors, "row_code cannot be found in template structure");
-										} elseif ($column == 3 && !(in_array($val, $type_array, true))) {
-											$templatestructure['sourcing'][$sourcingcontentcount]['type'] = $val;
+										}
+										$templatestructure['sourcing'][$sourcingcontentcount]['row_code'] = $val;
+									}
+									if ($row > 1 && $column == 3) {
+										if (!(in_array($val, $type_array, true))) {
 											$templatestructure['sourcing'][$sourcingcontentcount]['error'] = "1";
 											array_push($errors, "type_name is not a valid value");
-										} elseif ($column == 4 && !(in_array($val, $source_array, true))) {
-											$templatestructure['sourcing'][$sourcingcontentcount]['source'] = $val;
+										}
+										$key = array_search($val, $type_array);
+										$templatestructure['sourcing'][$sourcingcontentcount]['type'] = $key;
+									}
+									if ($row > 1 && $column == 4) {
+										if (!(in_array($val, $source_array, true))) {
 											$templatestructure['sourcing'][$sourcingcontentcount]['error'] = "1";
 											array_push($errors, "source_name is not a valid value");
-										} else {
-											//add content to templatestructure sourcing
-											if ($column == 1) {
-												$templatestructure['sourcing'][$sourcingcontentcount]['column_code'] = $val;
-											}
-											if ($column == 2) {
-												$templatestructure['sourcing'][$sourcingcontentcount]['row_code'] = $val;
-											}
-											if ($column == 3) {
-												$key = array_search($val, $type_array);
-												$templatestructure['sourcing'][$sourcingcontentcount]['type'] = $key;
-											}
-											if ($column == 4) {
-												$key = array_search($val, $source_array);
-												$templatestructure['sourcing'][$sourcingcontentcount]['source'] = $key;
-											}
-											if ($column == 5) {
-												$templatestructure['sourcing'][$sourcingcontentcount]['value'] = $val;
-											}
-											if ($column == 6) {
-												$templatestructure['sourcing'][$sourcingcontentcount]['description'] = $val;
-											}
 										}
+										$key = array_search($val, $source_array);
+										$templatestructure['sourcing'][$sourcingcontentcount]['source'] = $key;
+									}
+									if ($row > 1 && $column == 5) {
+										$templatestructure['sourcing'][$sourcingcontentcount]['value'] = $val;
+									}
+									if ($row > 1 && $column == 6) {
+										$templatestructure['sourcing'][$sourcingcontentcount]['description'] = $val;
 									}
 								}
 								$sourcingcontentcount++;
@@ -585,43 +549,34 @@ class ExcelController extends Controller
 									$columnLetter = $this->getExcelColumnNumber($column);
 									$val = $reader->getExcel()->getSheet(3)->getCell($columnLetter . $row)->getValue();
 									//1th row is the heading
-									if ($row == 1) {
-										if ($column == 1 && $val != 'column_code' || $column == 2 && $val != 'row_code' || $column == 3 && $val != 'content_type' || $column == 4 && $val != 'content') {
-											array_push($errors, "incorrect heading on field content sheet");
-										}
+									if ($row == 1 && ($column == 1 && $val != 'column_code' || $column == 2 && $val != 'row_code' || $column == 3 && $val != 'content_type' || $column == 4 && $val != 'content')) {
+										array_push($errors, "incorrect heading on field content sheet");
 									} 
-									
-									if ($row > 1) {
+									if ($row > 1 && $column == 1) {
+										if (!(in_array($val, $templatecolumns, true))) {
+											$templatestructure['field_content'][$fieldcontentcount]['error'] = "1";
+											array_push($errors, "column_code cannot be found in template structure");
+										}
+										$templatestructure['field_content'][$fieldcontentcount]['column_code'] = $val;
+									}
+									if ($row > 1 && $column == 2) {
+										if (!(in_array($val, $templaterows, true))) {
+											$templatestructure['field_content'][$fieldcontentcount]['error'] = "1";
+											array_push($errors, "row_code cannot be found in template structure");
+										}
+										$templatestructure['field_content'][$fieldcontentcount]['row_code'] = $val;
+									}
+									if ($row > 1 && $column == 3) {
 										//validate if content_type contains regulation or interpretation
-										if ($column == 3 && !($val == 'regulation' || $val == 'interpretation' || $val == 'property1' || $val == 'property2')) {
-											$templatestructure['field_content'][$fieldcontentcount]['content_type'] = $val;
+										if (!($val == 'regulation' || $val == 'interpretation' || $val == 'property1' || $val == 'property2')) {
 											$templatestructure['field_content'][$fieldcontentcount]['error'] = "1";
 											array_push($errors, "incorrect content_type used");
 										//validate if column number exists in templatecolumns
-										} elseif ($column == 1 && !(in_array($val, $templatecolumns, true))) {
-											$templatestructure['field_content'][$fieldcontentcount]['column_code'] = $val;
-											$templatestructure['field_content'][$fieldcontentcount]['error'] = "1";
-											array_push($errors, "column_code cannot be found in template structure");
-										//validate if row number exists in templaterow
-										} elseif ($column == 2 && !(in_array($val, $templaterows, true))) {
-											$templatestructure['field_content'][$fieldcontentcount]['row_code'] = $val;
-											$templatestructure['field_content'][$fieldcontentcount]['error'] = "1";
-											array_push($errors, "row_code cannot be found in template structure");
-										} else {
-											//add content to templatestructure field_content
-											if ($column == 1) {
-												$templatestructure['field_content'][$fieldcontentcount]['column_code'] = $val;
-											}
-											if ($column == 2) {
-												$templatestructure['field_content'][$fieldcontentcount]['row_code'] = $val;
-											}
-											if ($column == 3) {
-												$templatestructure['field_content'][$fieldcontentcount]['content_type'] = $val;
-											}
-											if ($column == 4) {
-												$templatestructure['field_content'][$fieldcontentcount]['content'] = $val;
-											}
 										}
+										$templatestructure['field_content'][$fieldcontentcount]['content_type'] = $val;
+									}
+									if ($row > 1 && $column == 4) {
+										$templatestructure['field_content'][$fieldcontentcount]['content'] = $val;
 									}
 								}
 								$fieldcontentcount++;
