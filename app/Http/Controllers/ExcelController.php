@@ -785,7 +785,7 @@ class ExcelController extends Controller
 
 				Event::fire(new ChangeEvent($event));
 
-				return Redirect::to('/sections');
+				return Redirect::to('/sections')->with('message', 'New template successfully added to the database.');
 			}
 		}
 	}
