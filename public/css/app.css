@@ -182,6 +182,10 @@ button.changerequest#approve {
 	margin-top: 15px;
 }
 
+tr.changerequest div#row_name, tr.changerequest div#row_regulation, tr.changerequest div#row_interpretation, tr.changerequest div#column_name, tr.changerequest div#column_regulation, tr.changerequest div#column_interpretation {
+	min-height: 20px;
+}
+
 /* Search */
 
 search-table.table {
@@ -238,6 +242,14 @@ div.pagination {
 }
 
 /* HMLT Diff (changerequest edit view) */
+
+td.changerequest .dl-horizontal {
+	margin-right: 30px;
+}
+
+td.changerequest div.content-box {
+	float:left;
+}
 
 ins {
 	color: green;

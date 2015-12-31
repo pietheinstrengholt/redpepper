@@ -24,34 +24,34 @@
 	@if ($changerequest->field_property1 !== '' || $changerequest->field_property2 !== '' || $changerequest->field_regulation !== '' || $changerequest->field_interpretation !== '')
 		<table style="border: 1px solid #ddd;" class="table dialog table-striped">
 		<tr>
-		<td class="info-header"><h4><b>Specific Information: {{ $template_row->row_code }} - {{ $template_column->column_code }}</b></h4></td>
+			<td class="info-header"><h4><b>Specific Information: {{ $template_row->row_code }} - {{ $template_column->column_code }}</b></h4></td>
 		</tr>
-		<td>
-		@if ($changerequest->field_property1 !== '')
-			<dl class="dl-horizontal" style="margin-right: 30px;">
-			<dt>Fieldname property1:</dt>
-			<dd><div class="content-box" style="float:left;">{!! $changerequest->field_property1 !!}</div></dd>
-			</dl>
-		@endif
-		@if ($changerequest->field_property2 !== '')
-			<dl class="dl-horizontal" style="margin-right: 30px;">
-			<dt>Fieldname property2:</dt>
-			<dd><div class="content-box" style="float:left;">{!! $changerequest->field_property2 !!}</div></dd>
-			</dl>
-		@endif
-		@if ($changerequest->field_regulation !== '')
-			<dl class="dl-horizontal" style="margin-right: 30px;">
-			<dt>Legal standard:</dt>
-			<dd><div class="content-box" style="float:left;">{!! $changerequest->field_regulation !!}</div></dd>
-			</dl>
-		@endif
-		@if ($changerequest->field_interpretation !== '')
-			<dl class="dl-horizontal" style="margin-right: 30px;">
-			<dt>Interpretation:</dt>
-			<dd><div class="content-box" style="float:left;">{!! $changerequest->field_interpretation !!}</div></dd>
-			</dl>
-		@endif
-		</td>
+			<td class="changerequest">
+			@if ($changerequest->field_property1 !== '')
+				<dl class="dl-horizontal">
+				<dt>Fieldname property1:</dt>
+				<dd><div class="content-box">{!! $changerequest->field_property1 !!}</div></dd>
+				</dl>
+			@endif
+			@if ($changerequest->field_property2 !== '')
+				<dl class="dl-horizontal">
+				<dt>Fieldname property2:</dt>
+				<dd><div class="content-box">{!! $changerequest->field_property2 !!}</div></dd>
+				</dl>
+			@endif
+			@if ($changerequest->field_regulation !== '')
+				<dl class="dl-horizontal">
+				<dt>Legal standard:</dt>
+				<dd><div class="content-box">{!! $changerequest->field_regulation !!}</div></dd>
+				</dl>
+			@endif
+			@if ($changerequest->field_interpretation !== '')
+				<dl class="dl-horizontal">
+				<dt>Interpretation:</dt>
+				<dd><div class="content-box">{!! $changerequest->field_interpretation !!}</div></dd>
+				</dl>
+			@endif
+			</td>
 		</table>
 	@endif
 
@@ -63,10 +63,10 @@
 		<td class="info-header"><h4><b>Column information: {{ $template_column->column_code }}</b></h4></td>
 	</tr>
 
-	<tr>
+	<tr class="changerequest">
 		<td class="info-left im-content">
 			<h4><b>Name:</b></h4>
-			<div rows="1" id="rowname">{{ $template_row->row_description }}</div>
+			<div rows="1" id="row_name">{{ $template_row->row_description }}</div>
 			<h4><b>Legal standard:</b></h4>
 			<div rows="7" id="row_regulation">{!! nl2br($changerequest->regulation_row) !!}</div>
 			<h4><b>Interpretation:</b></h4>
@@ -74,7 +74,7 @@
 		</td>
 		<td class="info-right im-content">
 			<h4><b>Name:</b></h4>
-			<div rows="1" id="colname">{{ $template_column->column_description }}</div>
+			<div rows="1" id="coloumn_name">{{ $template_column->column_description }}</div>
 			<h4><b>Legal standard:</b></h4>
 			<div rows="7" id="column_regulation">{!! nl2br($changerequest->regulation_column) !!}</div>
 			<h4><b>Interpretation:</b></h4>
@@ -85,7 +85,11 @@
 
 	@if ($changerequest->technical !== '')
 		<table style="border: 1px solid #ddd;" class="table dialog table-striped">
-		<tr><td class="info-header"><h4><b>Additional Information for row {{ $template_row->row_code }} and column {{ $template_column->column_code }}:</b></h4></td></tr>
+		<tr>
+			<td class="info-header">
+				<h4><b>Additional Information for row {{ $template_row->row_code }} and column {{ $template_column->column_code }}:</b></h4>
+			</td>
+		</tr>
 		<td>{!! nl2br($changerequest->technical) !!}</td>
 		</table>
 	@endif
