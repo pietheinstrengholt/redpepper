@@ -22,9 +22,9 @@
 		<thead>
 		<tr class="success">
 
-		<td class="header content" style="width: 100px;">Row#</td>
-		<td class="header">Row description</td>
-		<td style="min-width: 200px;">Styling</td>
+		<td class="header structure content">Row#</td>
+		<td class="header structure">Row description</td>
+		<td class="header structure">Styling</td>
 
 		@foreach( $template->columns as $column )
 			<td style="width: 150px;" class="content header" id="$column->column_num">
@@ -35,7 +35,7 @@
 
 		<!-- Table header with column nums -->
 
-		<tr style="background-color: #EEE;">
+		<tr class="header2">
 
 		<td></td>
 		<td></td>
@@ -55,32 +55,31 @@
 		@foreach( $template->rows as $row )
 
 			<tr>
-			<td style="background-color: #FAFAFA; font-weight: bold;"><input class="form-control input-sm" type="text" value="{{ $row->row_code }}" placeholder="{{ $row->row_code }}" name="rownum[{{ $row->row_code }}]" style="width: 50px;"></td>
-			<td style="background-color: #FAFAFA; font-weight: bold;"><input class="form-control input-sm" type="text" placeholder="{{ $row->row_description }}" value="{{ $row->row_description }}" name="rowdesc[{{ $row->row_code }}]"></td>
+			<td class="desc"><input class="form-control input-sm" type="text" value="{{ $row->row_code }}" placeholder="{{ $row->row_code }}" name="rownum[{{ $row->row_code }}]" style="width: 50px;"></td>
+			<td class="desc"><input class="form-control input-sm" type="text" placeholder="{{ $row->row_description }}" value="{{ $row->row_description }}" name="rowdesc[{{ $row->row_code }}]"></td>
+			<td class="desc">
+				<label class="checkbox-inline">
+				@if ($row['row_property'] == "bold")
+					<input class="rowproperty{{ $row->row_code }}" type="radio" name="row_property[{{ $row->row_code }}]" id="radio{{ $row->row_code }}" value="bold" checked> bold
+				@else
+					<input class="rowproperty{{ $row->row_code }}" type="radio" name="row_property[{{ $row->row_code }}]" id="radio{{ $row->row_code }}" value="bold"> bold
+				@endif
+				</label>
 
-			<td style="background-color: #FAFAFA;">
-			<label style="padding-left:0px;" class="checkbox-inline">
-			@if ($row['row_property'] == "bold")
-				<input class="rowproperty{{ $row->row_code }}" type="radio" name="row_property[{{ $row->row_code }}]" id="radio{{ $row->row_code }}" value="bold" checked> bold
-			@else
-				<input class="rowproperty{{ $row->row_code }}" type="radio" name="row_property[{{ $row->row_code }}]" id="radio{{ $row->row_code }}" value="bold"> bold
-			@endif
-			</label>
-
-			<label style="padding-left:0px;" class="checkbox-inline">
-			@if ($row['row_property'] == "tab")
-				<input class="rowproperty{{ $row->row_code }}" type="radio" name="row_property[{{ $row->row_code }}]" id="radio{{ $row->row_code }}" value="tab" checked> tab
-			@else
-				<input class="rowproperty{{ $row->row_code }}" type="radio" name="row_property[{{ $row->row_code }}]" id="radio{{ $row->row_code }}" value="tab"> tab
-			@endif
-			</label>
-			<label style="padding-left:0px;" class="checkbox-inline">
-			@if ($row['row_property'] == "doubletab")
-				<input class="rowproperty{{ $row->row_code }}" type="radio" name="row_property[{{ $row->row_code }}]" id="radio{{ $row->row_code }}" value="doubletab" checked> doubletab
-			@else
-				<input class="rowproperty{{ $row->row_code }}" type="radio" name="row_property[{{ $row->row_code }}]" id="radio{{ $row->row_code }}" value="doubletab"> doubletab
-			@endif
-			</label>
+				<label class="checkbox-inline">
+				@if ($row['row_property'] == "tab")
+					<input class="rowproperty{{ $row->row_code }}" type="radio" name="row_property[{{ $row->row_code }}]" id="radio{{ $row->row_code }}" value="tab" checked> tab
+				@else
+					<input class="rowproperty{{ $row->row_code }}" type="radio" name="row_property[{{ $row->row_code }}]" id="radio{{ $row->row_code }}" value="tab"> tab
+				@endif
+				</label>
+				<label class="checkbox-inline">
+				@if ($row['row_property'] == "doubletab")
+					<input class="rowproperty{{ $row->row_code }}" type="radio" name="row_property[{{ $row->row_code }}]" id="radio{{ $row->row_code }}" value="doubletab" checked> doubletab
+				@else
+					<input class="rowproperty{{ $row->row_code }}" type="radio" name="row_property[{{ $row->row_code }}]" id="radio{{ $row->row_code }}" value="doubletab"> doubletab
+				@endif
+				</label>
 			</td>
 
 			<!-- Table cell information, column and row combination -->
@@ -90,7 +89,7 @@
 				{{--*/ $field = 'column' . $column->column_code . '-row' . $row->row_code /*--}}
 
 				@if (array_key_exists($field, $disabledFields))
-					<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="value" style="background-color: LightGray ! important;" id="{{ $field }}"><input style="display:none;" checked="checked" type="checkbox" name="options[]" value="{{ $field }}" /></td>
+					<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="value" class="disabled" id="{{ $field }}"><input style="display:none;" checked="checked" type="checkbox" name="options[]" value="{{ $field }}" /></td>
 				@else
 					<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="value" id="{{ $field }}"><input style="display:none;" type="checkbox" name="options[]" value="{{ $field }}" /></td>
 				@endif

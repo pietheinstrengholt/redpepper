@@ -31,9 +31,9 @@
 
 		@foreach( $templatestructure['columns'] as $column )
 			@if (array_key_exists('error', $column))
-				<td class="content header" id="$column['column_code']" style="min-width: 100px; word-wrap: break-word; background-color: #e74c3c; color: #ffffff;">
+				<td class="content header error" id="$column['column_code']">
 			@else
-				<td class="content header" id="$column['column_code']" style="min-width: overflow-hidden; word-wrap: break-word;">
+				<td class="content header" id="$column['column_code']">
 			@endif
 			{{ $column['column_description'] }}
 			</td>
@@ -42,16 +42,16 @@
 
 		<!-- Table header with column nums -->
 
-		<tr style="background-color: #EEE;">
+		<tr class="header2">
 
 		<td></td>
 		<td></td>
 
 		@foreach( $templatestructure['columns'] as $column )
 			@if (array_key_exists('error', $column))
-				<td style="text-align: center; font-weight: bold; background-color: #e74c3c; color: #ffffff;">{{ $column['column_code'] }}</td>
+				<td class="column error">{{ $column['column_code'] }}</td>
 			@else
-				<td style="text-align: center; font-weight: bold;">{{ $column['column_code'] }}</td>
+				<td class="column">{{ $column['column_code'] }}</td>
 			@endif
 		@endforeach
 
@@ -64,11 +64,11 @@
 
 			<tr>
 			@if (array_key_exists('error', $row))
-				<td style="background-color: #e74c3c; color: #ffffff;">{{ $row['row_code'] }}</td>
-				<td class="property{{ $row['row_reference'] }}" style="background-color: #e74c3c; color: #ffffff;">{{ $row['row_description'] }}</td>
+				<td class="desc error">{{ $row['row_code'] }}</td>
+				<td class="desc error property{{ $row['row_reference'] }}">{{ $row['row_description'] }}</td>
 			@else
-				<td style="background-color: #FAFAFA;">{{ $row['row_code'] }}</td>
-				<td class="property{{ $row['row_reference'] }}" style="background-color: #FAFAFA;">{{ $row['row_description'] }}</td>
+				<td class="desc">{{ $row['row_code'] }}</td>
+				<td class="desc property{{ $row['row_reference'] }}">{{ $row['row_description'] }}</td>
 			@endif
 
 			<!-- Table cell information, column and row combination -->
@@ -78,7 +78,7 @@
 				{{--*/ $field = 'column' . $column['column_code'] . '-row' . $row['row_code'] /*--}}
 
 				@if (array_key_exists($field, $arraydisabled))
-					<td title="{{ $column['column_description'] }} - {{ $row['row_description'] }}" class="disabled" style="background-color: LightGray ! important;" id="{{ $field }}"></td>
+					<td title="{{ $column['column_description'] }} - {{ $row['row_description'] }}" class="disabled" id="{{ $field }}"></td>
 				@else
 					<td title="{{ $column['column_description'] }} - {{ $row['row_description'] }}" class="tablecell" id="{{ $field }}">
 				@endif
@@ -104,7 +104,7 @@
 
 		@foreach($templatestructure['column_content'] as $row)
 			@if (array_key_exists('error', $row))
-				<tr style="background-color:#e74c3c; color:#ffffff;">
+				<tr class="error">
 			@else
 				<tr>
 			@endif
@@ -127,7 +127,7 @@
 
 		@foreach($templatestructure['row_content'] as $row)
 			@if (array_key_exists('error', $row))
-				<tr style="background-color:#e74c3c; color:#ffffff;">
+				<tr class="error">
 			@else
 				<tr>
 			@endif
@@ -151,7 +151,7 @@
 
 		@foreach($templatestructure['field_content'] as $row)
 			@if (array_key_exists('error', $row))
-				<tr style="background-color:#e74c3c; color:#ffffff;">
+				<tr class="error">
 			@else
 				<tr>
 			@endif
@@ -178,7 +178,7 @@
 
 		@foreach($templatestructure['sourcing'] as $row)
 			@if (array_key_exists('error', $row))
-				<tr style="background-color:#e74c3c; color:#ffffff;">
+				<tr class="error">
 			@else
 				<tr>
 			@endif
@@ -203,7 +203,7 @@
 
 		@foreach($templatestructure['template_content'] as $key => $row)
 			@if (array_key_exists('error', $templatestructure['template_content']))
-				<tr style="background-color:#e74c3c; color:#ffffff;">
+				<tr class="error">
 			@else
 				<tr>
 			@endif

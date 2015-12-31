@@ -109,8 +109,66 @@ table.template td.propertydoubletab {
 	margin-left: 100px;
 }
 
+div.modal-dialog {
+	width: 90%;
+}
+
+modal.fade {
+	overflow:hidden;
+}
+
+div.modal-body {
+	overflow-y: scroll; 
+	margin-right: 1px;
+}
+
+div#modalContent {
+	display:none;
+}
+
 td.tablecell {
 	text-align: center;
+}
+
+td.desc {
+	background-color: #FAFAFA;
+}
+
+tr.header2 {
+	background-color: #EEE;
+}
+
+td.column {
+	text-align: center; 
+	font-weight: bold;
+}
+
+td.content.header {
+	min-width: overflow-hidden; 
+	word-wrap: break-word;
+}
+
+td.error, tr.error {
+	background-color: #e74c3c; 
+	color: #ffffff;
+}
+
+td.disabled {
+	background-color: LightGray ! important;
+}
+
+/* Template structure page */
+
+td.desc label.checkbox-inline {
+	padding-left:0px;
+}
+
+td.header.structure {
+	min-width: 200px;
+}
+
+td.header.structure.content {
+	width: 100px;
 }
 
 /* Changerequest page */

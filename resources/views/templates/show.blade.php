@@ -29,7 +29,7 @@
 		<td class="header">Row description</td>
 
 		@foreach( $template->columns as $column )
-			<td class="content header" id="$column->column_code" style="min-width: overflow-hidden; word-wrap: break-word;">
+			<td class="content header" id="$column->column_code">
 			{{ $column->column_description }}
 			</td>
 		@endforeach
@@ -37,13 +37,13 @@
 
 		<!-- Table header with column nums -->
 
-		<tr style="background-color: #EEE;">
+		<tr class="header2">
 
 		<td></td>
 		<td></td>
 
 		@foreach( $template->columns as $column )
-			<td style="text-align: center; font-weight: bold;">
+			<td class="column">
 			{{ $column->column_code }}
 			</td>
 		@endforeach
@@ -56,8 +56,8 @@
 		@foreach( $template->rows as $row )
 
 			<tr>
-			<td style="background-color: #FAFAFA;">{{ $row->row_code }}</td>
-			<td class="property{{ $row->row_property }}" style="background-color: #FAFAFA;">{{ $row->row_description }}</td>
+			<td class="desc">{{ $row->row_code }}</td>
+			<td class="desc property{{ $row->row_property }}">{{ $row->row_description }}</td>
 			<!-- Table cell information, column and row combination -->
 			@foreach( $template->columns as $column )
 
@@ -65,7 +65,7 @@
 				{{--*/ $field = 'column' . $column->column_code . '-row' . $row->row_code /*--}}
 
 				@if (array_key_exists($field, $disabledFields))
-					<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="disabled" style="background-color: LightGray ! important;" id="{{ $field }}"></td>
+					<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="disabled" id="{{ $field }}"></td>
 				@else
 					@if (strpos($field,$searchvalue) !== false)
 						<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="tablecell highlight" id="{{ $field }}">
@@ -97,15 +97,15 @@
 	</p>
 
 	<!-- Modal pop-up -->
-	<div class="modal fade" id="template-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="overflow:hidden;">
-		<div class="modal-dialog" style="width: 90%;">
+	<div class="modal fade" id="template-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title"><b>Field information dialog</b></h4>
 				</div>
-				<div class="modal-body" style="overflow-y: scroll; margin-right: 1px;">
-					<div id="modalContent" style="display:none;">
+				<div class="modal-body">
+					<div id="modalContent">
 					</div>
 				</div>
 				<div class="modal-footer">
