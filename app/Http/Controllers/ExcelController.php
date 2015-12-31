@@ -113,42 +113,35 @@ class ExcelController extends Controller
 		]);
 
 		if ($request->file('excel')->isValid()) {
-			$file = array('excel' => Input::file('excel'));
-
-			//create an empty array for the structure
-			$templatestructure = array();
-
-			//create an empty array to capture validation problems
-			$errors = array();
 
 			$validation = Excel::load(Input::file('excel'), function ($reader) use ($request, &$templatestructure, &$errors) {
 
-				// Getting all results
-				$results = $reader->get();
+				// Getting all sheets
+				$sheets = $reader->get();
+				
+				//create empty arrays for build structure and for validation
+				$templatestructure = array();
+				$templatecolumns = array();
+				$templaterows = array();
+				$errors = array();				
 
-				foreach($results as $sheet)
+				foreach($sheets as $sheet)
 				{
-
 					$worksheetTitle = $sheet->getTitle();
 					$arraySheet = $sheet->toArray();
+					
+					//get column and row count from imported excel
+					$highestRow = count($arraySheet) + 1;
+					$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
+					$highestColumnIndex = count($arraySheet[0]) + 1;
+
+					//start counting unique id content in templatestructure array
+					$i = 1;
 
 					if ($worksheetTitle == "structure") {
 
-						//get column and row count from imported excel
-						$highestRow = count($arraySheet) + 1;
-
+						//validate if the excel sheets has more than 3 rows
 						if ($highestRow > 2) {
-
-							$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
-							$highestColumnIndex = count($arraySheet[0]) + 1;
-							$nrColumns = ord($highestColumn) - 64;
-
-							//create empty arrays for build structure and for validation
-							$templatestructure = array();
-							$templatecolumns = array();
-							$templaterows = array();
-							//start counting unique id for disabled cells in templatestructure array
-							$disabledcount = 1;
 
 							for ($row = 1; $row <= $highestRow; ++ $row) {
 								for ($column = 1; $column < $highestColumnIndex; ++ $column) {
@@ -234,9 +227,9 @@ class ExcelController extends Controller
 										$cell_row_code = $templatestructure['rows'][$rowid]['row_code'];
 										//check if cell color is disabled: = D3D3D3
 										if ($cellcolor == 'D3D3D3' || $val == 'disabled') {
-											$templatestructure['disabledcells'][$disabledcount]['column_code'] = $cell_column_code;
-											$templatestructure['disabledcells'][$disabledcount]['row_code'] = $cell_row_code;
-											$disabledcount++;
+											$templatestructure['disabledcells'][$i]['column_code'] = $cell_column_code;
+											$templatestructure['disabledcells'][$i]['row_code'] = $cell_row_code;
+											$i++;
 										}
 									}
 								}
@@ -249,20 +242,11 @@ class ExcelController extends Controller
 					//validatie work sheet with the name column_content
 					if ($worksheetTitle == "column_content") {
 
-						//get column and row count from imported excel
-						$highestRow         = count($arraySheet) + 1;
-
 						if ($highestRow > 1) {
-
-							$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
-							$highestColumnIndex = count($arraySheet[0]) + 1;
-							$nrColumns = ord($highestColumn) - 64;
-
-							//start counting unique id for column_content in templatestructure array
-							$columncontentcount = 0;
 
 							for ($row = 1; $row <= $highestRow; ++ $row) {
 								for ($column = 1; $column < $highestColumnIndex; ++ $column) {
+
 									//set column letter and retrieve value
 									$columnLetter = $this->getExcelColumnNumber($column);
 									$val = $reader->getExcel()->getSheet(1)->getCell($columnLetter . $row)->getValue();
@@ -276,90 +260,79 @@ class ExcelController extends Controller
 									if ($row > 1 && $column == 1) {
 										//validate if column_code exists in template columns
 										if (!(in_array($val, $templatecolumns, true))) {
-											$templatestructure['column_content'][$columncontentcount]['error'] = "1";
+											$templatestructure['column_content'][$i]['error'] = "1";
 											array_push($errors, "column_code cannot be found in template structure");
 										}
-										$templatestructure['column_content'][$columncontentcount]['column_code'] = $val;
+										$templatestructure['column_content'][$i]['column_code'] = $val;
 									}
 									if ($row > 1 && $column == 2) {
 										//validate if content_type contains regulation or interpretation
 										if (!($val == 'regulation' || $val == 'interpretation' || $val == 'reference')) {
-											$templatestructure['column_content'][$columncontentcount]['error'] = "1";
+											$templatestructure['column_content'][$i]['error'] = "1";
 											array_push($errors, "content_type not a valid value");
 										}
-										$templatestructure['column_content'][$columncontentcount]['content_type'] = $val;
+										$templatestructure['column_content'][$i]['content_type'] = $val;
 									}
 									if ($row > 1 && $column == 3) {
-										$templatestructure['column_content'][$columncontentcount]['content'] = $val;
+										$templatestructure['column_content'][$i]['content'] = $val;
 									}
 								}
-								$columncontentcount++;
+								$i++;
 							}
 						}
 					}
 
 					//validatie work sheet with the name row_content
 					if ($worksheetTitle == "row_content") {
-						//get column and row count from imported excel
-						$highestRow         = count($arraySheet) + 1;
 
 						if ($highestRow > 1) {
 
-							$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
-							$highestColumnIndex = count($arraySheet[0]) + 1;
-							$nrColumns = ord($highestColumn) - 64;
-							//start counting unique id for row_content in templatestructure array
-							$rowcontentcount = 0;
-
 							for ($row = 1; $row <= $highestRow; ++ $row) {
 								for ($column = 1; $column < $highestColumnIndex; ++ $column) {
+
 									//set column letter and retrieve value
 									$columnLetter = $this->getExcelColumnNumber($column);
 									$val = $reader->getExcel()->getSheet(2)->getCell($columnLetter . $row)->getValue();
+
 									//1th row is the heading
 									if ($row == 1 && ($column == 1 && $val != 'number' || $column == 2 && $val != 'content_type' || $column == 3 && $val != 'content')) {
 										array_push($errors, "incorrect heading on row content sheet");
 									}
 									if ($row > 1 && $column == 1) {
 										if (!(in_array($val, $templaterows, true))) {
-											$templatestructure['row_content'][$rowcontentcount]['error'] = "1";
+											$templatestructure['row_content'][$i]['error'] = "1";
 											array_push($errors, "row_code cannot be found in template structure");
 										}
-										$templatestructure['row_content'][$rowcontentcount]['row_code'] = $val;
+										$templatestructure['row_content'][$i]['row_code'] = $val;
 									}
 									if ($row > 1 && $column == 2) {
 										//validate if content_type contains regulation or interpretation
 										if (!($val == 'regulation' || $val == 'interpretation' || $val == 'reference')) {
-											$templatestructure['row_content'][$rowcontentcount]['error'] = "1";
+											$templatestructure['row_content'][$i]['error'] = "1";
 											array_push($errors, "content_type not a valid value");
 										}
-										$templatestructure['row_content'][$rowcontentcount]['content_type'] = $val;
+										$templatestructure['row_content'][$i]['content_type'] = $val;
 									}
 									if ($row > 1 && $column == 3) {
-										$templatestructure['row_content'][$rowcontentcount]['content'] = $val;
+										$templatestructure['row_content'][$i]['content'] = $val;
 									}
 								}
-								$rowcontentcount++;
+								$i++;
 							}
 						}
 					}
 
 					//validatie work sheet with the name column_content
 					if ($worksheetTitle == "template_content") {
-						//get column and row count from imported excel
-						$highestRow         = count($arraySheet) + 1;
-						$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
-						$highestColumnIndex = count($arraySheet[0]) + 1;
-						$nrColumns = ord($highestColumn) - 64;
-						//start counting unique id for column_content in templatestructure array
-						$columncontentcount = 0;
 
 						for ($row = 1; $row <= $highestRow; ++ $row) {
 
 							for ($column = 1; $column < $highestColumnIndex; ++ $column) {
+
 								//set column letter and retrieve value
 								$columnLetter = $this->getExcelColumnNumber($column);
 								$val = $reader->getExcel()->getSheet(5)->getCell($columnLetter . $row)->getValue();
+
 								//1th row is the heading
 								if ($row == 1 && $column < 3) {
 									if (empty($val)) {
@@ -465,22 +438,15 @@ class ExcelController extends Controller
 							}
 						}
 
-						//get column and row count from imported excel
-						$highestRow = count($arraySheet) + 1;
-
 						if ($highestRow > 1) {
-
-							$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
-							$highestColumnIndex = count($arraySheet[0]) + 1;
-							$nrColumns = ord($highestColumn) - 64;
-							//start counting unique id for field_content in templatestructure array
-							$sourcingcontentcount = 0;
 
 							for ($row = 1; $row <= $highestRow; ++ $row) {
 								for ($column = 1; $column < $highestColumnIndex; ++ $column) {
+
 									//set column letter and retrieve value
 									$columnLetter = $this->getExcelColumnNumber($column);
 									$val = $reader->getExcel()->getSheet(4)->getCell($columnLetter . $row)->getValue();
+
 									//1th row is the heading
 									if ($row == 1) {
 										if ($column == 1 && $val != 'column_code' || $column == 2 && $val != 'row_code' || $column == 3 && $val != 'type' || $column == 4 && $val != 'source' || $column == 5 && $val != 'value' || $column == 6 && $val != 'description') {
@@ -490,96 +456,90 @@ class ExcelController extends Controller
 									if ($row > 1 && $column == 1) {
 										//validate if column number exists in template columns
 										if (!(in_array($val, $templatecolumns, true))) {
-											$templatestructure['sourcing'][$sourcingcontentcount]['error'] = "1";
+											$templatestructure['sourcing'][$i]['error'] = "1";
 											array_push($errors, "column_code cannot be found in template structure");
 										}
-										$templatestructure['sourcing'][$sourcingcontentcount]['column_code'] = $val;
+										$templatestructure['sourcing'][$i]['column_code'] = $val;
 									}
 									if ($row > 1 && $column == 2) {
 										//validate if column number exists in template rows
 										if (!(in_array($val, $templaterows, true))) {
-											$templatestructure['sourcing'][$sourcingcontentcount]['error'] = "1";
+											$templatestructure['sourcing'][$i]['error'] = "1";
 											array_push($errors, "row_code cannot be found in template structure");
 										}
-										$templatestructure['sourcing'][$sourcingcontentcount]['row_code'] = $val;
+										$templatestructure['sourcing'][$i]['row_code'] = $val;
 									}
 									if ($row > 1 && $column == 3) {
 										if (!(in_array($val, $type_array, true))) {
-											$templatestructure['sourcing'][$sourcingcontentcount]['error'] = "1";
+											$templatestructure['sourcing'][$i]['error'] = "1";
 											array_push($errors, "type_name is not a valid value");
 										}
 										$key = array_search($val, $type_array);
-										$templatestructure['sourcing'][$sourcingcontentcount]['type'] = $key;
+										$templatestructure['sourcing'][$i]['type'] = $key;
 									}
 									if ($row > 1 && $column == 4) {
 										if (!(in_array($val, $source_array, true))) {
-											$templatestructure['sourcing'][$sourcingcontentcount]['error'] = "1";
+											$templatestructure['sourcing'][$i]['error'] = "1";
 											array_push($errors, "source_name is not a valid value");
 										}
 										$key = array_search($val, $source_array);
-										$templatestructure['sourcing'][$sourcingcontentcount]['source'] = $key;
+										$templatestructure['sourcing'][$i]['source'] = $key;
 									}
 									if ($row > 1 && $column == 5) {
-										$templatestructure['sourcing'][$sourcingcontentcount]['value'] = $val;
+										$templatestructure['sourcing'][$i]['value'] = $val;
 									}
 									if ($row > 1 && $column == 6) {
-										$templatestructure['sourcing'][$sourcingcontentcount]['description'] = $val;
+										$templatestructure['sourcing'][$i]['description'] = $val;
 									}
 								}
-								$sourcingcontentcount++;
+								$i++;
 							}
 						}
 					}
 
 					if ($worksheetTitle == "field_content") {
-						//get column and row count from imported excel
-						$highestRow         = count($arraySheet) + 1;
 
 						if ($highestRow > 1) {
 
-							$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
-							$highestColumnIndex = count($arraySheet[0]) + 1;
-							$nrColumns = ord($highestColumn) - 64;
-							//start counting unique id for field_content in templatestructure array
-							$fieldcontentcount = 0;
-
 							for ($row = 1; $row <= $highestRow; ++ $row) {
 								for ($column = 1; $column < $highestColumnIndex; ++ $column) {
+
 									//set column letter and retrieve value
 									$columnLetter = $this->getExcelColumnNumber($column);
 									$val = $reader->getExcel()->getSheet(3)->getCell($columnLetter . $row)->getValue();
+
 									//1th row is the heading
 									if ($row == 1 && ($column == 1 && $val != 'column_code' || $column == 2 && $val != 'row_code' || $column == 3 && $val != 'content_type' || $column == 4 && $val != 'content')) {
 										array_push($errors, "incorrect heading on field content sheet");
 									}
 									if ($row > 1 && $column == 1) {
 										if (!(in_array($val, $templatecolumns, true))) {
-											$templatestructure['field_content'][$fieldcontentcount]['error'] = "1";
+											$templatestructure['field_content'][$i]['error'] = "1";
 											array_push($errors, "column_code cannot be found in template structure");
 										}
-										$templatestructure['field_content'][$fieldcontentcount]['column_code'] = $val;
+										$templatestructure['field_content'][$i]['column_code'] = $val;
 									}
 									if ($row > 1 && $column == 2) {
 										if (!(in_array($val, $templaterows, true))) {
-											$templatestructure['field_content'][$fieldcontentcount]['error'] = "1";
+											$templatestructure['field_content'][$i]['error'] = "1";
 											array_push($errors, "row_code cannot be found in template structure");
 										}
-										$templatestructure['field_content'][$fieldcontentcount]['row_code'] = $val;
+										$templatestructure['field_content'][$i]['row_code'] = $val;
 									}
 									if ($row > 1 && $column == 3) {
 										//validate if content_type contains regulation or interpretation
 										if (!($val == 'regulation' || $val == 'interpretation' || $val == 'property1' || $val == 'property2')) {
-											$templatestructure['field_content'][$fieldcontentcount]['error'] = "1";
+											$templatestructure['field_content'][$i]['error'] = "1";
 											array_push($errors, "incorrect content_type used");
 										//validate if column number exists in templatecolumns
 										}
-										$templatestructure['field_content'][$fieldcontentcount]['content_type'] = $val;
+										$templatestructure['field_content'][$i]['content_type'] = $val;
 									}
 									if ($row > 1 && $column == 4) {
-										$templatestructure['field_content'][$fieldcontentcount]['content'] = $val;
+										$templatestructure['field_content'][$i]['content'] = $val;
 									}
 								}
-								$fieldcontentcount++;
+								$i++;
 							}
 						}
 					}
@@ -620,8 +580,7 @@ class ExcelController extends Controller
 				$template->save();
 
 				if (empty($templatestructure['columns']) || empty($templatestructure['rows'])) {
-					echo "Error: a template needs a least one column or one row!";
-					exit();
+					abort(403, 'Incorrect Excel template. Excel sheet structure needs a least one column or one row!.');
 				}
 
 				//add template column to database
