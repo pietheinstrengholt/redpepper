@@ -580,7 +580,7 @@ class ExcelController extends Controller
 				$template->save();
 
 				if (empty($templatestructure['columns']) || empty($templatestructure['rows'])) {
-					abort(403, 'Incorrect Excel template. Excel sheet structure needs a least one column or one row!.');
+					abort(403, 'Incorrect Excel template. Excel sheet structure needs a least one column or one row!');
 				}
 
 				//add template column to database
