@@ -236,3 +236,47 @@ div.pagination {
 	width: 100%;
 	margin-top: 0px;
 }
+
+/* HMLT Diff (changerequest edit view) */
+
+ins {
+	color: green;
+	background: #dfd;
+	text-decoration: none;
+}
+
+del {
+	color: red;
+	background: #fdd;
+	text-decoration: none;
+}
+
+code {
+	font-size: smaller;
+}
+
+#params {
+	margin: 1em 0;
+	font: 14px sans-serif;
+}
+
+.code {
+	margin-left: 2em;
+	font: 12px monospace;
+}
+
+.ins {
+	background:#dfd;
+}
+
+.del {
+	background:#fdd;
+}
+
+.rep {
+	color: #008;
+	background: #eef;
+}
+
+#htmldiff.onlyDeletions ins {display:none}
+#htmldiff.onlyInsertions del {display:none}
