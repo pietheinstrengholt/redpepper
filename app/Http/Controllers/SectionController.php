@@ -1,20 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-use DB;
+use App\Events\ChangeEvent;
+use App\Http\Controllers\Controller;
 use App\Section;
 use App\Template;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Input;
-use Redirect;
-
-use Gate;
 use App\User;
 use Auth;
-
 use Event;
-use App\Events\ChangeEvent;
+use Gate;
+use Illuminate\Http\Request;
+use Redirect;
 
 class SectionController extends Controller
 {
@@ -120,8 +116,7 @@ class SectionController extends Controller
 			'subject_id' => 'required'
 		]);
 
-		$input = Input::all();
-		$section = Section::create($input);
+		$section = Section::create($request->all());
 
 		//log Event
 		$event = array(
@@ -148,8 +143,7 @@ class SectionController extends Controller
 			'section_description' => 'required|min:4'
 		]);
 
-		$input = array_except(Input::all(), '_method');
-		$section->update($input);
+		$section->update($request->all());
 
 		//log Event
 		$event = array(

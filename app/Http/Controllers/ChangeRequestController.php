@@ -1,41 +1,33 @@
 <?php
 
 namespace App\Http\Controllers;
-use DB;
-use App\Section;
-use App\Template;
-use App\TemplateRow;
-use App\TemplateColumn;
-use App\TemplateField;
-use App\Requirement;
-use App\Technical;
-use App\TechnicalType;
-use App\TechnicalSource;
-
 use App\ChangeRequest;
 use App\DraftField;
 use App\DraftRequirement;
 use App\DraftTechnical;
-
+use App\Events\ChangeEvent;
 use App\HistoryRequirement;
 use App\HistoryTechnical;
-
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Input;
-use Redirect;
-use Validator;
-use Session;
-
 use App\Libraries\FineDiff;
-
-use Gate;
+use App\Requirement;
+use App\Section;
+use App\Technical;
+use App\TechnicalSource;
+use App\TechnicalType;
+use App\Template;
+use App\TemplateColumn;
+use App\TemplateField;
+use App\TemplateRow;
 use App\User;
 use App\UserRights;
 use Auth;
-
 use Event;
-use App\Events\ChangeEvent;
+use Gate;
+use Illuminate\Http\Request;
+use Redirect;
+use Session;
+use Validator;
 
 class ChangeRequestController extends Controller
 {
@@ -268,13 +260,6 @@ class ChangeRequestController extends Controller
 			'template_column' => TemplateColumn::where('template_id', $changerequest->template_id)->where('column_code', $changerequest->column_code)->first(),
 			'allowedToChange' => $allowedToChange
 		]);
-	}
-
-	public function store()
-	{
-		$input = Input::all();
-		ChangeRequest::create( $input );
-		return Redirect::route('changerequests.index')->with('message', 'Changerequest created');
 	}
 
 	public function update(Request $request)
@@ -871,7 +856,7 @@ class ChangeRequestController extends Controller
 				$draftrequirement->save();
 			}
 
-			$technicalData = Input::get('technical');
+			$technicalData = $request->input('technical');
 
 			foreach($technicalData as $technical) {
 

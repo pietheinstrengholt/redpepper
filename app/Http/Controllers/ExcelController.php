@@ -1,41 +1,33 @@
 <?php
 
 namespace App\Http\Controllers;
-use DB;
-use App\Section;
-use App\Template;
-use App\TemplateRow;
-use App\TemplateColumn;
-use App\TemplateField;
-use App\Requirement;
-
-use App\User;
-use App\UserRights;
-use Gate;
-use Auth;
-
-use App\Technical;
-use App\TechnicalType;
-use App\TechnicalSource;
-
 use App\ChangeRequest;
 use App\DraftField;
 use App\DraftRequirement;
 use App\DraftTechnical;
-
+use App\Events\ChangeEvent;
 use App\HistoryRequirement;
 use App\HistoryTechnical;
-
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Input;
-use Redirect;
-use Maatwebsite\Excel\Facades\Excel;
-use Validator;
-use Session;
-
+use App\Requirement;
+use App\Section;
+use App\Technical;
+use App\TechnicalSource;
+use App\TechnicalType;
+use App\Template;
+use App\TemplateColumn;
+use App\TemplateField;
+use App\TemplateRow;
+use App\User;
+use App\UserRights;
+use Auth;
 use Event;
-use App\Events\ChangeEvent;
+use Gate;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use Redirect;
+use Session;
+use Validator;
 
 
 class ExcelController extends Controller
@@ -114,7 +106,7 @@ class ExcelController extends Controller
 
 		if ($request->file('excel')->isValid()) {
 
-			$validation = Excel::load(Input::file('excel'), function ($reader) use ($request, &$templatestructure, &$errors) {
+			$validation = Excel::load($request->file('excel'), function ($reader) use ($request, &$templatestructure, &$errors) {
 
 				// Getting all sheets
 				$sheets = $reader->get();
@@ -150,8 +142,9 @@ class ExcelController extends Controller
 									$columnid = $column-3;
 									$rowid = $row-2;
 
-									//get the value from the cell, based on the columnnumber translated to the columnletter
-									$val = $reader->getExcel()->getSheet()->getCell($this->getExcelColumnNumber($column) . $row)->getValue();
+									//set column letter and retrieve value
+									$columnLetter = $this->getExcelColumnNumber($column);
+									$val = $reader->getExcel()->getSheet()->getCell($columnLetter . $row)->getValue();
 
 									//1th row is where the column names are stored, , 4th column is where column numbering starts
 									if ($row == 1 && $column > 4) {
@@ -246,8 +239,9 @@ class ExcelController extends Controller
 							for ($row = 1; $row <= $highestRow; ++ $row) {
 								for ($column = 1; $column < $highestColumnIndex; ++ $column) {
 
-									//get the value from the cell, based on the columnnumber translated to the columnletter
-									$val = $reader->getExcel()->getSheet()->getCell($this->getExcelColumnNumber($column) . $row)->getValue();
+									//set column letter and retrieve value
+									$columnLetter = $this->getExcelColumnNumber($column);
+									$val = $reader->getExcel()->getSheet(1)->getCell($columnLetter . $row)->getValue();
 
 									//1th row is the heading
 									if ($row == 1 && ($column == 1 && $val != 'number' || $column == 2 && $val != 'content_type' || $column == 3 && $val != 'content')) {
@@ -288,8 +282,9 @@ class ExcelController extends Controller
 							for ($row = 1; $row <= $highestRow; ++ $row) {
 								for ($column = 1; $column < $highestColumnIndex; ++ $column) {
 
-									//get the value from the cell, based on the columnnumber translated to the columnletter
-									$val = $reader->getExcel()->getSheet()->getCell($this->getExcelColumnNumber($column) . $row)->getValue();
+									//set column letter and retrieve value
+									$columnLetter = $this->getExcelColumnNumber($column);
+									$val = $reader->getExcel()->getSheet(2)->getCell($columnLetter . $row)->getValue();
 
 									//1th row is the heading
 									if ($row == 1 && ($column == 1 && $val != 'number' || $column == 2 && $val != 'content_type' || $column == 3 && $val != 'content')) {
@@ -326,8 +321,9 @@ class ExcelController extends Controller
 
 							for ($column = 1; $column < $highestColumnIndex; ++ $column) {
 
-								//get the value from the cell, based on the columnnumber translated to the columnletter
-								$val = $reader->getExcel()->getSheet()->getCell($this->getExcelColumnNumber($column) . $row)->getValue();
+								//set column letter and retrieve value
+								$columnLetter = $this->getExcelColumnNumber($column);
+								$val = $reader->getExcel()->getSheet(5)->getCell($columnLetter . $row)->getValue();
 
 								//1th row is the heading
 								if ($row == 1 && $column < 3) {
@@ -439,8 +435,9 @@ class ExcelController extends Controller
 							for ($row = 1; $row <= $highestRow; ++ $row) {
 								for ($column = 1; $column < $highestColumnIndex; ++ $column) {
 
-									//get the value from the cell, based on the columnnumber translated to the columnletter
-									$val = $reader->getExcel()->getSheet()->getCell($this->getExcelColumnNumber($column) . $row)->getValue();
+									//set column letter and retrieve value
+									$columnLetter = $this->getExcelColumnNumber($column);
+									$val = $reader->getExcel()->getSheet(4)->getCell($columnLetter . $row)->getValue();
 
 									//1th row is the heading
 									if ($row == 1) {
@@ -499,8 +496,9 @@ class ExcelController extends Controller
 							for ($row = 1; $row <= $highestRow; ++ $row) {
 								for ($column = 1; $column < $highestColumnIndex; ++ $column) {
 
-									//get the value from the cell, based on the columnnumber translated to the columnletter
-									$val = $reader->getExcel()->getSheet()->getCell($this->getExcelColumnNumber($column) . $row)->getValue();
+									//set column letter and retrieve value
+									$columnLetter = $this->getExcelColumnNumber($column);
+									$val = $reader->getExcel()->getSheet(3)->getCell($columnLetter . $row)->getValue();
 
 									//1th row is the heading
 									if ($row == 1 && ($column == 1 && $val != 'column_code' || $column == 2 && $val != 'row_code' || $column == 3 && $val != 'content_type' || $column == 4 && $val != 'content')) {

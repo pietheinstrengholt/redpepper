@@ -1,32 +1,30 @@
 <?php
 
 namespace App\Http\Controllers;
-use DB;
-use App\Section;
-use App\Template;
-use App\TemplateRow;
-use App\TemplateColumn;
-use App\TemplateField;
-use App\Requirement;
-use App\Technical;
-use App\TechnicalType;
-use App\TechnicalSource;
 use App\ChangeRequest;
 use App\DraftField;
 use App\DraftRequirement;
 use App\DraftTechnical;
+use App\Events\ChangeEvent;
 use App\Http\Controllers\Controller;
-use Gate;
+use App\Requirement;
+use App\Section;
+use App\Technical;
+use App\TechnicalSource;
+use App\TechnicalType;
+use App\Template;
+use App\TemplateColumn;
+use App\TemplateField;
+use App\TemplateRow;
 use App\User;
 use App\UserRights;
 use Auth;
-use Illuminate\Http\Request;
-use Input;
-use Redirect;
-use Validator;
-use Session;
 use Event;
-use App\Events\ChangeEvent;
+use Gate;
+use Illuminate\Http\Request;
+use Redirect;
+use Session;
+use Validator;
 
 class TemplateController extends Controller
 {
@@ -426,7 +424,7 @@ class TemplateController extends Controller
 			'template_shortdesc' => 'required|min:4'
 		]);
 
-		$input = Input::all();
+		$input = $request->all();
 		$input['section_id'] = $section->id;
 		$template = Template::create($input);
 
@@ -469,7 +467,7 @@ class TemplateController extends Controller
 
 		Event::fire(new ChangeEvent($event));
 
-		$input = array_except(Input::all(), '_method');
+		$input = array_except($request->all(), '_method');
 		$template->update($input);
 		return Redirect::route('sections.templates.show', [$section->id, $template->id])->with('message', 'Template updated.');
 	}

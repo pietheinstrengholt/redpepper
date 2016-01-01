@@ -1,40 +1,32 @@
 <?php
 
 namespace App\Http\Controllers;
-use DB;
-use App\Section;
-use App\Template;
-use App\TemplateRow;
-use App\TemplateColumn;
-use App\TemplateField;
-use App\Requirement;
-
-use App\Technical;
-use App\TechnicalType;
-use App\TechnicalSource;
-
 use App\ChangeRequest;
 use App\DraftField;
 use App\DraftRequirement;
 use App\DraftTechnical;
-
+use App\Events\ChangeEvent;
 use App\HistoryRequirement;
 use App\HistoryTechnical;
-
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Input;
-use Redirect;
-use Maatwebsite\Excel\Facades\Excel;
-use Validator;
-use Session;
-
-use Gate;
+use App\Requirement;
+use App\Section;
+use App\Technical;
+use App\TechnicalSource;
+use App\TechnicalType;
+use App\Template;
+use App\TemplateColumn;
+use App\TemplateField;
+use App\TemplateRow;
 use App\User;
 use Auth;
-
 use Event;
-use App\Events\ChangeEvent;
+use Gate;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use Redirect;
+use Session;
+use Validator;
 
 class CSVController extends Controller
 {
@@ -55,9 +47,9 @@ class CSVController extends Controller
 
 			if ($request->hasFile('csv')) {
 				if ($request->file('csv')->isValid()) {
-					$file = array('csv' => Input::file('csv'));
+					$file = array('csv' => $request->file('csv'));
 
-					Excel::load(Input::file('csv'), function ($reader) use ($request) {
+					Excel::load($request->file('csv'), function ($reader) use ($request) {
 
 						//create array from csv content
 						$csvarray = $reader->toArray();

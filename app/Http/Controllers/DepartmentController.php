@@ -1,14 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use DB;
 use App\Department;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Input;
-use Redirect;
 use App\User;
 use Gate;
+use Illuminate\Http\Request;
+use Redirect;
 
 class DepartmentController extends Controller
 {
@@ -62,8 +60,7 @@ class DepartmentController extends Controller
 			'department_description' => 'required'
 		]);
 
-		$input = Input::all();
-		Department::create( $input );
+		Department::create($request->all());
 		return Redirect::route('departments.index')->with('message', 'Department created');
 	}
 
@@ -80,8 +77,7 @@ class DepartmentController extends Controller
 			'department_description' => 'required'
 		]);
 
-		$input = array_except(Input::all(), '_method');
-		$department->update($input);
+		$department->update($request->all());
 		return Redirect::route('departments.show', $department->slug)->with('message', 'Department updated.');
 	}
 

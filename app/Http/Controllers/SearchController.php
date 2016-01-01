@@ -1,33 +1,27 @@
 <?php
 
 namespace App\Http\Controllers;
-use DB;
-use App\Section;
-use App\Template;
-use App\TemplateRow;
-use App\TemplateColumn;
-use App\TemplateField;
-use App\Requirement;
-
-use App\Technical;
-use App\TechnicalType;
-use App\TechnicalSource;
-
 use App\ChangeRequest;
 use App\DraftField;
 use App\DraftRequirement;
 use App\DraftTechnical;
-
 use App\HistoryRequirement;
 use App\HistoryTechnical;
-
 use App\Http\Controllers\Controller;
+use App\Requirement;
+use App\Section;
+use App\Technical;
+use App\TechnicalSource;
+use App\TechnicalType;
+use App\Template;
+use App\TemplateColumn;
+use App\TemplateField;
+use App\TemplateRow;
 use Illuminate\Http\Request;
-use Input;
-use Redirect;
 use Maatwebsite\Excel\Facades\Excel;
-use Validator;
+use Redirect;
 use Session;
+use Validator;
 
 class SearchController extends Controller
 {

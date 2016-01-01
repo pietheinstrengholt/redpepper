@@ -1,16 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-use DB;
-use App\Log;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Input;
-use Redirect;
-
-use Gate;
+use App\Log;
 use App\User;
 use Auth;
+use Gate;
+use Illuminate\Http\Request;
+use Redirect;
 
 class LogController extends Controller
 {

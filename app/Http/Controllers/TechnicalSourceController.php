@@ -1,16 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-use DB;
-use App\Technical;
-use App\TechnicalType;
-use App\TechnicalSource;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Input;
-use Redirect;
+use App\Technical;
+use App\TechnicalSource;
+use App\TechnicalType;
 use App\User;
 use Gate;
+use Illuminate\Http\Request;
+use Redirect;
 
 class TechnicalSourceController extends Controller
 {
@@ -62,8 +60,7 @@ class TechnicalSourceController extends Controller
 			'source_description' => 'required'
 		]);
 
-		$input = Input::all();
-		TechnicalSource::create( $input );
+		TechnicalSource::create($request->all());
 		return Redirect::route('sources.index')->with('message', 'Source created');
 	}
 
@@ -80,8 +77,7 @@ class TechnicalSourceController extends Controller
 			'source_description' => 'required'
 		]);
 
-		$input = array_except(Input::all(), '_method');
-		$source->update($input);
+		$source->update($request->all());
 		return Redirect::route('sources.show', $source->slug)->with('message', 'Source updated.');
 	}
 

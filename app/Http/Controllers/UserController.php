@@ -1,20 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
-use DB;
+use App\Department;
+use App\Events\ChangeEvent;
+use App\Http\Controllers\Controller;
+use App\Log;
+use App\Section;
 use App\User;
 use App\UserRights;
-use App\Section;
-use Gate;
-use App\Department;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Input;
-use Redirect;
 use Auth;
 use Event;
-use App\Events\ChangeEvent;
-use App\Log;
+use Gate;
+use Illuminate\Http\Request;
+use Redirect;
 
 class UserController extends Controller
 {
@@ -136,8 +134,7 @@ class UserController extends Controller
 			'department_id' => 'required'
 		]);
 
-		$input = array_except(Input::all(), '_method');
-		$user->update($input);
+		$user->update($request->all());
 
 		//log Event
 		$event = array(

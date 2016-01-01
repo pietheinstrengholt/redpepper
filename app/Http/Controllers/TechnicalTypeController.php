@@ -1,16 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-use DB;
-use App\Technical;
-use App\TechnicalType;
-use App\TechnicalSource;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Input;
-use Redirect;
+use App\Technical;
+use App\TechnicalSource;
+use App\TechnicalType;
 use App\User;
 use Gate;
+use Illuminate\Http\Request;
+use Redirect;
 
 class TechnicalTypeController extends Controller
 {
@@ -62,8 +60,7 @@ class TechnicalTypeController extends Controller
 			'type_description' => 'required'
 		]);
 
-		$input = Input::all();
-		TechnicalType::create( $input );
+		TechnicalType::create($request->all());
 		return Redirect::route('types.index')->with('message', 'Type created');
 	}
 
@@ -80,8 +77,7 @@ class TechnicalTypeController extends Controller
 			'type_description' => 'required'
 		]);
 
-		$input = array_except(Input::all(), '_method');
-		$type->update($input);
+		$type->update($request->all());
 		return Redirect::route('types.show', $type->slug)->with('message', 'Type updated.');
 	}
 
