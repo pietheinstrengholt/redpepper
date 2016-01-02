@@ -14,6 +14,16 @@ class Log extends Model
     {
         return $this->belongsTo('App\User', 'created_by', 'id');
     }
+	
+    public function section()
+    {
+        return $this->belongsTo('App\Section', 'section_id', 'id');
+    }
+	
+    public function template()
+    {
+        return $this->belongsTo('App\Template', 'template_id', 'id');
+    }
 }
 
 ?>
