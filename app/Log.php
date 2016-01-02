@@ -10,10 +10,15 @@ class Log extends Model
     protected $guarded = [];
 	protected $table = 't_logs';
 
-    public function user()
+    public function creator()
     {
         return $this->belongsTo('App\User', 'created_by', 'id');
     }
+	
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'username_id', 'id');
+    }	
 	
     public function section()
     {

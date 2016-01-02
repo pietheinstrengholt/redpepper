@@ -20,9 +20,9 @@
 		<td class="header">Event type</td>
 		<td class="header">Action</td>		
 		<td class="header">Changerequest id</td>
-		<td class="header">Section name</td>
-		<td class="header">Template name</td>
-		<td class="header">Username id</td>
+		<td class="header">Section</td>
+		<td class="header">Template</td>
+		<td class="header">Username</td>
 		<td class="header" style="width: 20%;">User</td>
 		<td class="header">Created</td>
 		</tr>
@@ -31,14 +31,19 @@
 			<tr>
 			<td>{{ $log->log_event }}</td>
 			<td>{{ $log->action }}</td>
-			<td>{{ $log->changerequest_id }}</a></td>
+			
+			<td>
+			@if ($log->changerequest_id)
+				<a href="{!! url('/') . '/changerequests/' . $log->changerequest_id . '/edit'; !!}">{{ $log->changerequest_id }}</a>
+			@endif
+			</td>			
 			
 			<td>
 			@if ($log->section_id)
 				@if ($log->section)
-					{{ $log->section->section_name }}
+					<a href="{!! url('/') . '/sections/' . $log->section_id; !!}">{{ $log->section->section_name }}</a>
 				@else
-					{{ $log->section_id }}		
+					{{ $log->section_id }} (Deleted)
 				@endif
 			@endif
 			</td>
@@ -46,15 +51,23 @@
 			<td>
 			@if ($log->template_id)
 				@if ($log->template)
-					{{ $log->template->template_name }}
+					<a href="{!! url('/') . '/sections/' . $log->template->section_id . '/templates/' . $log->template_id; !!}">{{ $log->template->template_name }}</a>
 				@else
-					{{ $log->template_id }}
+					{{ $log->template_id }} (Deleted)
 				@endif
 			@endif
 			</td>
 
-			<td>{{ $log->username_id }}</td>
-			<td>{{ $log->user->firstname }} {{ $log->user->lastname }} ({{ $log->user->username }})</td>
+			<td>
+			@if ($log->username_id)
+				@if ($log->user)
+					{{ $log->user->firstname }} {{ $log->user->lastname }} ({{ $log->user->username }})
+				@else
+					{{ $log->username_id }} (Deleted)
+				@endif
+			@endif
+			</td>
+			<td>{{ $log->creator->firstname }} {{ $log->creator->lastname }} ({{ $log->creator->username }})</td>
 			<td>{{ $log->created_at }}</td>
 			</tr>
 		@endforeach

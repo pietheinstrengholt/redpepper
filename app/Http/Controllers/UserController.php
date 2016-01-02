@@ -140,7 +140,7 @@ class UserController extends Controller
 		$event = array(
 			"log_event" => "User",
 			"action" => "updated",
-			"content_name" => $user->id,
+			"username_id" => $user->id,
 			"created_by" => Auth::user()->id
 		);
 
