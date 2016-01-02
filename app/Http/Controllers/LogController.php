@@ -11,9 +11,9 @@ use Redirect;
 
 class LogController extends Controller
 {
-    public function index(Request $request)
-    {
+	public function index(Request $request)
+	{
 		$logs = Log::orderBy('id', 'desc')->paginate(20);
 		return view('logs.index', compact('logs'));
-    }
+	}
 }

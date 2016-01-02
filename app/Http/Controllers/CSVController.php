@@ -1,14 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\ChangeRequest;
-use App\DraftField;
-use App\DraftRequirement;
-use App\DraftTechnical;
-use App\Events\ChangeEvent;
-use App\HistoryRequirement;
-use App\HistoryTechnical;
 use App\Http\Controllers\Controller;
+use App\Events\ChangeEvent;
 use App\Requirement;
 use App\Section;
 use App\Technical;
@@ -34,12 +28,12 @@ class CSVController extends Controller
 	{
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
+			abort(403, 'Unauthorized action.');
         }
 
 		//validate input form
 		$this->validate($request, [
-			'csv' => 'required|mimes:csv',
+			'csv' => 'required',
 			'formname' => 'required'
 		]);
 
@@ -47,6 +41,7 @@ class CSVController extends Controller
 
 			if ($request->hasFile('csv')) {
 				if ($request->file('csv')->isValid()) {
+
 					$file = array('csv' => $request->file('csv'));
 
 					Excel::load($request->file('csv'), function ($reader) use ($request) {
@@ -90,8 +85,7 @@ class CSVController extends Controller
 									$technical->created_by = Auth::user()->id;
 									$technical->save();
 								} else {
-									echo "Error: header mismatch!";
-									exit();
+									abort(403, 'Unable to import CSV file, header is incorrect');
 								}
 							}
 						}
@@ -114,9 +108,9 @@ class CSVController extends Controller
 							TemplateRow::where('template_id', $request->input('template_id'))->delete();
 							foreach ($csvarray as $csv) {
 
-								if (array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('row_code', $csv) && array_key_exists('row_description', $csv)) {
+								if (array_key_exists('template_id', $csv) && array_key_exists('row_num', $csv) && array_key_exists('row_code', $csv) && array_key_exists('row_description', $csv)) {
 									$row = new TemplateRow;
-									$row->template_id = $csv['template_id'];
+									$row->template_id = $request->input('template_id');
 									$row->row_num = $csv['row_num'];
 									$row->row_code = $csv['row_code'];
 									$row->row_description = $csv['row_description'];
@@ -124,8 +118,7 @@ class CSVController extends Controller
 									$row->created_by = Auth::user()->id;
 									$row->save();
 								} else {
-									echo "Error: header mismatch!";
-									exit();
+									abort(403, 'Unable to import CSV file, header is incorrect');
 								}
 							}
 						}
@@ -150,15 +143,14 @@ class CSVController extends Controller
 
 								if (array_key_exists('template_id', $csv) && array_key_exists('column_num', $csv) && array_key_exists('column_code', $csv) && array_key_exists('column_description', $csv)) {
 									$column = new TemplateColumn;
-									$column->template_id = $csv['template_id'];
+									$column->template_id = $request->input('template_id');
 									$column->column_num = $csv['column_num'];
 									$column->column_code = $csv['column_code'];
 									$column->column_description = $csv['column_description'];
 									$column->created_by = Auth::user()->id;
 									$column->save();
 								} else {
-									echo "Error: header mismatch!";
-									exit();
+									abort(403, 'Unable to import CSV file, header is incorrect');
 								}
 							}
 						}
@@ -183,7 +175,7 @@ class CSVController extends Controller
 
 								if (array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('column_code', $csv) && array_key_exists('property', $csv) && array_key_exists('content', $csv)) {
 									$TemplateField = new TemplateField;
-									$TemplateField->template_id = $csv['template_id'];
+									$TemplateField->template_id = $request->input('template_id');
 									$TemplateField->row_code = $csv['row_code'];
 									$TemplateField->column_code = $csv['column_code'];
 									$TemplateField->property = $csv['property'];
@@ -191,8 +183,7 @@ class CSVController extends Controller
 									$TemplateField->created_by = Auth::user()->id;
 									$TemplateField->save();
 								} else {
-									echo "Error: header mismatch!";
-									exit();
+									abort(403, 'Unable to import CSV file, header is incorrect');
 								}
 							}
 						}
@@ -218,15 +209,14 @@ class CSVController extends Controller
 
 								if (array_key_exists('template_id', $csv) && array_key_exists('field_id', $csv) && array_key_exists('content_type', $csv) && array_key_exists('content', $csv)) {
 									$Requirements = new Requirement;
-									$Requirements->template_id = $csv['template_id'];
+									$Requirements->template_id = $request->input('template_id');
 									$Requirements->field_id = $csv['field_id'];
 									$Requirements->content_type = $csv['content_type'];
 									$Requirements->content = $csv['content'];
 									$Requirements->created_by = Auth::user()->id;
 									$Requirements->save();
 								} else {
-									echo "Error: header mismatch!";
-									exit();
+									abort(403, 'Unable to import CSV file, header is incorrect');
 								}
 							}
 						}
@@ -237,7 +227,7 @@ class CSVController extends Controller
 
 			}
 
-			//return Redirect::to('/');
+			return Redirect::to('/sections')->with('message', 'CSV Imported successfully to the database.');
 		}
 	}
 
@@ -245,9 +235,9 @@ class CSVController extends Controller
 	public function importtech()
 	{
 		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		$sections = Section::all();
 		return view('csv.importtech', compact('sections'));
@@ -256,9 +246,9 @@ class CSVController extends Controller
 	public function importrows()
 	{
 		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		$templates = Template::all();
 		return view('csv.importrows', compact('templates'));
@@ -267,9 +257,9 @@ class CSVController extends Controller
 	public function importcolumns()
 	{
 		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		$templates = Template::all();
 		return view('csv.importcolumns', compact('templates'));
@@ -278,9 +268,9 @@ class CSVController extends Controller
 	public function importfields()
 	{
 		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		$templates = Template::all();
 		return view('csv.importfields', compact('templates'));
@@ -289,9 +279,9 @@ class CSVController extends Controller
 	public function importcontent()
 	{
 		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 		$templates = Template::all();
 		return view('csv.importcontent', compact('templates'));
 	}
