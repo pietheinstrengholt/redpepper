@@ -1,12 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\ChangeRequest;
-use App\DraftField;
-use App\DraftRequirement;
-use App\DraftTechnical;
-use App\HistoryRequirement;
-use App\HistoryTechnical;
 use App\Http\Controllers\Controller;
 use App\Requirement;
 use App\Section;
@@ -18,7 +12,6 @@ use App\TemplateColumn;
 use App\TemplateField;
 use App\TemplateRow;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
 use Redirect;
 use Session;
 use Validator;
