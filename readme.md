@@ -36,3 +36,4 @@ TODO
 * create new template -> automatisch juiste section selecteren?
 * in de log section_id, template_id, user_id toevoegen ipv sectionName
 * use YourModel::create(Input::all());
+* submit template, section, user object to event
