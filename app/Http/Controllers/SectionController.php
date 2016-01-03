@@ -117,7 +117,13 @@ class SectionController extends Controller
 		]);
 
 		$section = Section::create($request->all());
-
+		
+		/*$event = new stdClass();
+		$event->log_event = "Section";
+		$event->action = "created";
+		$event->section_id = $section->id;
+		$event->created_by = Auth::user()->id;*/
+		
 		//log Event
 		$event = array(
 			"log_event" => "Section",
