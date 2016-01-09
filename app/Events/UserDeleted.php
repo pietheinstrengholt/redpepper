@@ -2,17 +2,18 @@
 
 namespace App\Events;
 
+use App\User;
 use App\Events\Event;
 use Illuminate\Queue\SerializesModels;
 
-class ChangeEvent extends Event
+class UserDeleted extends Event
 {
 	use SerializesModels;
 
-	public $event;
+	public $user;
 	
-	public function __construct($event)
+	public function __construct(User $user)
 	{
-		$this->event = $event;
+		$this->user = $user;
 	}
 }

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Department;
-use App\Events\ChangeEvent;
+use App\Events\UserCreated;
+use App\Events\UserUpdated;
+use App\Events\UserDeleted;
 use App\Http\Controllers\Controller;
 use App\Log;
 use App\Section;
@@ -106,14 +108,7 @@ class UserController extends Controller
 			User::where('id', $request->input('username_id'))->update(['password' => bcrypt($request->input('password'))]);
 
 			//log Event
-			$event = array(
-				"log_event" => "User",
-				"action" => "password",
-				"username_id" => $request->input('username_id'),
-				"created_by" => Auth::user()->id
-			);
-
-			Event::fire(new ChangeEvent($event));
+			Event::fire(new UserUpdated($user));
 		}
 		//return to user overview
 		return Redirect::route('users.index')->with('message', 'Password updated.');
@@ -137,14 +132,7 @@ class UserController extends Controller
 		$user->update($request->all());
 
 		//log Event
-		$event = array(
-			"log_event" => "User",
-			"action" => "updated",
-			"username_id" => $user->id,
-			"created_by" => Auth::user()->id
-		);
-
-		Event::fire(new ChangeEvent($event));
+		Event::fire(new UserUpdated($user));
 
 		return Redirect::route('users.index')->with('message', 'User updated.');
 	}
@@ -184,14 +172,7 @@ class UserController extends Controller
 		$user = User::findOrFail($request->input('username_id'));
 
 		//log Event
-		$event = array(
-			"log_event" => "User",
-			"action" => "rights",
-			"username_id" => $request->input('username_id'),
-			"created_by" => Auth::user()->id
-		);
-
-		Event::fire(new ChangeEvent($event));
+		Event::fire(new UserUpdated($user));
 
 		return Redirect::route('users.index')->with('message', 'User updated.');
 	}
@@ -210,14 +191,7 @@ class UserController extends Controller
 		$user = User::findOrFail($user->id);
 
 		//log Event
-		$event = array(
-			"log_event" => "User",
-			"action" => "rights",
-			"username_id" => $user->id,
-			"created_by" => Auth::user()->id
-		);
-
-		Event::fire(new ChangeEvent($event));
+		Event::fire(new UserDeleted($user));
 
 		//delete user
 		$user->delete();

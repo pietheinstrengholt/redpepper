@@ -5,7 +5,9 @@ use App\ChangeRequest;
 use App\DraftField;
 use App\DraftRequirement;
 use App\DraftTechnical;
-use App\Events\ChangeEvent;
+use App\Events\TemplateCreated;
+use App\Events\TemplateUpdated;
+use App\Events\TemplateDeleted;
 use App\Http\Controllers\Controller;
 use App\Requirement;
 use App\Section;
@@ -63,7 +65,7 @@ class TemplateController extends Controller
 	{
 		//check if visible is set to false and user is a guest
 		if (Auth::guest() && $template->visible == "False") {
-			abort(403, 'Unauthorized action.');
+			abort(403, 'Unauthorized action. This template hasn\'t been published yet.');
 		}
 
 		//check if id property exists
@@ -73,7 +75,7 @@ class TemplateController extends Controller
 
 		//check if id property exists
 		if (!$section->id) {
-			abort(403, 'This section no longer exists in the database.');
+			abort(403, 'The section where this template belongs to no longer exists in the database.');
 		}
 
 		//set empty search value
@@ -284,15 +286,7 @@ class TemplateController extends Controller
 			}
 
 			//log Event
-			$event = array(
-				"log_event" => "Template Wizard",
-				"action" => "created",
-				"section_id" => $template->section_id,
-				"template_id" => $template->id,
-				"created_by" => Auth::user()->id
-			);
-
-			Event::fire(new ChangeEvent($event));
+			Event::fire(new TemplateCreated($template));
 
 		}
 		return Redirect::to('/templatestructure/' . $template->id);
@@ -395,15 +389,7 @@ class TemplateController extends Controller
 				}
 
 				//log Event
-				$event = array(
-					"log_event" => "Template Structure",
-					"action" => "updated",
-					"section_id" => $template->section_id,
-					"template_id" => $template->id,
-					"created_by" => Auth::user()->id
-				);
-
-				Event::fire(new ChangeEvent($event));
+				Event::fire(new TemplateUpdated($template));
 
 			}
 		}
@@ -429,15 +415,7 @@ class TemplateController extends Controller
 		$template = Template::create($input);
 
 		//log Event
-		$event = array(
-			"log_event" => "Template",
-			"action" => "created",
-			"section_id" => $section->id,
-			"template_id" => $template->id,
-			"created_by" => Auth::user()->id
-		);
-
-		Event::fire(new ChangeEvent($event));
+		Event::fire(new TemplateCreated($template));
 
 		return Redirect::route('sections.show', $section->id)->with('message', 'Template created.');
 	}
@@ -457,15 +435,7 @@ class TemplateController extends Controller
 		]);
 
 		//log Event
-		$event = array(
-			"log_event" => "Template",
-			"action" => "updated",
-			"section_id" => $template->section_id,
-			"template_id" => $template->id,
-			"created_by" => Auth::user()->id
-		);
-
-		Event::fire(new ChangeEvent($event));
+		Event::fire(new TemplateUpdated($template));
 
 		$input = array_except($request->all(), '_method');
 		$template->update($input);
@@ -489,15 +459,7 @@ class TemplateController extends Controller
 		ChangeRequest::where('template_id', $template->id)->delete();
 
 		//log Event
-		$event = array(
-			"log_event" => "Template",
-			"action" => "deleted",
-			"section_id" => $template->section_id,
-			"template_id" => $template->id,
-			"created_by" => Auth::user()->id
-		);
-
-		Event::fire(new ChangeEvent($event));
+		Event::fire(new TemplateDeleted($template));
 
 		//delete template
 		$template->delete();

@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Events\ChangeEvent;
+use App\Events\SectionCreated;
+use App\Events\SectionUpdated;
+use App\Events\SectionDeleted;
 use App\Http\Controllers\Controller;
 use App\Section;
 use App\Template;
@@ -117,22 +119,8 @@ class SectionController extends Controller
 		]);
 
 		$section = Section::create($request->all());
-		
-		/*$event = new stdClass();
-		$event->log_event = "Section";
-		$event->action = "created";
-		$event->section_id = $section->id;
-		$event->created_by = Auth::user()->id;*/
-		
-		//log Event
-		$event = array(
-			"log_event" => "Section",
-			"action" => "created",
-			"section_id" => $section->id,
-			"created_by" => Auth::user()->id
-		);
 
-		Event::fire(new ChangeEvent($event));
+		Event::fire(new SectionCreated($section));
 		return Redirect::route('sections.index')->with('message', 'Section created');
 	}
 
@@ -152,14 +140,7 @@ class SectionController extends Controller
 		$section->update($request->all());
 
 		//log Event
-		$event = array(
-			"log_event" => "Section",
-			"action" => "updated",
-			"section_id" => $section->id,
-			"created_by" => Auth::user()->id
-		);
-
-		Event::fire(new ChangeEvent($event));
+		Event::fire(new SectionUpdated($section));
 
 		return Redirect::route('sections.show', $section->id)->with('message', 'Section updated.');
 	}
@@ -177,14 +158,7 @@ class SectionController extends Controller
 		Template::where('section_id', $section->id)->delete();
 
 		//log Event
-		$event = array(
-			"log_event" => "Section",
-			"action" => "deleted",
-			"section_id" => $section->id,
-			"created_by" => Auth::user()->id
-		);
-
-		Event::fire(new ChangeEvent($event));
+		Event::fire(new SectionDeleted($section));
 
 		$section->delete();
 		return Redirect::route('sections.index')->with('message', 'Section deleted.');

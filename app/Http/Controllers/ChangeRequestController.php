@@ -5,7 +5,10 @@ use App\ChangeRequest;
 use App\DraftField;
 use App\DraftRequirement;
 use App\DraftTechnical;
-use App\Events\ChangeEvent;
+use App\Events\ChangeRequestCreated;
+use App\Events\ChangeRequestApproved;
+use App\Events\ChangeRequestRejected;
+use App\Events\ChangeRequestDeleted;
 use App\HistoryRequirement;
 use App\HistoryTechnical;
 use App\Http\Controllers\Controller;
@@ -286,27 +289,22 @@ class ChangeRequestController extends Controller
 					abort(403, 'Error: change request already processed!');
 				}
 
-				//log Event
-				$event = array(
-					"log_event" => "ChangeRequest",
-					"action" => $request->input('change_type'),
-					"changerequest_id" => $request->input('changerequest_id'),
-					"template_id" => $ChangeRequest->template_id,
-					"created_by" => Auth::user()->id
-				);
-
-				Event::fire(new ChangeEvent($event));
-
-				//update change request
 				if ($request->input('change_type') == "rejected") {
+					//update change request
 					ChangeRequest::where('id', $changerequest_id)->update(['status' => 'rejected']);
 					ChangeRequest::where('id', $changerequest_id)->update(['comment' => $request->input('comment')]);
+					
+					//log Event
+					Event::fire(new ChangeRequestRejected($ChangeRequest));
 				}
 
-				//update change request
 				if ($request->input('change_type') == "approved") {
+					//update changerequest
 					ChangeRequest::where('id', $changerequest_id)->update(['status' => 'approved']);
 					ChangeRequest::where('id', $changerequest_id)->update(['comment' => $request->input('comment')]);
+					
+					//log Event
+					Event::fire(new ChangeRequestApproved($ChangeRequest));
 
 					//get draft content
 					$DraftRegulation_row = DraftRequirement::where('changerequest_id', $changerequest_id)->where('field_id', 'R-' . $ChangeRequest->row_code)->where('content_type', 'regulation')->first();
@@ -776,15 +774,7 @@ class ChangeRequestController extends Controller
 	public function destroy(ChangeRequest $changerequest)
 	{
 		//log Event
-		$event = array(
-			"log_event" => "ChangeRequest",
-			"action" => "deleted",
-			"changerequest_id" => $changerequest->id,
-			"template_id" => $changerequest->template_id,
-			"created_by" => Auth::user()->id
-		);
-
-		Event::fire(new ChangeEvent($event));
+		Event::fire(new ChangeRequestDeleted($changerequest));
 
 		$changerequest->delete();
 		return Redirect::route('changerequests.index')->with('message', 'ChangeRequest deleted.');
@@ -810,15 +800,7 @@ class ChangeRequestController extends Controller
 			$changerequest->save();
 
 			//log Event
-			$event = array(
-				"log_event" => "ChangeRequest",
-				"action" => "created",
-				"changerequest_id" => $changerequest->id,
-				"template_id" => $request->input('template_id'),
-				"created_by" => Auth::user()->id
-			);
-
-			Event::fire(new ChangeEvent($event));
+			Event::fire(new ChangeRequestCreated($changerequest));
 
 			if ($request->has('regulation_row')) {
 				$draftrequirement = new DraftRequirement;
