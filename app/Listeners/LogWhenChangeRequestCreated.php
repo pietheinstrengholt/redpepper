@@ -34,8 +34,10 @@ class LogWhenChangeRequestCreated
 		$array = array();
 		
 		$array['changerequest_id'] = $event->changerequest->id;
-		$array['username'] = User::findOrFail(Auth::user()->id);
-		$array['template_name'] = Template::findOrFail($event->changerequest->template_id);
+		$user = User::findOrFail(Auth::user()->id);
+		$array['username'] = $user->username;
+		$template = Template::findOrFail($event->changerequest->template_id);
+		$array['template_name'] = $template->template_name;
 		
 		Mail::send('emails.changerequest', $array, function($message)
 		{
