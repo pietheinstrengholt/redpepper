@@ -16,11 +16,15 @@ REQUIREMENTS
 
 DEPLOYMENT
 ------------
-* `composer install --no-dev --optimize-autoloader`
-* `php artisan migrate`
-* `php artisan optimize`
-* `php artisan route:optimize`
-* `php artisan cache:clear`
+* install composer: `curl -sS https://getcomposer.org/installer | php — –filename=composer`
+* clone the repository: `git clone https://github.com/pietheinstrengholt/laravel.git`
+* run `composer install --no-dev --optimize-autoloader`
+* copy the `.env.example` to `.env` and configure with the correct database settings
+* deploy the database, use the following command: `php artisan migrate:refresh --seed`
+* run `php artisan optimize`
+* run `php artisan route:optimize`
+* run `php artisan cache:clear`
+* run `composer dump-autoload`
 
 
 TODO
