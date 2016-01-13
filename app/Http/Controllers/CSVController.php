@@ -27,7 +27,7 @@ class CSVController extends Controller
 	public function uploadcsv(Request $request)
 	{
 		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
+		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');
         }
 

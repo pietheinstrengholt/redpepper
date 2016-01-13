@@ -11,19 +11,17 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
-    {
+    public function boot() {
 		//show drop-down in nav menu
-        view()->composer('layouts.master', 'App\Http\Composers\SectionComposer');
-    }
+		view()->composer('layouts.master', 'App\Http\ViewComposers\SectionComposer');
+	}
 
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
+	/**
+	* Register any application services.
+	*
+	* @return void
+	*/
+	public function register() {
+		//
+	}
 }
