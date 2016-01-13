@@ -47,3 +47,4 @@ TODO
 * t_changes_content => row/column toevoegen, weghalen uit t_changes
 * cleanup database create script
 * opschonen archive fuctie, letterlijk kopie maken van de content naar archive
+* testen deployment script
