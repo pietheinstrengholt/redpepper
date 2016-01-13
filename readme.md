@@ -41,3 +41,9 @@ TODO
 * in de log section_id, template_id, user_id toevoegen ipv sectionName
 * use YourModel::create(Input::all());
 * submit template, section, user object to event
+* t_terms with lookup function
+* t_template_cells -> t_content
+* t_changes_cells -> t_changes_content
+* t_changes_content => row/column toevoegen, weghalen uit t_changes
+* cleanup database create script
+* opschonen archive fuctie, letterlijk kopie maken van de content naar archive
