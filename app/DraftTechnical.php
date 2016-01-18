@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DraftTechnical extends Model
 {
-	protected $fillable = ['changerequest_id','source_id','type_id','content','description'];
+	protected $fillable = ['changerequest_id','template_id','row_code','column_code','source_id','type_id','content','description'];
 	protected $guarded = [];
 	protected $table = 't_changes_technical';
 

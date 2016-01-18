@@ -10,40 +10,36 @@ class CreateIndex extends Migration
      *
      * @return void
      */
-    public function up()
-    {
+	public function up()
+	{
 		//on template_id
-        Schema::table('t_template_columns', function (Blueprint $table) {
+		Schema::table('t_template_columns', function (Blueprint $table) {
 			$table->index('template_id');
-            $table->index('column_code');
-        });
-        Schema::table('t_template_rows', function (Blueprint $table) {
-			$table->index('template_id');
-            $table->index('row_code');
-        });
-        Schema::table('t_template_cells', function (Blueprint $table) {
-			$table->index('template_id');
-            $table->index('row_code');
 			$table->index('column_code');
-        });
-        Schema::table('t_technical', function (Blueprint $table) {
+		});
+		Schema::table('t_template_rows', function (Blueprint $table) {
 			$table->index('template_id');
-            $table->index('row_code');
+			$table->index('row_code');
+		});
+		Schema::table('t_technical', function (Blueprint $table) {
+			$table->index('template_id');
+			$table->index('row_code');
 			$table->index('column_code');
-        });
-        Schema::table('t_content', function (Blueprint $table) {
-            $table->index('template_id');
-			$table->index('field_id');
-        });
-    }
+		});
+		Schema::table('t_content', function (Blueprint $table) {
+			$table->index('template_id');
+			$table->index('row_code');
+			$table->index('column_code');
+		});
+	}
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
+	/**
+	* Reverse the migrations.
+	*
+	* @return void
+	*/
+	public function down()
+	{
 		//
-    }
+	}
 }

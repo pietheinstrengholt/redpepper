@@ -10,7 +10,6 @@ use App\TechnicalSource;
 use App\TechnicalType;
 use App\Template;
 use App\TemplateColumn;
-use App\TemplateField;
 use App\TemplateRow;
 use App\User;
 use Auth;
@@ -170,51 +169,18 @@ class CSVController extends Controller
 
 							Event::fire(new ChangeEvent($event));
 
-							TemplateField::where('template_id', $request->input('template_id'))->delete();
-							foreach ($csvarray as $csv) {
-
-								if (array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('column_code', $csv) && array_key_exists('property', $csv) && array_key_exists('content', $csv)) {
-									$TemplateField = new TemplateField;
-									$TemplateField->template_id = $request->input('template_id');
-									$TemplateField->row_code = $csv['row_code'];
-									$TemplateField->column_code = $csv['column_code'];
-									$TemplateField->property = $csv['property'];
-									$TemplateField->content = $csv['content'];
-									$TemplateField->created_by = Auth::user()->id;
-									$TemplateField->save();
-								} else {
-									abort(403, 'Unable to import CSV file, header is incorrect');
-								}
-							}
-						}
-
-						//import content function
-						if ($request->input('formname') == "importcontent" && $request->has('template_id')) {
-
-							$template = Template::findOrFail($request->input('template_id'));
-
-							//log Event
-							$event = array(
-								"log_event" => "CSV Template",
-								"action" => "rows imported",
-								"template_id" => $request->input('template_id'),
-								"created_by" => Auth::user()->id
-							);
-
-							Event::fire(new ChangeEvent($event));
-
 							Requirement::where('template_id', $request->input('template_id'))->delete();
-
 							foreach ($csvarray as $csv) {
 
-								if (array_key_exists('template_id', $csv) && array_key_exists('field_id', $csv) && array_key_exists('content_type', $csv) && array_key_exists('content', $csv)) {
-									$Requirements = new Requirement;
-									$Requirements->template_id = $request->input('template_id');
-									$Requirements->field_id = $csv['field_id'];
-									$Requirements->content_type = $csv['content_type'];
-									$Requirements->content = $csv['content'];
-									$Requirements->created_by = Auth::user()->id;
-									$Requirements->save();
+								if (array_key_exists('template_id', $csv) && array_key_exists('property', $csv) && array_key_exists('content', $csv) && (array_key_exists('row_code', $csv) || array_key_exists('column_code', $csv))) {
+									$Requirement = new Requirement;
+									$Requirement->template_id = $request->input('template_id');
+									$Requirement->row_code = $csv['row_code'];
+									$Requirement->column_code = $csv['column_code'];
+									$Requirement->content_type = $csv['property'];
+									$Requirement->content = $csv['content'];
+									$Requirement->created_by = Auth::user()->id;
+									$Requirement->save();
 								} else {
 									abort(403, 'Unable to import CSV file, header is incorrect');
 								}

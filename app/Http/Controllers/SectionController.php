@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Section;
 use App\Template;
 use App\User;
+use App\UserRights;
 use Auth;
 use Event;
 use Gate;
@@ -15,7 +16,7 @@ use Illuminate\Http\Request;
 use Redirect;
 
 class SectionController extends Controller
-{
+{	
     public function index(Request $request)
     {
 		//only superadmin can see all sections
@@ -32,7 +33,8 @@ class SectionController extends Controller
 				$sections = Section::orderBy('section_name', 'asc')->get();
 			}
 		}
-		return view('sections.index', compact('sections'));
+		
+		return view('sections.index', compact('sections','sectionsrights'));
     }
 
     public function manuals()

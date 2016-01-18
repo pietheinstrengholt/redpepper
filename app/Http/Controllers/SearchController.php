@@ -9,7 +9,6 @@ use App\TechnicalSource;
 use App\TechnicalType;
 use App\Template;
 use App\TemplateColumn;
-use App\TemplateField;
 use App\TemplateRow;
 use Illuminate\Http\Request;
 use Redirect;
@@ -55,9 +54,8 @@ class SearchController extends Controller
 					return view('search.index', [
 						'rows' => TemplateRow::where('row_description', 'like', '%' . $request->input('search') . '%')->whereIn('template_id', $templatesArray)->get(),
 						'columns' => TemplateColumn::where('column_description', 'like', '%' . $request->input('search') . '%')->whereIn('template_id', $templatesArray)->get(),
-						'requirements' => Requirement::where('content', 'like', '%' . $request->input('search') . '%')->whereIn('template_id', $templatesArray)->whereIn('content_type', $typeslist)->get(),
-						'technicals' => Technical::where('content', 'like', '%' . $request->input('search') . '%')->orWhere('description', 'like', '%' . $request->input('search') . '%')->whereIn('template_id', $templatesArray)->get(),
-						'fields' => TemplateField::where('content', 'like', '%' . $request->input('search') . '%')->where('property', '<>', 'disabled')->whereIn('template_id', $templatesArray)->whereIn('property', $typeslist)->get()
+						'content' => Requirement::where('content', 'like', '%' . $request->input('search') . '%')->where('content_type', '<>', 'disabled')->whereIn('template_id', $templatesArray)->whereIn('content_type', $typeslist)->get(),
+						'technicals' => Technical::where('content', 'like', '%' . $request->input('search') . '%')->orWhere('description', 'like', '%' . $request->input('search') . '%')->whereIn('template_id', $templatesArray)->get()
 					]);
 
 				} else {
@@ -65,9 +63,8 @@ class SearchController extends Controller
 					return view('search.index', [
 						'rows' => TemplateRow::where('row_description', 'like', '%' . $request->input('search') . '%')->get(),
 						'columns' => TemplateColumn::where('column_description', 'like', '%' . $request->input('search') . '%')->get(),
-						'requirements' => Requirement::where('content', 'like', '%' . $request->input('search') . '%')->get(),
-						'technicals' => Technical::where('content', 'like', '%' . $request->input('search') . '%')->orWhere('description', 'like', '%' . $request->input('search') . '%')->get(),
-						'fields' => TemplateField::where('content', 'like', '%' . $request->input('search') . '%')->where('property', '<>', 'disabled')->get()
+						'content' => Requirement::where('content', 'like', '%' . $request->input('search') . '%')->where('content_type', '<>', 'disabled')->get(),
+						'technicals' => Technical::where('content', 'like', '%' . $request->input('search') . '%')->orWhere('description', 'like', '%' . $request->input('search') . '%')->get()
 					]);
 				}
 			} else {

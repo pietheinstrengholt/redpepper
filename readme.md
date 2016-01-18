@@ -3,7 +3,7 @@ UNBRANDED
 Copyright (c) 2016 Piethein Strengholt, piethein@strengholt-online.nl
 
 Unbranded is an easy to use management solution to easily maintain and document regulatory, management and disclosure reports.
-Unbranded features a lightweight fluid responsive design. It is written in JavaScript and PHP and uses the Laravel 5.1 and Twitter boostrap framework.
+Unbranded features a lightweight fluid responsive design. It is written in PHP/Laravel + jQuery / HTML / CSS (Bootstrap).
 
 REQUIREMENTS
 ------------
@@ -17,13 +17,15 @@ REQUIREMENTS
 DEPLOYMENT
 ------------
 * install composer: `curl -sS https://getcomposer.org/installer | php — –filename=composer`
-* clone the repository: `git clone https://github.com/pietheinstrengholt/laravel.git`
+* ssh to the machine, go the www directory
+* clone the repository: `git clone https://github.com/pietheinstrengholt/laravel.git .`
 * run `composer install --no-dev --optimize-autoloader`
 * copy the `.env.example` to `.env` and configure with the correct database settings
 * deploy the database, use the following command: `php artisan migrate:refresh --seed`
 * run `php artisan optimize`
 * run `php artisan route:optimize`
 * run `php artisan cache:clear`
+* run `chmod -R 777 storage/`
 * run `composer dump-autoload`
 
 
@@ -42,9 +44,11 @@ TODO
 * use YourModel::create(Input::all());
 * submit template, section, user object to event
 * t_terms with lookup function
-* t_template_cells -> t_content
-* t_changes_cells -> t_changes_content
-* t_changes_content => row/column toevoegen, weghalen uit t_changes
 * cleanup database create script
 * opschonen archive fuctie, letterlijk kopie maken van de content naar archive
 * testen deployment script
+* rechten admin, section mogen dan aangepast worden. templates, namen mogen dan ook aangepast worden
+* t_settings with viewComposer
+* dialoog met laatste aanpassingen op homescreen
+* backdoor voor superadmin
+* alt/pop-up (title="" on div) message wie content voor het laatst heeft aangepast.

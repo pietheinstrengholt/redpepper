@@ -45,44 +45,22 @@
 		</table>
 	@endif
 
-	@if ( $fields->count() )
+	@if ( $content->count() )
 		<table class="table search-table dialog table-striped" border="1">
 
 		<tr class="success">
 		<td class="header">Template Name</td>
 		<td class="header">Row code</td>
 		<td class="header">Column code</td>
-		<td class="header">Property</td>
-		<td class="header">Content</td>
-		</tr>
-
-		@foreach( $fields as $field )
-			<tr>
-			<td><a href="{!! url('sections/' . $field->template->section_id . '/templates/' . $field->template_id . '?row=' . $field->row_code . '&column=' . $field->column_code); !!}">{{ $field->template->template_name }}</a></td>
-			<td>{{ $field->row_code }}</td>
-			<td>{{ $field->column_code }}</td>
-			<td>{{ $field->property }}</td>
-			<td>{{ $field->content }}</td>
-			</tr>
-		@endforeach
-
-		</table>
-	@endif
-
-	@if ( $requirements->count() )
-		<table class="table search-table dialog table-striped" border="1">
-
-		<tr class="success">
-		<td class="header">Template Name</td>
-		<td class="header">Field id</td>
 		<td class="header">Content Type</td>
 		<td class="header">Content</td>
 		</tr>
 
-		@foreach( $requirements as $requirement )
+		@foreach( $content as $requirement )
 			<tr>
-			<td><a href="{!! url('sections/' . $requirement->template->section_id . '/templates/' . $requirement->template_id . '?field_id=' . $requirement->field_id); !!}">{{ $requirement->template->template_name }}</a></td>
-			<td>{{ $requirement->field_id }}</td>
+			<td><a href="{!! url('sections/' . $requirement->template->section_id . '/templates/' . $requirement->template_id . '?row=' . $requirement->row_code . '&column=' . $requirement->column_code); !!}">{{ $requirement->template->template_name }}</a></td>
+			<td>{{ $requirement->row_code }}</td>
+			<td>{{ $requirement->column_code }}</td>
 			<td>{{ $requirement->content_type }}</td>
 			<td>{{ $requirement->content }}</td>
 			</tr>
@@ -119,7 +97,7 @@
 		</table>
 	@endif
 
-	@if ( !$rows->count() && !$columns->count() && !$fields->count() && !$requirements->count() && !$technicals->count() )
+	@if ( !$rows->count() && !$columns->count() && !$content->count() && !$technicals->count() )
 		<p>No content has been found, try to search again!</p>
 	@endif
 

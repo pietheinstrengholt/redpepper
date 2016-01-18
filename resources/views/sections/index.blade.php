@@ -32,7 +32,7 @@
 			<td>{{ $section->section_description }}</td>
 			<td>
 			@if (!Auth::guest())
-				@if (Auth::user()->role == "superadmin" || Auth::user()->role == "admin")
+				@if (Auth::user()->role == "superadmin")
 					{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('sections.destroy', $section->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this section?\')')) !!}
 					{!! link_to_route('sections.edit', 'Edit', array($section->id), array('class' => 'btn btn-info btn-xs')) !!}
 					{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}

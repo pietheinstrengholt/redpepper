@@ -77,7 +77,6 @@
 					  <li><a href="{{ URL::to('/users') }}">Edit users</a></li>
 					  <li class="divider"></li>
 					  <li><a href="{{ URL::to('/csv/importcontent') }}">Import content</a></li>
-					  <li><a href="{{ URL::to('/csv/importfields') }}">Import fields</a></li>
 					  <li><a href="{{ URL::to('/csv/importrows') }}">Import rows</a></li>
 					  <li><a href="{{ URL::to('/csv/importcolumns') }}">Import columns</a></li>
 					  <li><a href="{{ URL::to('/csv/importtech') }}">Import technical</a></li>

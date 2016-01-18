@@ -16,7 +16,6 @@ use App\TechnicalSource;
 use App\TechnicalType;
 use App\Template;
 use App\TemplateColumn;
-use App\TemplateField;
 use App\TemplateRow;
 use App\User;
 use App\UserRights;
@@ -603,13 +602,13 @@ class ExcelController extends Controller
 				//add template field content to database
 				if (!empty($templatestructure['field_content'])) {
 					foreach($templatestructure['field_content'] as $field_content) {
-						$templatefield = new TemplateField;
-						$templatefield->template_id = $template->id;
-						$templatefield->row_code = $field_content['row_code'];
-						$templatefield->column_code = $field_content['column_code'];
-						$templatefield->property = $field_content['content_type'];
-						$templatefield->content = $field_content['content'];
-						$templatefield->save();
+						$Requirement = new Requirement;
+						$Requirement->template_id = $template->id;
+						$Requirement->row_code = $field_content['row_code'];
+						$Requirement->column_code = $field_content['column_code'];
+						$Requirement->content_type = $field_content['content_type'];
+						$Requirement->content = $field_content['content'];
+						$Requirement->save();
 
 						//submit new content to archive table
 						$HistoryRequirement = new HistoryRequirement;
@@ -633,7 +632,7 @@ class ExcelController extends Controller
 					foreach($templatestructure['row_content'] as $key => $requirement) {
 						$templaterequirement = new Requirement;
 						$templaterequirement->template_id = $template->id;
-						$templaterequirement->field_id = 'R-' . $requirement['row_code'];
+						$templaterequirement->row_code = $requirement['row_code'];
 						$templaterequirement->content_type = $requirement['content_type'];
 						$templaterequirement->content = $requirement['content'];
 						$templaterequirement->save();
@@ -660,7 +659,7 @@ class ExcelController extends Controller
 					foreach($templatestructure['column_content'] as $key => $requirement) {
 						$templaterequirement = new Requirement;
 						$templaterequirement->template_id = $template->id;
-						$templaterequirement->field_id = 'C-' . $requirement['column_code'];
+						$templaterequirement->column_code = $requirement['column_code'];
 						$templaterequirement->content_type = $requirement['content_type'];
 						$templaterequirement->content = $requirement['content'];
 						$templaterequirement->save();
@@ -685,12 +684,12 @@ class ExcelController extends Controller
 				//add disabled cells to database
 				if (!empty($templatestructure['disabledcells'])) {
 					foreach($templatestructure['disabledcells'] as $disabledcell) {
-						$templatefield = new TemplateField;
-						$templatefield->template_id = $template->id;
-						$templatefield->row_code = $disabledcell['row_code'];
-						$templatefield->column_code = $disabledcell['column_code'];
-						$templatefield->property = 'disabled';
-						$templatefield->save();
+						$Requirement = new Requirement;
+						$Requirement->template_id = $template->id;
+						$Requirement->row_code = $disabledcell['row_code'];
+						$Requirement->column_code = $disabledcell['column_code'];
+						$Requirement->content_type = 'disabled';
+						$Requirement->save();
 					}
 				}
 
@@ -832,7 +831,7 @@ class ExcelController extends Controller
 					}
 				}
 
-				$disabled = TemplateField::where('template_id', $template->id)->where('property', 'disabled')->get();
+				$disabled = Requirement::where('template_id', $template->id)->where('content_type', 'disabled')->get();
 
 				//set grey fields, add two to put it correctly in the template
 				if (!empty($disabled)) {
@@ -890,14 +889,13 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1:C1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
 
-				$column_content  = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'C-%')->where('content', '!=' , '')->orderBy('field_id', 'asc')->get();
+				$column_content  = Requirement::where('template_id', $id)->where('row_code', '')->orWhere('row_code', null)->where('content', '!=' , '')->orderBy('column_code', 'asc')->get();
 
 				$columncontentcount = 2;
 				//add content to excel
 				if (!empty($column_content )) {
 					foreach($column_content  as $key => $value) {
-						$column_code = trim($value['field_id']);
-						$column_code = ltrim($column_code, 'C-');
+						$column_code = trim($value['column_code']);
 						$sheet->setCellValueExplicit('A' . $columncontentcount, $column_code)
 						->setCellValueExplicit('B' . $columncontentcount, $value['content_type'])
 						->setCellValueExplicit('C' . $columncontentcount, $value['content']);
@@ -932,15 +930,14 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1:C1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
 
-				$row_contents  = Requirement::where('template_id', $id)->where('field_id', 'LIKE', 'R-%')->where('content', '!=' , '')->orderBy('field_id', 'asc')->get();
+				$row_contents  = Requirement::where('template_id', $id)->where('column_code', '')->orWhere('column_code', null)->where('content', '!=' , '')->orderBy('column_code', 'asc')->get();
 
 				$rowcontentcount = 2;
 
 				//add content to excel
 				if (!empty($row_contents)) {
 					foreach($row_contents as $key => $value) {
-						$row_code = trim($value['field_id']);
-						$row_code = ltrim($row_code, 'R-');
+						$row_code = trim($value['row_code']);
 						$sheet->setCellValueExplicit('A' . $rowcontentcount, $row_code)
 						->setCellValueExplicit('B' . $rowcontentcount, $value['content_type'])
 						->setCellValueExplicit('C' . $rowcontentcount, $value['content']);
@@ -978,7 +975,7 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1:D1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
 
-				$field_contents   = TemplateField::where('template_id', $id)->where('property', '!=' , 'disabled')->orderBy('row_code', 'asc')->orderBy('column_code', 'asc')->get();
+				$field_contents = Requirement::where('template_id', $id)->where('content_type', '!=' , 'disabled')->whereNotNull('row_code')->where('row_code', '<>', '')->whereNotNull('column_code')->where('column_code', '<>', '')->orderBy('row_code', 'asc')->orderBy('column_code', 'asc')->get();
 
 				$fieldcontentcount = 2;
 				//set grey fields, add two to put it correctly in the template
@@ -986,7 +983,7 @@ class ExcelController extends Controller
 					foreach($field_contents as $key => $value) {
 						$sheet->setCellValueExplicit('A' . $fieldcontentcount, $value['column_code'])
 						->setCellValueExplicit('B' . $fieldcontentcount, $value['row_code'])
-						->setCellValueExplicit('C' . $fieldcontentcount, $value['property'])
+						->setCellValueExplicit('C' . $fieldcontentcount, $value['content_type'])
 						->setCellValueExplicit('D' . $fieldcontentcount, $value['content']);
 						$fieldcontentcount++;
 					}
