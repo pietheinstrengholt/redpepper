@@ -17,16 +17,20 @@
 			@if ( $template->requirements->count() )
 				<table class="table table-bordered book" border="0">
 				<tr class="success">
-				<td>Fieldname</td>
+				<td>Row code</td>
+				<td>Column code</td>
 				<td>Content type</td>
 				<td>Requirement</td>
 				</tr>
 				@foreach( $template->requirements as $requirement )
-					<tr>
-					<td>{{ $requirement->field_id }}</td>
-					<td>{{ $requirement->content_type }}</td>
-					<td>{{ $requirement->content }}</td>
-					</tr>
+					@if ( $requirement->content_type != "disabled" )
+						<tr>
+						<td>{{ $requirement->row_code }}</td>
+						<td>{{ $requirement->column_code }}</td>
+						<td>{{ $requirement->content_type }}</td>
+						<td>{{ $requirement->content }}</td>
+						</tr>
+					@endif
 				@endforeach
 				</table>
 			@endif
