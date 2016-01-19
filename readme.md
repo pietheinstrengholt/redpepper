@@ -40,14 +40,11 @@ TODO
 * hyperlinks after submission of a change request
 * superadmin can approve own changes
 * create new template -> automatisch juiste section selecteren?
-* in de log section_id, template_id, user_id toevoegen ipv sectionName
 * use YourModel::create(Input::all());
-* submit template, section, user object to event
 * t_terms with lookup function
 * cleanup database create script
 * opschonen archive fuctie, letterlijk kopie maken van de content naar archive
 * testen deployment script
-* rechten admin, section mogen dan aangepast worden. templates, namen mogen dan ook aangepast worden
 * t_settings with viewComposer
 * dialoog met laatste aanpassingen op homescreen
 * backdoor voor superadmin

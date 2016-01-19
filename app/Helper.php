@@ -19,7 +19,7 @@ class Helper {
 		
 		$user = User::find($object['created_by']);
 		
-		if ($user) {
+		if (!empty($user)) {
 			return "Last updated at " . date('d F Y', strtotime($lastDate)) . " by " . $user->firstname . " " . $user->lastname;
 		} else {
 			return "Last updated at " . date('d F Y', strtotime($lastDate));			

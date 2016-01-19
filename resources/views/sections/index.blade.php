@@ -38,6 +38,9 @@
 					{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
 					{!! Form::close() !!}
 				@endif
+				@if (Auth::user()->role == "admin" && (in_array($section->id, $sectionRights)))
+					{!! link_to_route('sections.edit', 'Edit', array($section->id), array('class' => 'btn btn-info btn-xs')) !!}
+				@endif
 			@endif
 			</td>
 			</tr>
@@ -47,9 +50,11 @@
 	@endif
 
 	@if (!Auth::guest())
-		<p>
-		{!! link_to_route('sections.create', 'Create Section') !!}
-		</p>
+		@if (Auth::user()->role == "superadmin")
+			<p>
+			{!! link_to_route('sections.create', 'Create Section') !!}
+			</p>
+		@endif
 	@endif	
 
 @endsection

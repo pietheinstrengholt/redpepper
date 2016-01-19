@@ -16,7 +16,35 @@ use Illuminate\Http\Request;
 use Redirect;
 
 class SectionController extends Controller
-{	
+{
+	//function to retrieve section rights based on user id
+	public function sectionRights() {
+		
+		//set empty var
+		$sectionRights = array();
+
+		//check if user is logged on
+		if (!(Auth::guest())) {
+			
+			//admin and builder have restrictions based on userrights
+			if (Auth::user()->role == "admin" || Auth::user()->role == "builder") {
+
+				$userrights = UserRights::where('username_id', Auth::user()->id)->get();
+
+				$userrights = $userrights->toArray();
+				if (!empty($userrights)) {
+					foreach ($userrights as $userright) {
+						array_push($sectionRights,$userright['section_id']);
+					}
+				}
+			}
+			
+		}
+
+		//return sections
+		return $sectionRights;
+	}
+	
     public function index(Request $request)
     {
 		//only superadmin can see all sections
@@ -34,7 +62,10 @@ class SectionController extends Controller
 			}
 		}
 		
-		return view('sections.index', compact('sections','sectionsrights'));
+		//retrieve list with sections based on user id and user role
+		$sectionRights = $this->sectionRights();
+		
+		return view('sections.index', compact('sections','sectionsrights','sectionRights'));
     }
 
     public function manuals()
@@ -66,7 +97,11 @@ class SectionController extends Controller
 		} else {
 			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->get();
 		}
-		return view('sections.show', compact('section', 'templates'));
+		
+		//retrieve list with sections based on user id and user role
+		$sectionRights = $this->sectionRights();
+		
+		return view('sections.show', compact('section', 'templates', 'sectionRights'));
     }
 
     public function showmanual($id)
@@ -82,18 +117,24 @@ class SectionController extends Controller
     }
 
 	public function edit(Section $section)
-	{
-		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
+	{	
+		if (Auth::guest()) {
             abort(403, 'Unauthorized action.');
-        }
-
+		}
+		
 		//check if id property exists
 		if (!$section->id) {
 			abort(403, 'This section no longer exists in the database.');
 		}
-
-		return view('sections.edit', compact('section'));
+		
+		//retrieve list with sections based on user id and user role
+		$sectionRights = $this->sectionRights();
+		
+		if ((Auth::user()->role == "admin" && in_array($section->id, $sectionRights)) || Auth::user()->role == "superadmin") {
+			return view('sections.edit', compact('section'));
+		} else {
+			abort(403, 'Unauthorized action.');
+		}
 	}
 
 	public function create(Section $section)

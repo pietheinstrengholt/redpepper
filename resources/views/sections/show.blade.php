@@ -44,6 +44,9 @@
 					<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('templatestructure') . '/' . $template->id }}">Structure</a>
 					{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:2px;')) !!}
 				@endif
+				@if (Auth::user()->role == "admin" && (in_array($template->section_id, $sectionRights)))
+					{!! link_to_route('sections.templates.edit', 'Edit', array($template->section_id, $template->id), array('class' => 'btn btn-info btn-xs')) !!}
+				@endif
 			@endif
 			</td>
 			{!! Form::close() !!}
