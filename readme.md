@@ -40,11 +40,9 @@ TODO
 * hyperlinks after submission of a change request
 * superadmin can approve own changes
 * create new template -> automatisch juiste section selecteren?
-* use YourModel::create(Input::all());
 * t_terms with lookup function
-* cleanup database create script
 * opschonen archive fuctie, letterlijk kopie maken van de content naar archive
 * testen deployment script
 * t_settings with viewComposer
-* dialoog met laatste aanpassingen op homescreen
 * backdoor voor superadmin
+* style tooltip in cell.blade.php

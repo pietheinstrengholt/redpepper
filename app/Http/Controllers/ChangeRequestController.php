@@ -159,40 +159,34 @@ class ChangeRequestController extends Controller
 
 	public function edit(ChangeRequest $changerequest)
 	{
-		//abort if user is not logged on
-		if (Auth::guest()) {
-			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
-		}
-
-		//abort if the user is a quest
-		if (Auth::user()->role == "guest") {
-			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
-		}
-
 		//check if id property exists, else exit
 		if (!$changerequest->id) {
 			abort(403, 'Change request no longer exists in the database.');
 		}
+		
+		//set allowed to change to no
+		$allowedToChange = "no";
 
-		//set allowed to change to yes
-		$allowedToChange = "yes";
+		if (!(Auth::guest())) {
 
-		//check for admin, builder, reviewer if not own submitted changerequest is reviewed
-		if (Auth::user()->role == "admin" || Auth::user()->role == "builder" || Auth::user()->role == "reviewer") {
-			if ($changerequest->creator_id == Auth::user()->id) {
-				$allowedToChange = "no";
+			//check for admin, builder, reviewer if not own submitted changerequest is reviewed
+			if (Auth::user()->role == "admin" || Auth::user()->role == "builder" || Auth::user()->role == "reviewer") {
+				
+				//set allowed to change to yes
+				$allowedToChange = "yes";
+				
+				//user are not allowed to approve own changes
+				//TODO: add setting to allow superadmin to approve own changes
+				if ($changerequest->creator_id == Auth::user()->id) {
+					$allowedToChange = "no";
+				}
+
+				//check if users have section rights
+				$templateList = $this->templateRights(Auth::user()->id);
+				if (!in_array($changerequest->template_id, $templateList)) {
+					$allowedToChange = "no";
+				}
 			}
-
-			//check if users have section rights
-			$templateList = $this->templateRights(Auth::user()->id);
-			if (!in_array($changerequest->template_id, $templateList)) {
-				abort(403, 'Unauthorized action. You don\'t have access to this template or section');
-			}
-		}
-
-		//contributor is only allowed to see own submission
-		if (Auth::user()->role == "contributor") {
-			$allowedToChange = "no";
 		}
 
 		//get current content

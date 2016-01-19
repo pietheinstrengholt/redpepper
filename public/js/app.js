@@ -93,6 +93,33 @@ jQuery(document).ready(function () {
 		$("button#modal-update").text("Change values");
 
 	});
+	
+	//functionality when a field in the template is clicked
+	$("li#changes").click(function(){
+
+		//disable html scrollbar - avoid double scrolling or unwanted client behaviour
+		$("html").css("overflow", "hidden");
+
+		//retrieve content from the back-end and fill in modal form
+		$.ajax({
+			cache: false,
+			type: 'GET',
+			url: url + '/logs/latest',
+			success: function(data)
+			{
+				//show pop-up with information
+				$('#template-modal').modal('show');
+				//rescale modal height, see function
+				rescale();
+				//load html data into modal
+				$('#modalContent').show().html(data);
+			},
+			failure: function (errMsg) {
+				console.log(errMsg);
+			}
+		});
+
+	});
 
 	//enable html scrollbar when closing modal
 	$('#template-modal').on('hidden.bs.modal', function () {

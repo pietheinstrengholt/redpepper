@@ -11,9 +11,21 @@ use Redirect;
 
 class LogController extends Controller
 {
-	public function index(Request $request)
+	public function index()
 	{
+		//check for superadmin permissions
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }
+		
 		$logs = Log::orderBy('id', 'desc')->paginate(20);
 		return view('logs.index', compact('logs'));
 	}
+	
+	public function show()
+	{
+		$logs = Log::orderBy('id', 'desc')->whereIn('log_event', ['Template','Changerequest'])->take(10)->get();
+		return view('logs.show', compact('logs'));
+	}
+	
 }
