@@ -45,7 +45,9 @@
 					{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('changerequests.destroy', $changerequest->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this source?\')')) !!}
 					<td>
 						{!! link_to_route('changerequests.edit', 'Review', array($changerequest->id), array('class' => 'btn btn-info btn-xs')) !!}
-						{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
+						@if (Auth::user()->role == "superadmin")
+							{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
+						@endif
 					</td>
 					{!! Form::close() !!}
 				</tr>
