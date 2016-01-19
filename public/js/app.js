@@ -52,7 +52,7 @@ jQuery(document).ready(function () {
 	$(window).bind("resize", rescale);
 
 	//functionality when a field in the template is clicked
-	$(".tablecell").click(function(){
+	$(".tablecell").click(function() {
 
 		//disable html scrollbar - avoid double scrolling or unwanted client behaviour
 		$("html").css("overflow", "hidden");
@@ -95,10 +95,7 @@ jQuery(document).ready(function () {
 	});
 	
 	//functionality when a field in the template is clicked
-	$("li#changes").click(function(){
-
-		//disable html scrollbar - avoid double scrolling or unwanted client behaviour
-		$("html").css("overflow", "hidden");
+	$("li#changes").click(function() {
 
 		//retrieve content from the back-end and fill in modal form
 		$.ajax({
