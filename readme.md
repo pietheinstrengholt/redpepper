@@ -33,7 +33,6 @@ TODO
 ------------
 * manual page per template (pdf?)
 * reference tables?
-* cleanup EventHandler / of via Middleware
 * builder rechten via Middleware?
 * system config?
 * definitions / hovers?
@@ -46,3 +45,4 @@ TODO
 * t_settings with viewComposer
 * backdoor voor superadmin
 * style tooltip in cell.blade.php
+* highlight search results, e.g. when searched for 'test', highlight this word
