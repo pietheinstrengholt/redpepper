@@ -1189,7 +1189,7 @@ class ExcelController extends Controller
 
 					$i++;
 
-					$sheet->setCellValueExplicit('A' . $i, $row['id'])
+					$sheet->setCellValueExplicit('A' . $i, $row['changerequest_id'])
 						  ->setCellValueExplicit('B' . $i, $row['template_id'])
 						  ->setCellValueExplicit('C' . $i, $row['row_code'])
 						  ->setCellValueExplicit('D' . $i, $row['column_code'])
