@@ -5,7 +5,7 @@ use App\ChangeRequest;
 use App\DraftField;
 use App\DraftRequirement;
 use App\DraftTechnical;
-use App\Events\ChangeEvent;
+use App\Events\TemplateCreated;
 use App\HistoryRequirement;
 use App\HistoryTechnical;
 use App\Http\Controllers\Controller;
@@ -724,16 +724,7 @@ class ExcelController extends Controller
 					}
 				}
 
-				//log Event
-				$event = array(
-					"log_event" => "Template Excel",
-					"action" => "created",
-					"section_id" => $request->input('section_id'),
-					"template_id" => $template->id,
-					"created_by" => Auth::user()->id
-				);
-
-				Event::fire(new ChangeEvent($event));
+				Event::fire(new TemplateCreated($template));
 
 				return Redirect::to('/sections')->with('message', 'New template successfully added to the database.');
 			}
