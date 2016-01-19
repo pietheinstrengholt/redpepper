@@ -343,6 +343,7 @@ class ChangeRequestController extends Controller
 								$Requirements->row_code = $ChangeRequest->row_code;
 								$Requirements->content_type = 'regulation';
 								$Requirements->content = $DraftRegulation_row->content;
+								$Requirements->created_by = $ChangeRequest->creator_id;
 								$Requirements->save();
 							//update
 							} else {
@@ -390,6 +391,7 @@ class ChangeRequestController extends Controller
 								$Requirements->row_code = $ChangeRequest->row_code;
 								$Requirements->content_type = 'interpretation';
 								$Requirements->content = $DraftInterpretation_row->content;
+								$Requirements->created_by = $ChangeRequest->creator_id;
 								$Requirements->save();
 							//update
 							} else {
@@ -436,6 +438,7 @@ class ChangeRequestController extends Controller
 								$Requirements->column_code = $ChangeRequest->column_code;
 								$Requirements->content_type = 'regulation';
 								$Requirements->content = $DraftRegulation_column->content;
+								$Requirements->created_by = $ChangeRequest->creator_id;
 								$Requirements->save();
 							//update
 							} else {
@@ -482,6 +485,7 @@ class ChangeRequestController extends Controller
 								$Requirements->column_code = $ChangeRequest->column_code;
 								$Requirements->content_type = 'interpretation';
 								$Requirements->content = $DraftInterpretation_column->content;
+								$Requirements->created_by = $ChangeRequest->creator_id;
 								$Requirements->save();
 							//update
 							} else {
@@ -529,6 +533,7 @@ class ChangeRequestController extends Controller
 								$Requirement->column_code = $ChangeRequest->column_code;
 								$Requirement->content_type = 'property1';
 								$Requirement->content = $DraftField_property1->content;
+								$Requirement->created_by = $ChangeRequest->creator_id;
 								$Requirement->save();
 							//update
 							} else {
@@ -576,6 +581,7 @@ class ChangeRequestController extends Controller
 								$Requirement->column_code = $ChangeRequest->column_code;
 								$Requirement->content_type = 'property2';
 								$Requirement->content = $DraftField_property2->content;
+								$Requirement->created_by = $ChangeRequest->creator_id;
 								$Requirement->save();
 							//update
 							} else {
@@ -624,6 +630,7 @@ class ChangeRequestController extends Controller
 								$Requirement->column_code = $ChangeRequest->column_code;
 								$Requirement->content_type = 'regulation';
 								$Requirement->content = $DraftField_regulation->content;
+								$Requirement->created_by = $ChangeRequest->creator_id;
 								$Requirement->save();
 							//update
 							} else {
@@ -672,6 +679,7 @@ class ChangeRequestController extends Controller
 								$Requirement->column_code = $ChangeRequest->column_code;
 								$Requirement->content_type = 'interpretation';
 								$Requirement->content = $DraftField_interpretation->content;
+								$Requirement->created_by = Auth::user()->id;
 								$Requirement->save();
 							//update
 							} else {
@@ -744,6 +752,7 @@ class ChangeRequestController extends Controller
 								$Technical->source_id = $Technicalrow->source_id;
 								$Technical->content = $Technicalrow->content;
 								$Technical->description = $Technicalrow->description;
+								$Technical->created_by = $ChangeRequest->creator_id;
 								$Technical->save();
 
 								//submit new content to archive table
