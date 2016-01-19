@@ -299,7 +299,7 @@ class TemplateController extends Controller
 					foreach($request->input('colnum') as $key => $value) {
 						if (!empty($value)) {
 							TemplateColumn::where('template_id', $request->input('template_id'))->where('column_code', $key)->update(['column_code' => $value]);
-							Requirement::where('template_id', $request->input('template_id'))->where('field_id', 'C-' . $key)->update(['field_id' => 'C-' . $value]);
+							Requirement::where('template_id', $request->input('template_id'))->where('column_code', $key)->update(['column_code' => $value]);
 						}
 					}
 				}
@@ -318,7 +318,7 @@ class TemplateController extends Controller
 					foreach($request->input('rownum') as $key => $value) {
 						if (!empty($value)) {
 							TemplateRow::where('template_id', $request->input('template_id'))->where('row_code', $key)->update(['row_code' => $value]);
-							Requirement::where('template_id', $request->input('template_id'))->where('field_id', 'R-' . $key)->update(['field_id' => 'R-' . $value]);
+							Requirement::where('template_id', $request->input('template_id'))->where('row_code', $key)->update(['row_code' => $value]);
 						}
 					}
 				}
@@ -342,7 +342,7 @@ class TemplateController extends Controller
 				}
 
 				//delete disabled cells
-				Requirement::where('template_id', $request->input('template_id'))->where('property', 'content_type')->delete();
+				Requirement::where('template_id', $request->input('template_id'))->where('content_type', 'disabled')->delete();
 				if ($request->has('options')) {
 					foreach($request->input('options') as $disabled){
 						//split options into row and column
@@ -474,10 +474,10 @@ class TemplateController extends Controller
 			'regulation_column' => Requirement::where('template_id', $request->input('template_id'))->where('column_code', $column_code)->where('row_code', '')->orWhere('row_code', null)->where('content_type', 'regulation')->first(),
 			'interpretation_column' => Requirement::where('template_id', $request->input('template_id'))->where('column_code', $column_code)->where('row_code', '')->orWhere('row_code', null)->where('content_type', 'interpretation')->first(),
 			'technical' => Technical::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', $column_code)->get(),
-			'field_regulation' => Requirement::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', $column_code)->where('content_type', 'regulation')->get(),
-			'field_interpretation' => Requirement::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', $column_code)->where('content_type', 'interpretation')->get(),
-			'field_property1' => Requirement::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', $column_code)->where('content_type', 'property1')->get(),
-			'field_property2' => Requirement::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', $column_code)->where('content_type', 'property2')->get()
+			'field_regulation' => Requirement::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', $column_code)->where('content_type', 'regulation')->first(),
+			'field_interpretation' => Requirement::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', $column_code)->where('content_type', 'interpretation')->first(),
+			'field_property1' => Requirement::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', $column_code)->where('content_type', 'property1')->first(),
+			'field_property2' => Requirement::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', $column_code)->where('content_type', 'property2')->first()
 		]);
 
 	}

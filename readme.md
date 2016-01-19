@@ -51,4 +51,3 @@ TODO
 * t_settings with viewComposer
 * dialoog met laatste aanpassingen op homescreen
 * backdoor voor superadmin
-* alt/pop-up (title="" on div) message wie content voor het laatst heeft aangepast.
