@@ -6,25 +6,25 @@
 <td class="info-header"><h4><b>Specific Information: {{ $row->row_code }} - {{ $column->column_code }}</b></h4></td>
 </tr>
 <td>
-@if ( $field_property1->count() )
+@if ( $field_property1 )
 	<dl class="dl-horizontal">
 	<dt>Fieldname property1:</dt>
 	<dd><div title="{!! App\Helper::returnHistory($field_property1) !!}" class="content-box">{{ $field_property1->content }}</div></dd>
 	</dl>
 @endif
-@if ( $field_property2->count() )
+@if ( $field_property2 )
 	<dl class="dl-horizontal">
 	<dt>Fieldname property2:</dt>
 	<dd><div title="{!! App\Helper::returnHistory($field_property2) !!}" class="content-box">{{ $field_property2->content }}</div></dd>
 	</dl>
 @endif
-@if ( $field_regulation->count() )
+@if ( $field_regulation )
 	<dl class="dl-horizontal">
 	<dt>Regulation:</dt>
 	<dd><div title="{!! App\Helper::returnHistory($field_regulation) !!}" class="content-box">{!! App\Helper::formatUrlsInText($field_regulation->content) !!}</div></dd>
 	</dl>
 @endif
-@if ( $field_interpretation->count() )
+@if ( $field_interpretation )
 	<dl class="dl-horizontal">
 	<dt>Interpretation:</dt>
 	<dd><div title="{!! App\Helper::returnHistory($field_interpretation) !!}" class="content-box">{!! App\Helper::formatUrlsInText($field_interpretation->content) !!}</div></dd>
