@@ -24,6 +24,7 @@ Route::model('departments', 'Department');
 Route::model('users', 'User');
 Route::model('changerequests', 'ChangeRequest');
 Route::model('logs', 'Log');
+Route::model('terms', 'Term');
 
 // Use IDs in URLs
 Route::bind('sections', function($value, $route) {
@@ -58,6 +59,10 @@ Route::bind('logs', function($value, $route) {
 	return App\Log::whereId($value)->first();
 });
 
+Route::bind('terms', function($value, $route) {
+	return App\Term::whereId($value)->first();
+});
+
 // User routes...
 Route::get('users/{id}/rights', ['middleware' => 'auth', 'uses' => 'UserController@rights']);
 Route::get('users/{id}/password', ['middleware' => 'auth', 'uses' => 'UserController@password']);
@@ -78,6 +83,11 @@ Route::resource('departments', 'DepartmentController');
 Route::resource('users', 'UserController');
 Route::resource('changerequests', 'ChangeRequestController');
 Route::resource('logs', 'LogController');
+Route::resource('terms', 'TermController');
+
+// Settings
+Route::get('settings', ['middleware' => 'auth', 'uses' => 'SettingController@index']);
+Route::post('/settings', 'SettingController@store');
 
 //getCellContent api call
 Route::get('/cell', 'TemplateController@getCellContent');
