@@ -95,7 +95,7 @@
 	@endif
 
 
-	@if ($allowedToChange == 'yes' && $changerequest->status == 'pending')
+	@if ($allowedToChange == 'yes' && $changerequest->status == 'pending' || Auth::user()->role == "superadmin")
 		{!! Form::open(array('action' => 'ChangeRequestController@update', 'id' => 'form')) !!}
 		<textarea form="form" name="comment" style="width: 600px;" class="form-control" rows="3" id="comment" class="comment" placeholder="Please enter a comment about this change"></textarea>
 
