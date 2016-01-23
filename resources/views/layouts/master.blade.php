@@ -71,7 +71,9 @@
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin menu <span class="caret"></span></a>
 				<ul class="dropdown-menu" role="menu">
 				  @if (Auth::user()->role == "superadmin")
-					  <li><a href="{{ URL::to('/settings') }}"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Settings</a></li>
+					  <li><a href="{{ URL::to('/settings') }}"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Settings</a></li>
+					  <li class="divider"></li>
+					  <li><a href="{{ URL::to('/terms') }}"><span class="glyphicon glyphicon-grain" aria-hidden="true"></span> Terms</a></li>
 					  <li class="divider"></li>
 					  <li><a href="{{ URL::to('/types') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit types</a></li>
 					  <li><a href="{{ URL::to('/sources') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit sources</a></li>

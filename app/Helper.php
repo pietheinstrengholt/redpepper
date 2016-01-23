@@ -3,6 +3,7 @@
 namespace App;
 use App\User;
 use App\Setting;
+use App\Term;
 
 class Helper {
 
@@ -33,6 +34,27 @@ class Helper {
 			return $setting->config_value;
 		}
 	}
+	
+	public static function addTermLinks($text) {
+		//retrieve words from database
+		$words = Term::all();
+
+		//build dictionary with values that needs replacement
+		$patterns = array();
+		foreach ($words as $word) {
+			$patterns[$word->id] = $word->term_name;
+		}
+
+		//build dictionary with values the replacements
+		$replacements = array();
+		foreach ($words as $word) {
+			$replacements[$word->id] = "<a href=\"" . url('terms') . "/" . $word->id . "\">" . $patterns[$word->id] . "</a>";
+		}
+
+		//return text, replace words from dictionary with hyperlinks
+		return str_replace($patterns, $replacements, $text);
+	}
+	
 }
 
 ?>

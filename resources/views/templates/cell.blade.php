@@ -45,7 +45,7 @@
 		<h4><b>Name:</b></h4>
 		<div rows="1" title="{!! App\Helper::returnHistory($row) !!}" id="rowname">{{ $row->row_description }}</div>
 		<h4><b>Regulation:</b></h4>
-		<div rows="7" title="{!! App\Helper::returnHistory($regulation_row) !!}" id="row_regulation">{!! App\Helper::formatUrlsInText(nl2br(e($regulation_row['content']))) !!}</div>
+		<div rows="7" title="{!! App\Helper::returnHistory($regulation_row) !!}" id="row_regulation">{!! App\Helper::addTermLinks(App\Helper::formatUrlsInText(nl2br(e($regulation_row['content'])))) !!}</div>
 		<h4><b>Interpretation:</b></h4>
 		<div rows="6" title="{!! App\Helper::returnHistory($interpretation_row) !!}" id="row_interpretation">{!! App\Helper::formatUrlsInText(nl2br(e($interpretation_row['content']))) !!}</div>
 	</td>
