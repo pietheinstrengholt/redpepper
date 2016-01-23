@@ -45,7 +45,7 @@ class SettingController extends Controller
 			'bank_name' => 'required|min:3',
 			'fieldname_property1' => 'required',
 			'fieldname_property2' => 'required',
-			'administrator_email' => 'required',
+			'administrator_email' => 'required|email',
 			'superadmin_process_directly' => 'required',
 		]);
 		

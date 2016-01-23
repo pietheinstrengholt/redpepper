@@ -23,37 +23,25 @@
 
 {!! Form::open(array('action' => 'SettingController@store', 'id' => 'form')) !!}
 
-<h5>Bank name:</h5>
-<textarea form="form" name="bank_name" rows="1" style="width:600px;" id="bank_name" class="form-control name">
-@if (!empty($config_array['bank_name']))
-{{ $config_array['bank_name'] }}
-@endif
-</textarea>
-<br>
+<div class="form-group">
+  <label for="usr">Bank name:</label>
+  <input name="bank_name" type="text" style="width:550px;" class="form-control" id="usr" value="{{ $config_array['bank_name'] }}" placeholder="{{ $config_array['bank_name'] }}">
+</div>
 
-<h5>Field property1:</h5>
-<textarea form="form" name="fieldname_property1" rows="1" style="width:550px;" id="fieldname_property1" class="form-control name">
-@if (!empty($config_array['fieldname_property1']))
-{{ $config_array['fieldname_property1'] }}
-@endif
-</textarea>
-<br>
+<div class="form-group">
+  <label for="usr">Field property1:</label>
+  <input name="fieldname_property1" type="text" style="width:550px;" class="form-control" id="usr" value="{{ $config_array['fieldname_property1'] }}" placeholder="{{ $config_array['fieldname_property1'] }}">
+</div>
 
-<h5>Field property2:</h5>
-<textarea form="form" name="fieldname_property2" rows="1" style="width:550px;" id="fieldname_property2" class="form-control name">
-@if (!empty($config_array['fieldname_property2']))
-{{ $config_array['fieldname_property2'] }}
-@endif
-</textarea>
-<br>
+<div class="form-group">
+  <label for="usr">Field property2:</label>
+  <input name="fieldname_property2" type="text" style="width:550px;" class="form-control" id="usr" value="{{ $config_array['fieldname_property2'] }}" placeholder="{{ $config_array['fieldname_property2'] }}">
+</div>
 
-<h5>Administrator email message:</h5>
-<textarea form="form" name="administrator_email" rows="1" style="width:500px;" id="administrator_email" class="form-control name">
-@if (!empty($config_array['administrator_email']))
-{{ $config_array['administrator_email'] }}
-@endif
-</textarea>
-<br>
+<div class="form-group">
+  <label for="usr">Administrator email message:</label>
+  <input name="administrator_email" type="email" style="width:550px;" class="form-control" id="usr" value="{{ $config_array['administrator_email'] }}" placeholder="{{ $config_array['administrator_email'] }}">
+</div>
 
 <h5>Allow super admin to process changes directly:</h5>
 <select name="superadmin_process_directly" class="form-control" style="width: 100px;" id="visible">
