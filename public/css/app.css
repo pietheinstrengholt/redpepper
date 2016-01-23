@@ -43,6 +43,10 @@ div#ie8 p {
 	padding: 8px;
 }
 
+nav .glyphicon {
+	top: 2px !important;
+}
+
 /* Section Breadcrumb */
 
 ul.breadcrumb-section {

@@ -77,6 +77,6 @@ class SettingController extends Controller
 		$setting->config_value = $request->input('superadmin_process_directly');
 		$setting->save();
 		
-		return Redirect::to('/');
+		return Redirect::to('/')->withErrors(['Settings updated']);
 	}
 }
