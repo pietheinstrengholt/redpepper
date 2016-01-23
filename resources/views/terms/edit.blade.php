@@ -14,7 +14,7 @@
 		</div>
 	@endif
 
-	{!! Form::model($department, ['method' => 'PATCH', 'route' => ['terms.update', $department->id]]) !!}
-	@include('terms/partials/_form', ['submit_text' => 'Edit Department'])
+	{!! Form::model($term, ['method' => 'PATCH', 'route' => ['terms.update', $term->id]]) !!}
+	@include('terms/partials/_form', ['submit_text' => 'Edit Term'])
 	{!! Form::close() !!}
 @endsection
