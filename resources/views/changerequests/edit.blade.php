@@ -29,13 +29,13 @@
 			<td class="changerequest">
 			@if ($changerequest->field_property1 !== '')
 				<dl class="dl-horizontal">
-				<dt>Fieldname property1:</dt>
+				<dt>{!! App\Helper::setting('fieldname_property1') !!}:</dt>
 				<dd><div class="content-box">{!! $changerequest->field_property1 !!}</div></dd>
 				</dl>
 			@endif
 			@if ($changerequest->field_property2 !== '')
 				<dl class="dl-horizontal">
-				<dt>Fieldname property2:</dt>
+				<dt>{!! App\Helper::setting('fieldname_property2') !!}:</dt>
 				<dd><div class="content-box">{!! $changerequest->field_property2 !!}</div></dd>
 				</dl>
 			@endif

@@ -32,12 +32,12 @@
 	<td>
 
 	<dl class="dl-horizontal">
-	<dt>Fieldname property1:</dt>
+	<dt>{!! App\Helper::setting('fieldname_property1') !!}:</dt>
 	<dd><textarea form="form" name="field_property1" class="form-control" rows="1" id="field_property1">{{ $field_property1['content'] }}</textarea></dd>
 	</dl>
 
 	<dl class="dl-horizontal">
-	<dt>Fieldname property2:</dt>
+	<dt>{!! App\Helper::setting('fieldname_property2') !!}:</dt>
 	<dd><textarea form="form" name="field_property2" class="form-control" rows="1" id="field_property2">{{ $field_property2['content'] }}</textarea></dd>
 	</dl>
 

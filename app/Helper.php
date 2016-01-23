@@ -2,6 +2,7 @@
 
 namespace App;
 use App\User;
+use App\Setting;
 
 class Helper {
 
@@ -23,6 +24,13 @@ class Helper {
 			return "Last updated at " . date('d F Y', strtotime($lastDate)) . " by " . $user->firstname . " " . $user->lastname;
 		} else {
 			return "Last updated at " . date('d F Y', strtotime($lastDate));			
+		}
+	}
+	
+	public static function setting($input) {
+		$setting = Setting::where('config_key', $input)->first();
+		if (!empty($setting)) {
+			return $setting->config_value;
 		}
 	}
 }

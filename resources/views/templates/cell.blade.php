@@ -8,13 +8,13 @@
 <td>
 @if ( $field_property1 )
 	<dl class="dl-horizontal">
-	<dt>Fieldname property1:</dt>
+	<dt>{!! App\Helper::setting('fieldname_property1') !!}:</dt>
 	<dd><div title="{!! App\Helper::returnHistory($field_property1) !!}" class="content-box">{{ $field_property1->content }}</div></dd>
 	</dl>
 @endif
 @if ( $field_property2 )
 	<dl class="dl-horizontal">
-	<dt>Fieldname property2:</dt>
+	<dt>{!! App\Helper::setting('fieldname_property2') !!}:</dt>
 	<dd><div title="{!! App\Helper::returnHistory($field_property2) !!}" class="content-box">{{ $field_property2->content }}</div></dd>
 	</dl>
 @endif

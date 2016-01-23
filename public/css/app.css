@@ -104,11 +104,11 @@ table.template td.propertydoubletab {
 	min-height: 20px;
 }
 
- .modal-body div.technical-info {
+.modal-body div.technical-info {
 	padding-left: 30px;
 }
 
- .modal-body table.table.technical {
+.modal-body table.table.technical {
 	width: 75% !important;
 	margin-left: 100px;
 }
@@ -128,6 +128,14 @@ div.modal-body {
 
 div#modalContent {
 	display:none;
+}
+
+#modalContent table dt, #cell-update .dl-horizontal dt, td.changerequest .dl-horizontal dt {
+    width: 220px !important;
+}
+
+#modalContent table dd, #cell-update .dl-horizontal dd, td.changerequest .dl-horizontal dd {
+    margin-left: 230px !important;
 }
 
 td.tablecell {
