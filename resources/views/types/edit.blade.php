@@ -2,6 +2,13 @@
 @extends('layouts.master')
 
 @section('content')
+
+	<ul class="breadcrumb breadcrumb-section">
+	  <li><a href="{!! url('/'); !!}">Home</a></li>
+	  <li><a href="{!! url('/types'); !!}">Types</a></li>
+	  <li class="active">{{ $type->type_name }}</li>
+	</ul>
+
 	<h2>Edit Type "{{ $type->type_name }}"</h2>
 
 	@if (count($errors) > 0)

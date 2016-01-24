@@ -2,6 +2,13 @@
 @extends('layouts.master')
 
 @section('content')
+
+	<ul class="breadcrumb breadcrumb-section">
+	  <li><a href="{!! url('/'); !!}">Home</a></li>
+	  <li><a href="{!! url('/users'); !!}">Users</a></li>
+	  <li class="active">{{ $user->username }}</li>
+	</ul>
+
 	<h2>Edit User "{{ $user->username }}"</h2>
 
 	@if (count($errors) > 0)

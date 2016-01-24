@@ -2,6 +2,12 @@
 @extends('layouts.master')
 
 @section('content')
+
+	<ul class="breadcrumb breadcrumb-section">
+	  <li><a href="{!! url('/'); !!}">Home</a></li>
+	  <li class="active">Manuals</li>
+	</ul>
+
 	<h2>Manuals</h2>
 	<h4>The manual section facilitates in order to completely understand the regulatory reporting process and templates. The manuals contain legal references, guidance and interpretations by users. On a cell level the manuals could provide mapping information and validations. For one of the manuals, please make a selection below:</h4>
 

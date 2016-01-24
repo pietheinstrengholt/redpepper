@@ -4,8 +4,9 @@
 @section('content')
 
 	<ul class="breadcrumb breadcrumb-section">
-	<li><a href="{!! url('/'); !!}">Home</a></li>
-	<li class="active"><a href="{!! url('/terms'); !!}">Terms</a></li>
+	 <li><a href="{!! url('/'); !!}">Home</a></li>
+	 <li><a href="{!! url('/terms'); !!}">Terms</a></li>
+	 <li class="active">{{ $term->term_name }}</li>
 	</ul>
 
 	<dl class="dl-horizontal">

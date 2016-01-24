@@ -2,6 +2,13 @@
 @extends('layouts.master')
 
 @section('content')
+
+	<ul class="breadcrumb breadcrumb-section">
+	  <li><a href="{!! url('/'); !!}">Home</a></li>
+	  <li><a href="{!! url('/departments'); !!}">Departments</a></li>
+	  <li class="active">{{ $department->department_name }}</li>
+	</ul>
+
 	<h2>Edit Department "{{ $department->department_name }}"</h2>
 
 	@if (count($errors) > 0)

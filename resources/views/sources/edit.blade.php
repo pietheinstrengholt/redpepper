@@ -1,7 +1,14 @@
-<!-- /resources/views/sections/edit.blade.php -->
+<!-- /resources/views/sources/edit.blade.php -->
 @extends('layouts.master')
 
 @section('content')
+
+	<ul class="breadcrumb breadcrumb-section">
+	  <li><a href="{!! url('/'); !!}">Home</a></li>
+	  <li><a href="{!! url('/sources'); !!}">Sources</a></li>
+	  <li class="active">{{ $source->source_name }}</li>
+	</ul>
+
 	<h2>Edit Source "{{ $source->source_name }}"</h2>
 
 	@if (count($errors) > 0)

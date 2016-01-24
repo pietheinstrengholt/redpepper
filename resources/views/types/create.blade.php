@@ -1,7 +1,14 @@
-<!-- /resources/views/sections/create.blade.php -->
+<!-- /resources/views/types/create.blade.php -->
 @extends('layouts.master')
 
 @section('content')
+
+	<ul class="breadcrumb breadcrumb-section">
+	  <li><a href="{!! url('/'); !!}">Home</a></li>
+	  <li><a href="{!! url('/types'); !!}">Types</a></li>
+	  <li class="active">Create new type</li>
+	</ul>
+
 	<h2>Create Type</h2>
 
 	@if (count($errors) > 0)
