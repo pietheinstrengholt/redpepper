@@ -1,4 +1,4 @@
-UNBRANDED
+RED PEPPER REPORTING FRAMEWORK
 =======
 Copyright (c) 2016 Piethein Strengholt, piethein@strengholt-online.nl
 

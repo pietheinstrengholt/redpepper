@@ -86,7 +86,7 @@
 			</div>
 
 			<div class="col-md-12 col-sm-12" id="footer">
-				<p class="muted credit" style="margin: 20px 0; color: #999999;">Owned by the <a style="color:#0088cc;" href="mailto:FRC@nl.abnamro.com">FRC team</a>, developed with close collaboration by <a style="color:#0088cc;" href="mailto:piethein.strengholt@nl.abnamro.com">Piethein Strengholt</a>.</p>
+				<p class="muted credit" style="margin: 20px 0; color: #999999;">Owned by the <a style="color:#0088cc;" href="mailto:FRC@nl.abnamro.com">FRC team</a>, developed with close collaboration by <a style="color:#0088cc;" href="mailto:piethein.strengholt@nl.abnamro.com">Piethein Strengholt</a><img style="margin-bottom: 5px; margin-left: 3px;" src="{{ URL::asset('img/pepper-small.png') }}" alt="redpepper" height="16" width="16"></p>
 			</div>
 
 		</div>
