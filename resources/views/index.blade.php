@@ -22,8 +22,8 @@
 						</div>
 					@endif
 
-					<h1>FRC RADAR Tool</h1>
-					<h3>Zichtbaar in control</h3>
+					<h1>{!! App\Helper::setting('main_message1') !!}</h1>
+					<h3>{!! App\Helper::setting('main_message2') !!}</h3>
 					<hr style="margin-right:1000px;" class="intro-divider">
 					<ul class="list-inline intro-social-buttons">
 						<li><a href="{{ url('sections') }}" class="btn btn-default btn-lg"><span class="network-name"><span style="margin-right:3px;" class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>All reports</span></a></li>

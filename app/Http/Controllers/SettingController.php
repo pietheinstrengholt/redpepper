@@ -45,6 +45,8 @@ class SettingController extends Controller
 			'bank_name' => 'required|min:3',
 			'fieldname_property1' => 'required',
 			'fieldname_property2' => 'required',
+			'main_message1' => 'required',
+			'main_message2' => 'required',
 			'administrator_email' => 'required|email',
 			'superadmin_process_directly' => 'required',
 		]);
@@ -65,6 +67,16 @@ class SettingController extends Controller
 		$setting = new Setting;
 		$setting->config_key = 'fieldname_property2';
 		$setting->config_value = $request->input('fieldname_property2');
+		$setting->save();
+		
+		$setting = new Setting;
+		$setting->config_key = 'main_message1';
+		$setting->config_value = $request->input('main_message1');
+		$setting->save();
+		
+		$setting = new Setting;
+		$setting->config_key = 'main_message2';
+		$setting->config_value = $request->input('main_message2');
 		$setting->save();
 		
 		$setting = new Setting;

@@ -25,22 +25,32 @@
 
 <div class="form-group">
   <label for="usr">Bank name:</label>
-  <input name="bank_name" type="text" style="width:550px;" class="form-control" id="usr" value="{{ $config_array['bank_name'] }}" placeholder="{{ $config_array['bank_name'] }}">
+  <input name="bank_name" type="text" style="width:550px;" class="form-control" id="usr" value="{!! App\Helper::setting('bank_name') !!}" placeholder="{!! App\Helper::setting('bank_name') !!}">
 </div>
 
 <div class="form-group">
   <label for="usr">Field property1:</label>
-  <input name="fieldname_property1" type="text" style="width:550px;" class="form-control" id="usr" value="{{ $config_array['fieldname_property1'] }}" placeholder="{{ $config_array['fieldname_property1'] }}">
+  <input name="fieldname_property1" type="text" style="width:550px;" class="form-control" id="usr" value="{!! App\Helper::setting('fieldname_property1') !!}" placeholder="{!! App\Helper::setting('fieldname_property1') !!}">
 </div>
 
 <div class="form-group">
   <label for="usr">Field property2:</label>
-  <input name="fieldname_property2" type="text" style="width:550px;" class="form-control" id="usr" value="{{ $config_array['fieldname_property2'] }}" placeholder="{{ $config_array['fieldname_property2'] }}">
+  <input name="fieldname_property2" type="text" style="width:550px;" class="form-control" id="usr" value="{!! App\Helper::setting('fieldname_property2') !!}" placeholder="{!! App\Helper::setting('fieldname_property2') !!}">
+</div>
+
+<div class="form-group">
+  <label for="usr">Welcome screen header text:</label>
+  <input name="main_message1" type="text" style="width:550px;" class="form-control" id="usr" value="{!! App\Helper::setting('main_message1') !!}" placeholder="{!! App\Helper::setting('main_message1') !!}">
+</div>
+
+<div class="form-group">
+  <label for="usr">Welcome screen sub text:</label>
+  <input name="main_message2" type="text" style="width:550px;" class="form-control" id="usr" value="{!! App\Helper::setting('main_message2') !!}" placeholder="{!! App\Helper::setting('main_message2') !!}">
 </div>
 
 <div class="form-group">
   <label for="usr">Administrator email message:</label>
-  <input name="administrator_email" type="email" style="width:550px;" class="form-control" id="usr" value="{{ $config_array['administrator_email'] }}" placeholder="{{ $config_array['administrator_email'] }}">
+  <input name="administrator_email" type="email" style="width:550px;" class="form-control" id="usr" value="{!! App\Helper::setting('administrator_email') !!}" placeholder="{!! App\Helper::setting('administrator_email') !!}">
 </div>
 
 <h5>Allow super admin to process changes directly:</h5>

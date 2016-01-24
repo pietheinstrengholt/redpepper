@@ -98,7 +98,7 @@
 	@endif
 
 	@if ( !$rows->count() && !$columns->count() && !$content->count() && !$technicals->count() )
-		<p>No content has been found, try to search again!</p>
+		<p>No results have been found. Please try to refine search.</p>
 	@endif
 
 @endsection
