@@ -24,14 +24,17 @@
 
 		@foreach( $terms as $term )
 			<tr>
-			<td>{{ $term->term_name }}</td>
+			<td><a href="{!! url('terms'); !!}/{{ $term->id }}">{{ $term->term_name }}</a></td>
 			<td>{{ $term->term_definition }}</td>
-			{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('terms.destroy', $term->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this term?\')')) !!}
 			<td>
-			{!! link_to_route('terms.edit', 'Edit', array($term->id), array('class' => 'btn btn-info btn-xs')) !!}
-			{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
+			@if (!Auth::guest())
+				{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('terms.destroy', $term->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this term?\')')) !!}
+				{!! link_to_route('terms.edit', 'Edit', array($term->id), array('class' => 'btn btn-info btn-xs')) !!}
+				{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
+				{!! Form::close() !!}
+			@endif
 			</td>
-			{!! Form::close() !!}
+			
 			</tr>
 		@endforeach
 
