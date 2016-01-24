@@ -813,9 +813,6 @@ class ChangeRequestController extends Controller
 			$ChangeRequest->status = 'pending';
 			$ChangeRequest->save();
 
-			//log Event
-			Event::fire(new ChangeRequestCreated($ChangeRequest));
-
 			if ($request->has('regulation_row')) {
 				$draftrequirement = new DraftRequirement;
 				$draftrequirement->changerequest_id = $ChangeRequest->id;
@@ -933,6 +930,9 @@ class ChangeRequestController extends Controller
 				//process changerequest
 				$this->process($ChangeRequest);
 				
+				//log Event
+				Event::fire(new ChangeRequestApproved($ChangeRequest));
+				
 				//redirect back to template page
 				return Redirect::route('sections.templates.show', [$request->input('section_id'), $request->input('template_id')])->with('message', 'Content directly updated without review approval.');				
 			} else {
@@ -940,7 +940,8 @@ class ChangeRequestController extends Controller
 				return Redirect::route('sections.templates.show', [$request->input('section_id'), $request->input('template_id')])->with('message', 'Change request submitted for review.');				
 			}
 
-
+			//log Event
+			Event::fire(new ChangeRequestCreated($ChangeRequest));
 
 		}
 	}

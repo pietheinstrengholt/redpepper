@@ -11,6 +11,7 @@ use Auth;
 use Mail;
 use App\User;
 use App\Template;
+use App\Helper;
 
 class LogWhenChangeRequestCreated
 {
@@ -39,12 +40,15 @@ class LogWhenChangeRequestCreated
 		$template = Template::findOrFail($event->changerequest->template_id);
 		$array['template_name'] = $template->template_name;
 		
-		Mail::send('emails.changerequest', $array, function($message)
-		{
-			$message->from(env('MAIL_USERNAME'));
-			$message->to(env('MAIL_TO'), env('MAIL_NAME'));
-			$message->subject('RADAR notification');
-		});
+		if (!(Helper::setting('superadmin_process_directly') == "yes" && Auth::user()->role == "superadmin")) {
+		
+			Mail::send('emails.changerequest', $array, function($message)
+			{
+				$message->from(env('MAIL_USERNAME'));
+				$message->to(env('MAIL_TO'), env('MAIL_NAME'));
+				$message->subject('RADAR notification');
+			});
+		}
 		
 	}
 }
