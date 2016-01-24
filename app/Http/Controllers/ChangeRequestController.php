@@ -246,8 +246,11 @@ class ChangeRequestController extends Controller
 				$draft_technical_string = $draft_technical_string . $str;
 			}
 		}
-
-		$changerequest->technical = $this->compare($current_technical_string,$draft_technical_string);
+		
+		//one of the two technical should not be empty
+		if (!empty($draft_technical) || !empty($current_technical)) {
+			$ChangeRequest->technical = $this->compare($current_technical_string,$draft_technical_string);
+		}
 
 		return view('changerequests.edit', [
 			'changerequest' => $ChangeRequest,
