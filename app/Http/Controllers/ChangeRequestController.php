@@ -923,7 +923,7 @@ class ChangeRequestController extends Controller
 				$draftrequirement->save();
 			}
 			
-			if (Helper::setting('superadmin_process_directly') == "yes") {
+			if (Helper::setting('superadmin_process_directly') == "yes" && Auth::user()->role == "superadmin") {
 				
 				//update change request
 				$ChangeRequest->status = "approved";
