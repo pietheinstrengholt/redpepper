@@ -69,6 +69,14 @@ Route::get('users/{id}/password', ['middleware' => 'auth', 'uses' => 'UserContro
 Route::post('updaterights', ['middleware' => 'auth', 'uses' => 'UserController@updaterights']);
 Route::post('updatepassword', ['middleware' => 'auth', 'uses' => 'UserController@updatepassword']);
 
+// Password reset link request routes...
+Route::get('password/email', 'Auth\PasswordController@getEmail');
+Route::post('password/email', 'Auth\PasswordController@postEmail');
+
+// Password reset routes...
+Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
+Route::post('password/reset', 'Auth\PasswordController@postReset');
+
 // Template routes...
 Route::get('templatestructure/{id}', ['middleware' => 'auth', 'uses' => 'TemplateController@structure']);
 Route::post('changestructure', ['middleware' => 'auth', 'uses' => 'TemplateController@changestructure']);

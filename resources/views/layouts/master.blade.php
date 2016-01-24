@@ -103,6 +103,7 @@
 			@if (Auth::guest())
 			  <li><a href="{{ URL::to('/auth/login') }}">Login</a></li>
 			  <li><a href="{{ URL::to('/auth/register') }}">Register</a></li>
+			  <li><a href="{{ URL::to('/password/email') }}">Reset</a></li>
 			@else
 			  <li><a href="{{ URL::to('/auth/logout') }}">Logout</a></li>
 			@endif
