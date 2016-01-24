@@ -43,10 +43,10 @@ TODO
 * reference tables?
 * definitions / hovers?
 * hyperlinks after submission of a change request
-* superadmin can approve own changes
 * create new template -> automatisch juiste section selecteren?
 * opschonen archive fuctie, letterlijk kopie maken van de content naar archive
 * testen deployment script
 * backdoor voor superadmin?
 * style tooltip in cell.blade.php
 * highlight search results, e.g. when searched for 'test', highlight this word
+* debug true of false testen
