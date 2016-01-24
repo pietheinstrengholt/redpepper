@@ -55,6 +55,12 @@ class Helper {
 		return str_replace($patterns, $replacements, $text);
 	}
 	
+	public static function contentAdjust($input) {
+		$output = self::formatUrlsInText($input);
+		$output = self::addTermLinks($output);
+		return $output;
+	}
+	
 }
 
 ?>

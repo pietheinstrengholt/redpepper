@@ -21,13 +21,13 @@
 @if ( $field_regulation )
 	<dl class="dl-horizontal">
 	<dt>Regulation:</dt>
-	<dd><div title="{!! App\Helper::returnHistory($field_regulation) !!}" class="content-box">{!! App\Helper::formatUrlsInText($field_regulation->content) !!}</div></dd>
+	<dd><div title="{!! App\Helper::returnHistory($field_regulation) !!}" class="content-box">{!! App\Helper::contentAdjust($field_regulation->content) !!}</div></dd>
 	</dl>
 @endif
 @if ( $field_interpretation )
 	<dl class="dl-horizontal">
 	<dt>Interpretation:</dt>
-	<dd><div title="{!! App\Helper::returnHistory($field_interpretation) !!}" class="content-box">{!! App\Helper::formatUrlsInText($field_interpretation->content) !!}</div></dd>
+	<dd><div title="{!! App\Helper::returnHistory($field_interpretation) !!}" class="content-box">{!! App\Helper::contentAdjust($field_interpretation->content) !!}</div></dd>
 	</dl>
 @endif
 </td>
@@ -45,17 +45,17 @@
 		<h4><b>Name:</b></h4>
 		<div rows="1" title="{!! App\Helper::returnHistory($row) !!}" id="rowname">{{ $row->row_description }}</div>
 		<h4><b>Regulation:</b></h4>
-		<div rows="7" title="{!! App\Helper::returnHistory($regulation_row) !!}" id="row_regulation">{!! App\Helper::addTermLinks(App\Helper::formatUrlsInText(nl2br(e($regulation_row['content'])))) !!}</div>
+		<div rows="7" title="{!! App\Helper::returnHistory($regulation_row) !!}" id="row_regulation">{!! App\Helper::contentAdjust(nl2br(e($regulation_row['content']))) !!}</div>
 		<h4><b>Interpretation:</b></h4>
-		<div rows="6" title="{!! App\Helper::returnHistory($interpretation_row) !!}" id="row_interpretation">{!! App\Helper::formatUrlsInText(nl2br(e($interpretation_row['content']))) !!}</div>
+		<div rows="6" title="{!! App\Helper::returnHistory($interpretation_row) !!}" id="row_interpretation">{!! App\Helper::contentAdjust(nl2br(e($interpretation_row['content']))) !!}</div>
 	</td>
 	<td class="info-right im-content">
 		<h4><b>Name:</b></h4>
 		<div rows="1" title="{!! App\Helper::returnHistory($column) !!}" id="colname">{{ $column->column_description }}</div>
 		<h4><b>Regulation:</b></h4>
-		<div rows="7" title="{!! App\Helper::returnHistory($regulation_column) !!}" id="column_regulation">{!! App\Helper::formatUrlsInText(nl2br(e($regulation_column['content']))) !!}</div>
+		<div rows="7" title="{!! App\Helper::returnHistory($regulation_column) !!}" id="column_regulation">{!! App\Helper::contentAdjust(nl2br(e($regulation_column['content']))) !!}</div>
 		<h4><b>Interpretation:</b></h4>
-		<div rows="6" title="{!! App\Helper::returnHistory($interpretation_column) !!}" id="column_interpretation">{!! App\Helper::formatUrlsInText(nl2br(e($interpretation_column['content']))) !!}</div>
+		<div rows="6" title="{!! App\Helper::returnHistory($interpretation_column) !!}" id="column_interpretation">{!! App\Helper::contentAdjust(nl2br(e($interpretation_column['content']))) !!}</div>
 	</td>
 </tr>
 </table>
