@@ -305,7 +305,7 @@ class ChangeRequestController extends Controller
 					$Requirements->save();
 				//update
 				} else {
-					Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'regulation')->update(['content' => $DraftRegulation_row->content]);
+					Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'regulation')->update(['content' => $DraftRegulation_row->content, 'created_by' => $ChangeRequest->creator_id]);
 
 					//submit existing content to archive table
 					$HistoryRequirement = new HistoryRequirement;
@@ -353,7 +353,7 @@ class ChangeRequestController extends Controller
 					$Requirements->save();
 				//update
 				} else {
-					Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'interpretation')->update(['content' => $DraftInterpretation_row->content]);
+					Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'interpretation')->update(['content' => $DraftInterpretation_row->content, 'created_by' => $ChangeRequest->creator_id]);
 
 					//submit existing content to archive table
 					$HistoryRequirement = new HistoryRequirement;
@@ -400,7 +400,7 @@ class ChangeRequestController extends Controller
 					$Requirements->save();
 				//update
 				} else {
-					Requirement::where('template_id', $ChangeRequest->template_id)->where('column_code', $ChangeRequest->column_code)->where('row_code', null)->where('content_type', 'regulation')->update(['content' => $DraftRegulation_column->content]);
+					Requirement::where('template_id', $ChangeRequest->template_id)->where('column_code', $ChangeRequest->column_code)->where('row_code', null)->where('content_type', 'regulation')->update(['content' => $DraftRegulation_column->content, 'created_by' => $ChangeRequest->creator_id]);
 
 					//submit existing content to archive table
 					$HistoryRequirement = new HistoryRequirement;
@@ -447,7 +447,7 @@ class ChangeRequestController extends Controller
 					$Requirements->save();
 				//update
 				} else {
-					Requirement::where('template_id', $ChangeRequest->template_id)->where('column_code', $ChangeRequest->column_code)->where('row_code', null)->where('content_type', 'interpretation')->update(['content' => $DraftInterpretation_column->content]);
+					Requirement::where('template_id', $ChangeRequest->template_id)->where('column_code', $ChangeRequest->column_code)->where('row_code', null)->where('content_type', 'interpretation')->update(['content' => $DraftInterpretation_column->content, 'created_by' => $ChangeRequest->creator_id]);
 
 					//submit existing content to archive table
 					$HistoryRequirement = new HistoryRequirement;
@@ -495,7 +495,7 @@ class ChangeRequestController extends Controller
 					$Requirement->save();
 				//update
 				} else {
-					Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property1')->update(['content' => $DraftField_property1->content]);
+					Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property1')->update(['content' => $DraftField_property1->content, 'created_by' => $ChangeRequest->creator_id]);
 
 					//submit existing content to archive table
 					$HistoryRequirement = new HistoryRequirement;
@@ -543,7 +543,7 @@ class ChangeRequestController extends Controller
 					$Requirement->save();
 				//update
 				} else {
-					Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property2')->update(['content' => $DraftField_property2->content]);
+					Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property2')->update(['content' => $DraftField_property2->content, 'created_by' => $ChangeRequest->creator_id]);
 
 					//submit existing content to archive table
 					$HistoryRequirement = new HistoryRequirement;
@@ -592,7 +592,7 @@ class ChangeRequestController extends Controller
 					$Requirement->save();
 				//update
 				} else {
-					Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'regulation')->update(['content' => $DraftField_regulation->content]);
+					Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'regulation')->update(['content' => $DraftField_regulation->content, 'created_by' => $ChangeRequest->creator_id]);
 
 					//submit existing content to archive table
 					$HistoryRequirement = new HistoryRequirement;
@@ -641,7 +641,7 @@ class ChangeRequestController extends Controller
 					$Requirement->save();
 				//update
 				} else {
-					Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'interpretation')->update(['content' => $DraftField_interpretation->content]);
+					Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'interpretation')->update(['content' => $DraftField_interpretation->content, 'created_by' => $ChangeRequest->creator_id]);
 
 					//submit existing content to archive table
 					$HistoryRequirement = new HistoryRequirement;
