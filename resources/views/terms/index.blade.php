@@ -41,5 +41,15 @@
 	<p>
 	{!! link_to_route('terms.create', 'Create Term') !!}
 	</p>
+	
+	@if ( !empty($letters) )
+		<div class="pagination">
+		<ul class="pagination">
+		@foreach( $letters as $letter )
+			<li><a href="{!! url('terms?letter='); !!}{{ $letter }}">{{ $letter }}</a></li>
+		@endforeach
+		</ul>
+		</div>
+	@endif
 
 @endsection

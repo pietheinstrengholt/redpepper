@@ -38,21 +38,27 @@ class Helper {
 	public static function addTermLinks($text) {
 		//retrieve words from database
 		$words = Term::all();
+		
+		if (!empty($words)) {
+			//build dictionary with values that needs replacement
+			$patterns = array();
+			foreach ($words as $word) {
+				$patterns[$word->id] = $word->term_name;
+			}
 
-		//build dictionary with values that needs replacement
-		$patterns = array();
-		foreach ($words as $word) {
-			$patterns[$word->id] = $word->term_name;
+			//build dictionary with values the replacements
+			$replacements = array();
+			foreach ($words as $word) {
+				$replacements[$word->id] = "<a href=\"" . url('terms') . "/" . $word->id . "\">" . $patterns[$word->id] . "</a>";
+			}
+
+			//return text, replace words from dictionary with hyperlinks
+			return str_replace($patterns, $replacements, $text);			
+		} else {
+			return $text;
 		}
 
-		//build dictionary with values the replacements
-		$replacements = array();
-		foreach ($words as $word) {
-			$replacements[$word->id] = "<a href=\"" . url('terms') . "/" . $word->id . "\">" . $patterns[$word->id] . "</a>";
-		}
 
-		//return text, replace words from dictionary with hyperlinks
-		return str_replace($patterns, $replacements, $text);
 	}
 	
 	public static function contentAdjust($input) {
