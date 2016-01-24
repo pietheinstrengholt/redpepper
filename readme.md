@@ -14,7 +14,7 @@ REQUIREMENTS
 * Composer
 * Git
 
-DEPLOYMENT
+INITIAL DEPLOYMENT
 ------------
 * install composer: `curl -sS https://getcomposer.org/installer | php — –filename=composer`
 * ssh to the machine, go the www directory
@@ -28,20 +28,25 @@ DEPLOYMENT
 * run `chmod -R 777 storage/`
 * run `composer dump-autoload`
 
+UPDATING
+------------
+* run `git pull`
+* run `composer install`
+* run `php artisan migrate`
+* run `composer dump-autoload`
+* run `php artisan cache:clear`
+* run `chmod -R 777 storage/`
 
 TODO
 ------------
 * manual page per template (pdf?)
 * reference tables?
-* builder rechten via Middleware?
 * definitions / hovers?
 * hyperlinks after submission of a change request
 * superadmin can approve own changes
 * create new template -> automatisch juiste section selecteren?
-* t_terms with lookup function
 * opschonen archive fuctie, letterlijk kopie maken van de content naar archive
 * testen deployment script
-* t_settings with viewComposer
-* backdoor voor superadmin
+* backdoor voor superadmin?
 * style tooltip in cell.blade.php
 * highlight search results, e.g. when searched for 'test', highlight this word
