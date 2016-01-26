@@ -121,10 +121,16 @@ class ExcelController extends Controller
 					$worksheetTitle = $sheet->getTitle();
 					$arraySheet = $sheet->toArray();
 					
+					//TODO:add validation when structure is incorrect or no content exists on sheet
 					//get column and row count from imported excel
 					$highestRow = count($arraySheet) + 1;
-					$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
-					$highestColumnIndex = count($arraySheet[0]) + 1;
+					if (array_key_exists(0,$arraySheet)) {
+						$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
+						$highestColumnIndex = count($arraySheet[0]) + 1;						
+					} else {
+						$highestColumn = 0;
+						$highestColumnIndex = 1;
+					}
 
 					//start counting unique id content in templatestructure array
 					$i = 1;
@@ -880,7 +886,7 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1:C1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
 
-				$column_content  = Requirement::where('template_id', $id)->where('row_code', '')->orWhere('row_code', null)->where('content', '!=' , '')->orderBy('column_code', 'asc')->get();
+				$column_content  = Requirement::where('template_id', $id)->where('row_code', null)->where('content', '!=' , '')->orderBy('column_code', 'asc')->get();
 
 				$columncontentcount = 2;
 				//add content to excel
@@ -921,7 +927,7 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1:C1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
 
-				$row_contents  = Requirement::where('template_id', $id)->where('column_code', '')->orWhere('column_code', null)->where('content', '!=' , '')->orderBy('column_code', 'asc')->get();
+				$row_contents  = Requirement::where('template_id', $id)->where('column_code', null)->where('content', '!=' , '')->orderBy('column_code', 'asc')->get();
 
 				$rowcontentcount = 2;
 
@@ -966,7 +972,7 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1:D1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
 
-				$field_contents = Requirement::where('template_id', $id)->where('content_type', '!=' , 'disabled')->whereNotNull('row_code')->where('row_code', '<>', '')->whereNotNull('column_code')->where('column_code', '<>', '')->orderBy('row_code', 'asc')->orderBy('column_code', 'asc')->get();
+				$field_contents = Requirement::where('template_id', $id)->where('content_type', '!=' , 'disabled')->whereNotNull('row_code')->whereNotNull('column_code')->orderBy('row_code', 'asc')->orderBy('column_code', 'asc')->get();
 
 				$fieldcontentcount = 2;
 				//set grey fields, add two to put it correctly in the template
