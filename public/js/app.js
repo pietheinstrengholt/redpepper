@@ -107,7 +107,7 @@ jQuery(document).ready(function () {
 				//show pop-up with information
 				$('#template-modal').modal('show');
 				//rescale modal height, see function
-				rescale();
+				//rescale();
 				//load html data into modal
 				$('#modalContent').show().html(data);
 			},
