@@ -827,7 +827,9 @@ class ExcelController extends Controller
 						$rownumber++;
 					}
 				}
-
+				
+				
+				//TODO: fix disabled cells when letters are used in row_codes or column_codes
 				$disabled = Requirement::where('template_id', $template->id)->where('content_type', 'disabled')->get();
 
 				//set grey fields, add two to put it correctly in the template
