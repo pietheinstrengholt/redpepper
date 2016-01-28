@@ -25,11 +25,17 @@ class CreateTablesScript extends Migration
 			$table->timestamps();
 		});
 
-		Schema::create('t_password_resets', function (Blueprint $table) {
-			$table->string('email')->index();
-			$table->string('token')->index();
-			$table->timestamps();
-		});		
+        Schema::create('password_resets', function (Blueprint $table) {
+            $table->string('email')->index();
+            $table->string('token')->index();
+            $table->timestamp('created_at');
+        });
+		
+        Schema::create('t_settings', function (Blueprint $table) {
+            $table->string('config_key')->unique();
+            $table->string('config_value');
+            $table->timestamps();
+        });	
 
 		Schema::create('t_departments', function (Blueprint $table) {
 			$table->increments('id');
@@ -205,7 +211,7 @@ class CreateTablesScript extends Migration
 			$table->integer('approved_by');
 			$table->timestamp('submission_date');
 			$table->timestamps();
-		});		
+		});
 
 	}
 
