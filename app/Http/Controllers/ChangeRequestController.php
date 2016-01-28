@@ -926,23 +926,23 @@ class ChangeRequestController extends Controller
 				$ChangeRequest->status = "approved";
 				$ChangeRequest->comment = "Changerequest directly approved without review";
 				$ChangeRequest->save();
-				
+
 				//process changerequest
 				$this->process($ChangeRequest);
-				
+
 				//log Event
 				Event::fire(new ChangeRequestApproved($ChangeRequest));
 				
 				//redirect back to template page
 				return Redirect::route('sections.templates.show', [$request->input('section_id'), $request->input('template_id')])->with('message', 'Content directly updated without review approval.');				
 			} else {
+				
+				//log Event
+				Event::fire(new ChangeRequestCreated($ChangeRequest));
+				
 				//redirect back to template page
 				return Redirect::route('sections.templates.show', [$request->input('section_id'), $request->input('template_id')])->with('message', 'Change request submitted for review.');				
 			}
-
-			//log Event
-			Event::fire(new ChangeRequestCreated($ChangeRequest));
-
 		}
 	}
 
