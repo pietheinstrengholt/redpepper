@@ -607,23 +607,23 @@ class ExcelController extends Controller
 
 				//add template field content to database
 				if (!empty($templatestructure['field_content'])) {
-					foreach($templatestructure['field_content'] as $field_content) {
+					foreach($templatestructure['field_content'] as $requirement) {
 						$Requirement = new Requirement;
 						$Requirement->template_id = $template->id;
-						$Requirement->row_code = $field_content['row_code'];
-						$Requirement->column_code = $field_content['column_code'];
-						$Requirement->content_type = $field_content['content_type'];
-						$Requirement->content = $field_content['content'];
+						$Requirement->row_code = $requirement['row_code'];
+						$Requirement->column_code = $requirement['column_code'];
+						$Requirement->content_type = $requirement['content_type'];
+						$Requirement->content = $requirement['content'];
 						$Requirement->save();
 
 						//submit new content to archive table
 						$HistoryRequirement = new HistoryRequirement;
 						$HistoryRequirement->changerequest_id = '0';
 						$HistoryRequirement->template_id = $template->id;
-						$HistoryRequirement->row_code = $field_content['row_code'];
-						$HistoryRequirement->column_code = $field_content['column_code'];
-						$HistoryRequirement->content_type = $field_content['content_type'];
-						$HistoryRequirement->content = $field_content['content'];
+						$HistoryRequirement->row_code = $requirement['row_code'];
+						$HistoryRequirement->column_code = $requirement['column_code'];
+						$HistoryRequirement->content_type = $requirement['content_type'];
+						$HistoryRequirement->content = $requirement['content'];
 						$HistoryRequirement->change_type = 'excel';
 						$HistoryRequirement->created_by = Auth::user()->id;
 						$HistoryRequirement->submission_date = null;
@@ -647,10 +647,10 @@ class ExcelController extends Controller
 						$HistoryRequirement = new HistoryRequirement;
 						$HistoryRequirement->changerequest_id = '0';
 						$HistoryRequirement->template_id = $template->id;
-						$HistoryRequirement->row_code = $field_content['row_code'];
+						$HistoryRequirement->row_code = $requirement['row_code'];
 						$HistoryRequirement->column_code = '';
-						$HistoryRequirement->content_type = $field_content['content_type'];
-						$HistoryRequirement->content = $field_content['content'];
+						$HistoryRequirement->content_type = $requirement['content_type'];
+						$HistoryRequirement->content = $requirement['content'];
 						$HistoryRequirement->change_type = 'excel';
 						$HistoryRequirement->created_by = Auth::user()->id;
 						$HistoryRequirement->submission_date = null;
@@ -675,9 +675,9 @@ class ExcelController extends Controller
 						$HistoryRequirement->changerequest_id = '0';
 						$HistoryRequirement->template_id = $template->id;
 						$HistoryRequirement->row_code = '';
-						$HistoryRequirement->column_code = $field_content['column_code'];
-						$HistoryRequirement->content_type = $field_content['content_type'];
-						$HistoryRequirement->content = $field_content['content'];
+						$HistoryRequirement->column_code = $requirement['column_code'];
+						$HistoryRequirement->content_type = $requirement['content_type'];
+						$HistoryRequirement->content = $requirement['content'];
 						$HistoryRequirement->change_type = 'excel';
 						$HistoryRequirement->created_by = Auth::user()->id;
 						$HistoryRequirement->submission_date = null;
