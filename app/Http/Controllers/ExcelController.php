@@ -562,6 +562,7 @@ class ExcelController extends Controller
 				$template->section_id = $request->input('section_id');
 				$template->template_name = $request->input('template_name');
 				$template->template_shortdesc = $request->input('template_description');
+				$template->visible = 'False';
 
 				//add additional template content
 				if (!empty($templatestructure['template_content'])) {
@@ -573,7 +574,6 @@ class ExcelController extends Controller
 					$template->process_and_organisation_description = $templatestructure['template_content']['process_and_organisation_description'];
 				}
 
-				$template->visible = 'No';
 				$template->save();
 
 				if (empty($templatestructure['columns']) || empty($templatestructure['rows'])) {
