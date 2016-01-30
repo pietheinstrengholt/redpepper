@@ -89,7 +89,7 @@
 				{{--*/ $field = 'column' . $column->column_code . '-row' . $row->row_code /*--}}
 
 				@if (array_key_exists($field, $disabledFields))
-					<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="value" class="disabled" id="{{ $field }}"><input style="display:none;" checked="checked" type="checkbox" name="options[]" value="{{ $field }}" /></td>
+					<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="value disabled" id="{{ $field }}"><input style="display:none;" checked="checked" type="checkbox" name="options[]" value="{{ $field }}" /></td>
 				@else
 					<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="value" id="{{ $field }}"><input style="display:none;" type="checkbox" name="options[]" value="{{ $field }}" /></td>
 				@endif
