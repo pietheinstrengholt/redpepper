@@ -38,7 +38,7 @@
 					{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
 					{!! Form::close() !!}
 				@endif
-				@if (Auth::user()->role == "admin" && (in_array($section->id, $sectionRights)))
+				@if ((Auth::user()->role == "builder" || Auth::user()->role == "admin") && in_array($section->id, $sectionRights))
 					{!! link_to_route('sections.edit', 'Edit', array($section->id), array('class' => 'btn btn-info btn-xs')) !!}
 				@endif
 			@endif

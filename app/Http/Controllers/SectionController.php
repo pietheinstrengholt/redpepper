@@ -130,7 +130,7 @@ class SectionController extends Controller
 		//retrieve list with sections based on user id and user role
 		$sectionRights = $this->sectionRights();
 		
-		if ((Auth::user()->role == "admin" && in_array($section->id, $sectionRights)) || Auth::user()->role == "superadmin") {
+		if (((Auth::user()->role == "admin" || Auth::user()->role == "builder") && in_array($section->id, $sectionRights)) || Auth::user()->role == "superadmin") {
 			return view('sections.edit', compact('section'));
 		} else {
 			abort(403, 'Unauthorized action.');
@@ -149,7 +149,7 @@ class SectionController extends Controller
 
 	public function store(Request $request)
 	{
-		//check for superadmin permissions
+		//only a superadmin has permissions to create new sections
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }
@@ -169,23 +169,25 @@ class SectionController extends Controller
 
 	public function update(Section $section, Request $request)
 	{
-		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+		//retrieve list with sections based on user id and user role
+		$sectionRights = $this->sectionRights();
+		
+		if (((Auth::user()->role == "admin" || Auth::user()->role == "builder") && in_array($section->id, $sectionRights)) || Auth::user()->role == "superadmin") {
+			//validate input form
+			$this->validate($request, [
+				'section_name' => 'required|min:4',
+				'section_description' => 'required|min:4'
+			]);
 
-		//validate input form
-		$this->validate($request, [
-			'section_name' => 'required|min:4',
-			'section_description' => 'required|min:4'
-		]);
+			$section->update($request->all());
 
-		$section->update($request->all());
+			//log Event
+			Event::fire(new SectionUpdated($section));
 
-		//log Event
-		Event::fire(new SectionUpdated($section));
-
-		return Redirect::route('sections.show', $section->id)->with('message', 'Section updated.');
+			return Redirect::route('sections.show', $section->id)->with('message', 'Section updated.');
+		} else {
+			abort(403, 'Unauthorized action.');
+		}
 	}
 
 	public function destroy(Section $section)
