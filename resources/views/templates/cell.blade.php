@@ -78,12 +78,14 @@
 				</tr>
 
 				@foreach( $technical as $row )
-					<tr id="{{ $row->id }}">
-						<td class="source">{{ $row->source->source_name }}</td>
-						<td class="type">{{ $row->type->type_name }}</td>
-						<td class="content">{{ $row->content }}</td>
-						<td class="description">{{ $row->description }}</td>
-					</tr>
+					@if (is_object($row->source) && is_object($row->type))
+						<tr id="{{ $row->id }}">
+							<td class="source">{{ $row->source->source_name }}</td>
+							<td class="type">{{ $row->type->type_name }}</td>
+							<td class="content">{{ $row->content }}</td>
+							<td class="description">{{ $row->description }}</td>
+						</tr>
+					@endif
 				@endforeach
 
 			</table>

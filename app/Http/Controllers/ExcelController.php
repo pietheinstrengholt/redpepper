@@ -1036,7 +1036,7 @@ class ExcelController extends Controller
 				if (!empty($field_contents)) {
 					foreach($field_contents as $key => $value) {
 						//validate if type and source exist
-						if (!empty($value->type) && !empty($value->source)) {
+						if (is_object($value->source) && is_object($value->type)) {
 							$sheet->setCellValueExplicit('A' . $fieldcontentcount, $value['column_code'])
 							->setCellValueExplicit('B' . $fieldcontentcount, $value['row_code'])
 							->setCellValueExplicit('C' . $fieldcontentcount, $value->type->type_name)

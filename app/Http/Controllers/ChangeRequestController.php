@@ -225,6 +225,13 @@ class ChangeRequestController extends Controller
 		$current_technical_string = "";
 		if (!empty($current_technical)) {
 			foreach ($current_technical as $current_technical_row) {
+				if (!is_object($current_technical_row->source)) {
+					abort(403, 'The source name no longer exists in the database. Unable to view change request.');
+				}
+
+				if (!is_object($current_technical_row->type)) {
+					abort(403, 'The type name no longer exists in the database. Unable to view change request.');
+				}
 				$str = $current_technical_row->source->source_name . " - " . $current_technical_row->type->type_name . " " . $current_technical_row->content . " " . $current_technical_row->description . "\n";
 				$current_technical_string = $current_technical_string . $str;
 			}
