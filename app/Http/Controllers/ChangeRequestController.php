@@ -60,11 +60,11 @@ class ChangeRequestController extends Controller
 		}
 
 		//contributors and builders can only see own submitted changes
-		if (Auth::user()->role == "contributor" || Auth::user()->role == "builder") {
+		if (Auth::user()->role == "contributor") {
 			$changerequests = ChangeRequest::where('creator_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(15);
 		}
 
-		if (Auth::user()->role == "admin" || Auth::user()->role == "reviewer") {
+		if (Auth::user()->role == "admin" || Auth::user()->role == "reviewer" || Auth::user()->role == "builder") {
 			$templateList = $this->templateRights(Auth::user()->id);
 			$changerequests = ChangeRequest::whereIn('template_id', $templateList)->orderBy('created_at', 'desc')->paginate(15);
 		}
