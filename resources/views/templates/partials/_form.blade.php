@@ -65,11 +65,11 @@
 		</div>
 	</div>
 	
-	@if (Auth::user()->role == "builder")
+	@if (Auth::user()->role == "admin")
 		{!! Form::hidden('visible','False') !!}
 	@endif	
 
-	@if (Auth::user()->role == "superadmin")
+	@if (Auth::user()->role == "builder" || Auth::user()->role == "superadmin")
 		<div class="form-group">
 			{!! Form::label('Visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
 			<div class="col-sm-6" style="margin-top: 11px;">
