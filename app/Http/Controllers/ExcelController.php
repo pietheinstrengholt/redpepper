@@ -1035,13 +1035,15 @@ class ExcelController extends Controller
 				//set grey fields, add two to put it correctly in the template
 				if (!empty($field_contents)) {
 					foreach($field_contents as $key => $value) {
-						$sheet->setCellValueExplicit('A' . $fieldcontentcount, $value['column_code'])
-						->setCellValueExplicit('B' . $fieldcontentcount, $value['row_code'])
-						->setCellValueExplicit('C' . $fieldcontentcount, $value->type->type_name)
-						->setCellValueExplicit('D' . $fieldcontentcount, $value->source->source_name)
-						->setCellValueExplicit('E' . $fieldcontentcount, $value['content'])
-						->setCellValueExplicit('F' . $fieldcontentcount, $value['description']);
-						$fieldcontentcount++;
+						if (!empty($value->type) && !empty($value->source)) {
+							$sheet->setCellValueExplicit('A' . $fieldcontentcount, $value['column_code'])
+							->setCellValueExplicit('B' . $fieldcontentcount, $value['row_code'])
+							->setCellValueExplicit('C' . $fieldcontentcount, $value->type->type_name)
+							->setCellValueExplicit('D' . $fieldcontentcount, $value->source->source_name)
+							->setCellValueExplicit('E' . $fieldcontentcount, $value['content'])
+							->setCellValueExplicit('F' . $fieldcontentcount, $value['description']);
+							$fieldcontentcount++;
+						}
 					}
 				}
 
