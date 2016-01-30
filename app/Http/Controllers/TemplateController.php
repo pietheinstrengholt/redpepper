@@ -192,7 +192,7 @@ class TemplateController extends Controller
 		$sections = $this->sectionRights();
 		
 		//builder and admin are only permitted to upload to own sections. when builder the template should be published
-		if ((Auth::user()->role == "admin" && in_array($section->id, $sectionArray)) || Auth::user()->role == "superadmin" || (Auth::user()->role == "builder" && in_array($section->id, $sectionArray) && $template->visible == "True")) {
+		if ((Auth::user()->role == "admin" && in_array($section->id, $sectionArray)) || Auth::user()->role == "superadmin" || (Auth::user()->role == "builder" && in_array($section->id, $sectionArray))) {
 			return view('templates.edit', compact('sections', 'section', 'template'));
 		} else {
 			abort(403, 'Unauthorized action.');
@@ -221,7 +221,7 @@ class TemplateController extends Controller
 		$sectionArray = $this->sectionArray();
 		
 		//builder and admin are only permitted to upload to own sections. when builder the template should be published
-		if ((Auth::user()->role == "admin" && in_array($section->id, $sectionArray)) || Auth::user()->role == "superadmin" || (Auth::user()->role == "builder" && in_array($section->id, $sectionArray) && $template->visible == "True")) {
+		if ((Auth::user()->role == "admin" && in_array($template->section_id, $sectionArray)) || Auth::user()->role == "superadmin" || (Auth::user()->role == "builder" && in_array($template->section_id, $sectionArray))) {
 			$disabledFields = $this->getDisabledFields($template);
 			return view('templates.structure', compact('template', 'disabledFields'));
 		} else {
@@ -253,7 +253,7 @@ class TemplateController extends Controller
 			$template->template_name = $request->input('template_name');
 			$template->template_shortdesc = $request->input('template_shortdesc');
 			$template->template_longdesc = $request->input('template_longdesc');
-			$template->visible = 'No';
+			$template->visible = 'False';
 			$template->save();
 
 			$inputrows = $request->input('inputrows');
