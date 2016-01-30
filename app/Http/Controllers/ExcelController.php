@@ -1035,6 +1035,7 @@ class ExcelController extends Controller
 				//set grey fields, add two to put it correctly in the template
 				if (!empty($field_contents)) {
 					foreach($field_contents as $key => $value) {
+						//validate if type and source exist
 						if (!empty($value->type) && !empty($value->source)) {
 							$sheet->setCellValueExplicit('A' . $fieldcontentcount, $value['column_code'])
 							->setCellValueExplicit('B' . $fieldcontentcount, $value['row_code'])

@@ -188,6 +188,9 @@ class TemplateController extends Controller
 		//retrieve list with sections based on user id and user role
 		$sectionArray = $this->sectionArray();
 		
+		//retrieve list with sections based on user id and user role
+		$sections = $this->sectionRights();
+		
 		//builder and admin are only permitted to upload to own sections. when builder the template should be published
 		if ((Auth::user()->role == "admin" && in_array($section->id, $sectionArray)) || Auth::user()->role == "superadmin" || (Auth::user()->role == "builder" && in_array($section->id, $sectionArray) && $template->visible == "True")) {
 			return view('templates.edit', compact('sections', 'section', 'template'));
