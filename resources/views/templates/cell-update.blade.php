@@ -228,7 +228,7 @@
 		</td>
 	</table>
 
-	<button class="btn btn-primary" id="approve-changes" name="formSubmit" value="Submit" type="submit">Submit changes</button>
+	<button class="btn btn-primary" id="approve-changes" name="formSubmit" value="Submit" type="submit" style="margin-left:6px;">Submit changes</button>
 </form>
 
 @endsection
