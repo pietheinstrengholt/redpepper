@@ -221,13 +221,13 @@ class TemplateController extends Controller
 		
 		//builder and admin are only permitted to upload to own sections. when builder the template should be published
 		if ((Auth::user()->role == "admin" && in_array($section->id, $sectionArray)) || Auth::user()->role == "superadmin" || (Auth::user()->role == "builder" && in_array($section->id, $sectionArray) && $template->visible == "True")) {
-			return view('sections.edit', compact('section'));
+			$disabledFields = $this->getDisabledFields($template);
+			return view('templates.structure', compact('section', 'template', 'disabledFields'));
 		} else {
 			abort(403, 'Unauthorized action.');
 		}
 
-		$disabledFields = $this->getDisabledFields($template);
-		return view('templates.structure', compact('section', 'template', 'disabledFields'));
+
 	}
 
 	//function to create new template
