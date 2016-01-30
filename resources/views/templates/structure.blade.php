@@ -1,4 +1,4 @@
-<!-- /resources/views/template/show.blade.php -->
+<!-- /resources/views/templates/structure.blade.php -->
 @extends('layouts.master')
 
 @section('content')
