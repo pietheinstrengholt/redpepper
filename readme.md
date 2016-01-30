@@ -52,5 +52,8 @@ TODO
 * backdoor for superadmin?
 * style tooltip in cell.blade.php
 * highlight search results, e.g. when searched for 'test', highlight this word
-* debug true of false testen
-* reset password by email
+* when changerequest is approved, compare with history instead of current content
+* reopen changerequest
+* select all for rights
+* select an user to give a notification when submitting content
+* make email configurable
