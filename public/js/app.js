@@ -32,6 +32,17 @@ jQuery(document).ready(function () {
 
 	//end of time-out function
 	}, 0);
+	
+	//functionality to automatically check other checkboxes
+	$( "tr.allrights input" ).click(function() {
+		if (this.checked) {
+			//check all checkboxes with same right type and same section id
+			$('td.rights input').prop('checked', true);
+		} else {
+			//uncheck all checkboxes with same right type and same section id
+			$('td.rights input').prop('checked', false);
+		}
+	});
 
 	//function to rescale modal height
 	function rescale(){

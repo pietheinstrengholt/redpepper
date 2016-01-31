@@ -56,5 +56,4 @@ TODO
 * highlight search results, e.g. when searched for 'test', highlight this word
 * when changerequest is approved, compare with history instead of current content
 * reopen changerequest
-* select all for rights
 * select an user to give a notification when submitting content
