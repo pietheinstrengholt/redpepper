@@ -22,7 +22,7 @@ INITIAL DEPLOYMENT
 * run `composer install --no-dev --optimize-autoloader` , use your github key when asked.
 * copy the `.env.example` to `.env` and configure with the correct database settings. If localhost doesn't work, try 127.0.0.1 instead.
 * run `php artisan key:generate` to generate an unique key. Add this key to the .env configuration file
-* deploy the database, use the following command: `php artisan migrate:refresh --seed`
+* deploy the database, use the following command: `php artisan migrate:install`
 * run `php artisan optimize`
 * run `php artisan route:optimize`
 * run `php artisan cache:clear`
@@ -36,8 +36,11 @@ UPDATING
 * to save your credentials permanently using the following: `git config credential.helper store`
 * run `composer install`
 * run `php artisan migrate`
-* run `composer dump-autoload`
+* run `php artisan config:clear`
 * run `php artisan cache:clear`
+* run `chown www-data:www-data * -R`
+* run `chown www-data:www-data .env -R`
+* run `chown www-data:www-data public/.htaccess -R`
 * run `chmod -R 777 storage/`
 
 TODO
@@ -48,7 +51,6 @@ TODO
 * hyperlinks after submission of a change request
 * create new template -> automatisch juiste section selecteren?
 * opschonen archive fuctie, letterlijk kopie maken van de content naar archive
-* testen deployment script
 * backdoor for superadmin?
 * style tooltip in cell.blade.php
 * highlight search results, e.g. when searched for 'test', highlight this word
