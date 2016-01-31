@@ -47,6 +47,7 @@ class SettingController extends Controller
 			'fieldname_property2' => 'required',
 			'main_message1' => 'required',
 			'main_message2' => 'required',
+			'tool_name' => 'required',
 			'administrator_email' => 'required|email',
 			'superadmin_process_directly' => 'required',
 		]);
@@ -77,6 +78,11 @@ class SettingController extends Controller
 		$setting = new Setting;
 		$setting->config_key = 'main_message2';
 		$setting->config_value = $request->input('main_message2');
+		$setting->save();
+		
+		$setting = new Setting;
+		$setting->config_key = 'tool_name';
+		$setting->config_value = $request->input('tool_name');
 		$setting->save();
 		
 		$setting = new Setting;

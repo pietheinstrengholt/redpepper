@@ -56,4 +56,3 @@ TODO
 * reopen changerequest
 * select all for rights
 * select an user to give a notification when submitting content
-* make email configurable

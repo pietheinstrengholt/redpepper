@@ -44,9 +44,12 @@ class LogWhenChangeRequestCreated
 		
 			Mail::send('emails.changerequest', $array, function($message)
 			{
+				$mailto = Helper::setting('administrator_email');
+				$tool_name = Helper::setting('tool_name');
+				
 				$message->from(env('MAIL_USERNAME'));
-				$message->to(env('MAIL_TO'), env('MAIL_NAME'));
-				$message->subject('RADAR notification');
+				$message->to($mailto);
+				$message->subject('Notification from the ' . $tool_name);
 			});
 		}
 		

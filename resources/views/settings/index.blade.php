@@ -49,6 +49,11 @@
 </div>
 
 <div class="form-group">
+  <label for="usr">Tool name:</label>
+  <input name="tool_name" type="text" style="width:550px;" class="form-control" id="usr" value="{!! App\Helper::setting('tool_name') !!}" placeholder="{!! App\Helper::setting('tool_name') !!}">
+</div>
+
+<div class="form-group">
   <label for="usr">Administrator email message:</label>
   <input name="administrator_email" type="email" style="width:550px;" class="form-control" id="usr" value="{!! App\Helper::setting('administrator_email') !!}" placeholder="{!! App\Helper::setting('administrator_email') !!}">
 </div>
