@@ -53,7 +53,7 @@ TODO
 * create new template -> automatisch juiste section selecteren?
 * opschonen archive fuctie, letterlijk kopie maken van de content naar archive
 * backdoor for superadmin?
-* style tooltip in cell.blade.php
+* turn off native browser title tooltip
 * highlight search results, e.g. when searched for 'test', highlight this word
 * reopen changerequest
 * select an user to give a notification when submitting content
