@@ -24,7 +24,7 @@ class LogController extends Controller
 	
 	public function show()
 	{
-		$logs = Log::orderBy('id', 'desc')->whereIn('log_event', ['Template','Changerequest'])->take(10)->get();
+		$logs = Log::orderBy('id', 'desc')->whereIn('log_event', ['Changerequest'])->take(10)->get();
 		return view('logs.show', compact('logs'));
 	}
 	

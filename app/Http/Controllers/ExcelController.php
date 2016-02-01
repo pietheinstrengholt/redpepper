@@ -841,8 +841,7 @@ class ExcelController extends Controller
 						$rownumber++;
 					}
 				}
-				
-				
+
 				//TODO: fix disabled cells when letters are used in row_codes or column_codes
 				$disabled = Requirement::where('template_id', $template->id)->where('content_type', 'disabled')->get();
 
@@ -1133,9 +1132,7 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getStyle('A6')->getFill()->getStartColor()->setARGB('dff0d8');
 			});
-
 		})->download('xlsx');
-
 	}
 
     public function exportchanges()
@@ -1326,9 +1323,7 @@ class ExcelController extends Controller
 						$sheet->setCellValueExplicit('F' . $i, $type_id['type_name']);
 					}
 				}
-
 			});
-
 		})->download('xlsx');
     }
 }
