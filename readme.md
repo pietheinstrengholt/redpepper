@@ -38,6 +38,7 @@ UPDATING
 * run `php artisan migrate`
 * run `php artisan config:clear`
 * run `php artisan cache:clear`
+* run `php artisan route:cache`
 * run `chown www-data:www-data * -R`
 * run `chown www-data:www-data .env -R`
 * run `chown www-data:www-data public/.htaccess -R`

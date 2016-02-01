@@ -742,8 +742,22 @@ class ExcelController extends Controller
 	{
 
 		$template = Template::findOrFail($id);
+		
+		//create two array for row_code and column_code lookup usage
+		$row_code_array = array();
+		$column_code_array = array();
 
-		Excel::create($template->template_name, function($excel) use ($id)  {
+		foreach ($template->rows as $row) {
+			$row_code = trim($row['row_code']);
+			array_push($row_code_array,$row_code);
+		}
+
+		foreach ($template->columns as $column) {
+			$column_code = trim($column['column_code']);
+			array_push($column_code_array,$column_code);
+		}
+
+		Excel::create($template->template_name, function($excel) use ($id, $row_code_array, $column_code_array)  {
 
 			// Our first sheet
 			$excel->sheet('structure', function($sheet) use ($id) {
@@ -859,12 +873,10 @@ class ExcelController extends Controller
 
 				// Set border for range
 				$sheet->setBorder('A1:' . $letter . $rownumber, 'thin');
-
-
 			});
 
 			// Our second sheet
-			$excel->sheet('column_content', function($sheet) use ($id) {
+			$excel->sheet('column_content', function($sheet) use ($id, $column_code_array) {
 
 				//set first column for column_content
 				//Column part
@@ -888,7 +900,7 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1:C1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
 
-				$column_content  = Requirement::where('template_id', $id)->where('row_code', null)->where('content', '!=' , '')->orderBy('column_code', 'asc')->get();
+				$column_content  = Requirement::where('template_id', $id)->where('row_code', null)->where('content', '!=' , '')->orderBy('column_code', 'asc')->whereIn('column_code', $column_code_array)->get();
 
 				$columncontentcount = 2;
 				//add content to excel
@@ -905,7 +917,7 @@ class ExcelController extends Controller
 			});
 
 			// Our third sheet
-			$excel->sheet('row_content', function($sheet) use ($id) {
+			$excel->sheet('row_content', function($sheet) use ($id, $row_code_array) {
 
 				//set first column for column_content
 				//Column part
@@ -929,7 +941,7 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1:C1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
 
-				$row_contents  = Requirement::where('template_id', $id)->where('column_code', null)->where('content', '!=' , '')->orderBy('column_code', 'asc')->get();
+				$row_contents  = Requirement::where('template_id', $id)->where('column_code', null)->where('content', '!=' , '')->orderBy('row_code', 'asc')->whereIn('row_code', $row_code_array)->get();
 
 				$rowcontentcount = 2;
 
@@ -947,7 +959,7 @@ class ExcelController extends Controller
 			});
 
 			// Our fourth sheet
-			$excel->sheet('field_content', function($sheet) use ($id) {
+			$excel->sheet('field_content', function($sheet) use ($id, $row_code_array, $column_code_array) {
 
 				//set first column for field_content
 				//Column part
@@ -974,7 +986,7 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1:D1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
 
-				$field_contents = Requirement::where('template_id', $id)->where('content_type', '!=' , 'disabled')->whereNotNull('row_code')->whereNotNull('column_code')->orderBy('row_code', 'asc')->orderBy('column_code', 'asc')->get();
+				$field_contents = Requirement::where('template_id', $id)->where('content_type', '!=' , 'disabled')->whereNotNull('row_code')->whereNotNull('column_code')->whereIn('column_code', $column_code_array)->whereIn('row_code', $row_code_array)->orderBy('row_code', 'asc')->orderBy('column_code', 'asc')->get();
 
 				$fieldcontentcount = 2;
 				//set grey fields, add two to put it correctly in the template
@@ -991,7 +1003,7 @@ class ExcelController extends Controller
 			});
 
 			// Our firth sheet
-			$excel->sheet('sourcing', function($sheet) use ($id) {
+			$excel->sheet('sourcing', function($sheet) use ($id, $row_code_array, $column_code_array) {
 
 				//set first column for field_content
 				//Column part
@@ -1029,7 +1041,7 @@ class ExcelController extends Controller
 				$sheet->getStyle('A1:F1')->getFill()->getStartColor()->setARGB('dff0d8');
 				$sheet->getRowDimension('1')->setRowHeight(20);
 
-				$field_contents = Technical::where('template_id', $id)->get();
+				$field_contents = Technical::where('template_id', $id)->whereIn('column_code', $column_code_array)->whereIn('row_code', $row_code_array)->get();
 
 				$fieldcontentcount = 2;
 				//set grey fields, add two to put it correctly in the template
