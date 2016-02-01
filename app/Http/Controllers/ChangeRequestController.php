@@ -188,30 +188,63 @@ class ChangeRequestController extends Controller
 					$allowedToChange = "no";
 				}
 			}
+			
+			//superadmin has also rights to change
+			if (Auth::user()->role == "superadmin") {
+				
+				//set allowed to change to yes
+				$allowedToChange = "yes";
+			}
 		}
+		
+		if ($ChangeRequest->status <> 'approved') {
+			//get current content
+			$current_regulation_row = Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'regulation')->first();
+			$current_interpretation_row = Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'interpretation')->first();
+			$current_regulation_column = Requirement::where('template_id', $ChangeRequest->template_id)->where('column_code', $ChangeRequest->column_code)->where('row_code', null)->where('content_type', 'regulation')->first();
+			$current_interpretation_column = Requirement::where('template_id', $ChangeRequest->template_id)->where('column_code', $ChangeRequest->column_code)->where('row_code', null)->where('content_type', 'interpretation')->first();
+			$current_technical = Technical::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->orderBy('content', 'asc')->get();
+			$current_field_regulation = Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'regulation')->first();
+			$current_field_interpretation = Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'interpretation')->first();
+			$current_field_property1 = Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property1')->first();
+			$current_field_property2 = Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property2')->first();
 
-		//get current content
-		$current_regulation_row = Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'regulation')->first();
-		$current_interpretation_row = Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'interpretation')->first();
-		$current_regulation_column = Requirement::where('template_id', $ChangeRequest->template_id)->where('column_code', $ChangeRequest->column_code)->where('row_code', null)->where('content_type', 'regulation')->first();
-		$current_interpretation_column = Requirement::where('template_id', $ChangeRequest->template_id)->where('column_code', $ChangeRequest->column_code)->where('row_code', null)->where('content_type', 'interpretation')->first();
-		$current_technical = Technical::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->orderBy('content', 'asc')->get();
-		$current_field_regulation = Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'regulation')->first();
-		$current_field_interpretation = Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'interpretation')->first();
-		$current_field_property1 = Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property1')->first();
-		$current_field_property2 = Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property2')->first();
-
-		//get draft content
-		$draft_regulation_row = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'regulation')->first();
-		$draft_interpretation_row = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'interpretation')->first();
-		$draft_regulation_column = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('column_code', $ChangeRequest->column_code)->where('row_code', null)->where('content_type', 'regulation')->first();
-		$draft_interpretation_column = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('column_code', $ChangeRequest->column_code)->where('row_code', null)->where('content_type', 'interpretation')->first();
-		$draft_technical = DraftTechnical::where('changerequest_id', $ChangeRequest->id)->orderBy('content', 'asc')->get();
-		$draft_field_regulation = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'regulation')->first();
-		$draft_field_interpretation = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'interpretation')->first();
-		$draft_field_property1 = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property1')->first();
-		$draft_field_property2 = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property2')->first();
-
+			//get draft content
+			$draft_regulation_row = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'regulation')->first();
+			$draft_interpretation_row = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'interpretation')->first();
+			$draft_regulation_column = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('column_code', $ChangeRequest->column_code)->where('row_code', null)->where('content_type', 'regulation')->first();
+			$draft_interpretation_column = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('column_code', $ChangeRequest->column_code)->where('row_code', null)->where('content_type', 'interpretation')->first();
+			$draft_technical = DraftTechnical::where('changerequest_id', $ChangeRequest->id)->orderBy('content', 'asc')->get();
+			$draft_field_regulation = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'regulation')->first();
+			$draft_field_interpretation = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'interpretation')->first();
+			$draft_field_property1 = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property1')->first();
+			$draft_field_property2 = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property2')->first();
+		}
+		
+		if ($ChangeRequest->status == 'approved') {
+			//get current content
+			$current_regulation_row = HistoryRequirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'regulation')->where('change_type', 'existing')->first();
+			$current_interpretation_row = HistoryRequirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'interpretation')->where('change_type', 'existing')->first();
+			$current_regulation_column = HistoryRequirement::where('template_id', $ChangeRequest->template_id)->where('column_code', $ChangeRequest->column_code)->where('row_code', null)->where('content_type', 'regulation')->where('change_type', 'existing')->first();
+			$current_interpretation_column = HistoryRequirement::where('template_id', $ChangeRequest->template_id)->where('column_code', $ChangeRequest->column_code)->where('row_code', null)->where('content_type', 'interpretation')->where('change_type', 'existing')->first();
+			$current_technical = HistoryTechnical::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->orderBy('content', 'asc')->where('change_type', 'existing')->get();
+			$current_field_regulation = HistoryRequirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'regulation')->where('change_type', 'existing')->first();
+			$current_field_interpretation = HistoryRequirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'interpretation')->where('change_type', 'existing')->first();
+			$current_field_property1 = HistoryRequirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property1')->where('change_type', 'existing')->first();
+			$current_field_property2 = HistoryRequirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property2')->where('change_type', 'existing')->first();
+			
+			//get draft content
+			$draft_regulation_row = HistoryRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'regulation')->where('change_type', 'new')->first();
+			$draft_interpretation_row = HistoryRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'interpretation')->where('change_type', 'new')->first();
+			$draft_regulation_column = HistoryRequirement::where('changerequest_id', $ChangeRequest->id)->where('column_code', $ChangeRequest->column_code)->where('row_code', null)->where('content_type', 'regulation')->where('change_type', 'new')->first();
+			$draft_interpretation_column = HistoryRequirement::where('changerequest_id', $ChangeRequest->id)->where('column_code', $ChangeRequest->column_code)->where('row_code', null)->where('content_type', 'interpretation')->where('change_type', 'new')->first();
+			$draft_technical = HistoryTechnical::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->orderBy('content', 'asc')->where('change_type', 'new')->get();
+			$draft_field_regulation = HistoryRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'regulation')->where('change_type', 'new')->first();
+			$draft_field_interpretation = HistoryRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'interpretation')->where('change_type', 'new')->first();
+			$draft_field_property1 = HistoryRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property1')->where('change_type', 'new')->first();
+			$draft_field_property2 = HistoryRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property2')->where('change_type', 'new')->first();
+		}
+		
 		//perform comparison
 		$ChangeRequest->regulation_row = $this->compare_word($current_regulation_row['content'], $draft_regulation_row['content']);
 		$ChangeRequest->interpretation_row = $this->compare_word($current_interpretation_row['content'], $draft_interpretation_row['content']);
@@ -319,7 +352,7 @@ class ChangeRequestController extends Controller
 					$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 					$HistoryRequirement->template_id = $ChangeRequest->template_id;
 					$HistoryRequirement->row_code = $ChangeRequest->row_code;
-					$HistoryRequirement->column_code = '';
+					$HistoryRequirement->column_code = null;
 					$HistoryRequirement->content_type = 'regulation';
 					$HistoryRequirement->content = $Regulation_row->content;
 					$HistoryRequirement->change_type = 'existing';
@@ -334,7 +367,7 @@ class ChangeRequestController extends Controller
 				$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 				$HistoryRequirement->template_id = $ChangeRequest->template_id;
 				$HistoryRequirement->row_code = $ChangeRequest->row_code;
-				$HistoryRequirement->column_code = '';
+				$HistoryRequirement->column_code = null;
 				$HistoryRequirement->content_type = 'regulation';
 				$HistoryRequirement->content = $DraftRegulation_row->content;
 				$HistoryRequirement->change_type = 'new';
@@ -367,7 +400,7 @@ class ChangeRequestController extends Controller
 					$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 					$HistoryRequirement->template_id = $ChangeRequest->template_id;
 					$HistoryRequirement->row_code = $ChangeRequest->row_code;
-					$HistoryRequirement->column_code = '';
+					$HistoryRequirement->column_code = null;
 					$HistoryRequirement->content_type = 'interpretation';
 					$HistoryRequirement->content = $Interpretation_row->content;
 					$HistoryRequirement->change_type = 'existing';
@@ -382,7 +415,7 @@ class ChangeRequestController extends Controller
 				$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 				$HistoryRequirement->template_id = $ChangeRequest->template_id;
 				$HistoryRequirement->row_code = $ChangeRequest->row_code;
-				$HistoryRequirement->column_code = '';
+				$HistoryRequirement->column_code = null;
 				$HistoryRequirement->content_type = 'interpretation';
 				$HistoryRequirement->content = $DraftInterpretation_row->content;
 				$HistoryRequirement->change_type = 'new';
@@ -413,7 +446,7 @@ class ChangeRequestController extends Controller
 					$HistoryRequirement = new HistoryRequirement;
 					$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 					$HistoryRequirement->template_id = $ChangeRequest->template_id;
-					$HistoryRequirement->row_code = '';
+					$HistoryRequirement->row_code = null;
 					$HistoryRequirement->column_code = $ChangeRequest->column_code;
 					$HistoryRequirement->content_type = 'regulation';
 					$HistoryRequirement->content = $Regulation_column->content;
@@ -428,7 +461,7 @@ class ChangeRequestController extends Controller
 				$HistoryRequirement = new HistoryRequirement;
 				$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 				$HistoryRequirement->template_id = $ChangeRequest->template_id;
-				$HistoryRequirement->row_code = '';
+				$HistoryRequirement->row_code = null;
 				$HistoryRequirement->column_code = $ChangeRequest->column_code;
 				$HistoryRequirement->content_type = 'regulation';
 				$HistoryRequirement->content = $DraftRegulation_column->content;
@@ -460,7 +493,7 @@ class ChangeRequestController extends Controller
 					$HistoryRequirement = new HistoryRequirement;
 					$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 					$HistoryRequirement->template_id = $ChangeRequest->template_id;
-					$HistoryRequirement->row_code = '';
+					$HistoryRequirement->row_code = null;
 					$HistoryRequirement->column_code = $ChangeRequest->column_code;
 					$HistoryRequirement->content_type = 'interpretation';
 					$HistoryRequirement->content = $Interpretation_column->content;
@@ -475,7 +508,7 @@ class ChangeRequestController extends Controller
 				$HistoryRequirement = new HistoryRequirement;
 				$HistoryRequirement->changerequest_id = $ChangeRequest->id;
 				$HistoryRequirement->template_id = $ChangeRequest->template_id;
-				$HistoryRequirement->row_code = '';
+				$HistoryRequirement->row_code = null;
 				$HistoryRequirement->column_code = $ChangeRequest->column_code;
 				$HistoryRequirement->content_type = 'interpretation';
 				$HistoryRequirement->content = $DraftInterpretation_column->content;
