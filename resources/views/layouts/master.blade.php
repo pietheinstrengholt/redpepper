@@ -94,6 +94,8 @@
 				  @endif
 				  @if (Auth::user()->role == "superadmin" || Auth::user()->role == "admin" || Auth::user()->role == "builder")
 					<li><a href="{{ URL::to('/excel/upload') }}"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Upload excel template</a></li>
+					<li class="divider"></li>
+					<li><a href="{{ URL::to('/sections/0/templates/create') }}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Create new template</a></li>
 				  @endif
 				</ul>
 			  </li>
