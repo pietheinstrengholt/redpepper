@@ -58,3 +58,5 @@ TODO
 * reopen changerequest
 * select an user to give a notification when submitting content
 * improve layout mail notification
+* create events & listeners for CSV
+* validate in CSV for existing templates, sections, unique row_code, column_code, numeric col_num, row_num, etc.
