@@ -245,17 +245,6 @@ class CSVController extends Controller
 		return view('csv.importcolumns', compact('templates'));
 	}
 
-	public function importfields()
-	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-			abort(403, 'Unauthorized action.');
-		}
-
-		$templates = Template::all();
-		return view('csv.importfields', compact('templates'));
-	}
-
 	public function importcontent()
 	{
 		//check for superadmin permissions

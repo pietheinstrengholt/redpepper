@@ -41,7 +41,6 @@
 				@endforeach
 				</table>
 			@endif
-
 		@endforeach
 	@endif
 
