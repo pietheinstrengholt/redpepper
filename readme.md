@@ -38,7 +38,7 @@ UPDATING
 * run `php artisan migrate`
 * run `php artisan config:clear`
 * run `php artisan cache:clear`
-* run `php artisan route:cache`
+* run `php artisan route:cache` - issue: https://laracasts.com/discuss/channels/laravel/why-unable-to-prepare-route-for-serialization-uses-closure
 * run `chown www-data:www-data * -R`
 * run `chown www-data:www-data .env -R`
 * run `chown www-data:www-data public/.htaccess -R`
