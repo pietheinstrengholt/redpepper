@@ -7,9 +7,9 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
-	"laravelcollective/html": "^5.1",
-	"maatwebsite/excel": "~2.0",
-	"guzzlehttp/guzzle": "~5.3|~6.0",
+        "laravelcollective/html": "^5.1",
+        "maatwebsite/excel": "~2.0",
+        "guzzlehttp/guzzle": "~5.3|~6.0",
         "filp/whoops": "^2.0"
     },
     "require-dev": {
