@@ -109,11 +109,7 @@ Route::get('/excel/upload', ['middleware' => 'auth', 'uses' => 'ExcelController@
 Route::post('/excel/uploadexcel', ['middleware' => 'auth', 'uses' => 'ExcelController@uploadexcel']);
 
 // CSV routes...
-Route::get('/csv/importtech', ['middleware' => 'auth', 'uses' => 'CSVController@importtech']);
-Route::get('/csv/importrows', ['middleware' => 'auth', 'uses' => 'CSVController@importrows']);
-Route::get('/csv/importcolumns', ['middleware' => 'auth', 'uses' => 'CSVController@importcolumns']);
-Route::get('/csv/importfields', ['middleware' => 'auth', 'uses' => 'CSVController@importfields']);
-Route::get('/csv/importcontent', ['middleware' => 'auth', 'uses' => 'CSVController@importcontent']);
+Route::get('/csv/import', ['middleware' => 'auth', 'uses' => 'CSVController@import']);
 Route::post('/csv/uploadcsv', ['middleware' => 'auth', 'uses' => 'CSVController@uploadcsv']);
 
 // Changerequest routes...

@@ -42,19 +42,21 @@ class CSVController extends Controller
 
 					$file = array('csv' => $request->file('csv'));
 					
+					//Abort if the file extension is not CSV
 					if ($request->file('csv')->getClientOriginalExtension() <> 'csv') {
 						abort(403, 'Unable to import CSV file, filetype is no CSV');
 					}
 
+					//Use Excel functionality to parse CSV file
 					Excel::load($request->file('csv'), function ($reader) use ($request) {
 
-						//create array from csv content
+						//Create array from csv content
 						$csvarray = $reader->toArray();
 						
+						//Abort when only a header is used and no content can be found
 						if (empty($csvarray)) {
 							abort(403, 'Unable to import CSV file, no content is found');
 						}
-						
 
 						//import rows function
 						if ($request->input('formname') == "importtech" && $request->has('section_id')) {
@@ -62,149 +64,47 @@ class CSVController extends Controller
 							$section = Section::findOrFail($request->input('section_id'));
 							$templates = Template::where('section_id', $request->input('section_id'))->get();
 
-							//start counting
-							$i = 0;
-
+							//Create empty array for template id validation
+							$templatesArray = array();
+							if (!empty($templates)) {
+								foreach ($templates as $template) {
+									array_push($templatesArray,$template->id);
+								}
+							}
+						
+							//validate before import CSV content
 							foreach ($csvarray as $csv) {
-
-								if (array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('column_code', $csv) && array_key_exists('source', $csv) && array_key_exists('type', $csv)  && array_key_exists('value', $csv)  && array_key_exists('description', $csv)) {
-									
-									//remove existing content if count is zero
-									if ($i = 0) {
-										if (!empty($templates)) {
-											foreach ($templates as $template) {
-												Technical::where('template_id', $template->id)->delete();
-											}
-										}
-									}
-									
-									$technical = new Technical;
-									$technical->template_id = $csv['template_id'];
-									$technical->row_code = $csv['row_code'];
-									$technical->column_code = $csv['column_code'];
-									$technical->source_id = $csv['source'];
-									$technical->type_id = $csv['type'];
-									$technical->content = $csv['value'];
-									$technical->description = $csv['description'];
-									$technical->created_by = Auth::user()->id;
-									$technical->save();
-								} else {
+								if (!(array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('column_code', $csv) && array_key_exists('source', $csv) && array_key_exists('type', $csv)  && array_key_exists('value', $csv)  && array_key_exists('description', $csv))) {
 									abort(403, 'Unable to import CSV file, header is incorrect');
 								}
-								
-								//increate increment
-								$i++;
-							}
-						}
-
-						//import rows function
-						if ($request->input('formname') == "importrows" && $request->has('template_id')) {
-
-							$template = Template::findOrFail($request->input('template_id'));
-
-							foreach ($csvarray as $csv) {
-
-								if (array_key_exists('template_id', $csv) && array_key_exists('row_num', $csv) && array_key_exists('row_code', $csv) && array_key_exists('row_description', $csv)) {
-									
-									//remove existing content if count is zero
-									if ($i = 0) {
-										if (!empty($templates)) {
-											foreach ($templates as $template) {
-												TemplateRow::where('template_id', $request->input('template_id'))->delete();
-											}
-										}
-									}
-									
-									$row = new TemplateRow;
-									$row->template_id = $request->input('template_id');
-									$row->row_num = $csv['row_num'];
-									$row->row_code = $csv['row_code'];
-									$row->row_description = $csv['row_description'];
-									//$row->row_reference = $rowline['row_reference'];
-									$row->created_by = Auth::user()->id;
-									$row->save();
-								} else {
-									abort(403, 'Unable to import CSV file, header is incorrect');
+								if (!in_array($csv['template_id'], $templatesArray)) {
+									abort(403, 'Template id used in CSV file does''t belong to selected section');
 								}
-								
-								//increate increment
-								$i++;
 							}
-						}
-
-						//import columns function
-						if ($request->input('formname') == "importcolumns" && $request->has('template_id')) {
-
-							$template = Template::findOrFail($request->input('template_id'));
-
-							foreach ($csvarray as $csv) {
-
-								if (array_key_exists('template_id', $csv) && array_key_exists('column_num', $csv) && array_key_exists('column_code', $csv) && array_key_exists('column_description', $csv)) {
-									
-									//remove existing content if count is zero
-									if ($i = 0) {
-										if (!empty($templates)) {
-											foreach ($templates as $template) {
-												TemplateColumn::where('template_id', $request->input('template_id'))->delete();
-											}
-										}
-									}
-									
-									$column = new TemplateColumn;
-									$column->template_id = $request->input('template_id');
-									$column->column_num = $csv['column_num'];
-									$column->column_code = $csv['column_code'];
-									$column->column_description = $csv['column_description'];
-									$column->created_by = Auth::user()->id;
-									$column->save();
-								} else {
-									abort(403, 'Unable to import CSV file, header is incorrect');
+							
+							//remove existing content if count is zero
+							if (!empty($templates)) {
+								foreach ($templates as $template) {
+									Technical::where('template_id', $template->id)->delete();
 								}
-
-								//increate increment
-								$i++;
 							}
-						}
 
-						//import fields function
-						if ($request->input('formname') == "importcontent" && $request->has('template_id')) {
-
-							$template = Template::findOrFail($request->input('template_id'));
-
+							//Import CSV content
 							foreach ($csvarray as $csv) {
-
-								if (array_key_exists('template_id', $csv) && array_key_exists('content_type', $csv) && array_key_exists('content', $csv) && (array_key_exists('row_code', $csv) || array_key_exists('column_code', $csv))) {
-									
-									//remove existing content if count is zero
-									if ($i = 0) {
-										if (!empty($templates)) {
-											foreach ($templates as $template) {
-												Requirement::where('template_id', $request->input('template_id'))->delete();
-											}
-										}
-									}
-									
-									$Requirement = new Requirement;
-									$Requirement->template_id = $request->input('template_id');
-									$Requirement->row_code = $csv['row_code'];
-									$Requirement->column_code = $csv['column_code'];
-									$Requirement->content_type = $csv['content_type'];
-									$Requirement->content = $csv['content'];
-									$Requirement->created_by = Auth::user()->id;
-									$Requirement->save();
-								} else {
-									abort(403, 'Unable to import CSV file, header is incorrect');
-								}
-								
-								//increate increment
-								$i++;
+								$technical = new Technical;
+								$technical->template_id = $csv['template_id'];
+								$technical->row_code = $csv['row_code'];
+								$technical->column_code = $csv['column_code'];
+								$technical->source_id = $csv['source'];
+								$technical->type_id = $csv['type'];
+								$technical->content = $csv['value'];
+								$technical->description = $csv['description'];
+								$technical->created_by = Auth::user()->id;
+								$technical->save();
 							}
 						}
-
 					});
-
 				}
-
 			}
 
 			return Redirect::to('/sections')->with('message', 'CSV Imported successfully to the database.');
@@ -212,7 +112,7 @@ class CSVController extends Controller
 	}
 
 
-	public function importtech()
+	public function import()
 	{
 		//check for superadmin permissions
 		if (Gate::denies('superadmin')) {
@@ -220,39 +120,7 @@ class CSVController extends Controller
 		}
 
 		$sections = Section::all();
-		return view('csv.importtech', compact('sections'));
-	}
-
-	public function importrows()
-	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-			abort(403, 'Unauthorized action.');
-		}
-
-		$templates = Template::all();
-		return view('csv.importrows', compact('templates'));
-	}
-
-	public function importcolumns()
-	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-			abort(403, 'Unauthorized action.');
-		}
-
-		$templates = Template::all();
-		return view('csv.importcolumns', compact('templates'));
-	}
-
-	public function importcontent()
-	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-			abort(403, 'Unauthorized action.');
-		}
-		$templates = Template::all();
-		return view('csv.importcontent', compact('templates'));
+		return view('csv.import', compact('sections'));
 	}
 
 }

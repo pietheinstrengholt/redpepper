@@ -80,10 +80,7 @@
 					  <li><a href="{{ URL::to('/departments') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit departments</a></li>
 					  <li><a href="{{ URL::to('/users') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit users</a></li>
 					  <li class="divider"></li>
-					  <li><a href="{{ URL::to('/csv/importcontent') }}"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Import content</a></li>
-					  <li><a href="{{ URL::to('/csv/importrows') }}"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Import rows</a></li>
-					  <li><a href="{{ URL::to('/csv/importcolumns') }}"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Import columns</a></li>
-					  <li><a href="{{ URL::to('/csv/importtech') }}"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Import technical</a></li>
+					  <li><a href="{{ URL::to('/csv/import') }}"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Import technical</a></li>
 					  <li class="divider"></li>
 				  @endif
 				  <li><a href="{{ URL::to('/changerequests') }}"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Change requests</a></li>
