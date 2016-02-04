@@ -1,4 +1,4 @@
-<!-- /resources/views/emails/test.blade.php -->
+<!-- /resources/views/emails/changerequest.blade.php -->
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -9,7 +9,6 @@
 		-webkit-text-size-adjust: 100%;
 		-ms-text-size-adjust: 100%;
 	}
-
 	body {
 		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 		font-size: 14px;
@@ -18,14 +17,12 @@
 		background-color: #fff;
 		margin: 0;
 	}
-
 	h1, h2,	h3, h4 {
 	  font-family: inherit;
 	  font-weight: 500;
 	  line-height: 1.1;
 	  color: inherit;
 	}
-
 	h1 {
 		font-size: 36px;
 	}
@@ -38,11 +35,9 @@
 	h4 {
 		font-size: 18px;
 	}
-
 	small {
 		font-size: 80%;
 	}
-
 	a, a:visited {
 		text-decoration: underline;
 		color: #337ab7;
@@ -60,7 +55,7 @@
 <table border="0" cellpadding="0" cellspacing="30" height="100%" width="100%" id="bodyTable">
 	<tr>
 		<td align="center" valign="top">
-			<table border="0" cellpadding="10" cellspacing="0" width="600" id="emailContainer">
+			<table border="0" cellpadding="20" cellspacing="0" width="1000" id="emailContainer">
 				<tr>
 					<td align="center" valign="top">
 						<table border="0" cellpadding="0" cellspacing="0" width="100%" id="emailHeader">
@@ -89,7 +84,7 @@
 						<table border="0" cellpadding="0" cellspacing="0" width="100%" id="emailFooter">
 							<tr>
 								<td align="left" valign="top">
-								If you have any questions, please send an email to: <a href="mailto:frc@nl.abnamro.com">FRC RADAR</A>
+								<small>If you have any questions, please send an email to: <a href="mailto:frc@nl.abnamro.com">FRC RADAR</A></small>
 								</td>
 							</tr>
 						</table>
