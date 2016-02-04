@@ -177,7 +177,7 @@ class TemplateController extends Controller
 	{
 		//guests are not allowed to change templates
 		if (Auth::guest()) {
-            abort(403, 'Unauthorized action.');
+			abort(403, 'Unauthorized action.');
 		}
 
 		//check if id property exists
@@ -199,7 +199,7 @@ class TemplateController extends Controller
 		}
 	}
 
-	public function create()
+	public function create(Section $section)
 	{
 		//retrieve list with sections based on user id and user role
 		$sections = $this->sectionRights();
@@ -207,8 +207,15 @@ class TemplateController extends Controller
 		if (empty($sections)) {
 			abort(403, 'Unauthorized action. You don\'t have access to any sections');
 		}
-
-		return view('templates.create', compact('sections'));
+		
+		//use default value to select from dropdown
+		if (!empty($section)) {
+			$default = $section->id;
+		} else {
+			$default = null;		
+		}
+		
+		return view('templates.create', compact('default','sections'));
 	}
 
 

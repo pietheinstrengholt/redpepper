@@ -43,7 +43,7 @@
 		<div class="form-group">
 			{!! Form::label('section_id', 'Section:', array('class' => 'col-sm-3 control-label')) !!}
 			<div class="col-sm-6">
-			{!! Form::select('section_id', $sections->lists('section_name', 'id'), null, ['id' => 'section_id', 'class' => 'form-control']) !!}
+			{!! Form::select('section_id', $sections->lists('section_name', 'id'), $default, ['id' => 'section_id', 'class' => 'form-control']) !!}
 			</div>
 		</div>
 
