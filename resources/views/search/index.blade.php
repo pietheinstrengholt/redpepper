@@ -18,7 +18,7 @@
 			<tr>
 			<td><a href="{!! url('sections/' . $row->template->section_id . '/templates/' . $row->template_id . '?row=' . $row->row_code); !!}">{{ $row->template->template_name }}</a></td>
 			<td>{{ $row->row_code }}</td>
-			<td>{{ $row->row_description }}</td>
+			<td>{!! App\Helper::highlightInput($search,$row->row_description) !!}</td>
 			</tr>
 		@endforeach
 
@@ -38,7 +38,7 @@
 			<tr>
 			<td><a href="{!! url('sections/' . $column->template->section_id . '/templates/' . $column->template_id . '?column=' . $column->column_code); !!}">{{ $column->template->template_name }}</a></td>
 			<td>{{ $column->column_code }}</td>
-			<td>{{ $column->column_description }}</td>
+			<td>{!! App\Helper::highlightInput($search,$column->column_description) !!}</td>
 			</tr>
 		@endforeach
 
@@ -62,7 +62,7 @@
 			<td>{{ $requirement->row_code }}</td>
 			<td>{{ $requirement->column_code }}</td>
 			<td>{{ $requirement->content_type }}</td>
-			<td>{{ $requirement->content }}</td>
+			<td>{!! App\Helper::highlightInput($search,$requirement->content) !!}</td>
 			</tr>
 		@endforeach
 
@@ -89,8 +89,8 @@
 			<td>{{ $technical->column_code }}</td>
 			<td>{{ $technical->source->source_name }}</td>
 			<td>{{ $technical->type->type_name }}</td>
-			<td>{{ $technical->content }}</td>
-			<td>{{ $technical->description }}</td>
+			<td>{!! App\Helper::highlightInput($search,$technical->content) !!}</td>
+			<td>{!! App\Helper::highlightInput($search,$technical->description) !!}</td>
 			</tr>
 		@endforeach
 

@@ -67,6 +67,10 @@ class Helper {
 		return $output;
 	}
 	
+	public static function highlightInput($input1, $input2) {
+		return str_ireplace($input1, "<strong>$input1</strong>", $input2);
+	}
+	
 }
 
 ?>
