@@ -50,13 +50,10 @@ TODO
 * reference tables?
 * definitions / hovers?
 * hyperlinks after submission of a change request
-* create new template -> automatisch juiste section selecteren?
 * opschonen archive fuctie, letterlijk kopie maken van de content naar archive
 * backdoor for superadmin?
 * turn off native browser title tooltip
-* highlight search results, e.g. when searched for 'test', highlight this word
 * reopen changerequest
 * select an user to give a notification when submitting content
-* improve layout mail notification
 * create events & listeners for CSV
 * validate in CSV for existing row_code, column_code

@@ -31,6 +31,12 @@ class CreateIndexScript extends Migration
 			$table->index('row_code');
 			$table->index('column_code');
 		});
+		Schema::table('t_changes_content', function (Blueprint $table) {
+			$table->index('changerequest_id');
+		});
+		Schema::table('t_changes_technical', function (Blueprint $table) {
+			$table->index('changerequest_id');
+		});
 	}
 
 	/**

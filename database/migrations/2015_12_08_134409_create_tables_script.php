@@ -24,18 +24,31 @@ class CreateTablesScript extends Migration
 			$table->rememberToken();
 			$table->timestamps();
 		});
-
-        Schema::create('password_resets', function (Blueprint $table) {
-            $table->string('email')->index();
-            $table->string('token')->index();
-            $table->timestamp('created_at');
-        });
 		
-        Schema::create('t_settings', function (Blueprint $table) {
-            $table->string('config_key')->unique();
-            $table->string('config_value');
-            $table->timestamps();
-        });	
+		// Insert superadmin user
+		DB::table('t_usernames')->insert(
+			array(
+				'username' => 'superadmin',
+				'password' => '$2y$10$nb2fmPNIlSR9Inbke3v7z.nOguP8sr5Wns4jtp8POA55kZvSU2I/.' //welkom01
+				'email' => 'name@domain.com',
+				'role' => 'superadmin',
+				'firstname' => 'firstname',
+				'lastname' => 'lastname',
+				'department_id' => 0
+			)
+		);
+
+		Schema::create('password_resets', function (Blueprint $table) {
+			$table->string('email')->index();
+			$table->string('token')->index();
+			$table->timestamp('created_at');
+		});
+
+		Schema::create('t_settings', function (Blueprint $table) {
+			$table->string('config_key')->unique();
+			$table->string('config_value');
+			$table->timestamps();
+		});	
 
 		Schema::create('t_departments', function (Blueprint $table) {
 			$table->increments('id');
@@ -239,5 +252,6 @@ class CreateTablesScript extends Migration
 		Schema::drop('t_history_technical');	
 		Schema::drop('t_changes');
 		Schema::drop('t_sections');
+		Schema::drop('t_settings');
 	}
 }

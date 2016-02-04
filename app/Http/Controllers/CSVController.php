@@ -111,7 +111,6 @@ class CSVController extends Controller
 		}
 	}
 
-
 	public function import()
 	{
 		//check for superadmin permissions
@@ -122,5 +121,4 @@ class CSVController extends Controller
 		$sections = Section::all();
 		return view('csv.import', compact('sections'));
 	}
-
 }
