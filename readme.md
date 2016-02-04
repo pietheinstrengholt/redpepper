@@ -32,8 +32,8 @@ INITIAL DEPLOYMENT
 
 UPDATING
 ------------
-* run `git pull`
-* to save your credentials permanently using the following: `git config credential.helper store`
+* run `php artisan down`
+* run `git pull` - to save your credentials permanently using the following: `git config credential.helper store`
 * run `composer install`
 * run `php artisan migrate`
 * run `php artisan config:clear`
@@ -43,12 +43,12 @@ UPDATING
 * run `chown www-data:www-data .env -R`
 * run `chown www-data:www-data public/.htaccess -R`
 * run `chmod -R 777 storage/`
+* run `php artisan up`
 
 TODO
 ------------
 * manual page per template (pdf?)
 * reference tables?
-* definitions / hovers?
 * hyperlinks after submission of a change request
 * opschonen archive fuctie, letterlijk kopie maken van de content naar archive
 * backdoor for superadmin?
