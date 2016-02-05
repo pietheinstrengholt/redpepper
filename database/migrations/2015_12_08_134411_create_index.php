@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateIndexScript extends Migration
+class CreateIndex extends Migration
 {
     /**
      * Run the migrations.

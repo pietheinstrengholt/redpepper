@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateForeignScript extends Migration
+class CreateForeign extends Migration
 {
 	/**
 	 * Run the migrations.
