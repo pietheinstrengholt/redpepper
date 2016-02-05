@@ -981,7 +981,7 @@ class ChangeRequestController extends Controller
 				Event::fire(new ChangeRequestCreated($ChangeRequest));
 				
 				//redirect back to template page
-				return Redirect::route('sections.templates.show', [$request->input('section_id'), $request->input('template_id')])->with('message', 'Change request submitted for review.');				
+				return Redirect::route('sections.templates.show', [$request->input('section_id'), $request->input('template_id')])->with('message', '<a style="color:white;" href="' . url('/') . '/changerequests/' . $ChangeRequest->id . '/edit">Change request</a> submitted for review.');				
 			}
 		}
 	}

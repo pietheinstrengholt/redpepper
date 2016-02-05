@@ -119,7 +119,7 @@
 		@if (Session::has('message'))
 			<div id="session-alert" class="alert alert-info alert-dismissible" role="alert">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<p>{{ Session::get('message') }}</p>
+				<p>{!! Session::get('message') !!}</p>
 			</div>
 		@endif
 

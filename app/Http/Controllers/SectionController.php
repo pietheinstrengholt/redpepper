@@ -38,7 +38,6 @@ class SectionController extends Controller
 					}
 				}
 			}
-			
 		}
 
 		//return sections
