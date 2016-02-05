@@ -102,6 +102,9 @@ class CSVController extends Controller
 								$technical->created_by = Auth::user()->id;
 								$technical->save();
 							}
+							
+							//log Event
+							Event::fire(new SectionUpdated($section));
 						}
 					});
 				}

@@ -49,11 +49,9 @@ TODO
 ------------
 * manual page per template (pdf?)
 * reference tables?
-* hyperlinks after submission of a change request
 * opschonen archive fuctie, letterlijk kopie maken van de content naar archive
 * backdoor for superadmin?
 * turn off native browser title tooltip
 * reopen changerequest
 * select an user to give a notification when submitting content
-* create events & listeners for CSV
 * validate in CSV for existing row_code, column_code
