@@ -13,6 +13,7 @@ use App\TemplateRow;
 use App\User;
 use Auth;
 use Event;
+use App\Events\SectionUpdated;
 use Gate;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -63,30 +64,62 @@ class CSVController extends Controller
 
 							$section = Section::findOrFail($request->input('section_id'));
 							$templates = Template::where('section_id', $request->input('section_id'))->get();
+							$sources =  TechnicalSource::all();
+							$types =  TechnicalType::all();
+							
+							//Abort when there are no templates
+							if (empty($templates)) {
+								abort(403, 'Unable to import CSV file, no templates found for this section');
+							}
+							
+							//Abort when there are no sources
+							if (empty($sources)) {
+								abort(403, 'Unable to import CSV file, no sources are found in the database');
+							}
+							
+							//Abort when there are no types
+							if (empty($types)) {
+								abort(403, 'Unable to import CSV file, no types are found in the database');
+							}
 
 							//Create empty array for template id validation
 							$templatesArray = array();
-							if (!empty($templates)) {
-								foreach ($templates as $template) {
-									array_push($templatesArray,$template->id);
-								}
+							foreach ($templates as $template) {
+								array_push($templatesArray,$template->id);
+							}
+							
+							//Create empty array for template id validation
+							$sourcesArray = array();
+							foreach ($sources as $source) {
+								array_push($sourcesArray,$source->id);
+							}
+							
+							//Create empty array for template id validation
+							$typesArray = array();
+							foreach ($types as $type) {
+								array_push($typesArray,$type->id);
 							}
 						
 							//validate before import CSV content
+							//TODO: validate in CSV for existing row_code, column_code in template
 							foreach ($csvarray as $csv) {
-								if (!(array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('column_code', $csv) && array_key_exists('source', $csv) && array_key_exists('type', $csv)  && array_key_exists('value', $csv)  && array_key_exists('description', $csv))) {
+								if (!(array_key_exists('template_id', $csv) && array_key_exists('row_code', $csv) && array_key_exists('column_code', $csv) && array_key_exists('source_id', $csv) && array_key_exists('type_id', $csv)  && array_key_exists('content', $csv)  && array_key_exists('description', $csv))) {
 									abort(403, 'Unable to import CSV file, header is incorrect');
 								}
 								if (!in_array($csv['template_id'], $templatesArray)) {
-									abort(403, 'Template id used in CSV file does''t belong to selected section');
+									abort(403, 'Template id used in CSV file does\'t belong to selected section');
+								}
+								if (!in_array($csv['source_id'], $sourcesArray)) {
+									abort(403, 'source id used in CSV file can\'t be matched with any source id in the database');
+								}
+								if (!in_array($csv['type_id'], $typesArray)) {
+									abort(403, 'type id used in CSV file can\'t be matched with any type id in the database');
 								}
 							}
 							
 							//remove existing content if count is zero
-							if (!empty($templates)) {
-								foreach ($templates as $template) {
-									Technical::where('template_id', $template->id)->delete();
-								}
+							foreach ($templates as $template) {
+								Technical::where('template_id', $template->id)->delete();
 							}
 
 							//Import CSV content
@@ -95,9 +128,9 @@ class CSVController extends Controller
 								$technical->template_id = $csv['template_id'];
 								$technical->row_code = $csv['row_code'];
 								$technical->column_code = $csv['column_code'];
-								$technical->source_id = $csv['source'];
-								$technical->type_id = $csv['type'];
-								$technical->content = $csv['value'];
+								$technical->source_id = $csv['source_id'];
+								$technical->type_id = $csv['type_id'];
+								$technical->content = $csv['content'];
 								$technical->description = $csv['description'];
 								$technical->created_by = Auth::user()->id;
 								$technical->save();
@@ -110,7 +143,7 @@ class CSVController extends Controller
 				}
 			}
 
-			return Redirect::to('/sections')->with('message', 'CSV Imported successfully to the database.');
+			return Redirect::to('/sections')->with('message', 'CSV successfully imported to the database.');
 		}
 	}
 

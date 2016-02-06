@@ -54,4 +54,3 @@ TODO
 * turn off native browser title tooltip
 * reopen changerequest
 * select an user to give a notification when submitting content
-* validate in CSV for existing row_code, column_code
