@@ -112,5 +112,17 @@
 		</div>
 		{!! Form::close() !!}
 	@endif
+	
+	@if ($allowedToChange == 'yes' && $changerequest->status == 'rejected' || (App\Helper::setting('superadmin_process_directly') == "yes" && Auth::user()->role == "superadmin"))
+		{!! Form::open(array('action' => 'ChangeRequestController@update', 'id' => 'form')) !!}
+		<textarea form="form" name="comment" style="width: 600px;" class="form-control" rows="3" id="comment" class="comment" placeholder="Please enter a comment about this change"></textarea>
+
+		<div class="form-group">
+		<button type="submit" id="reopen" name="change_type" value="reopen" class="changerequest btn btn-warning">Reopen changerequest</button>
+		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
+		<input type="hidden" name="changerequest_id" value="{!! $changerequest->id !!}">
+		</div>
+		{!! Form::close() !!}
+	@endif
 
 @endsection

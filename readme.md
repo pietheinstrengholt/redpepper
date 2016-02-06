@@ -52,5 +52,4 @@ TODO
 * opschonen archive fuctie, letterlijk kopie maken van de content naar archive
 * backdoor for superadmin?
 * turn off native browser title tooltip
-* reopen changerequest
 * select an user to give a notification when submitting content

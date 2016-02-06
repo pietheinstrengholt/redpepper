@@ -211,7 +211,7 @@ button.changerequest.btn {
 	margin-right: 20px;
 }
 
-button.changerequest#approve {
+button.changerequest#approve, button.changerequest#reopen {
 	margin-top: 15px;
 }
 

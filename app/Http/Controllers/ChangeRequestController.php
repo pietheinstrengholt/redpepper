@@ -792,13 +792,21 @@ class ChangeRequestController extends Controller
 
 				$ChangeRequest = ChangeRequest::findOrFail($request->input('changerequest_id'));
 
-				if ($ChangeRequest['status'] <> 'pending') {
+				//abort if changerequest is already processed
+				if ($ChangeRequest['change_type'] == 'approved') {
 					abort(403, 'Error: change request already processed!');
 				}
+				
+				//reopen changerequest
+				if ($request->input('change_type') == 'reopen') {
+					$ChangeRequest->status = "pending";
+					$ChangeRequest->comment = $request->input('comment');
+					$ChangeRequest->save();
+				}
 
+				//reject changerequest
 				if ($request->input('change_type') == "rejected") {
 
-					//update change request
 					$ChangeRequest->status = "rejected";
 					$ChangeRequest->comment = $request->input('comment');
 					$ChangeRequest->save();
@@ -974,7 +982,8 @@ class ChangeRequestController extends Controller
 				Event::fire(new ChangeRequestApproved($ChangeRequest));
 				
 				//redirect back to template page
-				return Redirect::route('sections.templates.show', [$request->input('section_id'), $request->input('template_id')])->with('message', 'Content directly updated without review approval.');				
+				return Redirect::route('sections.templates.show', [$request->input('section_id'), $request->input('template_id')])->with('message', 'Content directly updated without review approval.');	
+				
 			} else {
 				
 				//log Event
