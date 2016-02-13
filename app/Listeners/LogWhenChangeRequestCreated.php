@@ -42,16 +42,26 @@ class LogWhenChangeRequestCreated
 		
 		if (!(Helper::setting('superadmin_process_directly') == "yes" && Auth::user()->role == "superadmin")) {
 		
-			Mail::send('emails.changerequest', $array, function($message)
-			{
-				$mailto = Helper::setting('administrator_email');
-				$tool_name = Helper::setting('tool_name');
-				
-				$message->from(env('MAIL_USERNAME'));
-				$message->to($mailto);
-				$message->subject('Notification from the ' . $tool_name);
-			});
+			//email the system administrator
+			if (!empty(Helper::setting('administrator_email'))) {
+				Mail::send('emails.changerequest', $array, function($message)
+				{
+					$message->from(env('MAIL_USERNAME'));
+					$message->to(Helper::setting('administrator_email'));
+					$message->subject('Notification from the ' . Helper::setting('tool_name'));
+				});				
+			}
+			
+			//email the approver if set
+			if ($event->changerequest->approver) {
+				$approver = User::findOrFail($event->changerequest->approver);
+				Mail::send('emails.changerequest', $array, function($message) use ($approver)
+				{
+					$message->from(env('MAIL_USERNAME'));
+					$message->to($approver->email);
+					$message->subject('Notification from the ' . Helper::setting('tool_name'));
+				});
+			}
 		}
-		
 	}
 }

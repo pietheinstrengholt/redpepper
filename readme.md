@@ -48,6 +48,4 @@ UPDATING
 TODO
 ------------
 * manual page per template (pdf?)
-* reference tables?
 * opschonen archive fuctie, letterlijk kopie maken van de content naar archive
-* select an user to give a notification when submitting content

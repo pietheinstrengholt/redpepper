@@ -229,6 +229,18 @@
 	</table>
 
 	<button class="btn btn-primary" id="approve-changes" name="formSubmit" value="Submit" type="submit" style="margin-left:6px;">Submit changes</button>
+	
+	<div style="margin-left:5px; margin-top:10px;" class="form-group">
+	  <label for="sel1" style="margin-left:1px;">Optional: select any user who would you like to inform:</label>
+		<select style="width:40%;" name="approver" class="form-control" class="form-control" id="approver">
+		<option></option>
+		@foreach( $approvers as $approver )
+				<option value="{{ $approver->id }}">{{ $approver->firstname . " " . $approver->lastname . " (" . $approver->username . ")" }}</option>
+		@endforeach
+		</select>
+	</div>
+	<br><br><br>
+	
 </form>
 
 @endsection

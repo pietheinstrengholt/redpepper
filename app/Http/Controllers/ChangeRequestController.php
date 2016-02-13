@@ -110,9 +110,32 @@ class ChangeRequestController extends Controller
 		if (Auth::user()->role == "reviewer" || Auth::user()->role == "guest" || Auth::guest()) {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
 		}
+		
+		$template = Template::findOrFail($_GET['template_id']);
+		
+		//build list with users with section_id rights
+		$userrights = UserRights::where('section_id', $template->section_id)->select('username_id')->get();
+		$userList = array();
+		
+		if (!empty($userrights)) {
+			foreach($userrights as $userright) {
+				array_push($userList,$userright->username_id);
+			}
+		}
+		
+		//build list with superadmins
+		$superadmins = User::orderBy('firstname', 'asc')->where('role', 'superadmin')->get();
+		if (!empty($superadmins)) {
+			foreach($superadmins as $superadmin) {
+				array_push($userList,$superadmin->id);
+			}
+		}
+		
+		//query the users based on the roles, list with user rights and superadmins
+		$approvers = User::orderBy('firstname', 'asc')->whereIn('id', $userList)->whereIn('role', array("superadmin","builder","admin","reviewer"))->get();
 
 		return view('templates.cell-update', [
-			'template' => Template::find($_GET['template_id']),
+			'template' => $template,
 			'row' => TemplateRow::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->first(),
 			'column' => TemplateColumn::where('template_id', $_GET['template_id'])->where('column_code', $column_code)->first(),
 			'regulation_row' => Requirement::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', null)->where('content_type', 'regulation')->first(),
@@ -125,7 +148,8 @@ class ChangeRequestController extends Controller
 			'field_regulation' => Requirement::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', $column_code)->where('content_type', 'regulation')->first(),
 			'field_interpretation' => Requirement::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', $column_code)->where('content_type', 'interpretation')->first(),
 			'field_property1' => Requirement::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', $column_code)->where('content_type', 'property1')->first(),
-			'field_property2' => Requirement::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', $column_code)->where('content_type', 'property2')->first()
+			'field_property2' => Requirement::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', $column_code)->where('content_type', 'property2')->first(),
+			'approvers' => $approvers
 		]);
     }
 
@@ -966,6 +990,11 @@ class ChangeRequestController extends Controller
 				$draftrequirement->content_type = 'regulation';
 				$draftrequirement->content = $request->input('field_regulation');
 				$draftrequirement->save();
+			}
+			
+			//if approver field is set, extend object with approver, see listener LogWhenChangeRequestCreated
+			if ($request->has('approver')) {
+				$ChangeRequest->approver = $request->input('approver');
 			}
 			
 			if (Helper::setting('superadmin_process_directly') == "yes" && Auth::user()->role == "superadmin") {
