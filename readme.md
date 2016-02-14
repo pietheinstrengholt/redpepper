@@ -47,5 +47,6 @@ UPDATING
 
 TODO
 ------------
-* manual page per template (pdf?)
-* opschonen archive fuctie, letterlijk kopie maken van de content naar archive
+* Manual page per template (pdf?)
+* Cleanup ChangeRequestController, clone object instead of line by line copy
+* Cleanup views, move all css to app.css
