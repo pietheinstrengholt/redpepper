@@ -31,17 +31,14 @@
 			<td><a href="{{ route('sections.show', $section->id) }}">{{ $section->section_name }}</a></td>
 			<td>{{ $section->section_description }}</td>
 			<td>
-			@if (!Auth::guest())
-				@if (Auth::user()->role == "superadmin")
-					{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('sections.destroy', $section->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this section?\')')) !!}
-					{!! link_to_route('sections.edit', 'Edit', array($section->id), array('class' => 'btn btn-info btn-xs')) !!}
-					{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
-					{!! Form::close() !!}
-				@endif
-				@if ((Auth::user()->role == "builder" || Auth::user()->role == "admin") && in_array($section->id, $sectionRights))
-					{!! link_to_route('sections.edit', 'Edit', array($section->id), array('class' => 'btn btn-info btn-xs')) !!}
-				@endif
-			@endif
+			@can('superadmin', $section)
+				{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('sections.destroy', $section->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this section?\')')) !!}
+				{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
+			@endcan
+			@can('update-section', $section)
+				{!! link_to_route('sections.edit', 'Edit', array($section->id), array('class' => 'btn btn-info btn-xs')) !!}
+			@endcan
+			{!! Form::close() !!}
 			</td>
 			</tr>
 		@endforeach
@@ -49,12 +46,10 @@
 		</table>
 	@endif
 
-	@if (!Auth::guest())
-		@if (Auth::user()->role == "superadmin")
-			<p>
-			{!! link_to_route('sections.create', 'Create Section') !!}
-			</p>
-		@endif
-	@endif	
+	@can('superadmin', $section)
+		<p>
+		{!! link_to_route('sections.create', 'Create Section') !!}
+		</p>
+	@endcan	
 
 @endsection

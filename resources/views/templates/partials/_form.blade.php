@@ -67,7 +67,7 @@
 	
 	@if (Auth::user()->role == "admin")
 		{!! Form::hidden('visible','False') !!}
-	@endif	
+	@endif
 
 	@if (Auth::user()->role == "builder" || Auth::user()->role == "superadmin")
 		<div class="form-group">

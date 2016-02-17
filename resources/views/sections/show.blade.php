@@ -38,16 +38,11 @@
 			<td>{{ $template->template_longdesc }}</td>
 			<td>
 			<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $template->id }}">Export</a>
-			@if (!Auth::guest())
-				@if (Auth::user()->role == "superadmin" || (Auth::user()->role == "builder" && in_array($template->section_id, $sectionRights)))
-					{!! link_to_route('sections.templates.edit', 'Edit', array($template->section_id, $template->id), array('class' => 'btn btn-info btn-xs')) !!}
-					<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('templatestructure') . '/' . $template->id }}">Structure</a>
-					{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:2px;')) !!}
-				@endif
-				@if (Auth::user()->role == "admin" && (in_array($template->section_id, $sectionRights)))
-					{!! link_to_route('sections.templates.edit', 'Edit', array($template->section_id, $template->id), array('class' => 'btn btn-info btn-xs')) !!}
-				@endif
-			@endif
+			@can('update-section', $section)
+				{!! link_to_route('sections.templates.edit', 'Edit', array($template->section_id, $template->id), array('class' => 'btn btn-info btn-xs')) !!}
+				<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('templatestructure') . '/' . $template->id }}">Structure</a>
+				{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:2px;')) !!}
+			@endcan
 			</td>
 			{!! Form::close() !!}
 			</tr>
@@ -57,9 +52,9 @@
 
 	<p>
 	{!! link_to_route('sections.index', 'Back to Sections') !!}
-	@if (!Auth::guest())
+	@can('update-section', $section)
 		| {!! link_to_route('sections.templates.create', 'Create Template', $section->id) !!}
-	@endif	
+	@endcan
 	</p>
 
 @endsection

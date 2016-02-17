@@ -29,66 +29,32 @@ use Validator;
 
 class TemplateController extends Controller
 {
-	//function to retrieve section rights based on user id
-	public function sectionRights() {
-
-		if (Auth::guest()) {
-			abort(403, 'Unauthorized action.');
-		}
-
-		if (!(Auth::user()->role == "builder" || Auth::user()->role == "superadmin" || Auth::user()->role == "admin")) {
-			abort(403, 'Unauthorized action. You are not allowed to make changes for this section.');
-		}
-
-		if (Auth::user()->role == "builder" || Auth::user()->role == "admin") {
-
-			$userrights = UserRights::where('username_id', Auth::user()->id)->get();
-
-			$sectionRights = array();
-			$userrights = $userrights->toArray();
-			if (!empty($userrights)) {
-				foreach ($userrights as $userright) {
-					array_push($sectionRights,$userright['section_id']);
-				}
-			}
-			$sections = Section::whereIn('id', $sectionRights)->where('visible','True')->orderBy('section_name', 'asc')->get();
-		}
-		if (Auth::user()->role == "superadmin") {
-			$sections = Section::orderBy('section_name', 'asc')->get();
-		}
-		return $sections;
-	}
-	
-	//function to retrieve section rights based on user id
-	public function sectionArray() {
+	//function to compile list with sections
+	public function sectionList(Request $request)
+	{
 		
 		//set empty var
 		$sectionRights = array();
-
-		//check if user is logged on
-		if (!(Auth::guest())) {
-			
-			//admin and builder have restrictions based on userrights
-			if (Auth::user()->role == "admin" || Auth::user()->role == "builder") {
-
-				$userrights = UserRights::where('username_id', Auth::user()->id)->get();
-
-				$userrights = $userrights->toArray();
-				if (!empty($userrights)) {
-					foreach ($userrights as $userright) {
-						array_push($sectionRights,$userright['section_id']);
-					}
-				}
+		
+		$sections = Section::orderBy('section_name', 'asc')->get();
+		
+		foreach ($sections as $section) {
+			if ($request->user()->can('update-section', $section)) {
+				array_push($sectionRights,$section->id);
 			}
-			
 		}
-
-		//return sections
+		
+		//abort if sectionRights array is empty
+		if (empty($sectionRights)) {
+			abort(403, 'Unauthorized action. You don\'t have access to any sections.');
+		}
+		
+		//return Array with sections
 		return $sectionRights;
 	}
-
+		
 	//function to show template
-	public function show(Section $section, Template $template, Request $request)
+	public function show(Request $request, Section $section, Template $template)
 	{
 		//check if visible is set to false and user is a guest
 		if (Auth::guest() && $template->visible == "False") {
@@ -173,7 +139,7 @@ class TemplateController extends Controller
 	}
 
 	//function to edit template
-	public function edit(Section $section, Template $template)
+	public function edit(Request $request, Section $section, Template $template)
 	{
 		//guests are not allowed to change templates
 		if (Auth::guest()) {
@@ -186,13 +152,11 @@ class TemplateController extends Controller
 		}
 
 		//retrieve list with sections based on user id and user role
-		$sectionArray = $this->sectionArray();
+		$sectionlist = $this->sectionList($request);
+		$sections = Section::whereIn('id', $sectionlist)->orderBy('section_name', 'asc')->get();
 		
-		//retrieve list with sections based on user id and user role
-		$sections = $this->sectionRights();
-		
-		//builder and admin are only permitted to upload to own sections. when builder the template should be published
-		if ((Auth::user()->role == "admin" && in_array($section->id, $sectionArray)) || Auth::user()->role == "superadmin" || (Auth::user()->role == "builder" && in_array($section->id, $sectionArray))) {
+		//validate if user can update section (see AuthServiceProvider)
+		if ($request->user()->can('update-section', $section)) {
 			return view('templates.edit', compact('sections', 'section', 'template'));
 		} else {
 			abort(403, 'Unauthorized action.');
@@ -202,11 +166,7 @@ class TemplateController extends Controller
 	public function create(Section $section)
 	{
 		//retrieve list with sections based on user id and user role
-		$sections = $this->sectionRights();
-
-		if (empty($sections)) {
-			abort(403, 'Unauthorized action. You don\'t have access to any sections');
-		}
+		$sections = $this->sectionList($request);
 		
 		//use default value to select from dropdown
 		if (!empty($section)) {
@@ -220,15 +180,13 @@ class TemplateController extends Controller
 
 
 	//function to structure template
-	public function structure($id)
+	public function structure(Request $request, $id)
 	{
 		$template = Template::findOrFail($id);
-
-		//retrieve list with sections based on user id and user role
-		$sectionArray = $this->sectionArray();
+		$section = Section::findOrFail($template->section_id);
 		
-		//builder and admin are only permitted to upload to own sections. when builder the template should be published
-		if ((Auth::user()->role == "admin" && in_array($template->section_id, $sectionArray)) || Auth::user()->role == "superadmin" || (Auth::user()->role == "builder" && in_array($template->section_id, $sectionArray))) {
+		//validate if user can update section (see AuthServiceProvider)
+		if ($request->user()->can('update-section', $section)) {
 			$disabledFields = $this->getDisabledFields($template);
 			return view('templates.structure', compact('template', 'disabledFields'));
 		} else {

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use App\UserRights;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -22,37 +23,48 @@ class AuthServiceProvider extends ServiceProvider
      * @param  \Illuminate\Contracts\Auth\Access\Gate  $gate
      * @return void
      */
-    public function boot(GateContract $gate)
-    {
-        $this->registerPolicies($gate);
-
-        $gate->define('superadmin', function ($user) {
-            return $user->role === "superadmin";
-        });
-
-        $gate->define('admin', function ($user) {
-            if ($user->role === "superadmin" || $user->role === "admin") {
+	public function boot(GateContract $gate)
+	{
+		$this->registerPolicies($gate);
+		
+        $gate->define('update-section', function ($user, $section) {
+			if ($user->role === "superadmin") {
 				return true;
+			}
+			if ($user->role === "builder" || $user->role === "admin") {
+				$userrights = UserRights::where('username_id', $user->id)->where('section_id', $section->id)->get();
+				if ($userrights->count()) {
+					return true;
+				}
 			}
         });
 
-        $gate->define('contributor', function ($user) {
-            if ($user->role === "superadmin" || $user->role === "admin" || $user->role === "contributor") {
+		$gate->define('superadmin', function ($user) {
+			return $user->role === "superadmin";
+		});
+
+		$gate->define('admin', function ($user) {
+			if ($user->role === "superadmin" || $user->role === "admin") {
 				return true;
 			}
-        });
+		});
 
-        $gate->define('reviewer', function ($user) {
-            if ($user->role === "superadmin" || $user->role === "admin" || $user->role === "reviewer") {
+		$gate->define('contributor', function ($user) {
+			if ($user->role === "superadmin" || $user->role === "admin" || $user->role === "contributor") {
 				return true;
 			}
-        });
+		});
 
-        $gate->define('builder', function ($user) {
-            if ($user->role === "superadmin" || $user->role === "admin" || $user->role === "builder") {
+		$gate->define('reviewer', function ($user) {
+			if ($user->role === "superadmin" || $user->role === "admin" || $user->role === "reviewer") {
 				return true;
 			}
-        });
+		});
 
-    }
+		$gate->define('builder', function ($user) {
+			if ($user->role === "superadmin" || $user->role === "admin" || $user->role === "builder") {
+				return true;
+			}
+		});
+	}
 }

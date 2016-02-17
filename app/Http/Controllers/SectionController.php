@@ -16,34 +16,7 @@ use Illuminate\Http\Request;
 use Redirect;
 
 class SectionController extends Controller
-{
-	//function to retrieve section rights based on user id
-	public function sectionRights() {
-		
-		//set empty var
-		$sectionRights = array();
-
-		//check if user is logged on
-		if (!(Auth::guest())) {
-			
-			//admin and builder have restrictions based on userrights
-			if (Auth::user()->role == "admin" || Auth::user()->role == "builder") {
-
-				$userrights = UserRights::where('username_id', Auth::user()->id)->get();
-
-				$userrights = $userrights->toArray();
-				if (!empty($userrights)) {
-					foreach ($userrights as $userright) {
-						array_push($sectionRights,$userright['section_id']);
-					}
-				}
-			}
-		}
-
-		//return sections
-		return $sectionRights;
-	}
-	
+{	
     public function index(Request $request)
     {
 		//only superadmin can see all sections
@@ -61,10 +34,7 @@ class SectionController extends Controller
 			}
 		}
 		
-		//retrieve list with sections based on user id and user role
-		$sectionRights = $this->sectionRights();
-		
-		return view('sections.index', compact('sections','sectionsrights','sectionRights'));
+		return view('sections.index', compact('sections'));
     }
 
     public function manuals()
@@ -97,10 +67,7 @@ class SectionController extends Controller
 			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->get();
 		}
 		
-		//retrieve list with sections based on user id and user role
-		$sectionRights = $this->sectionRights();
-		
-		return view('sections.show', compact('section', 'templates', 'sectionRights'));
+		return view('sections.show', compact('section', 'templates'));
     }
 
     public function showmanual($id)
@@ -115,7 +82,7 @@ class SectionController extends Controller
 		return view('manuals.show', compact('section', 'templates'));
     }
 
-	public function edit(Section $section)
+	public function edit(Request $request, Section $section)
 	{	
 		if (Auth::guest()) {
             abort(403, 'Unauthorized action.');
@@ -126,10 +93,8 @@ class SectionController extends Controller
 			abort(403, 'This section no longer exists in the database.');
 		}
 		
-		//retrieve list with sections based on user id and user role
-		$sectionRights = $this->sectionRights();
-		
-		if (((Auth::user()->role == "admin" || Auth::user()->role == "builder") && in_array($section->id, $sectionRights)) || Auth::user()->role == "superadmin") {
+		//validate if user can update section (see AuthServiceProvider)
+		if ($request->user()->can('update-section', $section)) {
 			return view('sections.edit', compact('section'));
 		} else {
 			abort(403, 'Unauthorized action.');
@@ -166,12 +131,12 @@ class SectionController extends Controller
 		return Redirect::route('sections.index')->with('message', 'Section created');
 	}
 
-	public function update(Section $section, Request $request)
+	public function update(Request $request, Section $section)
 	{
-		//retrieve list with sections based on user id and user role
-		$sectionRights = $this->sectionRights();
+		//validate if user can update section (see AuthServiceProvider)
 		
-		if (((Auth::user()->role == "admin" || Auth::user()->role == "builder") && in_array($section->id, $sectionRights)) || Auth::user()->role == "superadmin") {
+		if ($request->user()->can('update-section', $section)) {
+
 			//validate input form
 			$this->validate($request, [
 				'section_name' => 'required|min:4',
@@ -180,9 +145,7 @@ class SectionController extends Controller
 
 			$section->update($request->all());
 
-			//log Event
 			Event::fire(new SectionUpdated($section));
-
 			return Redirect::route('sections.show', $section->id)->with('message', 'Section updated.');
 		} else {
 			abort(403, 'Unauthorized action.');
