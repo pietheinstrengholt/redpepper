@@ -12,11 +12,9 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				@if (!Auth::guest())
-					@if (Auth::user()->role == "superadmin" || Auth::user()->role == "admin" || Auth::user()->role == "builder" || Auth::user()->role == "contributor" || Auth::user()->role == "reviewer")
-						<button type="button" id="modal-update" class="btn btn-warning">Change content</button>
-					@endif
-				@endif
+				@can('create-changerequest', $template)
+					<button type="button" id="modal-update" class="btn btn-warning">Change content</button>
+				@endcan
 				<button type="button" id="modal-close" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div><!-- /.modal-content -->

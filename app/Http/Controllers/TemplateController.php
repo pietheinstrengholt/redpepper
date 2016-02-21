@@ -445,8 +445,10 @@ class TemplateController extends Controller
 	//content for the pop-up
 	public function getCellContent(Request $request)
 	{
-		if (!($request->has('template_id') && $request->has('cell_id'))) {
-			abort(404, 'Content cannot be found with invalid arguments.');
+		if ($request->has('template_id') && $request->has('cell_id')) {
+			$template = Template::findOrFail($request->input('template_id'));			
+		} else {
+			abort(404, 'Content cannot be found with invalid arguments.');			
 		}
 
 		//split input into row and column
@@ -455,9 +457,9 @@ class TemplateController extends Controller
 		$row_code = $after;
 
 		return view('templates.cell', [
-			'template' => Template::find($request->input('template_id')),
-			'row' => TemplateRow::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->first(),
-			'column' => TemplateColumn::where('template_id', $request->input('template_id'))->where('column_code', $column_code)->first(),
+			'template' => $template,
+			'row' => TemplateRow::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->firstOrFail(),
+			'column' => TemplateColumn::where('template_id', $request->input('template_id'))->where('column_code', $column_code)->firstOrFail(),
 			'regulation_row' => Requirement::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', null)->where('content_type', 'regulation')->first(),
 			'interpretation_row' => Requirement::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', null)->where('content_type', 'interpretation')->first(),
 			'regulation_column' => Requirement::where('template_id', $request->input('template_id'))->where('column_code', $column_code)->where('row_code', null)->where('content_type', 'regulation')->first(),

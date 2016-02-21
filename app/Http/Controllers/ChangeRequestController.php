@@ -82,36 +82,28 @@ class ChangeRequestController extends Controller
 		return view('changerequests.index', ['changerequests' => $changerequests]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
 		//exit when user is a guest
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
 		}
-
-		//abort if template_id and cell_id are not set
-		if (empty($_GET['template_id']) || empty($_GET['cell_id'])) {
-			abort(404, 'Content cannot be found with invalid arguments.');
+		
+		if ($request->has('template_id') && $request->has('cell_id')) {
+			$template = Template::findOrFail($request->input('template_id'));			
+		} else {
+			abort(404, 'Content cannot be found with invalid arguments.');			
 		}
-
-		//check if the admin, builder or reviewer user has the correct section rights
-		if (Auth::user()->role == "admin" || Auth::user()->role == "builder" || Auth::user()->role == "contributor") {
-			$templateList = $this->templateRights(Auth::user()->id);
-			if (!in_array($_GET['template_id'], $templateList)) {
-				abort(403, 'Unauthorized action. You don\'t have access to this template or section');
-			}
+		
+		//exit when the user has no permission
+		if ($request->user()->cannot('create-changerequest', $template)) {
+			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
 		}
 
 		//split input into row and column
 		list($before, $after) = explode('-row', $_GET['cell_id'], 2);
 		$column_code = str_ireplace("column", "", "$before");
 		$row_code = $after;
-
-		if (Auth::user()->role == "reviewer" || Auth::user()->role == "guest" || Auth::guest()) {
-			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
-		}
-		
-		$template = Template::findOrFail($_GET['template_id']);
 		
 		//build list with users with section_id rights
 		$userrights = UserRights::where('section_id', $template->section_id)->select('username_id')->get();
@@ -136,8 +128,8 @@ class ChangeRequestController extends Controller
 
 		return view('templates.cell-update', [
 			'template' => $template,
-			'row' => TemplateRow::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->first(),
-			'column' => TemplateColumn::where('template_id', $_GET['template_id'])->where('column_code', $column_code)->first(),
+			'row' => TemplateRow::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->firstOrFail(),
+			'column' => TemplateColumn::where('template_id', $_GET['template_id'])->where('column_code', $column_code)->firstOrFail(),
 			'regulation_row' => Requirement::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', null)->where('content_type', 'regulation')->first(),
 			'regulation_column' => Requirement::where('template_id', $_GET['template_id'])->where('column_code', $column_code)->where('row_code', null)->where('content_type', 'regulation')->first(),
 			'interpretation_row' => Requirement::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', null)->where('content_type', 'interpretation')->first(),
@@ -319,8 +311,8 @@ class ChangeRequestController extends Controller
 		return view('changerequests.edit', [
 			'changerequest' => $ChangeRequest,
 			'template' => Template::find($ChangeRequest->template_id),
-			'template_row' => TemplateRow::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->first(),
-			'template_column' => TemplateColumn::where('template_id', $ChangeRequest->template_id)->where('column_code', $ChangeRequest->column_code)->first(),
+			'template_row' => TemplateRow::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->firstOrFail(),
+			'template_column' => TemplateColumn::where('template_id', $ChangeRequest->template_id)->where('column_code', $ChangeRequest->column_code)->firstOrFail(),
 			'allowedToChange' => $allowedToChange
 		]);
 	}

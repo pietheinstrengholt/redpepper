@@ -38,6 +38,30 @@ class AuthServiceProvider extends ServiceProvider
 				}
 			}
         });
+		
+        $gate->define('create-changerequest', function ($user, $template) {
+			if ($user->role === "superadmin") {
+				return true;
+			}
+			if ($user->role === "builder" || $user->role === "admin" || $user->role === "contributor") {
+				$userrights = UserRights::where('username_id', $user->id)->where('section_id', $template->section_id)->get();
+				if ($userrights->count()) {
+					return true;
+				}
+			}
+        });
+		
+        $gate->define('approve-changerequest', function ($user, $template) {
+			if ($user->role === "superadmin") {
+				return true;
+			}
+			if ($user->role === "builder" || $user->role === "admin" || $user->role === "reviewer") {
+				$userrights = UserRights::where('username_id', $user->id)->where('section_id', $template->section_id)->get();
+				if ($userrights->count()) {
+					return true;
+				}
+			}
+        });
 
 		$gate->define('superadmin', function ($user) {
 			return $user->role === "superadmin";
@@ -50,19 +74,19 @@ class AuthServiceProvider extends ServiceProvider
 		});
 
 		$gate->define('contributor', function ($user) {
-			if ($user->role === "superadmin" || $user->role === "admin" || $user->role === "contributor") {
+			if ($user->role === "superadmin" || $user->role === "builder" || $user->role === "admin" || $user->role === "contributor") {
 				return true;
 			}
 		});
 
 		$gate->define('reviewer', function ($user) {
-			if ($user->role === "superadmin" || $user->role === "admin" || $user->role === "reviewer") {
+			if ($user->role === "superadmin" || $user->role === "builder" || $user->role === "admin" || $user->role === "reviewer") {
 				return true;
 			}
 		});
 
 		$gate->define('builder', function ($user) {
-			if ($user->role === "superadmin" || $user->role === "admin" || $user->role === "builder") {
+			if ($user->role === "superadmin" || $user->role === "builder") {
 				return true;
 			}
 		});
