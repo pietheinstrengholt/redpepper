@@ -3,7 +3,7 @@
 
 @section('content')
 
-	<h2>Login</h2>
+	<h2>Login</h2><hr>
 	<h4>Please use the login form below</h4>
 
 	@if (count($errors) > 0)
@@ -30,8 +30,8 @@
 			<input type="password" class="form-control" name="password" value="">
 		</div>
 
-		<div class="form-group">
-			<button class="btn btn-primary" type="submit">Login</button>
+		<div style="padding-top: 10px;" class="form-group">
+			<button style="margin-bottom: 3px;" class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Login</button> <a style="margin-left:15px;" href="{{ URL::to('/password/email') }}">Forgot your password?</a>
 		</div>
 	</form>
 
