@@ -163,10 +163,11 @@ class TemplateController extends Controller
 		}
 	}
 
-	public function create(Section $section)
+	public function create(Request $request, Section $section)
 	{
 		//retrieve list with sections based on user id and user role
-		$sections = $this->sectionList($request);
+		$sectionlist = $this->sectionList($request);
+		$sections = Section::whereIn('id', $sectionlist)->orderBy('section_name', 'asc')->get();
 		
 		//use default value to select from dropdown
 		if (!empty($section)) {
