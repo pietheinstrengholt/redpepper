@@ -116,7 +116,7 @@ class ChangeRequestController extends Controller
 		}
 		
 		//build list with superadmins
-		$superadmins = User::orderBy('firstname', 'asc')->where('role', 'superadmin')->get();
+		$superadmins = User::orderBy('firstname', 'asc')->where('id', '<>', Auth::user()->id)->where('role', 'superadmin')->get();
 		if (!empty($superadmins)) {
 			foreach($superadmins as $superadmin) {
 				array_push($userList,$superadmin->id);
@@ -124,7 +124,7 @@ class ChangeRequestController extends Controller
 		}
 		
 		//query the users based on the roles, list with user rights and superadmins
-		$approvers = User::orderBy('firstname', 'asc')->whereIn('id', $userList)->whereIn('role', array("superadmin","builder","admin","reviewer"))->get();
+		$approvers = User::orderBy('firstname', 'asc')->where('id', '<>', Auth::user()->id)->whereIn('id', $userList)->whereIn('role', array("superadmin","builder","admin","reviewer"))->get();
 
 		return view('templates.cell-update', [
 			'template' => $template,
