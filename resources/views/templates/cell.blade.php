@@ -83,10 +83,20 @@
 							<td class="source">{{ $row->source->source_name }}</td>
 							<td class="type">{{ $row->type->type_name }}</td>
 							<td class="content">{{ $row->content }}</td>
-							<td class="description">{{ $row->description }}</td>
+							@if ( $row->type->descriptions->count() )
+								@foreach( $row->type->descriptions as $description )
+									@if ($description->content == $row->content)
+										<td class="description">{{ $description->description }}</td>
+									@endif
+								@endforeach						
+							@else
+								<td class="description">{{ $row->description }}</td>
+							@endif
 						</tr>
 					@endif
 				@endforeach
+				
+
 
 			</table>
 		</td>
