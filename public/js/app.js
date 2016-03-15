@@ -174,8 +174,6 @@ jQuery(document).ready(function () {
 		$trNew.show();
 		$trNew.attr( "id", cloneCount );
 		$trLast.before($trNew);
-		
-		console.log(cloneCount);
 
 		//change name attribute and to increased clone count
 		$( 'tr#' + cloneCount + ' td.source select.form-control').attr('name', 'technical[' + cloneCount + '][source_id]');
