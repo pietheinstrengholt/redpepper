@@ -20,9 +20,9 @@
 		<div id="collapseSix" class="accordion-body collapse" style="height: 0px;"><div class="accordion-inner">
 		<br>
 		<table style="width:50%;" class="table dialog table-striped" border="1">
-		<tr>
-		<td style="background-color:#f2dede; width:30%;" class="header">Value</td>
-		<td style="background-color:#f2dede; width:70%;" class="header">Description</td>
+		<tr class="warning">
+		<td class="header">Value</td>
+		<td class="header">Description</td>
 		</tr>
 		@foreach( $descriptions as $description )
 			</tr>
