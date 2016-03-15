@@ -13,6 +13,27 @@
     <h2>{{ $template->template_name }}</h2>
 	<h4>{{ $template->template_shortdesc }}</h4>
 	<h4>{{ $template->template_longdesc }}</h4>
+	
+	@if ( $descriptions->count() )
+		<div class="info-group" style="margin-bottom:10px;">
+		<div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseSix">Show reference table {{ $technicaltype->type_name }}</a></div>
+		<div id="collapseSix" class="accordion-body collapse" style="height: 0px;"><div class="accordion-inner">
+		<br>
+		<table style="width:50%;" class="table dialog table-striped" border="1">
+		<tr>
+		<td style="background-color:#f2dede; width:30%;" class="header">Value</td>
+		<td style="background-color:#f2dede; width:70%;" class="header">Description</td>
+		</tr>
+		@foreach( $descriptions as $description )
+			</tr>
+			<td>{{ $description->content }}</td>
+			<td>{{ $description->description }}</td>
+			</tr>
+		@endforeach
+		
+		</table><br></div></div></div>
+	@endif
+	
 	<!-- Hidden div to carry template id -->
 	<div class="templateId" id="{{ $template->id }}" style="display: none;"></div>
 

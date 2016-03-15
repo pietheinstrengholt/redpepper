@@ -65,6 +65,23 @@
 		</div>
 	</div>
 	
+	<div class="form-group">
+		{!! Form::label('type_id', 'Type:', array('class' => 'col-sm-3 control-label')) !!}
+		<div class="col-sm-6">
+		
+		<select class="form-control">
+		<option selected value="0" disabled>Please select one option</option>
+		@foreach($types as $type)
+			@if ( $template->type_id == $type->id )
+				<option selected value="{{ $type->id }}">{{ $type->type_name }}</option>
+			@else
+				<option value="{{ $type->id }}">{{ $type->type_name }}</option>
+			@endif
+		@endforeach
+		</select>
+		</div>
+	</div>
+	
 	@if (Auth::user()->role == "admin")
 		{!! Form::hidden('visible','False') !!}
 	@endif

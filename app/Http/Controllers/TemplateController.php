@@ -14,6 +14,7 @@ use App\Section;
 use App\Technical;
 use App\TechnicalSource;
 use App\TechnicalType;
+use App\TechnicalDescription;
 use App\Template;
 use App\TemplateColumn;
 use App\TemplateRow;
@@ -85,7 +86,11 @@ class TemplateController extends Controller
 
 		$disabledFields = $this->getDisabledFields($template);
 		$propertyFields = $this->getPropertyFields($template);
-		return view('templates.show', compact('section', 'template', 'disabledFields', 'propertyFields', 'searchvalue'));
+		
+		$technicaltype = TechnicalType::where('id', $template->type_id)->first();
+		$descriptions = TechnicalDescription::where('type_id', $template->type_id)->orderBy('content', 'asc')->get();
+		
+		return view('templates.show', compact('section', 'template', 'disabledFields', 'propertyFields', 'searchvalue', 'technicaltype', 'descriptions'));
 	}
 
 	//function to disabled fields
@@ -154,10 +159,11 @@ class TemplateController extends Controller
 		//retrieve list with sections based on user id and user role
 		$sectionlist = $this->sectionList($request);
 		$sections = Section::whereIn('id', $sectionlist)->orderBy('section_name', 'asc')->get();
+		$types = TechnicalType::orderBy('type_name', 'asc')->get();
 		
 		//validate if user can update section (see AuthServiceProvider)
 		if ($request->user()->can('update-section', $section)) {
-			return view('templates.edit', compact('sections', 'section', 'template'));
+			return view('templates.edit', compact('sections', 'section', 'template','types'));
 		} else {
 			abort(403, 'Unauthorized action.');
 		}
