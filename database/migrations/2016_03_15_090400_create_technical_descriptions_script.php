@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTechnicalDescriptions extends Migration
+class CreateTechnicalDescriptionsScript extends Migration
 {
 	/**
 	* Run the migrations.
@@ -18,14 +18,6 @@ class CreateTechnicalDescriptions extends Migration
 			$table->string('content')->nullable();
 			$table->longText('description')->nullable();
 			$table->timestamps();
-		});
-		
-		Schema::table('t_technical_descriptions', function (Blueprint $table) {
-			$table->index('type_id');
-		});
-		
-		Schema::table('t_technical_descriptions', function (Blueprint $table) {
-			$table->foreign('type_id')->references('id')->on('t_technical_types')->onDelete('cascade');
 		});
 	}
 
