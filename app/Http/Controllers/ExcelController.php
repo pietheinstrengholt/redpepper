@@ -14,6 +14,7 @@ use App\Section;
 use App\Technical;
 use App\TechnicalSource;
 use App\TechnicalType;
+use App\TechnicalDescription;
 use App\Template;
 use App\TemplateColumn;
 use App\TemplateRow;
@@ -46,7 +47,7 @@ class ExcelController extends Controller
 		return $sectionRights;
 	}
 
-	public function uploadform()
+	public function uploadtemplateform()
 	{
 		if (Auth::user()->role == "contributor" || Auth::user()->role == "reviewer" || Auth::user()->role == "guest") {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
@@ -66,7 +67,19 @@ class ExcelController extends Controller
 			$sections = Section::orderBy('section_name', 'asc')->get();
 		}
 
-		return view('excel.upload', compact('sections'));
+		return view('excel.uploadtemplate', compact('sections'));
+	}
+	
+	public function uploadreferenceform()
+	{
+		//only a superadmin has permissions to create new sections
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+		$types = TechnicalType::orderBy('type_name', 'asc')->get();
+
+		return view('excel.uploadreference', compact('types'));
 	}
 
 	public function getNameFromNumber($num)
@@ -92,8 +105,49 @@ class ExcelController extends Controller
 			return $letter;
 		}
 	}
+	
+	public function uploadreferenceexcel(Request $request)
+	{
+		//validate input form
+		$this->validate($request, [
+			'excel' => 'required|mimes:xls,xlsx',
+			'type_id' => 'required|numeric'
+		]);
 
-	public function uploadexcel(Request $request)
+		if ($request->file('excel')->isValid()) {
+
+			$validation = Excel::load($request->file('excel'), function ($reader) use ($request, &$descriptions, &$errors) {
+
+				//delete existing content
+				TechnicalDescription::where('type_id', $request->input('type_id'))->delete();
+				
+				//convert excel to array
+				$excelImport = $reader->toArray();
+				
+				//create empty array to validate for unique results
+				$validate = array();
+				
+				//parse excel array, add new content to database
+				foreach($excelImport as $row) {
+					
+					if (!empty($row['value']) && !empty($row['description']) && !(in_array($row['value'], $validate, true))) {
+						$description = new TechnicalDescription;
+						$description->type_id = $request->input('type_id');
+						$description->content = $row['value'];
+						$description->description = $row['description'];
+						$description->save();
+						
+						array_push($validate, $row['value']);
+					}
+				}
+
+			});
+		}
+		
+		return Redirect::to('/types/' . $request->input('type_id'))->with('message', 'Content successfully added to the database.');
+	}
+
+	public function uploadtemplateexcel(Request $request)
 	{
 		//validate input form
 		$this->validate($request, [
