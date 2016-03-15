@@ -8,6 +8,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Log;
 use App\Template;
 use Auth;
+use App\User;
+use Mail;
+use App\Helper;
 
 class LogWhenTemplateCreated
 {
@@ -27,5 +30,20 @@ class LogWhenTemplateCreated
 		$log->template_id = $event->template->id;
 		$log->created_by = Auth::user()->id;
 		$log->save();
+
+		$user = User::findOrFail(Auth::user()->id);
+		$array['username'] = $user->username;
+		$template = Template::findOrFail($event->template->id);
+		$array['template_name'] = $template->template_name;
+		$array['template_id'] = $event->template->id;
+		$array['section_id'] = $event->template->section_id;
+		
+		Mail::send('emails.template', $array, function($message)
+		{
+			$message->from(env('MAIL_USERNAME'));
+			$message->to(Helper::setting('administrator_email'));
+			$message->subject('Notification from the ' . Helper::setting('tool_name'));
+		});
+		
 	}
 }
