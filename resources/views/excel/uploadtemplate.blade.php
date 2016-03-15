@@ -1,4 +1,4 @@
-<!-- /resources/views/template/upload.blade.php -->
+<!-- /resources/views/template/uploadtemplate.blade.php -->
 @extends('layouts.master')
 
 @section('content')
@@ -21,7 +21,7 @@
 		</div>
 	@endif
 
-	{!! Form::open(array('action' => 'ExcelController@uploadexcel', 'id' => 'form', 'files'=> 'true')) !!}
+	{!! Form::open(array('action' => 'ExcelController@uploadtemplateexcel', 'id' => 'form', 'files'=> 'true')) !!}
 
 	<br>
 	{!! Form::file('excel') !!}
