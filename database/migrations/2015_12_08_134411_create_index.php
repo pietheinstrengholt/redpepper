@@ -12,7 +12,6 @@ class CreateIndex extends Migration
      */
 	public function up()
 	{
-		//on template_id
 		Schema::table('t_template_columns', function (Blueprint $table) {
 			$table->index('template_id');
 			$table->index('column_code');
