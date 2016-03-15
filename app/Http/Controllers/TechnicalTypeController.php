@@ -5,7 +5,6 @@ use App\Http\Controllers\Controller;
 use App\Technical;
 use App\TechnicalSource;
 use App\TechnicalType;
-use App\TechnicalDescription;
 use App\User;
 use Gate;
 use Illuminate\Http\Request;
@@ -36,23 +35,6 @@ class TechnicalTypeController extends Controller
 		}
 
 		return view('types.edit', compact('type'));
-	}
-	
-	public function show(TechnicalType $type)
-	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-			abort(403, 'Unauthorized action.');
-		}
-
-		//check if id property exists
-		if (!$type->id) {
-			abort(403, 'This type no longer exists in the database.');
-		}
-		
-		$descriptions = TechnicalDescription::where('type_id', $type->id)->orderBy('content', 'asc')->get();
-
-		return view('types.show', compact('type','descriptions'));
 	}
 
 	public function create(TechnicalType $type)

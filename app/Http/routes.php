@@ -105,10 +105,8 @@ Route::post('/updatecell', 'ChangeRequestController@submit');
 // Excel routes...
 Route::get('exporttemplate/{id}', 'ExcelController@export');
 Route::get('uploadtemplate', ['middleware' => 'auth', 'uses' => 'ExcelController@upload']);
-Route::get('/excel/uploadtemplate', ['middleware' => 'auth', 'uses' => 'ExcelController@uploadtemplateform']);
-Route::get('/excel/uploadreference', ['middleware' => 'auth', 'uses' => 'ExcelController@uploadreferenceform']);
-Route::post('/excel/uploadexcel', ['middleware' => 'auth', 'uses' => 'ExcelController@uploadtemplateexcel']);
-Route::post('/excel/uploadreference', ['middleware' => 'auth', 'uses' => 'ExcelController@uploadreferenceexcel']);
+Route::get('/excel/upload', ['middleware' => 'auth', 'uses' => 'ExcelController@uploadform']);
+Route::post('/excel/uploadexcel', ['middleware' => 'auth', 'uses' => 'ExcelController@uploadexcel']);
 
 // CSV routes...
 Route::get('/csv/import', ['middleware' => 'auth', 'uses' => 'CSVController@import']);
