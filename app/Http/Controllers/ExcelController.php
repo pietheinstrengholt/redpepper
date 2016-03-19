@@ -756,31 +756,34 @@ class ExcelController extends Controller
 				//add technical content to database
 				if (!empty($templatestructure['sourcing'])) {
 					foreach($templatestructure['sourcing'] as $sourcing) {
-						$technical = new Technical;
-						$technical->template_id = $template->id;
-						$technical->row_code = $sourcing['row_code'];
-						$technical->column_code = $sourcing['column_code'];
-						$technical->source_id = $sourcing['source'];
-						$technical->type_id = $sourcing['type'];
-						$technical->content = $sourcing['value'];
-						$technical->description = $sourcing['description'];
-						$technical->save();
+						if (!empty($sourcing['value'])) {
+							$technical = new Technical;
+							$technical->template_id = $template->id;
+							$technical->row_code = $sourcing['row_code'];
+							$technical->column_code = $sourcing['column_code'];
+							$technical->source_id = $sourcing['source'];
+							$technical->type_id = $sourcing['type'];
+							$technical->content = $sourcing['value'];
+							$technical->description = $sourcing['description'];
+							$technical->save();
 
-						//submit new content to archive table
-						$HistoryTechnical = new HistoryTechnical;
-						$HistoryTechnical->changerequest_id = '0';
-						$HistoryTechnical->template_id = $template->id;
-						$HistoryTechnical->row_code = $sourcing['row_code'];
-						$HistoryTechnical->column_code = $sourcing['column_code'];
-						$HistoryTechnical->type_id = $sourcing['type'];
-						$HistoryTechnical->source_id = $sourcing['source'];
-						$HistoryTechnical->content = $sourcing['value'];
-						$HistoryTechnical->description = $sourcing['description'];
-						$HistoryTechnical->change_type = 'excel';
-						$HistoryTechnical->created_by = Auth::user()->id;
-						$HistoryTechnical->submission_date = null;
-						$HistoryTechnical->approved_by = Auth::user()->id;
-						$HistoryTechnical->save();
+							//submit new content to archive table
+							$HistoryTechnical = new HistoryTechnical;
+							$HistoryTechnical->changerequest_id = '0';
+							$HistoryTechnical->template_id = $template->id;
+							$HistoryTechnical->row_code = $sourcing['row_code'];
+							$HistoryTechnical->column_code = $sourcing['column_code'];
+							$HistoryTechnical->type_id = $sourcing['type'];
+							$HistoryTechnical->source_id = $sourcing['source'];
+							$HistoryTechnical->content = $sourcing['value'];
+							$HistoryTechnical->description = $sourcing['description'];
+							$HistoryTechnical->change_type = 'excel';
+							$HistoryTechnical->created_by = Auth::user()->id;
+							$HistoryTechnical->submission_date = null;
+							$HistoryTechnical->approved_by = Auth::user()->id;
+							$HistoryTechnical->save();							
+						}
+
 					}
 				}
 
@@ -1155,14 +1158,14 @@ class ExcelController extends Controller
 				//set first column for field_content
 				//Column part
 				$sheet->SetCellValue('A1', 'for column and row content:')
-				->SetCellValue('A2', 'legal_desc')
-				->SetCellValue('A3', 'interpretation_desc')
+				->SetCellValue('A2', 'regulation')
+				->SetCellValue('A3', 'interpretation')
 				->SetCellValue('A4', 'reference')
 				->SetCellValue('A6', 'for field_content')
 				->SetCellValue('A7', 'property1')
 				->SetCellValue('A8', 'property2')
-				->SetCellValue('A9', 'legal_desc')
-				->SetCellValue('A10', 'interpretation_desc')
+				->SetCellValue('A9', 'regulation')
+				->SetCellValue('A10', 'interpretation')
 				->SetCellValue('A12', 'styles')
 				->SetCellValue('A13', 'bold')
 				->SetCellValue('A14', 'tab')
