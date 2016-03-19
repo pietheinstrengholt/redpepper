@@ -929,7 +929,7 @@ class ChangeRequestController extends Controller
 				if(isset($technical['hidden'])) { $row_hidden = $technical['hidden']; } else { $row_hidden = "no"; }
 				if(isset($technical['source_id'])) { $row_system = $technical['source_id']; } else { $row_system = 0; }
 
-				if ($row_action != "delete" && $row_system != 0 && $row_hidden == "no") {
+				if ($row_action != "delete" && $row_system != 0 && $row_hidden == "no" && !(empty($technical['content']))) {
 					$drafttechnical = new DraftTechnical;
 					$drafttechnical->changerequest_id = $ChangeRequest->id;
 					$drafttechnical->source_id = $technical['source_id'];
