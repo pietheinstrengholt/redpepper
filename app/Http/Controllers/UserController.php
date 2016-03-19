@@ -54,9 +54,9 @@ class UserController extends Controller
 
 		$roles = array(
 			"superadmin" => "superadmin",
-			"admin" => "admin",
+			/* "admin" => "admin", */
 			"contributor" => "contributor",
-			"reviewer" => "reviewer",
+			/* "reviewer" => "reviewer", */
 			"builder" => "builder",
 			"guest" => "guest",
 		);
