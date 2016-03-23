@@ -73,7 +73,13 @@ class SectionController extends Controller
     public function showmanual($id)
     {
 		$section = Section::where('id', $id)->first();
-		$templates = Template::with('requirements')->where('section_id', $id)->get();
+		
+		//only superadmin can see all sections
+		if (Gate::denies('superadmin')) {
+			$templates = Template::with('requirements')->where('visible', 'True')->where('section_id', $id)->get();
+		} else {
+			$templates = Template::with('requirements')->where('section_id', $id)->get();
+		}
 
 		if (!$section) {
 			abort(403, 'This section no longer exists in the database.');
