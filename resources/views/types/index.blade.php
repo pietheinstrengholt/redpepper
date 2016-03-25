@@ -24,7 +24,7 @@
 
 		@foreach( $types as $type )
 			<tr>
-			<td>{{ $type->type_name }}</td>
+			<td><a href="{!! url('types'); !!}/{{ $type->id }}">{{ $type->type_name }}</a></td>
 			<td>{{ $type->type_description }}</td>
 			{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('types.destroy', $type->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this type?\')')) !!}
 			<td>
