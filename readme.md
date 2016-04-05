@@ -51,3 +51,4 @@ TODO
 * Cleanup ChangeRequestController, clone object instead of line by line copy
 * Cleanup views, move all css to app.css
 * Add more efficient way to lookup reference value
+* When creating a section, also select correct subject_id

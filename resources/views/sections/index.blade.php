@@ -46,10 +46,10 @@
 		</table>
 	@endif
 
-	@can('superadmin', $section)
+	@if (!Auth::guest())
 		<p>
 		{!! link_to_route('sections.create', 'Create Section') !!}
 		</p>
-	@endcan	
+	@endif
 
 @endsection

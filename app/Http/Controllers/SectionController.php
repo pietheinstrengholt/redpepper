@@ -34,6 +34,11 @@ class SectionController extends Controller
 			}
 		}
 		
+		//abort if sectionRights array is empty
+		if (empty($sections)) {
+			abort(403, 'No sections have been found. Please ask your administrator to add any sections.');
+		}
+		
 		return view('sections.index', compact('sections'));
     }
 
@@ -45,6 +50,12 @@ class SectionController extends Controller
 		} else {
 			$sections = Section::orderBy('section_name', 'asc')->get();
 		}
+
+		//abort if sectionRights array is empty
+		if (empty($sections)) {
+			abort(403, 'No sections have been found. Please ask your administrator to add any sections.');
+		}
+
 		return view('manuals.index', compact('sections'));
     }
 
@@ -83,6 +94,11 @@ class SectionController extends Controller
 
 		if (!$section) {
 			abort(403, 'This section no longer exists in the database.');
+		}
+		
+		//abort if sectionRights array is empty
+		if (empty($templates)) {
+			abort(403, 'No templates have been found for this selection.');
 		}
 
 		return view('manuals.show', compact('section', 'templates'));
