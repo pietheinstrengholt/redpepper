@@ -26,7 +26,7 @@
 @endif
 @if ( $field_interpretation )
 	<dl class="dl-horizontal">
-	<dt>Interpretation:</dt>
+	<dt>Interpretation by ABN AMRO:</dt>
 	<dd><div title="{!! App\Helper::returnHistory($field_interpretation) !!}" class="content-box">{!! App\Helper::contentAdjust($field_interpretation->content) !!}</div></dd>
 	</dl>
 @endif
@@ -46,7 +46,7 @@
 		<div rows="1" title="{!! App\Helper::returnHistory($row) !!}" id="rowname">{{ $row->row_description }}</div>
 		<h4><b>Regulation:</b></h4>
 		<div rows="7" title="{!! App\Helper::returnHistory($regulation_row) !!}" id="row_regulation">{!! App\Helper::contentAdjust(nl2br(e($regulation_row['content']))) !!}</div>
-		<h4><b>Interpretation:</b></h4>
+		<h4><b>Interpretation by ABN AMRO:</b></h4>
 		<div rows="6" title="{!! App\Helper::returnHistory($interpretation_row) !!}" id="row_interpretation">{!! App\Helper::contentAdjust(nl2br(e($interpretation_row['content']))) !!}</div>
 	</td>
 	<td class="info-right im-content">
@@ -54,7 +54,7 @@
 		<div rows="1" title="{!! App\Helper::returnHistory($column) !!}" id="colname">{{ $column->column_description }}</div>
 		<h4><b>Regulation:</b></h4>
 		<div rows="7" title="{!! App\Helper::returnHistory($regulation_column) !!}" id="column_regulation">{!! App\Helper::contentAdjust(nl2br(e($regulation_column['content']))) !!}</div>
-		<h4><b>Interpretation:</b></h4>
+		<h4><b>Interpretation by ABN AMRO:</b></h4>
 		<div rows="6" title="{!! App\Helper::returnHistory($interpretation_column) !!}" id="column_interpretation">{!! App\Helper::contentAdjust(nl2br(e($interpretation_column['content']))) !!}</div>
 	</td>
 </tr>
