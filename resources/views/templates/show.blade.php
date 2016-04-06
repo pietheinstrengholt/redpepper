@@ -48,6 +48,7 @@
 
 		<td class="header content">Row#</td>
 		<td class="header">Row description</td>
+		<td class="header">Reference</td>
 
 		@foreach( $template->columns as $column )
 			<td class="content header" id="$column->column_code">
@@ -60,6 +61,7 @@
 
 		<tr class="header2">
 
+		<td></td>
 		<td></td>
 		<td></td>
 
@@ -79,6 +81,7 @@
 			<tr>
 			<td class="desc">{{ $row->row_code }}</td>
 			<td class="desc property{{ $row->row_property }}">{{ $row->row_description }}</td>
+			<td class="desc property{{ $row->reference }}">{{ $row->row_reference }}</td>
 			<!-- Table cell information, column and row combination -->
 			@foreach( $template->columns as $column )
 
