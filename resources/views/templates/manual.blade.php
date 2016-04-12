@@ -5,7 +5,6 @@
 
 	<ul class="breadcrumb breadcrumb-section">
 	  <li><a href="{!! url('/'); !!}">Home</a></li>
-	  <li><a href="{!! url('/manuals'); !!}">Manuals</a></li>
 	  <li><a href="{!! url('/sections/' . $template->section_id . '/templates/' . $template->id); !!}">{{ $template->template_name }}</a></li>
 	  <li class="active">Manual</li>
 	</ul>
