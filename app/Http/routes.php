@@ -78,6 +78,7 @@ Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
 Route::post('password/reset', 'Auth\PasswordController@postReset');
 
 // Template routes...
+Route::get('templatemanual/{id}', 'TemplateController@manual');
 Route::get('templatestructure/{id}', ['middleware' => 'auth', 'uses' => 'TemplateController@structure']);
 Route::post('changestructure', ['middleware' => 'auth', 'uses' => 'TemplateController@changestructure']);
 Route::post('newtemplate', ['middleware' => 'auth', 'uses' => 'TemplateController@newtemplate']);
