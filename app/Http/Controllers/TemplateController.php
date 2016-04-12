@@ -477,7 +477,20 @@ class TemplateController extends Controller
 			'field_property1' => Requirement::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', $column_code)->where('content_type', 'property1')->first(),
 			'field_property2' => Requirement::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', $column_code)->where('content_type', 'property2')->first()
 		]);
-
 	}
+	
+    public function manual($id)
+    {
+		$template = Template::where('id', $id)->first();
+		
+		//abort if sectionRights array is empty
+		if (empty($template)) {
+			abort(403, 'No template has been found for this selection.');
+		}
+		
+		$technical = Technical::where('template_id', $id)->get();
+		
+		return view('templates.manual', compact('template','technical'));
+    }
 
 }
