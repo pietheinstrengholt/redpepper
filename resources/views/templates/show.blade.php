@@ -13,6 +13,7 @@
     <h2>{{ $template->template_name }}</h2>
 	<h4>{{ $template->template_shortdesc }}</h4>
 	<h4>{{ $template->template_longdesc }}</h4>
+	<h5><a href="{!! url('/templatemanual/' . $template->id); !!}"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print manual</a></h5>
 	
 	@if ( $descriptions->count() )
 		<div class="info-group" style="margin-bottom:10px;">
