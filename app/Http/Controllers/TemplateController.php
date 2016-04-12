@@ -488,7 +488,7 @@ class TemplateController extends Controller
 			abort(403, 'No template has been found for this selection.');
 		}
 		
-		$technical = Technical::where('template_id', $id)->get();
+		$technical = Technical::where('template_id', $id)->orderBy('row_code', 'asc')->orderBy('column_code', 'asc')->get();
 		
 		return view('templates.manual', compact('template','technical'));
     }
