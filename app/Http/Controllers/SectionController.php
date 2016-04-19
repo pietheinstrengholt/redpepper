@@ -34,6 +34,9 @@ class SectionController extends Controller
 			}
 		}
 		
+		//sort sections on natural ordering
+		$sections = $sections->sortBy('section_name', SORT_NATURAL);
+		
 		//abort if sectionRights array is empty
 		if (empty($sections)) {
 			abort(403, 'No sections have been found. Please ask your administrator to add any sections.');
@@ -50,6 +53,9 @@ class SectionController extends Controller
 		} else {
 			$sections = Section::orderBy('section_name', 'asc')->get();
 		}
+
+		//sort sections on natural ordering
+		$sections = $sections->sortBy('section_name', SORT_NATURAL);		
 
 		//abort if sectionRights array is empty
 		if (empty($sections)) {
@@ -77,7 +83,10 @@ class SectionController extends Controller
 		} else {
 			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->get();
 		}
-		
+
+		//sort templates on natural ordering
+		$templates = $templates->sortBy('template_name', SORT_NATURAL);
+
 		return view('sections.show', compact('section', 'templates'));
     }
 
@@ -100,6 +109,9 @@ class SectionController extends Controller
 		if (empty($templates)) {
 			abort(403, 'No templates have been found for this selection.');
 		}
+		
+		//sort templates on natural ordering
+		$templates = $templates->sortBy('template_name', SORT_NATURAL);
 
 		return view('manuals.show', compact('section', 'templates'));
     }
