@@ -21,13 +21,13 @@
 @if ( $field_regulation )
 	<dl class="dl-horizontal">
 	<dt>Regulation:</dt>
-	<dd><div title="{!! App\Helper::returnHistory($field_regulation) !!}" class="content-box">{!! App\Helper::contentAdjust($field_regulation->content) !!}</div></dd>
+	<dd><div title="{!! App\Helper::returnHistory($field_regulation) !!}" class="content-box">{!! App\Helper::contentAdjust(nl2br(e($field_regulation->content))) !!}</div></dd>
 	</dl>
 @endif
 @if ( $field_interpretation )
 	<dl class="dl-horizontal">
 	<dt>Interpretation by ABN AMRO:</dt>
-	<dd><div title="{!! App\Helper::returnHistory($field_interpretation) !!}" class="content-box">{!! App\Helper::contentAdjust($field_interpretation->content) !!}</div></dd>
+	<dd><div title="{!! App\Helper::returnHistory($field_interpretation) !!}" class="content-box">{!! App\Helper::contentAdjust(nl2br(e($field_interpretation->content))) !!}</div></dd>
 	</dl>
 @endif
 </td>
