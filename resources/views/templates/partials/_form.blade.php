@@ -85,17 +85,12 @@
 	@if (Auth::user()->role == "admin")
 		{!! Form::hidden('visible','False') !!}
 	@endif
-
+	
 	@if (Auth::user()->role == "builder" || Auth::user()->role == "superadmin")
 		<div class="form-group">
-			{!! Form::label('Visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
-			<div class="col-sm-6" style="margin-top: 11px;">
-			{!! Form::hidden('visible','False') !!}
-			@if ( $template->visible == "True" )
-				{!! Form::checkbox('visible', 'True', true) !!}
-			@else
-				{!! Form::checkbox('visible', 'True') !!}
-			@endif
+			{!! Form::label('visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
+			<div class="col-sm-6">
+			{!! Form::select('visible', ['True' => 'True', 'Limited' => 'Only show descriptions', 'False' => 'False'], $template->visible, ['id' => 'visible', 'class' => 'form-control']) !!}
 			</div>
 		</div>
 	@endif
