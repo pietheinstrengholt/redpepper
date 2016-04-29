@@ -961,12 +961,21 @@ class ExcelController extends Controller
 				$columncontentcount = 2;
 				//add content to excel
 				if (!empty($column_content )) {
+					
+					//create empty array for validation and extraction of only unique values
+					$column_content_array = array();
+					
 					foreach($column_content  as $key => $value) {
 						$column_code = trim($value['column_code']);
-						$sheet->setCellValueExplicit('A' . $columncontentcount, $column_code)
-						->setCellValueExplicit('B' . $columncontentcount, $value['content_type'])
-						->setCellValueExplicit('C' . $columncontentcount, $value['content']);
-						$columncontentcount++;
+						if (!(in_array($column_code, $column_content_array, true))) {
+							$sheet->setCellValueExplicit('A' . $columncontentcount, $column_code)
+							->setCellValueExplicit('B' . $columncontentcount, $value['content_type'])
+							->setCellValueExplicit('C' . $columncontentcount, $value['content']);
+							$columncontentcount++;
+							
+							//push column_code to unique array for validation
+							array_push($column_content_array, $column_code);
+						}
 					}
 				}
 
@@ -1003,12 +1012,23 @@ class ExcelController extends Controller
 
 				//add content to excel
 				if (!empty($row_contents)) {
+					
+					//create empty array for validation and extraction of only unique values
+					$row_content_array = array();
+					
 					foreach($row_contents as $key => $value) {
 						$row_code = trim($value['row_code']);
-						$sheet->setCellValueExplicit('A' . $rowcontentcount, $row_code)
-						->setCellValueExplicit('B' . $rowcontentcount, $value['content_type'])
-						->setCellValueExplicit('C' . $rowcontentcount, $value['content']);
-						$rowcontentcount++;
+						
+						if (!(in_array($row_code, $row_content_array, true))) {
+						
+							$sheet->setCellValueExplicit('A' . $rowcontentcount, $row_code)
+							->setCellValueExplicit('B' . $rowcontentcount, $value['content_type'])
+							->setCellValueExplicit('C' . $rowcontentcount, $value['content']);
+							$rowcontentcount++;
+							
+							//push row_code to unique array for validation
+							array_push($row_content_array, $row_code);
+						}
 					}
 				}
 
