@@ -908,22 +908,27 @@ class ExcelController extends Controller
 						//get row_code and column_code from array
 						$disabled_row_code = $disabledrows['row_code'];
 						$disabled_column_code = $disabledrows['column_code'];
-						//get row_code and column name from structure
-						$structurerowid = $templatestructure['rows'][$disabled_row_code];
-						$structurecolumnid = $templatestructure['columns'][$disabled_column_code];
-						//jump in two from top and four from left
-						$structurerowid = $structurerowid + 2;
-						$structurecolumnid = $structurecolumnid + 4;
-						//convert columnid to letter
-						//$columnLetter = PHPExcel_Cell::stringFromColumnIndex($structurecolumnid);
-						$columnLetter = $this->getExcelColumnNumber($structurecolumnid);
-						//grey color
-						//add disabled to cell, otherwise the import won't pick it up
-						$sheet->setCellValueExplicit($columnLetter . $structurerowid, 'disabled');
-						$sheet->getStyle($columnLetter . $structurerowid)->getFill()->getStartColor()->setARGB('D3D3D3');
-						$sheet->cells($columnLetter . $structurerowid, function($cells) {
-							$cells->setBackground('#d3d3d3');
-						});
+						
+						//check if disabled row and columns exist in the structure of the template
+						if (array_key_exists($disabled_row_code, $templatestructure['rows']) && array_key_exists($disabled_column_code, $templatestructure['columns'])) {
+						
+							//get row_code and column name from structure
+							$structurerowid = $templatestructure['rows'][$disabled_row_code];
+							$structurecolumnid = $templatestructure['columns'][$disabled_column_code];
+							//jump in two from top and four from left
+							$structurerowid = $structurerowid + 2;
+							$structurecolumnid = $structurecolumnid + 4;
+							//convert columnid to letter
+							//$columnLetter = PHPExcel_Cell::stringFromColumnIndex($structurecolumnid);
+							$columnLetter = $this->getExcelColumnNumber($structurecolumnid);
+							//grey color
+							//add disabled to cell, otherwise the import won't pick it up
+							$sheet->setCellValueExplicit($columnLetter . $structurerowid, 'disabled');
+							$sheet->getStyle($columnLetter . $structurerowid)->getFill()->getStartColor()->setARGB('D3D3D3');
+							$sheet->cells($columnLetter . $structurerowid, function($cells) {
+								$cells->setBackground('#d3d3d3');
+							});
+						}
 					}
 				}
 
