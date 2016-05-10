@@ -1,7 +1,7 @@
 php artisan down
 git clean -n -d
 git clean -f -d -e deploy.sh
-git checkout -f master
+git reset --hard HEAD
 git pull
 git log --pretty="%h" -n1 HEAD > version
 composer install
