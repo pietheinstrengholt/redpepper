@@ -1,5 +1,7 @@
 php artisan down
+git clean -f
 git pull
+git log --pretty="%h" -n1 HEAD > version
 composer install
 php artisan migrate
 php artisan config:clear
