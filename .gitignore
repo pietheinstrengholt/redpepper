@@ -9,6 +9,8 @@
 Homestead.yaml
 Homestead.json
 .env
+/storage
 
 # Specific
 deploy.sh
+version
