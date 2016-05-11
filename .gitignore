@@ -1,6 +1,14 @@
+# Laravel 5 & Lumen specific
+.env.*.php
+.env.php
+.env
+
+# Generic
 /vendor
 /node_modules
 Homestead.yaml
 Homestead.json
 .env
+
+# Specific
 deploy.sh
