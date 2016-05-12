@@ -48,7 +48,11 @@
 
 	@if (!Auth::guest())
 		<p>
-		{!! link_to_route('sections.create', 'Create Section') !!}
+		@if ( $subject_id )
+			{!! link_to_route('sections.create', 'Create Section', array('subject_id' => $subject_id))  !!}
+		@else
+			{!! link_to_route('sections.create', 'Create Section')  !!}
+		@endif
 		</p>
 	@endif
 

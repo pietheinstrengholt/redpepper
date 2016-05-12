@@ -19,6 +19,13 @@ class SectionController extends Controller
 {	
     public function index(Request $request)
     {
+		//set subject_id if argument is given
+		if ($request->has('subject_id')) {
+			$subject_id = $request->input('subject_id');
+		} else {
+			$subject_id = null;
+		}
+		
 		//only non guests can see all sections
 		if (Auth::guest()) {
 			if ($request->has('subject_id')) {
@@ -42,7 +49,7 @@ class SectionController extends Controller
 			abort(403, 'No sections have been found. Please ask your administrator to add any sections.');
 		}
 		
-		return view('sections.index', compact('sections'));
+		return view('sections.index', compact('sections','subject_id'));
     }
 
     public function manuals()
@@ -135,14 +142,21 @@ class SectionController extends Controller
 		}
 	}
 
-	public function create(Section $section)
+	public function create(Request $request, Section $section)
 	{
 		//check for superadmin permissions
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }
+		
+		//set subject_id if argument is given
+		if ($request->has('subject_id')) {
+			$subject_id = $request->input('subject_id');
+		} else {
+			$subject_id = null;
+		}
 
-		return view('sections.create', compact('section'));
+		return view('sections.create', compact('section','subject_id'));
 	}
 
 	public function store(Request $request)
