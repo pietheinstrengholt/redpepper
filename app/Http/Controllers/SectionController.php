@@ -19,12 +19,12 @@ class SectionController extends Controller
 {	
     public function index(Request $request)
     {
-		//only superadmin can see all sections
-		if (Gate::denies('superadmin')) {
+		//only non guests can see all sections
+		if (Auth::guest()) {
 			if ($request->has('subject_id')) {
-				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', $request->input('subject_id'))->where('visible', 'True')->get();
+				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', $request->input('subject_id'))->where('visible', '<>' , 'False')->get();
 			} else {
-				$sections = Section::orderBy('section_name', 'asc')->where('visible', 'True')->get();
+				$sections = Section::orderBy('section_name', 'asc')->where('visible', '<>' , 'False')->get();
 			}
 		} else {
 			if ($request->has('subject_id')) {
@@ -47,9 +47,9 @@ class SectionController extends Controller
 
     public function manuals()
     {
-		//only superadmin can see all sections
-		if (Gate::denies('superadmin')) {
-			$sections = Section::orderBy('section_name', 'asc')->where('visible', 'True')->get();
+		//only non guests can see all sections
+		if (Auth::guest()) {
+			$sections = Section::orderBy('section_name', 'asc')->where('visible', '<>' , 'False')->get();
 		} else {
 			$sections = Section::orderBy('section_name', 'asc')->get();
 		}
@@ -79,7 +79,7 @@ class SectionController extends Controller
 
 		//only non guests will see the hidden templates
 		if (Auth::guest()) {
-			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->where('visible', 'True')->get();
+			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->where('visible', '<>' , 'False')->get();
 		} else {
 			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->get();
 		}
@@ -94,9 +94,9 @@ class SectionController extends Controller
     {
 		$section = Section::where('id', $id)->first();
 		
-		//only superadmin can see all sections
-		if (Gate::denies('superadmin')) {
-			$templates = Template::with('requirements')->where('visible', 'True')->where('section_id', $id)->get();
+		//only non guests can see all sections
+		if (Auth::guest()) {
+			$templates = Template::with('requirements')->where('visible', '<>' , 'False')->where('section_id', $id)->get();
 		} else {
 			$templates = Template::with('requirements')->where('section_id', $id)->get();
 		}
