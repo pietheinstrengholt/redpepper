@@ -30,7 +30,23 @@ class SettingController extends Controller
 			}
 		}
 		
-  		return view('settings.index', compact('config_array'));
+		//scan images from background folder to show them as a selectable dropdown list in the settings
+		$scanned_img_directory = array_diff(scandir(base_path() . '/public/img/background/'), array('..', '.'));
+		$scanned_img_directory = array_combine($scanned_img_directory, $scanned_img_directory);
+		
+		//scan css from bootstrap folder to show them as a selectable dropdown list in the settings
+		$scanned_css_directory = array_diff(scandir(base_path() . '/public/css/'), array('..', '.'));
+		
+		$scanned_css_filter = array();
+		foreach ($scanned_css_directory as $cssfilename) {
+			if ((substr($cssfilename, -4) == '.css') && (substr($cssfilename, 0, 9) == 'bootstrap')) {
+				array_push($scanned_css_filter,$cssfilename);
+			}
+		}
+		
+		$scanned_css_directory = array_combine($scanned_css_filter, $scanned_css_filter);
+		
+  		return view('settings.index', compact('config_array','scanned_img_directory','scanned_css_directory'));
     }
 
 	public function store(Request $request)
@@ -93,6 +109,16 @@ class SettingController extends Controller
 		$setting = new Setting;
 		$setting->config_key = 'superadmin_process_directly';
 		$setting->config_value = $request->input('superadmin_process_directly');
+		$setting->save();
+		
+		$setting = new Setting;
+		$setting->config_key = 'homescreen_image';
+		$setting->config_value = $request->input('homescreen_image');
+		$setting->save();
+		
+		$setting = new Setting;
+		$setting->config_key = 'css_style';
+		$setting->config_value = $request->input('css_style');
 		$setting->save();
 		
 		return Redirect::to('/')->withErrors(['Settings updated']);

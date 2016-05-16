@@ -58,8 +58,8 @@
   <input name="administrator_email" type="email" style="width:550px;" class="form-control" id="usr" value="{!! App\Helper::setting('administrator_email') !!}" placeholder="{!! App\Helper::setting('administrator_email') !!}">
 </div>
 
-<h5>Allow super admin to process changes directly:</h5>
-<select name="superadmin_process_directly" class="form-control" style="width: 100px;" id="visible">
+<h5><label for="usr">Allow super admin to process changes directly:</label></h5>
+<select name="superadmin_process_directly" class="form-control" style="width: 100px; margin-top: -10px;" id="visible">
 @if (!empty($config_array['superadmin_process_directly']))
 	@if ($config_array['superadmin_process_directly'] == "yes") 
 		<option value="yes" selected="selected">Yes</option> 
@@ -75,9 +75,31 @@
 	<option value="yes">Yes</option>
 	<option value="no">No</option>
 @endif
-</select><br><br>
+</select>
 
-<button style="margin-bottom:15px;" type="submit" class="btn btn-primary">Submit new settings</button>
+@if (empty($config_array['css_style']))
+	{{--*/ $css_style = '' /*--}}
+@else
+	{{--*/ $css_style = $config_array['css_style'] /*--}}
+@endif
+
+<h5><label for="usr">Select CSS layout:</label></h5>
+<div style="width:300px; margin-top: -10px;">
+{!! Form::select('css_style', $scanned_css_directory, $css_style, ['id' => 'css_style', 'class' => 'form-control']) !!}
+</div>
+
+@if (empty($config_array['homescreen_image']))
+	{{--*/ $homescreen_image = '' /*--}}
+@else
+	{{--*/ $homescreen_image = $config_array['homescreen_image'] /*--}}
+@endif
+
+<h5><label for="usr">Select background image on homescreen:</label></h5>
+<div style="width:300px; margin-top: -10px;">
+{!! Form::select('homescreen_image', $scanned_img_directory, $homescreen_image, ['id' => 'homescreen_image', 'class' => 'form-control']) !!}
+</div>
+
+<button style="margin-bottom:15px; margin-top:20px;" type="submit" class="btn btn-primary">Submit new settings</button>
 
 <input type="hidden" name="_token" value="{!! csrf_token() !!}">
 {!! Form::close() !!}

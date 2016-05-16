@@ -5,7 +5,7 @@
 <body class="startpage">
 
 <!-- Header -->
-<div id="intro-header" class="intro-header">
+<div id="intro-header" class="intro-header" style="background: url({{ URL::asset('/img/background') }}/{!! App\Helper::setting('homescreen_image') !!}) no-repeat center center;">
 	<div class="container">
 
 		<div id="intro-header-row" class="row">
@@ -13,12 +13,13 @@
 				<div class="intro-message">
 
 					@if (count($errors) > 0)
-						<div class="alert alert-danger">
-						<ul>
-						@foreach ($errors->all() as $error)
-							<li>{{ $error }}</li>
-						@endforeach
-						</ul>
+						<div class="alert alert-danger alert-dismissible">
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<ul>
+							@foreach ($errors->all() as $error)
+								<li>{{ $error }}</li>
+							@endforeach
+							</ul>
 						</div>
 					@endif
 

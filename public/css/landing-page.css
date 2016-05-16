@@ -29,7 +29,7 @@ startpage.h6 {
     padding-bottom: 0px;
     text-align: left;
     color: #f8f8f8;
-    background: url(../img/intro-bg.jpg) no-repeat center center;
+    /* background: url(../img/redpeppersbg.jpg) no-repeat center center; */
     background-size: cover;
 }
 
@@ -180,5 +180,5 @@ p.copyright {
 }
 
 div.alert.alert-danger {
-	margin-top: -71px;
+	margin-top: -61px;
 }

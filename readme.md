@@ -51,5 +51,3 @@ TODO
 * Cleanup views, move all css to app.css
 * Add more efficient way to lookup reference value
 * Groups or subjects
-* Manual per template instead of section
-* Dynamic background picture and stylesheets - via settings
