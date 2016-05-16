@@ -1,4 +1,16 @@
 
+/* Landscape phones and portrait tablets */
+@media (max-width: 767px) {
+    div.intro-header-col-lg-12 {height:200px;}
+	ul.list-inline.intro-social-buttons {display:none;}
+}
+
+/* Portrait phones and smaller */
+@media (max-width: 480px) {
+    div#intro-header-col-lg-12, div#intro-header-row, div#intro-header {height:200px ! important;}
+	ul.list-inline.intro-social-buttons {display:none;}
+}
+
 /* General & Master blade template */
 
 @media (min-width: 1400px) {
@@ -44,7 +56,7 @@ body {
 }
 
 div.container {
-	margin-top: 60px;
+	margin-top: 40px;
 	margin-bottom: 20px;
 }
 
