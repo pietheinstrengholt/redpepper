@@ -5,7 +5,7 @@
 <body class="startpage">
 
 <!-- Header -->
-<div id="intro-header" class="intro-header" style="background: url({{ URL::asset('/img/background') }}/{!! App\Helper::setting('homescreen_image') !!}) no-repeat center center;">
+<div id="intro-header" class="intro-header" style="background: url({{ URL::asset('/img/background') }}/{!! App\Helper::setting('homescreen_image') !!}) no-repeat center center; background-size:cover; ">
 	<div class="container">
 
 		<div id="intro-header-row" class="row">
