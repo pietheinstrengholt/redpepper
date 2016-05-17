@@ -25,7 +25,7 @@ startpage.h6 {
 }
 
 .intro-header {
-    padding-top: 0px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
+    margin-top: -20px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
     padding-bottom: 0px;
     text-align: left;
     color: #f8f8f8;

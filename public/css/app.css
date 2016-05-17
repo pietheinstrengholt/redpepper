@@ -55,8 +55,8 @@ body {
 	line-height: 1.25em ! important;
 }
 
-div.container {
-	margin-top: 40px;
+body div.container {
+	margin-top: 60px;
 	margin-bottom: 20px;
 }
 
@@ -83,7 +83,7 @@ nav .glyphicon {
 /* Section Breadcrumb */
 
 ul.breadcrumb-section {
-	margin-top: 40px ! important;
+	margin-top: 20px ! important;
 }
 
 /* Sections and templates overview */
