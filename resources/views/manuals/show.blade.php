@@ -19,7 +19,7 @@
 			<h4>{{ $template->template_name }}</h4>
 			<h5>{{ $template->template_shortdesc }}</h5>
 			<h5>{{ $template->section_shortdesc }}</h5>
-			<h5>{{ $template->template_longdesc }}</h5>
+			<h5>{!! html_entity_decode(e($template->template_longdesc)) !!}</h5>
 
 			@if ( $template->requirements->count() )
 				<table class="table table-bordered book" border="0">

@@ -19,7 +19,7 @@
 	<div class="form-group">
 		{!! Form::label('template_longdesc', 'Template longdesc:', array('class' => 'col-sm-3 control-label')) !!}
 		<div class="col-sm-6">
-		{!! Form::textarea('template_longdesc', null, ['class' => 'form-control', 'rows' => '7']) !!}
+		{!! Form::textarea('template_longdesc', null, ['id' => 'template_longdesc', 'class' => 'form-control', 'rows' => '7']) !!}
 		</div>
 	</div>
 

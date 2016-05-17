@@ -1,10 +1,21 @@
 <!-- /resources/views/templates/edit.blade.php -->
 @extends('layouts.master')
-<head>
-
-</head>
 
 @section('content')
+
+	<script src="{{ URL::asset('js/tinymce/tinymce.min.js') }}"></script>
+	<script>tinymce.init({ 	
+		selector:'textarea#template_longdesc',
+		height: 400,
+		plugins: [
+			'link image'
+		],
+		menubar: '',
+		toolbar: 'undo redo | alignleft aligncenter alignright | bold italic | link | bullist numlist',
+		body_class: 'form-control',
+		statusbar: false,
+		content_style: "p {margin-top: -4px;} ol,ul,p {color: #2c3e50; font-size: 15px;}"
+	});</script>
 
 	<ul class="breadcrumb breadcrumb-section">
 	<li><a href="{!! url('/'); !!}">Home</a></li>
