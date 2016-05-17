@@ -1,7 +1,17 @@
 <!-- /resources/views/templates/edit.blade.php -->
 @extends('layouts.master')
+<head>
+
+</head>
 
 @section('content')
+
+	<ul class="breadcrumb breadcrumb-section">
+	<li><a href="{!! url('/'); !!}">Home</a></li>
+	<li><a href="{!! url('/sections/' . $template->section_id); !!}">{{ $template->section->section_name }}</a></li>
+	<li class="active">{{ $template->template_name }}</li>
+	</ul>
+
 	<h2>Edit Template "{{ $template->template_name }}"</h2>
 	
 	@if (count($errors) > 0)
