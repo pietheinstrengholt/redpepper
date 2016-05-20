@@ -972,14 +972,14 @@ class ExcelController extends Controller
 					
 					foreach($column_content  as $key => $value) {
 						$column_code = trim($value['column_code']);
-						if (!(in_array($column_code, $column_content_array, true))) {
+						if (!(in_array($column_code . $value['content_type'], $column_content_array, true))) {
 							$sheet->setCellValueExplicit('A' . $columncontentcount, $column_code)
 							->setCellValueExplicit('B' . $columncontentcount, $value['content_type'])
 							->setCellValueExplicit('C' . $columncontentcount, $value['content']);
 							$columncontentcount++;
 							
-							//push column_code to unique array for validation
-							array_push($column_content_array, $column_code);
+							//push column_code and content_type combination to unique array for validation
+							array_push($column_content_array, $column_code . $value['content_type']);
 						}
 					}
 				}
@@ -1024,15 +1024,15 @@ class ExcelController extends Controller
 					foreach($row_contents as $key => $value) {
 						$row_code = trim($value['row_code']);
 						
-						if (!(in_array($row_code, $row_content_array, true))) {
+						if (!(in_array($row_code . $value['content_type'], $row_content_array, true))) {
 						
 							$sheet->setCellValueExplicit('A' . $rowcontentcount, $row_code)
 							->setCellValueExplicit('B' . $rowcontentcount, $value['content_type'])
 							->setCellValueExplicit('C' . $rowcontentcount, $value['content']);
 							$rowcontentcount++;
 							
-							//push row_code to unique array for validation
-							array_push($row_content_array, $row_code);
+							//push row_code and content_type combination to unique array for validation
+							array_push($row_content_array, $row_code . $value['content_type']);
 						}
 					}
 				}
