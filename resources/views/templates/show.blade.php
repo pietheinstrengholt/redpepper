@@ -12,7 +12,7 @@
 
 	<h2>{{ $template->template_name }}</h2>
 	<h4>{!! App\Helper::contentAdjust(nl2br(e($template->template_shortdesc))) !!}</h4>
-	<h4>{!! html_entity_decode(App\Helper::contentAdjust(e($template->template_longdesc))) !!}</h4>
+	<h4>{!! html_entity_decode(e($template->template_longdesc)) !!}</h4>
 	<h4>{!! App\Helper::contentAdjust(nl2br(e($template->frequency_description))) !!}</h4>
 	<h4>{!! App\Helper::contentAdjust(nl2br(e($template->reporting_dates_description))) !!}</h4>
 	<h4>{!! App\Helper::contentAdjust(nl2br(e($template->main_changes_description))) !!}</h4>
