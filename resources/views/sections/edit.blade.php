@@ -2,6 +2,26 @@
 @extends('layouts.master')
 
 @section('content')
+
+	<script src="{{ URL::asset('js/tinymce/tinymce.min.js') }}"></script>
+	<script>tinymce.init({ 	
+		selector:'textarea#section_longdesc',
+		height: 300,
+		plugins: [
+			'link image'
+		],
+		menubar: '',
+		toolbar: 'undo redo | alignleft aligncenter alignright | bold italic | link | bullist numlist',
+		body_class: 'form-control',
+		statusbar: false,
+		content_style: "p {margin-top: -4px;} ol,ul,p {color: #2c3e50; font-size: 15px;}"
+	});</script>
+
+	<ul class="breadcrumb breadcrumb-section">
+	<li><a href="{!! url('/'); !!}">Home</a></li>
+	<li class="active">{{ $section->section_name }}</li>
+	</ul>
+
 	<h2>Edit Section "{{ $section->section_name }}"</h2>
 
 	@if (count($errors) > 0)

@@ -10,7 +10,9 @@
 	</ul>
 
 	<h2>{{ $section->section_name }}</h2>
-	<h4>Total overview of all templates</h4>
+	<h4>{{ $section->section_description }}</h4>
+	<h4>{!! html_entity_decode(e($section->section_longdesc)) !!}</h4><br>
+	<h3>Total overview of all templates</h3>
 
 	@if ( !$section->templates->count() )
 		This section has no templates.<br><br>

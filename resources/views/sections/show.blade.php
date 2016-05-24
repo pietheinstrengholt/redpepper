@@ -15,7 +15,7 @@
 		This section has no templates.<br><br>
 	@else
 		<h4>{{ $section->section_description }}</h4>
-		<h4>{{ $section->section_longdesc }}</h4>
+		<h4>{!! html_entity_decode(e($section->section_longdesc)) !!}</h4>
 		<h5>Total overview of all templates</h5>
 
 		<table class="table section-table dialog table-striped" border="1">
