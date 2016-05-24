@@ -60,10 +60,10 @@
 			</ul>
 			<form class="navbar-form navbar-left" role="search" action="{{ URL::to('/search') }}" method="post">
 			<input type="hidden" name="_token" value="{!! csrf_token() !!}">
-			  <div class="form-group">
-				<input type="text" name="search" class="form-control" placeholder="Search for content">
-			  </div>
-			  <button type="submit" class="btn btn-default">Submit</button>
+				<div class="form-group">
+					<input type="text" name="search" class="form-control" placeholder="Search for content">
+				</div>
+				<button type="submit" class="btn btn-default">Submit</button>
 			</form>
 			@if (!Auth::guest())
 			<ul class="nav navbar-nav">
@@ -71,23 +71,24 @@
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin menu <span class="caret"></span></a>
 				<ul class="dropdown-menu" role="menu">
 				  @if (Auth::user()->role == "superadmin")
-					  <li><a href="{{ URL::to('/settings') }}"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Settings</a></li>
-					  <li class="divider"></li>
-					  <li><a href="{{ URL::to('/terms') }}"><span class="glyphicon glyphicon-grain" aria-hidden="true"></span> Terms</a></li>
-					  <li class="divider"></li>
-					  <li><a href="{{ URL::to('/types') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit types</a></li>
-					  <li><a href="{{ URL::to('/sources') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit sources</a></li>
-					  <li><a href="{{ URL::to('/departments') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit departments</a></li>
-					  <li><a href="{{ URL::to('/users') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit users</a></li>
-					  <li class="divider"></li>
-					  <li><a href="{{ URL::to('/csv/import') }}"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Import technical</a></li>
-					  <li class="divider"></li>
+					<li><a href="{{ URL::to('/settings') }}"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Settings</a></li>
+					<li class="divider"></li>
+					<li><a href="{{ URL::to('/terms') }}"><span class="glyphicon glyphicon-grain" aria-hidden="true"></span> Terms</a></li>
+					<li class="divider"></li>
+					<li><a href="{{ URL::to('/subjects') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit subjects</a></li>
+					<li><a href="{{ URL::to('/types') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit types</a></li>
+					<li><a href="{{ URL::to('/sources') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit sources</a></li>
+					<li><a href="{{ URL::to('/departments') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit departments</a></li>
+					<li><a href="{{ URL::to('/users') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit users</a></li>
+					<li class="divider"></li>
+					<li><a href="{{ URL::to('/csv/import') }}"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Import technical</a></li>
+					<li class="divider"></li>
 				  @endif
 				  <li><a href="{{ URL::to('/changerequests') }}"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Change requests</a></li>
 				  @if (Auth::user()->role == "superadmin" || Auth::user()->role == "admin")
-					  <li class="divider"></li>
-					  <li><a href="{{ URL::to('/logs') }}"><span class="glyphicon glyphicon-certificate" aria-hidden="true"></span> User activities</a></li>
-					  <li class="divider"></li>
+					<li class="divider"></li>
+					<li><a href="{{ URL::to('/logs') }}"><span class="glyphicon glyphicon-certificate" aria-hidden="true"></span> User activities</a></li>
+					<li class="divider"></li>
 				  @endif
 				  @if (Auth::user()->role == "superadmin" || Auth::user()->role == "admin" || Auth::user()->role == "builder")
 					<li><a href="{{ URL::to('/excel/uploadtemplate') }}"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Upload excel template</a></li>
