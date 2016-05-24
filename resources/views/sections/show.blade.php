@@ -35,7 +35,7 @@
 			{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('sections.templates.destroy', $template->section_id, $template->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this template?\')')) !!}
 			<td><a href="{{ route('sections.templates.show', [$section->id, $template->id]) }}">{{ $template->template_name }}</a></td>
 			<td>{{ $template->template_shortdesc }}</td>
-			<td>{{ $template->template_longdesc }}</td>
+			<td>{!! html_entity_decode(e($template->template_longdesc)) !!}</td>
 			<td>
 			<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $template->id }}">Export</a>
 			@can('update-section', $section)
