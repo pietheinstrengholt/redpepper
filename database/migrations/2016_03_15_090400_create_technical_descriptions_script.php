@@ -14,7 +14,7 @@ class CreateTechnicalDescriptionsScript extends Migration
 	{
 		Schema::create('t_technical_descriptions', function (Blueprint $table) {
 			$table->increments('id');
-			$table->integer('type_id')->unsigned();	
+			$table->integer('type_id')->unsigned();
 			$table->string('content')->nullable();
 			$table->longText('description')->nullable();
 			$table->timestamps();
