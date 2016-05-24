@@ -6,6 +6,7 @@ use App\Events\SectionUpdated;
 use App\Events\SectionDeleted;
 use App\Http\Controllers\Controller;
 use App\Section;
+use App\Subject;
 use App\Template;
 use App\User;
 use App\UserRights;
@@ -134,9 +135,15 @@ class SectionController extends Controller
 			abort(403, 'This section no longer exists in the database.');
 		}
 		
+		//retrieve subjects for dropdown
+		$subjects = Subject::orderBy('subject_name', 'asc')->get();
+		
+		//set subject_id variable, workaround for create function
+		$subject_id = $section->subject_id;
+		
 		//validate if user can update section (see AuthServiceProvider)
 		if ($request->user()->can('update-section', $section)) {
-			return view('sections.edit', compact('section'));
+			return view('sections.edit', compact('section','subjects','subject_id'));
 		} else {
 			abort(403, 'Unauthorized action.');
 		}
@@ -145,9 +152,12 @@ class SectionController extends Controller
 	public function create(Request $request, Section $section)
 	{
 		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
+
+		//retrieve subjects for dropdown
+		$subjects = Subject::orderBy('subject_name', 'asc')->get();
 		
 		//set subject_id if argument is given
 		if ($request->has('subject_id')) {
@@ -156,7 +166,7 @@ class SectionController extends Controller
 			$subject_id = null;
 		}
 
-		return view('sections.create', compact('section','subject_id'));
+		return view('sections.create', compact('section','subjects','subject_id'));
 	}
 
 	public function store(Request $request)
