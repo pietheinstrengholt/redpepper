@@ -25,6 +25,7 @@ Route::model('users', 'User');
 Route::model('changerequests', 'ChangeRequest');
 Route::model('logs', 'Log');
 Route::model('terms', 'Term');
+Route::model('subjects', 'Subject');
 
 // Use IDs in URLs
 Route::bind('sections', function($value, $route) {
@@ -63,6 +64,10 @@ Route::bind('terms', function($value, $route) {
 	return App\Term::whereId($value)->first();
 });
 
+Route::bind('subjects', function($value, $route) {
+	return App\Subject::whereId($value)->first();
+});
+
 // User routes...
 Route::get('users/{id}/rights', ['middleware' => 'auth', 'uses' => 'UserController@rights']);
 Route::get('users/{id}/password', ['middleware' => 'auth', 'uses' => 'UserController@password']);
@@ -93,6 +98,7 @@ Route::resource('users', 'UserController');
 Route::resource('changerequests', 'ChangeRequestController');
 Route::resource('logs', 'LogController');
 Route::resource('terms', 'TermController');
+Route::resource('subjects', 'SubjectController');
 
 // Settings
 Route::get('settings', ['middleware' => 'auth', 'uses' => 'SettingController@index']);
