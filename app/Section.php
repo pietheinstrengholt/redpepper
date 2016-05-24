@@ -10,6 +10,11 @@ class Section extends Model
 	protected $guarded = [];
 	protected $table = 't_sections';
 
+	public function subject()
+	{
+		return $this->belongsTo('App\Subject');
+	}
+
 	public function templates()
 	{
 		return $this->hasMany('App\Template');
