@@ -26,11 +26,7 @@
 	<div class="form-group">
 		{!! Form::label('subject_id', 'Section group:', array('class' => 'col-sm-3 control-label')) !!}
 		<div class="col-sm-6">
-		@if ( $subject_id )
-			{!! Form::select('subject_id', [1 => 'Corep', 2 => 'Finrep', 3 => 'Liquidity', 4 => 'Other'], $subject_id, ['id' => 'subject_id', 'class' => 'form-control']) !!}
-		@else
-			{!! Form::select('subject_id', [1 => 'Corep', 2 => 'Finrep', 3 => 'Liquidity', 4 => 'Other'], $section->subject_id, ['id' => 'subject_id', 'class' => 'form-control']) !!}
-		@endif
+		{!! Form::select('subject_id', [1 => 'Corep', 2 => 'Finrep', 3 => 'Liquidity', 4 => 'Other'], $section->subject_id, ['id' => 'subject_id', 'class' => 'form-control']) !!}
 		</div>
 	</div>
 
