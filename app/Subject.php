@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Subject extends Model
 {
-	protected $fillable = ['subject_name','subject_description','subject_longdesc'];
+	protected $fillable = ['subject_name','subject_description','subject_longdesc','visible'];
 	protected $guarded = [];
 	protected $table = 't_subjects';
 
