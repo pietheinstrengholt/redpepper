@@ -37,24 +37,22 @@
 		</div>
 
 		{{--*/ $i=0; /*--}}
-		<div class="row" style="margin-top: 20px;">
+		<div class="row row-eq-height" style="margin-top: 20px;">
 		@foreach ($subjects as $subject)
 		<div class="col-md-3 col-sm-6 hero-feature">
 			@if ($subject->visible == "False")
-				<div class="thumbnail" style="display: block; background-color: #FEF0C9 !important;">
+				<div class="thumbnail" style="background-color: #FEF0C9 !important;">
 			@else
-				<div class="thumbnail" style="display: block;">
+				<div class="thumbnail">
 			@endif
-				<div class="caption">
+				<div class="caption" style="padding:0px;">
 					<div class="clearfix"></div>
-					<div>
-						<div class="caption">
-							<h3 class="center"><a href="{{ url('sections') }}?subject_id={{ $subject->id }}">{{ $subject->subject_name }}</a></h3>
-							<p class="center">{{ $subject->subject_description }}</p>
-							<p class="p-more-info">
-								<a href="{{ url('sections') }}?subject_id={{ $subject->id }}" class="btn btn-primary">More info</a>
-							</p>
-						</div>
+					<div class="content-container" style="margin-top:-5px;">
+						<h3 class="center"><a href="{{ url('sections') }}?subject_id={{ $subject->id }}">{{ $subject->subject_name }}</a></h3>
+						<p class="center">{{ $subject->subject_description }}</p>
+						<p class="p-more-info">
+							<a href="{{ url('sections') }}?subject_id={{ $subject->id }}" class="btn btn-primary">More info</a>
+						</p>
 						<div class="clearfix"></div>
 					</div>
 				</div>
