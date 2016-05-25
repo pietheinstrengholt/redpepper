@@ -5,7 +5,11 @@
 
 	<ul class="breadcrumb breadcrumb-section">
 	<li><a href="{!! url('/'); !!}">Home</a></li>
-	<li class="active">Sections</li>
+	@if ( $subject )
+		<li class="active">{{ $subject->subject_name }}</li>
+	@else
+		<li class="active">Sections</li>
+	@endif
 	</ul>
 
 	@if ( $subject )
@@ -15,7 +19,7 @@
 	@else
 		<h2>Sections</h2>
 	@endif
-	<h4>Please make a selection of one of the following templates</h4>
+	<h4>Please make a selection of one of the following items</h4>
 
 	@if ( !$sections->count() )
 		No sections found in the database!<br><br>
