@@ -50,4 +50,4 @@ TODO
 * Cleanup ChangeRequestController, clone object instead of line by line copy
 * Cleanup views, move all css to app.css
 * Add more efficient way to lookup reference value
-* Groups or subjects
+* Same height tumbnails on frontpage
