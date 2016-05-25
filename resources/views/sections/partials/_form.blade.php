@@ -31,14 +31,9 @@
 	</div>
 
 	<div class="form-group">
-		{!! Form::label('Visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
-		<div class="col-sm-6" style="margin-top: 11px;">
-		{!! Form::hidden('visible','False') !!}
-		@if ( $section->visible == "True" )
-			{!! Form::checkbox('visible', 'True', true) !!}
-		@else
-			{!! Form::checkbox('visible', 'True') !!}
-		@endif
+		{!! Form::label('visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
+		<div class="col-sm-6">
+		{!! Form::select('visible', ['True' => 'True', 'False' => 'False'], $section->visible, ['id' => 'visible', 'class' => 'form-control']) !!}
 		</div>
 	</div>
 

@@ -65,7 +65,7 @@ class CreateTables extends Migration
 			$table->string('section_longdesc')->nullable();
 			$table->string('reporting_frequency')->nullable();
 			$table->integer('subject_id')->default(0);
-			$table->string('visible')->default('true');
+			$table->string('visible')->default('False');
 			$table->integer('created_by');
 			$table->timestamps();
 		});
@@ -82,7 +82,7 @@ class CreateTables extends Migration
 			$table->string('process_and_organisation_description')->nullable();
 			$table->integer('type_id')->nullable();
 			$table->integer('sortorder')->nullable();
-			$table->string('visible')->default('true');
+			$table->string('visible')->default('False');
 			$table->integer('created_by');
 			$table->timestamps();
 		});

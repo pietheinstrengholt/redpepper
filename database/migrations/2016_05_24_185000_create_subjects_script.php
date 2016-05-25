@@ -17,6 +17,7 @@ class CreateSubjectsScript extends Migration
 			$table->text('subject_name');
 			$table->string('subject_description');
 			$table->longText('subject_longdesc')->nullable();
+			$table->string('visible')->default('False');
 			$table->timestamps();
 		});
 
@@ -24,7 +25,8 @@ class CreateSubjectsScript extends Migration
 		DB::table('t_subjects')->insert(
 			array(
 				'subject_name' => 'COREP',
-				'subject_description' => 'Common Reporting (COREP) is the standardized reporting framework issued by the EBA for the Capital Requirements Directive reporting.'
+				'subject_description' => 'Common Reporting (COREP) is the standardized reporting framework issued by the EBA for the Capital Requirements Directive reporting.',
+				'visible' => 'True'
 			)
 		);
 
@@ -32,7 +34,8 @@ class CreateSubjectsScript extends Migration
 		DB::table('t_subjects')->insert(
 			array(
 				'subject_name' => 'FINREP',
-				'subject_description' => 'FINREP reporting is a standardized EU-wide framework for reporting financial (accounting) data.'
+				'subject_description' => 'FINREP reporting is a standardized EU-wide framework for reporting financial (accounting) data.',
+				'visible' => 'True'
 			)
 		);
 
@@ -40,7 +43,8 @@ class CreateSubjectsScript extends Migration
 		DB::table('t_subjects')->insert(
 			array(
 				'subject_name' => 'Liquidity reports',
-				'subject_description' => 'Liquidity covers the Liquidity coverage ratio templates, the stable funding templates and other liquidity reports.'
+				'subject_description' => 'Liquidity covers the Liquidity coverage ratio templates, the stable funding templates and other liquidity reports.',
+				'visible' => 'True'
 			)
 		);
 
@@ -48,7 +52,8 @@ class CreateSubjectsScript extends Migration
 		DB::table('t_subjects')->insert(
 			array(
 				'subject_name' => 'Other reports',
-				'subject_description' => 'This section covers all other regulatory reports, e.g. issues by the local NSA (National Supervisory Authority).'
+				'subject_description' => 'This section covers all other regulatory reports, e.g. issues by the local NSA (National Supervisory Authority).',
+				'visible' => 'True'
 			)
 		);
 	}

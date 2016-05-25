@@ -12,7 +12,7 @@ class Section extends Model
 
 	public function subject()
 	{
-		return $this->belongsTo('App\Subject');
+		return $this->hasOne('App\Subject', 'id', 'subject_id');
 	}
 
 	public function templates()
