@@ -8,7 +8,13 @@
 	<li class="active">Sections</li>
 	</ul>
 
-	<h2>Sections</h2>
+	@if ( $subject )
+		<h2>{{ $subject->subject_name }}</h2>
+		<h3>{{ $subject->subject_description }}</h3>
+		<h4>{!! html_entity_decode(e($subject->subject_longdesc)) !!}</h4>
+	@else
+		<h2>Sections</h2>
+	@endif
 	<h4>Please make a selection of one of the following templates</h4>
 
 	@if ( !$sections->count() )
@@ -18,6 +24,7 @@
 
 		<tr class="success">
 		<td class="header">Name</td>
+		<td class="header">Subject</td>
 		<td class="header">Description</td>
 		<td class="header" style="width: 120px;">Options</td>
 		</tr>
@@ -29,6 +36,7 @@
 				<tr>
 			@endif
 			<td><a href="{{ route('sections.show', $section->id) }}">{{ $section->section_name }}</a></td>
+			<td>{{ $section->subject->subject_name }}</td>
 			<td>{{ $section->section_description }}</td>
 			<td>
 			@can('superadmin', $section)
@@ -48,8 +56,8 @@
 
 	@if (!Auth::guest())
 		<p>
-		@if ( $subject_id )
-			{!! link_to_route('sections.create', 'Create Section', array('subject_id' => $subject_id))  !!}
+		@if ( $subject )
+			{!! link_to_route('sections.create', 'Create Section', array('subject_id' => $subject->id))  !!}
 		@else
 			{!! link_to_route('sections.create', 'Create Section')  !!}
 		@endif

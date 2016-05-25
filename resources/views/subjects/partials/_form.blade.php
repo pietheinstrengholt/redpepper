@@ -21,6 +21,13 @@
 		{!! Form::textarea('subject_longdesc', null, ['id' => 'subject_longdesc', 'class' => 'form-control', 'rows' => '7']) !!}
 		</div>
 	</div>
+	
+	<div class="form-group">
+		{!! Form::label('visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
+		<div class="col-sm-6">
+		{!! Form::select('visible', ['True' => 'True', 'False' => 'False'], $subject->visible, ['id' => 'visible', 'class' => 'form-control']) !!}
+		</div>
+	</div>
 
 	<div class="form-group">
 		{!! Form::submit($submit_text, ['class' => 'btn btn-primary']) !!}
