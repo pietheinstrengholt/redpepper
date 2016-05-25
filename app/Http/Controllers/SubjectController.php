@@ -82,7 +82,7 @@ class SubjectController extends Controller
 
 		$subject->update($request->all());
 
-		return Redirect::route('subjects.index', $subject->id)->with('message', 'Subject updated.');
+		return Redirect::route('subjects.index')->with('message', 'Subject updated.');
 	}
 
 	public function destroy(Subject $subject)

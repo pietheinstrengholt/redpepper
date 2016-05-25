@@ -22,23 +22,23 @@ class SectionController extends Controller
     {
 		//set subject_id if argument is given
 		if ($request->has('subject_id')) {
-			$subject_id = $request->input('subject_id');
+			$subject = Subject::where('id', $request->input('subject_id'))->first();
 		} else {
-			$subject_id = null;
+			$subject = null;
 		}
 		
 		//only non guests can see all sections
 		if (Auth::guest()) {
 			if ($request->has('subject_id')) {
-				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', $request->input('subject_id'))->where('visible', '<>' , 'False')->get();
+				$sections = Section::with('subject')->orderBy('section_name', 'asc')->where('subject_id', $request->input('subject_id'))->where('visible', '<>' , 'False')->get();
 			} else {
-				$sections = Section::orderBy('section_name', 'asc')->where('visible', '<>' , 'False')->get();
+				$sections = Section::with('subject')->orderBy('section_name', 'asc')->where('visible', '<>' , 'False')->get();
 			}
 		} else {
 			if ($request->has('subject_id')) {
-				$sections = Section::orderBy('section_name', 'asc')->where('subject_id', $request->input('subject_id'))->get();
+				$sections = Section::with('subject')->orderBy('section_name', 'asc')->where('subject_id', $request->input('subject_id'))->get();
 			} else {
-				$sections = Section::orderBy('section_name', 'asc')->get();
+				$sections = Section::with('subject')->orderBy('section_name', 'asc')->get();
 			}
 		}
 		
@@ -50,7 +50,7 @@ class SectionController extends Controller
 			abort(403, 'No sections have been found. Please ask your administrator to add any sections.');
 		}
 		
-		return view('sections.index', compact('sections','subject_id'));
+		return view('sections.index', compact('sections','subject'));
     }
 
     public function manuals()
@@ -63,7 +63,7 @@ class SectionController extends Controller
 		}
 
 		//sort sections on natural ordering
-		$sections = $sections->sortBy('section_name', SORT_NATURAL);		
+		$sections = $sections->sortBy('section_name', SORT_NATURAL);
 
 		//abort if sectionRights array is empty
 		if (empty($sections)) {
