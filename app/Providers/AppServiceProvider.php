@@ -14,6 +14,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot() {
 		//show drop-down in nav menu
 		view()->composer('layouts.master', 'App\Http\ViewComposers\SectionComposer');
+		view()->composer('index', 'App\Http\ViewComposers\SubjectComposer');
 	}
 
 	/**

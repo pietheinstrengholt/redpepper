@@ -36,63 +36,45 @@
 			</div>
 		</div>
 
-		<div id="page-content" class="row">
-
-			<div class="col-md-3 col-sm-6 hero-feature">
-				<div class="thumbnail">
-					<div class="caption">
-						<h3 class="center"><a href="{{ url('sections') }}?subject_id=1">COREP</a></h3>
-						<p class="center">Common Reporting (COREP) is the standardized reporting framework issued by the EBA for the Capital Requirements Directive reporting.</p>
-						<p class="p-more-info">
-							<a href="{{ url('sections') }}?subject_id=1" class="btn btn-danger">More info</a>
-						</p>
+		{{--*/ $i=0; /*--}}
+		<div class="row" style="margin-top: 20px;">
+		@foreach ($subjects as $subject)
+		<div class="col-md-3 col-sm-6 hero-feature">
+			@if ($subject->visible == "False")
+				<div class="thumbnail" style="display: block; background-color: #FEF0C9 !important;">
+			@else
+				<div class="thumbnail" style="display: block;">
+			@endif
+				<div class="caption">
+					<div class="clearfix"></div>
+					<div>
+						<div class="caption">
+							<h3 class="center"><a href="{{ url('sections') }}?subject_id={{ $subject->id }}">{{ $subject->subject_name }}</a></h3>
+							<p class="center">{{ $subject->subject_description }}</p>
+							<p class="p-more-info">
+								<a href="{{ url('sections') }}?subject_id={{ $subject->id }}" class="btn btn-primary">More info</a>
+							</p>
+						</div>
+						<div class="clearfix"></div>
 					</div>
 				</div>
 			</div>
+		</div>
+		{{--*/ $i++; /*--}}
+		@if ($i%4 == 0)
+			</div><div class="row">
+		@endif
 
-			<div class="col-md-3 col-sm-6 hero-feature">
-				<div class="thumbnail">
-					<div class="caption">
-						<h3 class="center"><a href="{{ url('sections') }}?subject_id=2">FINREP</a></h3>
-						<p class="center">FINREP reporting is a standardized EU-wide framework for reporting financial (accounting) data.<br><br></p>
-						<p class="p-more-info">
-							<a href="{{ url('sections') }}?subject_id=2" class="btn btn-primary">More info</a>
-						</p>
-					</div>
-				</div>
-			</div>
+		@endforeach
+		</div>
 
-			<div class="col-md-3 col-sm-6 hero-feature">
-				<div class="thumbnail">
-					<div class="caption">
-						<h3 class="center"><a href="{{ url('sections') }}?subject_id=3">Liquidity reports</a></h3>
-						<p class="center">Liquidity covers the Liquidity coverage ratio templates, the stable funding templates and other liquidity reports.<br><br></p>
-						<p class="p-more-info">
-							<a href="{{ url('sections') }}?subject_id=3" class="btn btn-success">More info</a>
-						</p>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-md-3 col-sm-6 hero-feature">
-				<div class="thumbnail">
-					<div class="caption">
-						<h3 class="center"><a href="{{ url('sections') }}?subject_id=4">Other reports</a></h3>
-						<p class="center">This section covers all other regulatory reports, e.g. issues by the local NSA (National Supervisory Authority).<br><br></p>
-						<p class="p-more-info">
-							<a href="{{ url('sections') }}?subject_id=4" class="btn btn-warning">More info</a>
-						</p>
-					</div>
-				</div>
-			</div>
-
+		<div id="page-content2" class="row" style="margin: 0px;">
 			<div class="col-md-12 col-sm-12" id="footer">
 				<p class="muted credit" style="margin: 20px 0px 0px 0px; color: #999999;">Owned by the <a style="color:#0088cc;" href="mailto:FRC@nl.abnamro.com">FRC team</a>, developed with close collaboration by <a style="color:#0088cc;" href="mailto:piethein.strengholt@nl.abnamro.com">Piethein Strengholt</a><img style="margin-bottom: 5px; margin-left: 3px;" src="{{ URL::asset('img/pepper-small.png') }}" alt="redpepper" height="16" width="16"></p>
 				@if (file_exists(base_path() . '/version'))
 					<p class="muted credit"style="color: #999999;"><small>version: 2.0-{{ file_get_contents(base_path() . '/version') }}</small></p>
 				@endif
 			</div>
-
 		</div>
 
 	</div>
