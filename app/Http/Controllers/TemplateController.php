@@ -479,8 +479,8 @@ class TemplateController extends Controller
 		]);
 	}
 	
-    public function manual($id)
-    {
+	public function manual($id)
+	{
 		$template = Template::where('id', $id)->first();
 		
 		//abort if sectionRights array is empty
@@ -491,6 +491,21 @@ class TemplateController extends Controller
 		$technical = Technical::where('template_id', $id)->orderBy('row_code', 'asc')->orderBy('column_code', 'asc')->get();
 		
 		return view('templates.manual', compact('template','technical'));
-    }
+	}
 
+	public function imageUpload(Request $request)
+	{
+		//create upload folder, if not exists
+		if (!file_exists(public_path() . '/img/upload/')) {
+			mkdir(public_path() . '/img/upload/', 0777, true);
+		}
+
+		//upload image with random string
+		$file = $request->file('imagefile');
+		$extension = $file->getClientOriginalExtension();
+		$random = str_random(10);
+		$file->move(public_path() . '/img/upload/', $random . '.' . $extension);
+		$file_path = str_replace("/index.php","",url()) . '/img/upload/' . $random . '.' . $extension;
+		return view('imageupload.image-upload', compact('file_path'));
+	}
 }

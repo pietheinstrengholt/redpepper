@@ -51,3 +51,5 @@ TODO
 * Cleanup views, move all css to app.css
 * Add more efficient way to lookup reference value
 * Same height tumbnails on frontpage
+* Abort when uploading image and extension is not jpeg, png, gif
+* Add bootstrap layout to image upload pop-up

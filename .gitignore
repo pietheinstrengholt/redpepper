@@ -11,6 +11,7 @@ Homestead.json
 .env
 /storage
 
-# Specific
+# Application Specific
 deploy.sh
 version
+/public/img/upload

@@ -142,3 +142,9 @@ Route::post('/auth/register', 'Auth\AuthController@postRegister');
 //Manuals
 Route::get('/manuals', 'SectionController@manuals');
 Route::get('/manuals/{id}', 'SectionController@showmanual');
+
+//image upload
+Route::get('/imageupload', function() {
+	return view('imageupload.image-dialog');
+});
+Route::post('/imageupload', 'TemplateController@imageUpload');

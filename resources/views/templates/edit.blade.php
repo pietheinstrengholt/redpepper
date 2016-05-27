@@ -8,10 +8,11 @@
 		selector:'textarea#template_longdesc',
 		height: 400,
 		plugins: [
-			'link image'
+			'link image imageupload'
 		],
 		menubar: '',
-		toolbar: 'undo redo | alignleft aligncenter alignright | bold italic | link | bullist numlist',
+		toolbar: 'undo redo | alignleft aligncenter alignright | bold italic | link | imageupload | bullist numlist',
+		relative_urls: false,
 		body_class: 'form-control',
 		statusbar: false,
 		content_style: "p {margin-top: -4px;} ol,ul,p {color: #2c3e50; font-size: 15px;}"
