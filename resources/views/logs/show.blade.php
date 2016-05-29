@@ -15,11 +15,12 @@
 	</tr>
 
 	@foreach( $logs as $log )
-		@if ($log->action == "Updated" || $log->action == "Approved")
+		@if ($log->action == "Updated" || $log->action == "Approved" && !(empty($log->template)))
 			<tr>
 			<td>
 			@if ($log->log_event == "Changerequest")
-				<a href="{!! url('/') . '/changerequests/' . $log->changerequest_id . '/edit'; !!}">Changerequest {{ $log->changerequest_id }}</a> has been approved for template <a href="{!! url('/') . '/sections/' . $log->template->section_id . '/templates/' . $log->template_id; !!}">{{ $log->template->template_name }}</a>
+				<a href="{!! url('/') . '/changerequests/' . $log->changerequest_id . '/edit'; !!}">Changerequest {{ $log->changerequest_id }}</a> has been approved for template 
+				<a href="{!! url('/') . '/sections/' . $log->template->section_id . '/templates/' . $log->template_id; !!}">{{ $log->template->template_name }}</a>
 			@endif
 			@if ($log->log_event == "Template")
 				Template <a href="{!! url('/') . '/sections/' . $log->template->section_id . '/templates/' . $log->template_id; !!}">{{ $log->template->template_name }}</a> has been updated.
