@@ -4,6 +4,8 @@
 </head>
 <body class="startpage">
 
+{{--*/ $buttons = array("btn-danger", "btn-primary", "btn-success", "btn-warning"); /*--}}
+
 <!-- Header -->
 <div id="intro-header" class="intro-header" style="background: url({{ URL::asset('/img/background') }}/{!! App\Helper::setting('homescreen_image') !!}) no-repeat center center; background-size:cover; ">
 	<div class="container">
@@ -25,52 +27,54 @@
 
 					<h1>{!! App\Helper::setting('main_message1') !!}</h1>
 					<h3>{!! App\Helper::setting('main_message2') !!}</h3>
-					<hr style="margin-right:1000px;" class="intro-divider">
+					<hr id="home-divider" class="intro-divider">
 					<ul class="list-inline intro-social-buttons">
-						<li><a href="{{ url('sections') }}" class="btn btn-default btn-lg"><span class="network-name"><span style="margin-right:3px;" class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>All reports</span></a></li>
-						<li><a href="doc/FRC_RADAR_Tooling_User_Manual.pdf" class="btn btn-default btn-lg"><span class="network-name"><span style="margin-right:3px;" class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>Instruction manual</span></a></li>
-						<li><a href="{{ url('advancedsearch') }}" class="btn btn-default btn-lg"><span class="network-name"><span style="margin-right:3px;" class="glyphicon glyphicon-search" aria-hidden="true"></span>Advanced</span></a></li>
-						<li id="changes"><p class="btn btn-default btn-lg"><span class="network-name"><span style="margin-right:3px;" class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>Latest changes</span></p></li>
+						<li><a href="{{ url('sections') }}" class="btn btn-default btn-lg"><span class="network-name"><span class="glyphicon home glyphicon-list-alt" aria-hidden="true"></span>All reports</span></a></li>
+						<li><a href="doc/FRC_RADAR_Tooling_User_Manual.pdf" class="btn btn-default btn-lg"><span class="network-name"><span class="glyphicon home glyphicon-folder-open" aria-hidden="true"></span>Instructions</span></a></li>
+						<li><a href="{{ url('advancedsearch') }}" class="btn btn-default btn-lg"><span class="network-name"><span class="glyphicon home glyphicon-search" aria-hidden="true"></span>Advanced</span></a></li>
+						<li id="changes"><p class="btn btn-default btn-lg"><span class="network-name"><span class="glyphicon home glyphicon-list-alt" aria-hidden="true"></span>Latest changes</span></p></li>
 					</ul>
 				</div>
 			</div>
 		</div>
 
 		{{--*/ $i=0; /*--}}
-		<div class="row row-eq-height" style="margin-top: 20px;">
-		@foreach ($subjects as $subject)
-		<div class="col-md-3 col-sm-6 hero-feature">
-			@if ($subject->visible == "False")
-				<div class="thumbnail" style="background-color: #FEF0C9 !important;">
-			@else
-				<div class="thumbnail">
-			@endif
-				<div class="caption" style="padding:0px;">
-					<div class="clearfix"></div>
-					<div class="content-container" style="margin-top:-5px;">
-						<h3 class="center"><a href="{{ url('sections') }}?subject_id={{ $subject->id }}">{{ $subject->subject_name }}</a></h3>
-						<p class="center">{{ $subject->subject_description }}</p>
-						<p class="p-more-info">
-							<a href="{{ url('sections') }}?subject_id={{ $subject->id }}" class="btn btn-primary">More info</a>
-						</p>
+		{{--*/ $buttonvalue=0; /*--}}
+		<div id="page-content1" class="row-flex row-flex-wrap row row-eq-height">
+		@foreach ($subjects as $key => $subject)
+			<div class="col-md-3 col-sm-6 hero-feature">
+				@if ($subject->visible == "False")
+					<div class="well yellow">
+				@else
+					<div class="well">
+				@endif
+					<div class="caption" style="padding:0px;">
 						<div class="clearfix"></div>
+						<div class="content-container">
+							<h3 class="center"><a href="{{ url('sections') }}?subject_id={{ $subject->id }}">{{ $subject->subject_name }}</a></h3>
+							<p class="center">{{ $subject->subject_description }}</p>
+							<p class="p-more-info">
+								<a href="{{ url('sections') }}?subject_id={{ $subject->id }}" class="btn {{ $buttons[$buttonvalue] }}">More info</a>
+							</p>
+							<div class="clearfix"></div>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		{{--*/ $i++; /*--}}
-		@if ($i%4 == 0)
-			</div><div class="row">
-		@endif
-
+			{{--*/ $i++; /*--}}
+			{{--*/ $buttonvalue++; /*--}}
+			@if ($i%4 == 0)
+				{{--*/ $buttonvalue=0; /*--}}
+				</div><div class="row">
+			@endif
 		@endforeach
 		</div>
 
-		<div id="page-content2" class="row" style="margin: 0px;">
+		<div id="page-content2" class="row">
 			<div class="col-md-12 col-sm-12" id="footer">
-				<p class="muted credit" style="margin: 20px 0px 0px 0px; color: #999999;">Owned by the <a style="color:#0088cc;" href="mailto:FRC@nl.abnamro.com">FRC team</a>, developed with close collaboration by <a style="color:#0088cc;" href="mailto:piethein.strengholt@nl.abnamro.com">Piethein Strengholt</a><img style="margin-bottom: 5px; margin-left: 3px;" src="{{ URL::asset('img/pepper-small.png') }}" alt="redpepper" height="16" width="16"></p>
+				<p class="muted credit" id="top">Owned by the <a class="credit" href="mailto:FRC@nl.abnamro.com">FRC team</a>, developed with close collaboration by <a class="credit" href="mailto:piethein.strengholt@nl.abnamro.com">Piethein Strengholt</a><img id="pepper" src="{{ URL::asset('img/pepper-small.png') }}" alt="redpepper" height="16" width="16"></p>
 				@if (file_exists(base_path() . '/version'))
-					<p class="muted credit"style="color: #999999;"><small>version: 2.0-{{ file_get_contents(base_path() . '/version') }}</small></p>
+					<p class="muted credit"><small>version: 2.0-{{ file_get_contents(base_path() . '/version') }}</small></p>
 				@endif
 			</div>
 		</div>

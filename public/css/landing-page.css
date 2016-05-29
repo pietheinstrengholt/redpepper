@@ -28,9 +28,13 @@ startpage.h6 {
     margin-top: -20px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
     padding-bottom: 0px;
     text-align: left;
-    color: #f8f8f8;
+
     /* background: url(../img/default.jpg) no-repeat center center; */
     background-size: cover;
+}
+
+#intro-header-row {
+    color: #f8f8f8;
 }
 
 .intro-message {
@@ -74,26 +78,49 @@ div#footer, p.p-more-info, h3.center, p.center {
 }
 
 @media(max-width:767px) {
-    .intro-message {
-        padding-bottom: 15%;
-    }
+	.intro-message {
+		padding-bottom: 15%;
+	}
 
-    .intro-message > h1 {
-        font-size: 3em;
-    }
+	.intro-message > h1 {
+		font-size: 3em;
+	}
 
-    ul.intro-social-buttons > li {
-        display: block;
-        margin-bottom: 20px;
-        padding: 0;
-    }
+	ul.intro-social-buttons > li {
+		display: block;
+		margin-bottom: 20px;
+		padding: 0;
+	}
 
-    ul.intro-social-buttons > li:last-child {
-        margin-bottom: 0;
-    }
+	ul.intro-social-buttons > li:last-child {
+		margin-bottom: 0;
+	}
 
-    .intro-divider {
-        width: 100%;
+	.intro-divider {
+		width: 100%;
+	}
+
+	.banner h2 {
+		margin: 0;
+		text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
+		font-size: 3em;
+	}
+
+	ul.banner-social-buttons > li {
+		display: block;
+		margin-bottom: 20px;
+		padding: 0;
+	}
+
+	ul.banner-social-buttons > li:last-child {
+		margin-bottom: 0;
+	}
+}
+
+@media(max-width:1199px) {
+    ul.banner-social-buttons {
+        float: left;
+        margin-top: 15px;
     }
 }
 
@@ -146,31 +173,6 @@ div#footer, p.p-more-info, h3.center, p.center {
     margin-top: 0;
 }
 
-@media(max-width:1199px) {
-    ul.banner-social-buttons {
-        float: left;
-        margin-top: 15px;
-    }
-}
-
-@media(max-width:767px) {
-    .banner h2 {
-        margin: 0;
-        text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
-        font-size: 3em;
-    }
-
-    ul.banner-social-buttons > li {
-        display: block;
-        margin-bottom: 20px;
-        padding: 0;
-    }
-
-    ul.banner-social-buttons > li:last-child {
-        margin-bottom: 0;
-    }
-}
-
 footer {
     padding: 20px 0;
 }
@@ -181,4 +183,92 @@ p.copyright {
 
 div.alert.alert-danger {
 	margin-top: -61px;
+}
+
+html,body {
+	height:100%;
+}
+      
+.row-flex, .row-flex > div[class*='col-'] {  
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	flex:1 1 auto;
+}
+
+.row-flex-wrap {
+	-webkit-flex-flow: row wrap;
+	align-content: flex-start;
+	flex:0;
+}
+
+.row-flex > div[class*='col-'], .container-flex > div[class*='col-'] {
+	 margin:-.2px; /* hack adjust for wrapping */
+}
+
+.container-flex > div[class*='col-'] div,.row-flex > div[class*='col-'] div {
+	width:100%;
+}
+
+.flex-col {
+	display: flex;
+	display: -webkit-flex;
+	flex: 1 100%;
+	flex-flow: column nowrap;
+}
+
+.flex-grow {
+	display: flex;
+	-webkit-flex: 2;
+	flex: 2;
+}
+
+div.well {
+	line-height: 1.42857143;
+	background-color: #ffffff;
+	border: 1px solid #ecf0f1;
+	border-radius: 4px;
+}
+
+div.content-container {
+	margin-top:-20px;
+}
+
+p.muted.credit {
+	color: #999999;
+}
+
+p.muted.credit#top {
+	margin: 20px 0px 0px 0px;
+}
+
+p.muted.credit a.credit {
+	color:#0088cc;
+}
+
+div#page-content1 {
+	margin-top: 20px;
+}
+
+div#page-content2 {
+	margin: 0px;
+}
+
+div.well.yellow {
+	background-color: #ffffe6 !important;
+}
+
+img#pepper {
+	margin-bottom: 5px;
+	margin-left: 3px;
+}
+
+hr#home-divider {
+	margin-right:1000px;
+}
+
+span.glyphicon.home  {
+	margin-right:3px;
 }
