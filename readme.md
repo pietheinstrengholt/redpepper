@@ -48,8 +48,5 @@ UPDATING
 TODO
 ------------
 * Cleanup ChangeRequestController, clone object instead of line by line copy
-* Cleanup views, move all css to app.css
+* Cleanup views, move all css to app.css, add media responsive
 * Add more efficient way to lookup reference value
-* Same height tumbnails on frontpage
-* Abort when uploading image and extension is not jpeg, png, gif
-* Add bootstrap layout to image upload pop-up
