@@ -503,9 +503,19 @@ class TemplateController extends Controller
 		//upload image with random string
 		$file = $request->file('imagefile');
 		$extension = $file->getClientOriginalExtension();
-		$random = str_random(10);
-		$file->move(public_path() . '/img/upload/', $random . '.' . $extension);
-		$file_path = str_replace("/index.php","",url()) . '/img/upload/' . $random . '.' . $extension;
-		return view('imageupload.image-upload', compact('file_path'));
+		
+		$validExtensions = array("jpeg", "jpg", "png", "gif");
+		
+		if (in_array(strtolower($extension), $validExtensions)) {
+			$random = str_random(10);
+			$file->move(public_path() . '/img/upload/', $random . '.' . $extension);
+			$file_path = str_replace("/index.php","",url()) . '/img/upload/' . $random . '.' . $extension;
+			return view('imageupload.image-upload', compact('file_path'));
+		} else {
+			$error = "An error occurred while processing the image. Unknown extension type.";
+			return view('imageupload.image-upload', compact('error'));
+		}
+		
+
 	}
 }
