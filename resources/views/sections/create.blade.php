@@ -7,6 +7,7 @@
 
 	<script>tinymce.init({ 	
 		selector:'textarea#section_description',
+		valid_elements: "p[style],a[href|target],strong/b,i/em,br,table,tbody,thead,tr,td,ul,ol,li",
 		height: 200,
 		plugins: [
 			'link image'
@@ -20,6 +21,7 @@
 
 	<script>tinymce.init({ 	
 		selector:'textarea#section_longdesc',
+		valid_elements: "p[style],a[href|target],strong/b,i/em,br,table,tbody,thead,tr,td,ul,ol,li",
 		height: 300,
 		plugins: [
 			'link image'
