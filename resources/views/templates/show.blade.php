@@ -11,7 +11,7 @@
 	</ul>
 
 	<h2>{{ $template->template_name }}</h2>
-	<h4>{!! App\Helper::contentAdjust(nl2br(e($template->template_shortdesc))) !!}</h4>
+	<h4>{!! html_entity_decode(e($template->template_shortdesc)) !!}</h4>
 	<h4>{!! html_entity_decode(e($template->template_longdesc)) !!}</h4>
 	<h4>{!! App\Helper::contentAdjust(nl2br(e($template->frequency_description))) !!}</h4>
 	<h4>{!! App\Helper::contentAdjust(nl2br(e($template->reporting_dates_description))) !!}</h4>
@@ -48,7 +48,7 @@
 		<div class="templateId" id="{{ $template->id }}" style="display: none;"></div>
 
 		@if ( !$template->columns->count() || !$template->rows->count() )
-			Error: This template has no columns or no rows.
+			<p><strong>Error:</strong> This template has no columns or no rows. Ask the administrator to change the properties of this template to show only the descriptions.</p>
 		@else
 			<table class="table table-bordered template" border="1">
 
