@@ -40,7 +40,11 @@
 				<tr>
 			@endif
 			<td><a href="{{ route('sections.show', $section->id) }}">{{ $section->section_name }}</a></td>
-			<td>{{ $section->subject->subject_name }}</td>
+			<td>
+			@if (!empty($section->subject)) 
+				{{ $section->subject->subject_name }}
+			@endif
+			</td>
 			<td>{{ $section->section_description }}</td>
 			<td>
 			@can('superadmin', $section)
