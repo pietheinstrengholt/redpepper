@@ -14,7 +14,7 @@
 
 	@if ( $subject )
 		<h2>{{ $subject->subject_name }}</h2>
-		<h3>{{ $subject->subject_description }}</h3>
+		<h3>{!! html_entity_decode(e($subject->subject_description)) !!}</h3>
 		<h4>{!! html_entity_decode(e($subject->subject_longdesc)) !!}</h4>
 	@else
 		<h2>Sections</h2>
@@ -45,7 +45,7 @@
 				{{ $section->subject->subject_name }}
 			@endif
 			</td>
-			<td>{{ $section->section_description }}</td>
+			<td>{!! html_entity_decode(e($section->section_description)) !!}</td>
 			<td>
 			@can('superadmin', $section)
 				{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('sections.destroy', $section->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this section?\')')) !!}
