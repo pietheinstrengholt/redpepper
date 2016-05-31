@@ -179,12 +179,11 @@ class TemplateController extends Controller
 		if (!empty($section)) {
 			$default = $section->id;
 		} else {
-			$default = null;		
+			$default = null;
 		}
 		
 		return view('templates.create', compact('default','sections'));
 	}
-
 
 	//function to structure template
 	public function structure(Request $request, $id)
@@ -225,55 +224,66 @@ class TemplateController extends Controller
 			$template->template_name = $request->input('template_name');
 			$template->template_shortdesc = $request->input('template_shortdesc');
 			$template->template_longdesc = $request->input('template_longdesc');
-			$template->visible = 'False';
-			$template->save();
-
-			$inputrows = $request->input('inputrows');
-			$inputcolumns = $request->input('inputcolumns');
-
-			//add tempate rows to database
-			$i = 1;
-			while ($i <= $inputrows) {
-				$j = $i;
-				if (strlen($j) == "1") {
-					$j = "0" . $j * 10;
-				} else {
-					$j = $j * 10;
-				}
-
-				$row = new TemplateRow;
-				$row->template_id = $template->id;
-				$row->row_num = $i;
-				$row->row_code = $j;
-				$row->row_description = 'description row number ' . $j;
-				$row->row_reference = '';
-				$row->save();
-				$i++;
+			
+			//assuming when no rows and columns are entered the template is description
+			if ($request->input('inputrows') == 0 || $request->input('inputcolumns') == 0) {
+				$template->visible = 'Limited';
+			} else {
+				$template->visible = 'False';
 			}
 
-			//add tempate columns to database
-			$i = 1;
-			while ($i <= $inputcolumns) {
-				$j = $i;
-				if (strlen($j) == "1") {
-					$j = "0" . $j * 10;
-				} else {
-					$j = $j * 10;
+			$template->save();
+			
+			//only create rows and columns if a valid value for both is given
+			if ($request->input('inputrows') > 0 && $request->input('inputcolumns') > 0) {
+
+				$inputrows = $request->input('inputrows');
+				$inputcolumns = $request->input('inputcolumns');
+
+				//add tempate rows to database
+				$i = 1;
+				while ($i <= $inputrows) {
+					$j = $i;
+					if (strlen($j) == "1") {
+						$j = "0" . $j * 10;
+					} else {
+						$j = $j * 10;
+					}
+
+					$row = new TemplateRow;
+					$row->template_id = $template->id;
+					$row->row_num = $i;
+					$row->row_code = $j;
+					$row->row_description = 'description row number ' . $j;
+					$row->row_reference = '';
+					$row->save();
+					$i++;
 				}
-				$column = new TemplateColumn;
-				$column->template_id = $template->id;
-				$column->column_num = $i;
-				$column->column_code = $j;
-				$column->column_description = 'description column number ' . $j;
-				$column->save();
-				$i++;
+
+				//add tempate columns to database
+				$i = 1;
+				while ($i <= $inputcolumns) {
+					$j = $i;
+					if (strlen($j) == "1") {
+						$j = "0" . $j * 10;
+					} else {
+						$j = $j * 10;
+					}
+					$column = new TemplateColumn;
+					$column->template_id = $template->id;
+					$column->column_num = $i;
+					$column->column_code = $j;
+					$column->column_description = 'description column number ' . $j;
+					$column->save();
+					$i++;
+				}
 			}
 
 			//log Event
 			Event::fire(new TemplateCreated($template));
 
 		}
-		return Redirect::to('/templatestructure/' . $template->id);
+		return Redirect::to('/sections/' . $request->input('section_id') . '/templates/' . $template->id);
 	}
 
 	//function to structure template
