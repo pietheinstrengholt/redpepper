@@ -4,6 +4,21 @@
 @section('content')
 
 	<script src="{{ URL::asset('js/tinymce/tinymce.min.js') }}"></script>
+
+	<script>tinymce.init({ 	
+		selector:'textarea#template_shortdesc',
+		height: 200,
+		plugins: [
+			'link image imageupload'
+		],
+		menubar: '',
+		toolbar: 'undo redo | bold italic | link | bullist numlist',
+		relative_urls: false,
+		body_class: 'form-control',
+		statusbar: false,
+		content_style: "p {margin-top: -4px;} ol,ul,p {color: #2c3e50; font-size: 15px;}"
+	});</script>
+
 	<script>tinymce.init({ 	
 		selector:'textarea#template_longdesc',
 		height: 400,
