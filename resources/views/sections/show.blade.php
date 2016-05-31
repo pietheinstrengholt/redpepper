@@ -12,11 +12,11 @@
 	<h2>{{ $section->section_name }}</h2>
 
 	@if ( !$section->templates->count() )
-		This section has no templates.<br><br>
+		<p>This section has no items.</p><br>
 	@else
-		<h4>{{ $section->section_description }}</h4>
+		<h4>{!! html_entity_decode(e($section->section_description)) !!}</h4>
 		<h4>{!! html_entity_decode(e($section->section_longdesc)) !!}</h4>
-		<h5>Total overview of all templates</h5>
+		<h5>Total overview of all items</h5>
 
 		<table class="table section-table dialog table-striped" border="1">
 
@@ -33,12 +33,16 @@
 			@endif
 			{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('sections.templates.destroy', $template->section_id, $template->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this template?\')')) !!}
 			<td><a href="{{ route('sections.templates.show', [$section->id, $template->id]) }}">{{ $template->template_name }}</a></td>
-			<td>{{ $template->template_shortdesc }}</td>
+			<td>{!! html_entity_decode(e($template->template_shortdesc)) !!}</td>
 			<td>
-			<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $template->id }}">Export</a>
+			@if ($template->visible !== 'Limited')
+				<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $template->id }}">Export</a>
+			@endif
 			@can('update-section', $section)
 				{!! link_to_route('sections.templates.edit', 'Edit', array($template->section_id, $template->id), array('class' => 'btn btn-info btn-xs')) !!}
-				<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('templatestructure') . '/' . $template->id }}">Structure</a>
+				@if ($template->visible !== 'Limited')
+					<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('templatestructure') . '/' . $template->id }}">Structure</a>
+				@endif
 				{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:2px;')) !!}
 			@endcan
 			</td>
