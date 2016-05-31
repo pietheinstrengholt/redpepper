@@ -7,7 +7,7 @@
 
 	<script>tinymce.init({ 	
 		selector:'textarea#template_shortdesc',
-		valid_elements: "p[style],h1,h2,h3,h4,h5,a[href|target],strong/b,i/em,br,table,tbody,thead,tr,td,ul,ol,li,img[src]",
+		valid_elements: "p[style],h1,h2,h3,h4,h5,a[href|target],strong/b,i/em,br,table[style|border|cellspacing],tbody,thead,tr[style],td[style],ul,ol,li,img[src]",
 		height: 200,
 		plugins: [
 			'link image imageupload'
@@ -22,7 +22,7 @@
 
 	<script>tinymce.init({ 	
 		selector:'textarea#template_longdesc',
-		valid_elements: "p[style],h1,h2,h3,h4,h5,a[href|target],strong/b,i/em,br,table,tbody,thead,tr,td,ul,ol,li,img[src]",
+		valid_elements: "p[style],h1,h2,h3,h4,h5,a[href|target],strong/b,i/em,br,table[style|border|cellspacing],tbody,thead,tr[style],td[style],ul,ol,li,img[src]",
 		height: 400,
 		plugins: [
 			'link image imageupload table'
