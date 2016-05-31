@@ -10,7 +10,7 @@
 
 	<div class="form-group">
 		{!! Form::label('template_shortdesc', 'Template shortdesc:', array('class' => 'col-sm-3 control-label')) !!}
-		<div class="col-sm-6">
+		<div class="col-sm-8">
 		{!! Form::textarea('template_shortdesc', null, ['class' => 'form-control', 'rows' => '4']) !!}
 		</div>
 
@@ -18,7 +18,7 @@
 
 	<div class="form-group">
 		{!! Form::label('template_longdesc', 'Template longdesc:', array('class' => 'col-sm-3 control-label')) !!}
-		<div class="col-sm-6">
+		<div class="col-sm-8">
 		{!! Form::textarea('template_longdesc', null, ['id' => 'template_longdesc', 'class' => 'form-control', 'rows' => '7']) !!}
 		</div>
 	</div>
@@ -60,14 +60,14 @@
 
 	<div class="form-group">
 		{!! Form::label('section_id', 'Section:', array('class' => 'col-sm-3 control-label')) !!}
-		<div class="col-sm-6">
+		<div class="col-sm-5">
 		{!! Form::select('section_id', $sections->lists('section_name', 'id'), $template->section_id, ['id' => 'section_id', 'class' => 'form-control']) !!}
 		</div>
 	</div>
 	
 	<div class="form-group">
 		{!! Form::label('type_id', 'Type:', array('class' => 'col-sm-3 control-label')) !!}
-		<div class="col-sm-6">
+		<div class="col-sm-8">
 		
 		<select class="form-control">
 		<option selected value="0" disabled>Please select one option</option>
@@ -89,7 +89,7 @@
 	@if (Auth::user()->role == "builder" || Auth::user()->role == "superadmin")
 		<div class="form-group">
 			{!! Form::label('visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
-			<div class="col-sm-6">
+			<div class="col-sm-8">
 			{!! Form::select('visible', ['True' => 'True', 'Limited' => 'Only show descriptions', 'False' => 'False'], $template->visible, ['id' => 'visible', 'class' => 'form-control']) !!}
 			</div>
 		</div>
