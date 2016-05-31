@@ -3,12 +3,20 @@
 
 @section('content')
 
+	<ul class="breadcrumb breadcrumb-section">
+	  <li><a href="{!! url('/'); !!}">Home</a></li>
+	  <li><a href="{!! url('/sections'); !!}">Sections</a></li>
+	  <li><a href="{!! url('/sections/' . $template->section->id); !!}">{{ $template->section->section_name }}</a></li>
+	  <li><a href="{!! url('/sections/' . $template->section->id . '/templates/' . $template->id); !!}">{{ $template->template_name }}</a></li>
+	  <li class="active">Edit Structure</li>
+	</ul>
+
 	<h2>{{ $template->template_name }}</h2>
-	<h4>{{ $template->template_shortdesc }}</h4>
-	<h4>{{ $template->template_longdesc }}</h4>
+	<h4>{!! html_entity_decode(e($template->template_shortdesc)) !!}</h4>
+	<h4>{!! html_entity_decode(e($template->template_longdesc)) !!}</h4>
 
 	@if ( !$template->columns->count() || !$template->rows->count() )
-		Error: This template has no columns or no rows.
+		<p><strong>Error:</strong> This template has no columns or no rows. Ask the administrator to change the properties of this template to show only the descriptions.</p>
 	@else
 
 		{!! Form::open(array('action' => 'TemplateController@changestructure', 'id' => 'form')) !!}
