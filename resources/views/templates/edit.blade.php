@@ -23,10 +23,10 @@
 		selector:'textarea#template_longdesc',
 		height: 400,
 		plugins: [
-			'link image imageupload'
+			'link image imageupload table'
 		],
 		menubar: '',
-		toolbar: 'undo redo | alignleft aligncenter alignright | bold italic | link | imageupload | bullist numlist',
+		toolbar: 'undo redo | alignleft aligncenter alignright | styleselect | bold italic | outdent indent | link | imageupload | bullist numlist | table ',
 		relative_urls: false,
 		body_class: 'form-control',
 		statusbar: false,

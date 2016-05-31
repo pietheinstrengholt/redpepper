@@ -23,15 +23,20 @@
 		selector:'textarea#template_longdesc',
 		height: 400,
 		plugins: [
-			'link image imageupload'
+			'link image imageupload table'
 		],
 		menubar: '',
-		toolbar: 'undo redo | alignleft aligncenter alignright | bold italic | link | imageupload | bullist numlist',
+		toolbar: 'undo redo | alignleft aligncenter alignright | styleselect | bold italic | outdent indent | link | imageupload | bullist numlist | table ',
 		relative_urls: false,
 		body_class: 'form-control',
 		statusbar: false,
 		content_style: "p {margin-top: -4px;} ol,ul,p {color: #2c3e50; font-size: 15px;}"
 	});</script>
+	
+	<ul class="breadcrumb breadcrumb-section">
+	<li><a href="{!! url('/'); !!}">Home</a></li>
+	<li class="active">Create template</li>
+	</ul>
 
 	<h2>Create Template</h2>
 
@@ -58,7 +63,7 @@
 
 		<div class="form-group">
 			{!! Form::label('template_shortdesc', 'Template shortdesc:', array('class' => 'col-sm-3 control-label')) !!}
-			<div class="col-sm-6">
+			<div class="col-sm-8">
 			{!! Form::textarea('template_shortdesc', null, ['class' => 'form-control', 'rows' => '4']) !!}
 			</div>
 
@@ -66,29 +71,29 @@
 
 		<div class="form-group">
 			{!! Form::label('template_longdesc', 'Template longdesc:', array('class' => 'col-sm-3 control-label')) !!}
-			<div class="col-sm-6">
+			<div class="col-sm-8">
 			{!! Form::textarea('template_longdesc', null, ['class' => 'form-control', 'rows' => '7']) !!}
 			</div>
 		</div>
 
 		<div class="form-group">
 			{!! Form::label('section_id', 'Section:', array('class' => 'col-sm-3 control-label')) !!}
-			<div class="col-sm-6">
+			<div class="col-sm-5">
 			{!! Form::select('section_id', $sections->lists('section_name', 'id'), $default, ['id' => 'section_id', 'class' => 'form-control']) !!}
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label for="inputcolumns" class="col-sm-3 control-label">Number of Columns</label>
-			<div class="col-sm-6">
-			<input class="form-control" type="text" style="width: 50px;" name="inputcolumns" id="inputcolumns" placeholder="..">
+			<div class="col-sm-1">
+			<input class="form-control" type="text" name="inputcolumns" id="inputcolumns" placeholder="....">
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label for="inputrows" class="col-sm-3 control-label">Number of Rows</label>
-			<div class="col-sm-6">
-			<input class="form-control" type="text" style="width: 50px;" name="inputrows" id="inputrows" placeholder="..">
+			<div class="col-sm-1">
+			<input class="form-control" type="text" name="inputrows" id="inputrows" placeholder="....">
 			</div>
 		</div>
 
