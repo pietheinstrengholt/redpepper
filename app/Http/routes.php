@@ -128,6 +128,7 @@ Route::post('/changerequests/exportchanges', ['middleware' => 'auth', 'uses' => 
 
 // Search routes...
 Route::post('/search', 'SearchController@search');
+Route::get('/search', 'SearchController@search');
 Route::get('/advancedsearch', 'SearchController@advancedsearch');
 
 // Authentication routes...

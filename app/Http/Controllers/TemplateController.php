@@ -463,9 +463,9 @@ class TemplateController extends Controller
 	public function getCellContent(Request $request)
 	{
 		if ($request->has('template_id') && $request->has('cell_id')) {
-			$template = Template::findOrFail($request->input('template_id'));			
+			$template = Template::findOrFail($request->input('template_id'));
 		} else {
-			abort(404, 'Content cannot be found with invalid arguments.');			
+			abort(404, 'Content cannot be found with invalid arguments.');
 		}
 
 		//split input into row and column

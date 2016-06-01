@@ -25,7 +25,7 @@ class SearchController extends Controller
 			'search' => 'required'
 		]);
 
-		if ($request->isMethod('post')) {
+		if ($request->isMethod('post') || $request->isMethod('get')) {
 			if ($request->has('search')) {
 				if ($request->has('advanced-search')) {
 
