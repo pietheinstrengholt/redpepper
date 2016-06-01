@@ -56,6 +56,7 @@ class SearchController extends Controller
 						'columns' => TemplateColumn::where('column_description', 'like', '%' . $request->input('search') . '%')->whereIn('template_id', $templatesArray)->get(),
 						'content' => Requirement::where('content', 'like', '%' . $request->input('search') . '%')->where('content_type', '<>', 'disabled')->whereIn('template_id', $templatesArray)->whereIn('content_type', $typeslist)->get(),
 						'technicals' => Technical::where('content', 'like', '%' . $request->input('search') . '%')->orWhere('description', 'like', '%' . $request->input('search') . '%')->whereIn('template_id', $templatesArray)->get(),
+						'templates' => Template::where('template_shortdesc', 'like', '%' . $request->input('search') . '%')->orWhere('template_longdesc', 'like', '%' . $request->input('search') . '%')->whereIn('id', $templatesArray)->get(),
 						'search' => $request->input('search')
 					]);
 
@@ -66,6 +67,7 @@ class SearchController extends Controller
 						'columns' => TemplateColumn::where('column_description', 'like', '%' . $request->input('search') . '%')->get(),
 						'content' => Requirement::where('content', 'like', '%' . $request->input('search') . '%')->where('content_type', '<>', 'disabled')->get(),
 						'technicals' => Technical::where('content', 'like', '%' . $request->input('search') . '%')->orWhere('description', 'like', '%' . $request->input('search') . '%')->get(),
+						'templates' => Template::where('template_shortdesc', 'like', '%' . $request->input('search') . '%')->orWhere('template_longdesc', 'like', '%' . $request->input('search') . '%')->get(),
 						'search' => $request->input('search')
 					]);
 				}

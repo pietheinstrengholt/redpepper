@@ -5,6 +5,26 @@
 	<h2>Search results</h2>
 	<h4>the following search results have been found</h4>
 
+	@if ( $templates->count() )
+		<table class="table search-table dialog table-striped" border="1">
+
+		<tr class="success">
+		<td class="header">Template Name</td>
+		<td class="header">Short description</td>
+		<td class="header">Long description</td>
+		</tr>
+
+		@foreach( $templates as $template )
+			<tr>
+			<td><a href="{!! url('sections/' . $template->section_id . '/templates/' . $template->id); !!}">{{ $template->template_name }}</a></td>
+			<td>{{ $template->template_shortdesc }}</td>
+			<td>{{ $template->template_longdesc }}</td>
+			</tr>
+		@endforeach
+
+		</table>
+	@endif
+
 	@if ( $rows->count() )
 		<table class="table search-table dialog table-striped" border="1">
 
@@ -97,7 +117,7 @@
 		</table>
 	@endif
 
-	@if ( !$rows->count() && !$columns->count() && !$content->count() && !$technicals->count() )
+	@if ( !$templates->count() && !$rows->count() && !$columns->count() && !$content->count() && !$technicals->count() )
 		<p>No results have been found. Please try to refine search.</p>
 	@endif
 
