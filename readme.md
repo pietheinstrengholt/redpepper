@@ -53,3 +53,4 @@ TODO
 * Filtering tinymce
 * Change and compare of template changes
 * Check builder user to perform changes on template descriptions/creation
+* Remove fields such as template process_and_organisation_description, etc.
