@@ -4,11 +4,49 @@
 @section('content')
 
 	<ul class="breadcrumb breadcrumb-section">
-	  <li><a href="{!! url('/'); !!}">Home</a></li>
-	  <li><a href="{!! url('/sections'); !!}">Sections</a></li>
-	  <li><a href="{!! url('/sections/' . $template->section->id); !!}">{{ $template->section->section_name }}</a></li>
-	  <li class="active">{{ $template->template_name }}</li>
+		<li><a href="{!! url('/'); !!}">Home</a></li>
+		<li><a href="{!! url('/sections'); !!}">Sections</a></li>
+		<li><a href="{!! url('/sections/' . $template->section->id); !!}">{{ $template->section->section_name }}</a></li>
+		@if ( $parent )
+			<li><a href="{!! url('/sections/' . $parent->section->id . '/templates/' . $parent->id); !!}">{{ $parent->template_name }}</a></li>
+		@endif
+		<li class="active">{{ $template->template_name }}</li>
 	</ul>
+	
+	@if ( $children->count() )
+		<table class="table section-table dialog table-striped" border="1">
+
+		<tr class="success">
+		<td class="header">Template</td>
+		<td class="header">Short description</td>
+		<td class="header" style="width: 245px;">Options</td>
+		</tr>
+		@foreach( $children as $child )
+			@if ($child->visible == "False")
+				<tr class="notvisible">
+			@else
+				<tr>
+			@endif
+			{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('sections.templates.destroy', $child->section_id, $child->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this template?\')')) !!}
+			<td><a href="{{ route('sections.templates.show', [$section->id, $child->id]) }}">{{ $child->template_name }}</a></td>
+			<td>{!! html_entity_decode(e($child->template_shortdesc)) !!}</td>
+			<td>
+			@if ($child->visible !== 'Limited')
+				<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $child->id }}">Export</a>
+			@endif
+			@can('update-section', $section)
+				{!! link_to_route('sections.templates.edit', 'Edit', array($child->section_id, $child->id), array('class' => 'btn btn-info btn-xs')) !!}
+				@if ($child->visible !== 'Limited')
+					<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('templatestructure') . '/' . $child->id }}">Structure</a>
+				@endif
+				{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:2px;')) !!}
+			@endcan
+			</td>
+			{!! Form::close() !!}
+			</tr>
+		@endforeach
+		</table>
+	@endif
 
 	<h2>{{ $template->template_name }}</h2>
 	<h4>{!! html_entity_decode(e($template->template_shortdesc)) !!}</h4>

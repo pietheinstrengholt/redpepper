@@ -58,10 +58,21 @@
 		</div>
 	</div>
 
+	@if (Auth::user()->role == "superadmin")
+		<div class="form-group">
+			{!! Form::label('section_id', 'Section:', array('class' => 'col-sm-3 control-label')) !!}
+			<div class="col-sm-5">
+			{!! Form::select('section_id', $sections->lists('section_name', 'id'), $template->section_id, ['id' => 'section_id', 'class' => 'form-control']) !!}
+			</div>
+		</div>
+	@else
+		<input type="hidden" name="section_id" value="{{ $section->id }}">
+	@endif
+
 	<div class="form-group">
-		{!! Form::label('section_id', 'Section:', array('class' => 'col-sm-3 control-label')) !!}
+		{!! Form::label('parent_id', 'Optional parent:', array('class' => 'col-sm-3 control-label')) !!}
 		<div class="col-sm-5">
-		{!! Form::select('section_id', $sections->lists('section_name', 'id'), $template->section_id, ['id' => 'section_id', 'class' => 'form-control']) !!}
+		{!! Form::select('parent_id', $templates->lists('template_name', 'id'), $template->parent_id, ['id' => 'parent_id', 'placeholder' => '', 'class' => 'form-control']) !!}
 		</div>
 	</div>
 	

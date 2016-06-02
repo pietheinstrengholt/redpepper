@@ -90,7 +90,15 @@ class TemplateController extends Controller
 		$technicaltype = TechnicalType::where('id', $template->type_id)->first();
 		$descriptions = TechnicalDescription::where('type_id', $template->type_id)->orderBy('content', 'asc')->get();
 		
-		return view('templates.show', compact('section', 'template', 'disabledFields', 'propertyFields', 'searchvalue', 'technicaltype', 'descriptions'));
+		//get parent and children
+		$parent = $template->parent()->first();
+		if (Auth::guest()) {
+			$children = $template->children()->orderBy('template_name', 'asc')->where('visible', '<>' , 'False')->get();
+		} else {
+			$children = $template->children()->orderBy('template_name', 'asc')->get();
+		}
+		
+		return view('templates.show', compact('section', 'template', 'disabledFields', 'propertyFields', 'searchvalue', 'technicaltype', 'descriptions','parent','children'));
 	}
 
 	//function to disabled fields
@@ -160,10 +168,12 @@ class TemplateController extends Controller
 		$sectionlist = $this->sectionList($request);
 		$sections = Section::whereIn('id', $sectionlist)->orderBy('section_name', 'asc')->get();
 		$types = TechnicalType::orderBy('type_name', 'asc')->get();
+		//get non child templates wihtin section and not equal to own template id
+		$templates = Template::orderBy('template_name', 'asc')->where('section_id', $template->section_id)->where('id', '!=', $template->id)->where('parent_id', null)->get();
 		
 		//validate if user can update section (see AuthServiceProvider)
 		if ($request->user()->can('update-section', $section)) {
-			return view('templates.edit', compact('sections', 'section', 'template','types'));
+			return view('templates.edit', compact('sections', 'section', 'template','templates','types'));
 		} else {
 			abort(403, 'Unauthorized action.');
 		}
@@ -177,12 +187,14 @@ class TemplateController extends Controller
 		
 		//use default value to select from dropdown
 		if (!empty($section)) {
-			$default = $section->id;
+			//get non child templates within section
+			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->where('parent_id', null)->get();
 		} else {
-			$default = null;
+			$templates = null;
+			$section = null;
 		}
 		
-		return view('templates.create', compact('default','sections'));
+		return view('templates.create', compact('sections','section','templates'));
 	}
 
 	//function to structure template
@@ -450,6 +462,8 @@ class TemplateController extends Controller
 		Requirement::where('template_id', $template->id)->delete();
 		Technical::where('template_id', $template->id)->delete();
 		ChangeRequest::where('template_id', $template->id)->delete();
+		//TODO: use for each procedure to also delete children content
+		Template::where('parent_id', $template->id)->delete();
 
 		//log Event
 		Event::fire(new TemplateDeleted($template));

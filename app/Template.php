@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Template extends Model
 {
-	protected $fillable = ['section_id','template_name','template_shortdesc','template_longdesc','frequency_description','reporting_dates_description','main_changes_description','links_other_temp_description','process_and_organisation_description','type_id','sortorder','visible'];
+	protected $fillable = ['section_id','parent_id','template_name','template_shortdesc','template_longdesc','frequency_description','reporting_dates_description','main_changes_description','links_other_temp_description','process_and_organisation_description','type_id','sortorder','visible'];
 	protected $guarded = [];
 	protected $table = 't_templates';
 
@@ -38,6 +38,16 @@ class Template extends Model
 	public function technical()
 	{
 		return $this->hasMany('App\Technical', 'template_id', 'id');
+	}
+	
+	public function parent()
+	{
+		return $this->belongsTo('App\Template', 'parent_id');
+	}
+
+	public function children()
+	{
+		return $this->hasMany('App\Template', 'parent_id');
 	}
 }
 

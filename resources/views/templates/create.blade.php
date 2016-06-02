@@ -44,6 +44,10 @@
 	
 	<ul class="breadcrumb breadcrumb-section">
 	<li><a href="{!! url('/'); !!}">Home</a></li>
+	@if (!empty($section))
+		<li><a href="{!! url('/sections'); !!}">Sections</a></li>
+		<li><a href="{!! url('/sections/' . $section->id); !!}">{{ $section->section_name }}</a></li>
+	@endif
 	<li class="active">Create template</li>
 	</ul>
 
@@ -84,13 +88,23 @@
 			{!! Form::textarea('template_longdesc', null, ['class' => 'form-control', 'rows' => '7']) !!}
 			</div>
 		</div>
-
-		<div class="form-group">
-			{!! Form::label('section_id', 'Section:', array('class' => 'col-sm-3 control-label')) !!}
-			<div class="col-sm-5">
-			{!! Form::select('section_id', $sections->lists('section_name', 'id'), $default, ['id' => 'section_id', 'class' => 'form-control']) !!}
+		
+		@if (!empty($section))
+			<input type="hidden" name="section_id" value="{{ $section->id }}">
+			<div class="form-group">
+				{!! Form::label('parent_id', 'Optional parent:', array('class' => 'col-sm-3 control-label')) !!}
+				<div class="col-sm-5">
+				{!! Form::select('parent_id', $templates->lists('template_name', 'id'), null, ['id' => 'parent_id', 'placeholder' => 'Optional parent', 'class' => 'form-control']) !!}
+				</div>
 			</div>
-		</div>
+		@else
+			<div class="form-group">
+				{!! Form::label('section_id', 'Section:', array('class' => 'col-sm-3 control-label')) !!}
+				<div class="col-sm-5">
+				{!! Form::select('section_id', $sections->lists('section_name', 'id'), null, ['id' => 'section_id', 'class' => 'form-control']) !!}
+				</div>
+			</div>
+		@endif
 
 		<div class="form-group">
 			<label for="inputcolumns" class="col-sm-3 control-label">Number of Columns</label>
