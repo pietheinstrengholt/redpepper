@@ -69,13 +69,15 @@
 		<input type="hidden" name="section_id" value="{{ $section->id }}">
 	@endif
 
-	<div class="form-group">
-		{!! Form::label('parent_id', 'Optional parent:', array('class' => 'col-sm-3 control-label')) !!}
-		<div class="col-sm-5">
-		{!! Form::select('parent_id', $templates->lists('template_name', 'id'), $template->parent_id, ['id' => 'parent_id', 'placeholder' => '', 'class' => 'form-control']) !!}
+	@if ( !($template->children->count()) )
+		<div class="form-group">
+			{!! Form::label('parent_id', 'Optional parent:', array('class' => 'col-sm-3 control-label')) !!}
+			<div class="col-sm-5">
+			{!! Form::select('parent_id', $templates->lists('template_name', 'id'), $template->parent_id, ['id' => 'parent_id', 'placeholder' => '', 'class' => 'form-control']) !!}
+			</div>
 		</div>
-	</div>
-	
+	@endif
+
 	<div class="form-group">
 		{!! Form::label('type_id', 'Type:', array('class' => 'col-sm-3 control-label')) !!}
 		<div class="col-sm-8">
