@@ -28,7 +28,9 @@
 
 		<tr class="success">
 		<td class="header">Name</td>
-		<td class="header">Subject</td>
+		@if ( !$subject )
+			<td class="header">Subject</td>
+		@endif
 		<td class="header">Description</td>
 		<td class="header" style="width: 120px;">Options</td>
 		</tr>
@@ -40,11 +42,13 @@
 				<tr>
 			@endif
 			<td><a href="{{ route('sections.show', $section->id) }}">{{ $section->section_name }}</a></td>
-			<td>
-			@if (!empty($section->subject)) 
-				{{ $section->subject->subject_name }}
+			@if ( !$subject )
+				<td>
+				@if (!empty($section->subject)) 
+					{{ $section->subject->subject_name }}
+				@endif
+				</td>
 			@endif
-			</td>
 			<td>{!! html_entity_decode(e($section->section_description)) !!}</td>
 			<td>
 			@can('superadmin', $section)
