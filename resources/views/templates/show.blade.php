@@ -49,8 +49,8 @@
 	@endif
 
 	<h2>{{ $template->template_name }}</h2>
-	<h4 class="template_shortdesc">{!! html_entity_decode(e($template->template_shortdesc)) !!}</h4>
-	<h4 class="template_longdesc">{!! html_entity_decode(e($template->template_longdesc)) !!}</h4>
+	<h4 class="tinymce">{!! html_entity_decode(e($template->template_shortdesc)) !!}</h4>
+	<h4 class="tinymce">{!! html_entity_decode(e($template->template_longdesc)) !!}</h4>
 	<h4>{!! App\Helper::contentAdjust(nl2br(e($template->frequency_description))) !!}</h4>
 	<h4>{!! App\Helper::contentAdjust(nl2br(e($template->reporting_dates_description))) !!}</h4>
 	<h4>{!! App\Helper::contentAdjust(nl2br(e($template->main_changes_description))) !!}</h4>

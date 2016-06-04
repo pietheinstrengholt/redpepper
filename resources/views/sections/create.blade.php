@@ -30,7 +30,7 @@
 		toolbar: 'undo redo | alignleft aligncenter alignright | bold italic | link | bullist numlist',
 		body_class: 'form-control',
 		statusbar: false,
-		content_style: "p {margin-top: -4px;} ol,ul,p {color: #2c3e50; font-size: 15px;}"
+		content_style: "p {margin-top: -4px; font-family: inherit ! important;}, ol,ul,p {color: #2c3e50; font-size: 15px;}"
 	});</script>
 
 	<ul class="breadcrumb breadcrumb-section">

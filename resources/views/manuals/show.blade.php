@@ -10,8 +10,8 @@
 	</ul>
 
 	<h2>{{ $section->section_name }}</h2>
-	<h4 class="section_description">{!! html_entity_decode(e($section->section_description)) !!}</h4>
-	<h4 class="section_longdesc">{!! html_entity_decode(e($section->section_longdesc)) !!}</h4><br>
+	<h4 class="tinymce">{!! html_entity_decode(e($section->section_description)) !!}</h4>
+	<h4 class="tinymce">{!! html_entity_decode(e($section->section_longdesc)) !!}</h4><br>
 	<h3>Total overview of all templates</h3>
 
 	@if ( !$section->templates->count() )
@@ -19,9 +19,9 @@
 	@else
 		@foreach( $templates as $template )
 			<h4>{{ $template->template_name }}</h4>
-			<h5 class="template_shortdesc">{!! html_entity_decode(e($template->template_shortdesc)) !!}</h5>
-			<h5 class="section_shortdesc">{!! html_entity_decode(e($template->section_shortdesc)) !!}</h5>
-			<h5 class="template_longdesc">{!! html_entity_decode(e($template->template_longdesc)) !!}</h5>
+			<h5 class="tinymce">{!! html_entity_decode(e($template->template_shortdesc)) !!}</h5>
+			<h5 class="tinymce">{!! html_entity_decode(e($template->section_shortdesc)) !!}</h5>
+			<h5 class="tinymce">{!! html_entity_decode(e($template->template_longdesc)) !!}</h5>
 
 			@if ( $template->requirements->count() )
 				<table class="table table-bordered book" border="0">

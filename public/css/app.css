@@ -274,10 +274,9 @@ table.dialog  textarea#regulation_row, table.dialog  textarea#interpretation_row
 	width: 90%;
 }
 
-h4.template_shortdesc p, h4.template_longdesc p, h4.section_description p, h4.section_longdesc p, h4.section_shortdesc p, h5.template_shortdesc p, h5.template_longdesc p, h5.section_description p, h5.section_longdesc p, h5.section_shortdesc p, iframe#template_longdesc_ifr p, iframe#template_shortdesc_ifr p, iframe#section_description_ifr p, iframe#section_longdesc_ifr p {
+h4.tinymce p, h5.tinymce p {
 	font-family: inherit ! important;
 }
-
 
 div#cell-update {
 	margin-top: 20px;

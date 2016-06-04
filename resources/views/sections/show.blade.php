@@ -14,8 +14,8 @@
 	@if ( !$section->templates->count() )
 		<p>This section has no items.</p><br>
 	@else
-		<h4 class="section_description">{!! html_entity_decode(e($section->section_description)) !!}</h4>
-		<h4 class="section_longdesc">{!! html_entity_decode(e($section->section_longdesc)) !!}</h4>
+		<h4 class="tinymce">{!! html_entity_decode(e($section->section_description)) !!}</h4>
+		<h4 class="tinymce">{!! html_entity_decode(e($section->section_longdesc)) !!}</h4>
 		<h5>Total overview of all items</h5>
 
 		<table class="table section-table dialog table-striped" border="1">

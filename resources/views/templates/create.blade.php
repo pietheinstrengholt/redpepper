@@ -39,7 +39,8 @@
 		relative_urls: false,
 		body_class: 'form-control',
 		statusbar: false,
-		content_style: "p {margin-top: -4px;} ol,ul,p {color: #2c3e50; font-size: 15px;}"
+		style_format_merge: true,
+		content_style: "p {margin-top: -4px; font-family: inherit ! important;}, span {font-family: inherit ! important;}, ol,ul,p {color: #2c3e50; font-size: 15px;}"
 	});</script>
 	
 	<ul class="breadcrumb breadcrumb-section">
