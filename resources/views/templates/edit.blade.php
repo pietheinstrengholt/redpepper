@@ -3,6 +3,7 @@
 
 @section('content')
 
+	@include('tinymce.template')
 
 	<ul class="breadcrumb breadcrumb-section">
 	<li><a href="{!! url('/'); !!}">Home</a></li>

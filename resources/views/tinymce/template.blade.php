@@ -13,6 +13,7 @@
 	relative_urls: false,
 	body_class: 'form-control',
 	statusbar: false,
+	style_format_merge: true,
 	content_style: "p {margin-top: -4px; color: #2c3e50; font-size: 15px; font-family: inherit ! important;}, span {font-family: inherit ! important;}, ol,ul"
 });</script>
 
@@ -24,11 +25,11 @@
 		'link image imageupload table nonbreaking'
 	],
 	style_formats : [
-		{title : 'Heading 1', inline : 'h1', classes : 'h1'},
-		{title : 'Heading 2', inline : 'h2', classes : 'h2'},
-		{title : 'Heading 3', inline : 'h3', classes : 'h3'},
-		{title : 'Heading 4', inline : 'h4', classes : 'h4'},
-		{title : 'Heading 5', inline : 'h5', classes : 'h5'},
+		{title : 'Heading 1', block : 'h1'},
+		{title : 'Heading 2', block : 'h2'},
+		{title : 'Heading 3', block : 'h3'},
+		{title : 'Heading 4', block : 'h4'},
+		{title : 'Heading 5', block : 'h5'},
 	],
 	menubar: '',
 	toolbar: 'undo redo | alignleft aligncenter alignright | styleselect | bold italic | outdent indent | link | imageupload | bullist numlist | table | nonbreaking',
