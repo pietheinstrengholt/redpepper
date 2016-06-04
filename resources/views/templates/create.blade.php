@@ -25,7 +25,7 @@
 		valid_elements: "p[style],h1,h2,h3,h4,h5,a[href|target],strong/b,i/em,br,table[style|border|cellspacing],tbody,thead,tr[style],td[style],ul,ol,li,img[src|height|width]",
 		height: 400,
 		plugins: [
-			'link image imageupload table'
+			'link image imageupload table nonbreaking'
 		],
 		style_formats : [
 			{title : 'Heading 1', inline : 'h1', classes : 'h1'},
@@ -35,7 +35,7 @@
 			{title : 'Heading 5', inline : 'h5', classes : 'h5'},
 		],
 		menubar: '',
-		toolbar: 'undo redo | alignleft aligncenter alignright | styleselect | bold italic | outdent indent | link | imageupload | bullist numlist | table ',
+		toolbar: 'undo redo | alignleft aligncenter alignright | styleselect | bold italic | outdent indent | link | imageupload | bullist numlist | table | nonbreaking',
 		relative_urls: false,
 		body_class: 'form-control',
 		statusbar: false,
