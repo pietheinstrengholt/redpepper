@@ -180,7 +180,7 @@ class ExcelController extends Controller
 					$highestRow = count($arraySheet) + 1;
 					if (array_key_exists(0,$arraySheet)) {
 						$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
-						$highestColumnIndex = count($arraySheet[0]) + 1;						
+						$highestColumnIndex = count($arraySheet[0]) + 1;
 					} else {
 						$highestColumn = 0;
 						$highestColumnIndex = 1;
@@ -781,7 +781,7 @@ class ExcelController extends Controller
 							$HistoryTechnical->created_by = Auth::user()->id;
 							$HistoryTechnical->submission_date = null;
 							$HistoryTechnical->approved_by = Auth::user()->id;
-							$HistoryTechnical->save();							
+							$HistoryTechnical->save();
 						}
 
 					}

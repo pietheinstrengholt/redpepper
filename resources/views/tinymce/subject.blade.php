@@ -2,13 +2,14 @@
 <script src="{{ URL::asset('js/tinymce/tinymce.min.js') }}"></script>
 <script>tinymce.init({ 	
 	selector:'textarea#subject_longdesc',
+	valid_elements: "p,a[href|target],strong/b,i/em,br,ul,ol,li",
 	height: 400,
 	plugins: [
 		'link image'
 	],
 	menubar: '',
 	toolbar: 'undo redo | alignleft aligncenter alignright | bold italic | link | bullist numlist',
-	body_class: 'form-control',
 	statusbar: false,
-	content_style: "p {margin-top: -4px; color: #2c3e50; font-size: 15px; font-family: inherit ! important;}, span {font-family: inherit ! important;}, ol,ul"
+	content_css: ["{!! URL::asset('css') . '/' . App\Helper::setting('css_style') !!}"],
+	content_style: "body {margin: 10px ! important; }",
 });</script>
