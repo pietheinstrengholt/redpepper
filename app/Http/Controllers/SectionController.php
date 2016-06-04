@@ -18,15 +18,15 @@ use Redirect;
 
 class SectionController extends Controller
 {	
-    public function index(Request $request)
-    {
+	public function index(Request $request)
+	{
 		//set subject_id if argument is given
 		if ($request->has('subject_id')) {
 			$subject = Subject::where('id', $request->input('subject_id'))->first();
 		} else {
 			$subject = null;
 		}
-		
+
 		//only non guests can see all sections
 		if (Auth::guest()) {
 			if ($request->has('subject_id')) {
@@ -41,7 +41,7 @@ class SectionController extends Controller
 				$sections = Section::with('subject')->orderBy('section_name', 'asc')->get();
 			}
 		}
-		
+
 		//sort sections on natural ordering
 		$sections = $sections->sortBy('section_name', SORT_NATURAL);
 		
@@ -49,12 +49,12 @@ class SectionController extends Controller
 		if (empty($sections)) {
 			abort(403, 'No sections have been found. Please ask your administrator to add any sections.');
 		}
-		
-		return view('sections.index', compact('sections','subject'));
-    }
 
-    public function manuals()
-    {
+		return view('sections.index', compact('sections','subject'));
+	}
+
+	public function manuals()
+	{
 		//only non guests can see all sections
 		if (Auth::guest()) {
 			$sections = Section::orderBy('section_name', 'asc')->where('visible', '<>' , 'False')->get();
@@ -71,10 +71,10 @@ class SectionController extends Controller
 		}
 
 		return view('manuals.index', compact('sections'));
-    }
+	}
 
-    public function show(Section $section)
-    {
+	public function show(Section $section)
+	{
 		//check if id property exists
 		if (!$section->id) {
 			abort(403, 'This section no longer exists in the database.');
@@ -96,10 +96,10 @@ class SectionController extends Controller
 		$templates = $templates->sortBy('template_name', SORT_NATURAL);
 
 		return view('sections.show', compact('section', 'templates'));
-    }
+	}
 
-    public function showmanual($id)
-    {
+	public function showmanual($id)
+	{
 		$section = Section::where('id', $id)->first();
 		
 		//only non guests can see all sections
@@ -122,12 +122,12 @@ class SectionController extends Controller
 		$templates = $templates->sortBy('template_name', SORT_NATURAL);
 
 		return view('manuals.show', compact('section', 'templates'));
-    }
+	}
 
 	public function edit(Request $request, Section $section)
 	{	
 		if (Auth::guest()) {
-            abort(403, 'Unauthorized action.');
+			abort(403, 'Unauthorized action.');
 		}
 		
 		//check if id property exists
@@ -172,9 +172,9 @@ class SectionController extends Controller
 	public function store(Request $request)
 	{
 		//only a superadmin has permissions to create new sections
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		//validate input form
 		$this->validate($request, [
@@ -213,9 +213,9 @@ class SectionController extends Controller
 	public function destroy(Section $section)
 	{
 		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 
 		//remove all related templates and content
 		$templates = Template::where('section_id', $section->id)->get();

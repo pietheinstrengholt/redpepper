@@ -239,7 +239,8 @@ class TemplateController extends Controller
 			$template->template_name = $request->input('template_name');
 			$template->template_shortdesc = $request->input('template_shortdesc');
 			$template->template_longdesc = $request->input('template_longdesc');
-			
+			$template->created_by = Auth::user()->id;
+
 			//assuming when no rows and columns are entered the template is description
 			if ($request->input('inputrows') == 0 || $request->input('inputcolumns') == 0) {
 				$template->visible = 'Limited';
