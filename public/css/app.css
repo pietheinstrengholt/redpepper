@@ -274,6 +274,11 @@ table.dialog  textarea#regulation_row, table.dialog  textarea#interpretation_row
 	width: 90%;
 }
 
+h4.template_shortdesc p, h4.template_longdesc p, h4.section_description p, h4.section_longdesc p, h4.section_shortdesc p, h5.template_shortdesc p, h5.template_longdesc p, h5.section_description p, h5.section_longdesc p, h5.section_shortdesc p {
+	font-family: inherit ! important;
+}
+
+
 div#cell-update {
 	margin-top: 20px;
 }
