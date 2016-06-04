@@ -52,7 +52,7 @@
 			</div>
 		</div>
 		
-		@if (!empty($section))
+		@if (!empty($section) && $section->id != 0)
 			<input type="hidden" name="section_id" value="{{ $section->id }}">
 			<div class="form-group">
 				{!! Form::label('parent_id', 'Optional parent:', array('class' => 'col-sm-3 control-label')) !!}
