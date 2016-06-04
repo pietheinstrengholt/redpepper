@@ -3,35 +3,7 @@
 
 @section('content')
 
-	<script src="{{ URL::asset('js/tinymce/tinymce.min.js') }}"></script>
-
-	<script>tinymce.init({ 	
-		selector:'textarea#section_description',
-		valid_elements: "p[style],a[href|target],strong/b,i/em,br,table,tbody,thead,tr,td,ul,ol,li",
-		height: 200,
-		plugins: [
-			'link image'
-		],
-		menubar: '',
-		toolbar: 'undo redo | bold italic | link | bullist numlist',
-		body_class: 'form-control',
-		statusbar: false,
-		content_style: "p {margin-top: -4px;} ol,ul,p {color: #2c3e50; font-size: 15px;}"
-	});</script>
-
-	<script>tinymce.init({ 	
-		selector:'textarea#section_longdesc',
-		valid_elements: "p[style],a[href|target],strong/b,i/em,br,table,tbody,thead,tr,td,ul,ol,li",
-		height: 300,
-		plugins: [
-			'link image'
-		],
-		menubar: '',
-		toolbar: 'undo redo | alignleft aligncenter alignright | bold italic | link | bullist numlist',
-		body_class: 'form-control',
-		statusbar: false,
-		content_style: "p {margin-top: -4px; font-family: inherit ! important;}, ol,ul,p {color: #2c3e50; font-size: 15px;}"
-	});</script>
+	@include('tinymce.section')
 
 	<ul class="breadcrumb breadcrumb-section">
 	<li><a href="{!! url('/'); !!}">Home</a></li>
