@@ -31,12 +31,12 @@
 			<td><a href="{{ route('sections.templates.show', [$section->id, $child->id]) }}">{{ $child->template_name }}</a></td>
 			<td>{!! html_entity_decode(e($child->template_shortdesc)) !!}</td>
 			<td>
-			@if ($child->visible !== 'Limited')
+			@if ( $child->rows->count() && $child->columns->count() )
 				<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $child->id }}">Export</a>
 			@endif
 			@can('update-section', $section)
 				{!! link_to_route('sections.templates.edit', 'Edit', array($child->section_id, $child->id), array('class' => 'btn btn-info btn-xs')) !!}
-				@if ($child->visible !== 'Limited')
+				@if ( $child->rows->count() && $child->columns->count() )
 					<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('templatestructure') . '/' . $child->id }}">Structure</a>
 				@endif
 				{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:2px;')) !!}
@@ -57,11 +57,8 @@
 		<h4>{!! App\Helper::contentAdjust(nl2br(e($template->main_changes_description))) !!}</h4>
 		<h4>{!! App\Helper::contentAdjust(nl2br(e($template->links_other_temp_description))) !!}</h4>
 		<h4>{!! App\Helper::contentAdjust(nl2br(e($template->process_and_organisation_description))) !!}</h4>
-	@end
-
-	@if ($template->visible !== 'Limited')
 		<h5><a href="{!! url('/templatemanual/' . $template->id); !!}"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print manual</a></h5>
-	@endif
+	@end
 
 	@if ( $descriptions->count() )
 		<div class="info-group" style="margin-bottom:10px;">
