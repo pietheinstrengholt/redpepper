@@ -52,4 +52,3 @@ TODO
 * Add more efficient way to lookup reference value
 * Change and compare of template changes
 * Remove fields such as template process_and_organisation_description, etc.
-* Save created_by on subject, section

@@ -25,5 +25,6 @@
 
 	{!! Form::model(new App\Section, ['route' => ['sections.store']]) !!}
 	@include('sections/partials/_form', ['submit_text' => 'Create Section'])
+	<input type="hidden" name="created_by" value="{!! Auth::user()->id !!}">
 	{!! Form::close() !!}
 @endsection
