@@ -35,12 +35,12 @@
 			<td><a href="{{ route('sections.templates.show', [$section->id, $template->id]) }}">{{ $template->template_name }}</a></td>
 			<td>{!! html_entity_decode(e($template->template_shortdesc)) !!}</td>
 			<td>
-			@if ($template->visible !== 'Limited')
+			@if ( $template->rows->count() && $template->columns->count() )
 				<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $template->id }}">Export</a>
 			@endif
 			@can('update-section', $section)
 				{!! link_to_route('sections.templates.edit', 'Edit', array($template->section_id, $template->id), array('class' => 'btn btn-info btn-xs')) !!}
-				@if ($template->visible !== 'Limited')
+				@if ( $template->rows->count() && $template->columns->count() )
 					<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('templatestructure') . '/' . $template->id }}">Structure</a>
 				@endif
 				{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:2px;')) !!}

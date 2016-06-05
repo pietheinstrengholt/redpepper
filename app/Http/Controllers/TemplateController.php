@@ -225,12 +225,23 @@ class TemplateController extends Controller
 
 		//validate input form
 		$this->validate($request, [
-			'inputrows' => 'required|numeric',
-			'inputcolumns' => 'required|numeric',
 			'template_name' => 'required|min:4',
 			'template_shortdesc' => 'required|min:4',
+			'visible' => 'required',
 			'section_id' => 'required'
 		]);
+		
+		//validate when type is template
+		if ($request->input('template-type') == "template") {
+			$this->validate($request, [
+				'inputrows' => 'required|numeric',
+				'inputcolumns' => 'required|numeric'
+			]);
+			
+			if ($request->input('inputrows') == 0 || $request->input('inputcolumns') == 0) {
+				abort(403, 'Error: Template should not contain any zero values.');
+			}
+		}
 
 		if ($request->isMethod('post')) {
 
@@ -239,15 +250,8 @@ class TemplateController extends Controller
 			$template->template_name = $request->input('template_name');
 			$template->template_shortdesc = $request->input('template_shortdesc');
 			$template->template_longdesc = $request->input('template_longdesc');
+			$template->visible = $request->input('visible');
 			$template->created_by = Auth::user()->id;
-
-			//assuming when no rows and columns are entered the template is description
-			if ($request->input('inputrows') == 0 || $request->input('inputcolumns') == 0) {
-				$template->visible = 'Limited';
-			} else {
-				$template->visible = 'False';
-			}
-
 			$template->save();
 			
 			//only create rows and columns if a valid value for both is given

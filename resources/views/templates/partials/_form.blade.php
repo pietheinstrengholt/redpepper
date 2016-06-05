@@ -23,41 +23,45 @@
 		</div>
 	</div>
 
-	<div class="form-group">
-		{!! Form::label('frequency_description', 'Frequency description:', array('class' => 'col-sm-3 control-label')) !!}
-		<div class="col-sm-6">
-		{!! Form::textarea('frequency_description', null, ['class' => 'form-control', 'rows' => '4']) !!}
+	{{-- Only show fields below when the template has rows and columns --}}
+	@if ( $template->rows->count() && $template->columns->count() )
+		<div class="form-group">
+			{!! Form::label('frequency_description', 'Frequency description:', array('class' => 'col-sm-3 control-label')) !!}
+			<div class="col-sm-6">
+			{!! Form::textarea('frequency_description', null, ['class' => 'form-control', 'rows' => '4']) !!}
+			</div>
 		</div>
-	</div>
 
-	<div class="form-group">
-		{!! Form::label('reporting_dates_description', 'Reporting dates description:', array('class' => 'col-sm-3 control-label')) !!}
-		<div class="col-sm-6">
-		{!! Form::textarea('reporting_dates_description', null, ['class' => 'form-control', 'rows' => '4']) !!}
+		<div class="form-group">
+			{!! Form::label('reporting_dates_description', 'Reporting dates description:', array('class' => 'col-sm-3 control-label')) !!}
+			<div class="col-sm-6">
+			{!! Form::textarea('reporting_dates_description', null, ['class' => 'form-control', 'rows' => '4']) !!}
+			</div>
 		</div>
-	</div>
 
-	<div class="form-group">
-		{!! Form::label('main_changes_description', 'Main changes description:', array('class' => 'col-sm-3 control-label')) !!}
-		<div class="col-sm-6">
-		{!! Form::textarea('main_changes_description', null, ['class' => 'form-control', 'rows' => '4']) !!}
+		<div class="form-group">
+			{!! Form::label('main_changes_description', 'Main changes description:', array('class' => 'col-sm-3 control-label')) !!}
+			<div class="col-sm-6">
+			{!! Form::textarea('main_changes_description', null, ['class' => 'form-control', 'rows' => '4']) !!}
+			</div>
 		</div>
-	</div>
 
-	<div class="form-group">
-		{!! Form::label('links_other_temp_description', 'Links other temp description:', array('class' => 'col-sm-3 control-label')) !!}
-		<div class="col-sm-6">
-		{!! Form::textarea('links_other_temp_description', null, ['class' => 'form-control', 'rows' => '4']) !!}
+		<div class="form-group">
+			{!! Form::label('links_other_temp_description', 'Links other temp description:', array('class' => 'col-sm-3 control-label')) !!}
+			<div class="col-sm-6">
+			{!! Form::textarea('links_other_temp_description', null, ['class' => 'form-control', 'rows' => '4']) !!}
+			</div>
 		</div>
-	</div>
 
-	<div class="form-group">
-		{!! Form::label('process_and_organisation_description', 'Process and organisation description:', array('class' => 'col-sm-3 control-label')) !!}
-		<div class="col-sm-6">
-		{!! Form::textarea('process_and_organisation_description', null, ['class' => 'form-control', 'rows' => '4']) !!}
+		<div class="form-group">
+			{!! Form::label('process_and_organisation_description', 'Process and organisation description:', array('class' => 'col-sm-3 control-label')) !!}
+			<div class="col-sm-6">
+			{!! Form::textarea('process_and_organisation_description', null, ['class' => 'form-control', 'rows' => '4']) !!}
+			</div>
 		</div>
-	</div>
+	@endif
 
+	{{-- Only allow superadmin to change the section of a template --}}
 	@if (Auth::user()->role == "superadmin")
 		<div class="form-group">
 			{!! Form::label('section_id', 'Section:', array('class' => 'col-sm-3 control-label')) !!}
@@ -69,6 +73,7 @@
 		<input type="hidden" name="section_id" value="{{ $section->id }}">
 	@endif
 
+	{{-- If the template does not have any children, show drop down below --}}
 	@if ( !($template->children->count()) )
 		<div class="form-group">
 			{!! Form::label('parent_id', 'Optional parent:', array('class' => 'col-sm-3 control-label')) !!}
@@ -79,21 +84,22 @@
 	@endif
 
 	<div class="form-group">
-		{!! Form::label('type_id', 'Type:', array('class' => 'col-sm-3 control-label')) !!}
+		{!! Form::label('type_id', 'Linked to types:', array('class' => 'col-sm-3 control-label')) !!}
 		<div class="col-sm-5">
 		{!! Form::select('type_id', $types->lists('type_name', 'id'), $template->type_id, ['id' => 'type_id', 'placeholder' => '', 'class' => 'form-control']) !!}
 		</div>
 	</div>
 
-	@if (Auth::user()->role == "admin")
+	{{-- Admin users and builder users who created the template are not allowed to change the visibility of the template --}}
+	@if (Auth::user()->role == "admin" || (Auth::user()->id == $template->created_by && Auth::user()->role == "builder"))
 		{!! Form::hidden('visible','False') !!}
 	@endif
-	
-	@if (Auth::user()->role == "builder" || Auth::user()->role == "superadmin")
+
+	@if ((Auth::user()->id != $template->created_by && Auth::user()->role == "builder") || Auth::user()->role == "superadmin")
 		<div class="form-group">
 			{!! Form::label('visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
-			<div class="col-sm-8">
-			{!! Form::select('visible', ['True' => 'True', 'Limited' => 'Only show descriptions', 'False' => 'False'], $template->visible, ['id' => 'visible', 'class' => 'form-control']) !!}
+			<div class="col-sm-5">
+			{!! Form::select('visible', ['True' => 'Yes, all users can see this template', 'False' => 'No, only visible for (super)admin, builder users'], $template->visible, ['id' => 'visible', 'class' => 'form-control']) !!}
 			</div>
 		</div>
 	@endif

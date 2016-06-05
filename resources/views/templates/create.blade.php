@@ -4,6 +4,25 @@
 @section('content')
 
 	@include('tinymce.template')
+
+	<script>
+	$( document ).ready(function() {
+		$( "#mySelectBox" ).change(function() {
+			var strSelect = "";
+			$( "#mySelectBox option:selected" ).each(function() {
+				strSelect += $(this).val();
+			});
+
+			if (strSelect == "document") {
+				$("div#template").hide();
+			}
+
+			if (strSelect == "template") {
+				$("div#template").show();
+			}
+		});
+	});
+	</script>
 	
 	<ul class="breadcrumb breadcrumb-section">
 	<li><a href="{!! url('/'); !!}">Home</a></li>
@@ -69,17 +88,40 @@
 			</div>
 		@endif
 
+		@if (Auth::user()->role == "superadmin")
+			<div class="form-group">
+				{!! Form::label('visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
+				<div class="col-sm-5">
+				{!! Form::select('visible', ['True' => 'Yes, all users can see this template', 'False' => 'No, only visible for (super)admin, builder users'], null, ['id' => 'visible', 'class' => 'form-control']) !!}
+				</div>
+			</div>
+		@else
+			{!! Form::hidden('visible','False') !!}
+		@endif
+		
 		<div class="form-group">
-			<label for="inputcolumns" class="col-sm-3 control-label">Number of Columns</label>
-			<div class="col-sm-1">
-			<input class="form-control" type="text" name="inputcolumns" id="inputcolumns" placeholder="....">
+			{!! Form::label('visible', 'Template or document:', array('class' => 'col-sm-3 control-label')) !!}
+			<div class="col-sm-5">
+			<select name="template-type" id="mySelectBox" class="form-control">
+				<option id="select-template" value="template">Create a template with rows and columns</option>
+				<option id="select-document" value="document">Create a document without a table</option>
+			</select>
 			</div>
 		</div>
+		
+		<div id="template">
+			<div class="form-group">
+				<label for="inputcolumns" class="col-sm-3 control-label">Number of Columns</label>
+				<div class="col-sm-1">
+				<input class="form-control" type="text" name="inputcolumns" id="inputcolumns" placeholder="....">
+				</div>
+			</div>
 
-		<div class="form-group">
-			<label for="inputrows" class="col-sm-3 control-label">Number of Rows</label>
-			<div class="col-sm-1">
-			<input class="form-control" type="text" name="inputrows" id="inputrows" placeholder="....">
+			<div class="form-group">
+				<label for="inputrows" class="col-sm-3 control-label">Number of Rows</label>
+				<div class="col-sm-1">
+				<input class="form-control" type="text" name="inputrows" id="inputrows" placeholder="....">
+				</div>
 			</div>
 		</div>
 

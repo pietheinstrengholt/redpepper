@@ -50,7 +50,6 @@ TODO
 * Cleanup ChangeRequestController, clone object instead of line by line copy
 * Cleanup views, move all css to app.css, add media responsive
 * Add more efficient way to lookup reference value
-* Filtering tinymce
 * Change and compare of template changes
-* Check builder user to perform changes on template descriptions/creation
 * Remove fields such as template process_and_organisation_description, etc.
+* Save created_by on subject, section
