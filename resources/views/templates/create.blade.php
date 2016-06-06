@@ -15,6 +15,10 @@
 
 			if (strSelect == "document") {
 				$("div#template").hide();
+				//empty input fields when hiding
+				$("input#inputrows").val("");
+				$("input#inputcolumns").val("");
+				
 			}
 
 			if (strSelect == "template") {
