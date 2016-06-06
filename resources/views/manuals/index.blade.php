@@ -24,7 +24,7 @@
 		@foreach( $sections as $section )
 			<tr>
 			<td><a href="{{ url('manuals/' . $section->id) }}">{{ $section->section_name }}</a></td>
-			<td>{{ $section->section_description }}</td>
+			<td>{!! html_entity_decode(e($section->section_description)) !!}</td>
 			</tr>
 		@endforeach
 
