@@ -33,7 +33,7 @@
 	<div class="form-group">
 		{!! Form::label('visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
 		<div class="col-sm-6">
-		{!! Form::select('visible', ['True' => 'True', 'False' => 'False'], $section->visible, ['id' => 'visible', 'class' => 'form-control']) !!}
+		{!! Form::select('visible', ['True' => 'Yes, all users can see this section', 'False' => 'No, only visible for (super)admin, builder users'], $section->visible, ['id' => 'visible', 'class' => 'form-control']) !!}
 		</div>
 	</div>
 

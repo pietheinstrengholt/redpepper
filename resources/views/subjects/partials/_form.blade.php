@@ -25,7 +25,7 @@
 	<div class="form-group">
 		{!! Form::label('visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
 		<div class="col-sm-6">
-		{!! Form::select('visible', ['True' => 'True', 'False' => 'False'], $subject->visible, ['id' => 'visible', 'class' => 'form-control']) !!}
+		{!! Form::select('visible', ['True' => 'Yes, all users can see this subject', 'False' => 'No, only visible for (super)admin, builder users'], $subject->visible, ['id' => 'visible', 'class' => 'form-control']) !!}
 		</div>
 	</div>
 
