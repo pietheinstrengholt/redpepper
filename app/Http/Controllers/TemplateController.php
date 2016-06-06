@@ -252,6 +252,7 @@ class TemplateController extends Controller
 
 			$template = new Template;
 			$template->section_id = $request->input('section_id');
+			$template->parent_id = $request->input('parent_id');
 			$template->template_name = $request->input('template_name');
 			$template->template_shortdesc = $request->input('template_shortdesc');
 			$template->template_longdesc = $request->input('template_longdesc');
