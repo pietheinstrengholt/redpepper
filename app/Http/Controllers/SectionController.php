@@ -87,9 +87,13 @@ class SectionController extends Controller
 
 		//only non guests will see the hidden templates
 		if (Auth::guest()) {
-			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->where('parent_id', null)->orWhere('parent_id', 0)->where('visible', '<>' , 'False')->get();
+			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->where('visible', '<>' , 'False')->where('parent_id', null)->orWhere(function ($query) use ($section) {
+				$query->where('section_id', $section->id)->where('visible', '<>' , 'False')->where('parent_id', 0);
+			})->get();
 		} else {
-			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->where('parent_id', null)->orWhere('parent_id', 0)->get();
+			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->where('parent_id', null)->orWhere(function ($query) use ($section) {
+				$query->where('section_id', $section->id)->where('parent_id', 0);
+			})->get();
 		}
 
 		//sort templates on natural ordering

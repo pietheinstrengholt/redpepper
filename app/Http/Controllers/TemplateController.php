@@ -170,7 +170,10 @@ class TemplateController extends Controller
 		$sections = Section::whereIn('id', $sectionlist)->orderBy('section_name', 'asc')->get();
 		$types = TechnicalType::orderBy('type_name', 'asc')->get();
 		//get non child templates wihtin section and not equal to own template id
-		$templates = Template::orderBy('template_name', 'asc')->where('section_id', $template->section_id)->where('id', '!=', $template->id)->where('parent_id', null)->orWhere('parent_id', 0)->get();
+		$templates = Template::orderBy('template_name', 'asc')->where('section_id', $template->section_id)->where('id', '!=', $template->id)->where('parent_id', null)->orWhere(function ($query) use ($template) {
+			$query->where('section_id', $template->section_id)->where('id', '!=', $template->id)->where('parent_id', 0);
+		})->get();
+		
 		$templates = $templates->sortBy('template_name', SORT_NATURAL);
 		
 		//validate if user can update section (see AuthServiceProvider)
@@ -190,7 +193,9 @@ class TemplateController extends Controller
 		//use default value to select from dropdown
 		if (!empty($section)) {
 			//get non child templates within section
-			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->where('parent_id', null)->orWhere('parent_id', 0)->get();
+			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->where('parent_id', null)->orWhere(function ($query) use ($section) {
+				$query->where('section_id', $section->id)->where('parent_id', 0);
+			})->get();
 			$templates = $templates->sortBy('template_name', SORT_NATURAL);
 		} else {
 			$templates = null;
