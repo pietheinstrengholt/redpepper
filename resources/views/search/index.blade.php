@@ -17,8 +17,8 @@
 		@foreach( $templates as $template )
 			<tr>
 			<td><a href="{!! url('sections/' . $template->section_id . '/templates/' . $template->id); !!}">{{ $template->template_name }}</a></td>
-			<td>{{ $template->template_shortdesc }}</td>
-			<td>{{ $template->template_longdesc }}</td>
+			<td>{!! App\Helper::highlightInput($search,$template->template_shortdesc) !!}</td>
+			<td>{!! App\Helper::highlightInput($search,$template->template_longdesc) !!}</td>
 			</tr>
 		@endforeach
 
