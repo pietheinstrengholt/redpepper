@@ -47,16 +47,16 @@
 		<div class="collapse navbar-collapse" id="navbar-collapse">
 			<ul class="nav navbar-nav">
 			  <li><a href="{{ URL::to('/manuals') }}">Manuals</a></li>
-			  <li class="dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sections <span class="caret"></span></a>
-				<ul class="dropdown-menu" role="menu">
-				  @if ( $sections->count() )
-					@foreach( $sections as $section )
-						<li><a href="{{ route('sections.show', $section->id) }}">{{ $section->section_name }}</a></li>
-					@endforeach
-				  @endif
-				</ul>
-			  </li>
+			  @if ( $subjects->count() )
+				  <li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Subjects <span class="caret"></span></a>
+					<ul class="dropdown-menu" role="menu">
+						@foreach( $subjects as $subject )
+							<li><a href="{{ route('sections.index', array('subject_id' => $subject->id)) }}">{{ $subject->subject_name }}</a></li>
+						@endforeach
+					</ul>
+				  </li>
+			  @endif
 			</ul>
 			<form class="navbar-form navbar-left" role="search" action="{{ URL::to('/search') }}" method="post">
 			<input type="hidden" name="_token" value="{!! csrf_token() !!}">
