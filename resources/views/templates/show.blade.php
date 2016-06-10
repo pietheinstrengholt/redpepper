@@ -158,7 +158,11 @@
 
 	@endif
 	
-	<p><a href="{!! url('/sections/' . $template->section->id); !!}">Back to Sections</a></p>
+	@if ( $parent )
+		<p><a href="{!! url('/sections/' . $parent->section->id . '/templates/' . $parent->id); !!}">Back to template</a></p>
+	@else
+		<p><a href="{!! url('/sections/' . $template->section->id); !!}">Back to Sections</a></p>
+	@endif
 
 @include('templates.modal')
 
