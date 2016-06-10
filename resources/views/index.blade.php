@@ -38,37 +38,39 @@
 			</div>
 		</div>
 
-		{{--*/ $i=0; /*--}}
-		{{--*/ $buttonvalue=0; /*--}}
-		<div id="page-content1" class="row-flex row-flex-wrap row row-eq-height">
-		@foreach ($subjects as $key => $subject)
-			<div class="col-md-3 col-sm-6 hero-feature">
-				@if ($subject->visible == "False")
-					<div class="well yellow">
-				@else
-					<div class="well">
-				@endif
-					<div class="caption" style="padding:0px;">
-						<div class="clearfix"></div>
-						<div class="content-container">
-							<h3 class="center"><a href="{{ url('sections') }}?subject_id={{ $subject->id }}">{{ $subject->subject_name }}</a></h3>
-							<p class="center">{{ $subject->subject_description }}</p>
-							<p class="p-more-info">
-								<a href="{{ url('sections') }}?subject_id={{ $subject->id }}" class="btn {{ $buttons[$buttonvalue] }}">More info</a>
-							</p>
+		@if ( $subjects->count() )
+			{{--*/ $i=0; /*--}}
+			{{--*/ $buttonvalue=0; /*--}}
+			<div id="page-content1" class="row-flex row-flex-wrap row row-eq-height">
+			@foreach ($subjects as $key => $subject)
+				<div class="col-md-3 col-sm-6 hero-feature">
+					@if ($subject->visible == "False")
+						<div class="well yellow">
+					@else
+						<div class="well">
+					@endif
+						<div class="caption" style="padding:0px;">
 							<div class="clearfix"></div>
+							<div class="content-container">
+								<h3 class="center"><a href="{{ url('sections') }}?subject_id={{ $subject->id }}">{{ $subject->subject_name }}</a></h3>
+								<p class="center">{{ $subject->subject_description }}</p>
+								<p class="p-more-info">
+									<a href="{{ url('sections') }}?subject_id={{ $subject->id }}" class="btn {{ $buttons[$buttonvalue] }}">More info</a>
+								</p>
+								<div class="clearfix"></div>
+							</div>
 						</div>
 					</div>
 				</div>
+				{{--*/ $i++; /*--}}
+				{{--*/ $buttonvalue++; /*--}}
+				@if ($i%4 == 0)
+					{{--*/ $buttonvalue=0; /*--}}
+					</div><div class="row">
+				@endif
+			@endforeach
 			</div>
-			{{--*/ $i++; /*--}}
-			{{--*/ $buttonvalue++; /*--}}
-			@if ($i%4 == 0)
-				{{--*/ $buttonvalue=0; /*--}}
-				</div><div class="row">
-			@endif
-		@endforeach
-		</div>
+		@endif
 
 		<div id="page-content2" class="row">
 			<div class="col-md-12 col-sm-12" id="footer">
