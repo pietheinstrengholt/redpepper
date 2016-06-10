@@ -190,7 +190,7 @@ class SectionController extends Controller
 		$section = Section::create($request->all());
 
 		Event::fire(new SectionCreated($section));
-		return Redirect::route('sections.index')->with('message', 'Section created');
+		return Redirect::route('sections.index', array('subject_id' => $request->input('subject_id')))->with('message', 'Section created');
 	}
 
 	public function update(Request $request, Section $section)
