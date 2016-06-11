@@ -27,7 +27,7 @@ class Helper {
 			return "Last updated at " . date('d F Y', strtotime($lastDate));			
 		}
 	}
-	
+
 	public static function setting($input) {
 		$setting = Setting::where('config_key', $input)->first();
 		if ($input == 'homescreen_image' && empty($setting)) {
@@ -40,7 +40,7 @@ class Helper {
 			return $setting->config_value;
 		}
 	}
-	
+
 	public static function addTermLinks($text) {
 		//retrieve words from database
 		$words = Term::all();
@@ -63,8 +63,6 @@ class Helper {
 		} else {
 			return $text;
 		}
-
-
 	}
 	
 	public static function contentAdjust($input) {
@@ -72,11 +70,10 @@ class Helper {
 		$output = self::addTermLinks($output);
 		return $output;
 	}
-	
+
 	public static function highlightInput($input1, $input2) {
 		return str_ireplace($input1, "<strong>$input1</strong>", $input2);
 	}
-	
 }
 
 ?>
