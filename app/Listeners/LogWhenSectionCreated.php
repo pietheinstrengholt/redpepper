@@ -19,7 +19,7 @@ class LogWhenSectionCreated
 	public function handle(SectionCreated $event)
 	{
 		\Log::info("SECTION CREATED {$event->section->section_name}"); 
-		
+
 		$log = new Log;
 		$log->log_event = 'Section';
 		$log->action = 'Created';

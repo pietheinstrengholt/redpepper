@@ -22,7 +22,7 @@ class LogWhenTemplateCreated
 	public function handle(TemplateCreated $event)
 	{
 		\Log::info("TEMPLATE CREATED {$event->template->template_name}"); 
-		
+
 		$log = new Log;
 		$log->log_event = 'Template';
 		$log->action = 'Created';
@@ -37,13 +37,12 @@ class LogWhenTemplateCreated
 		$array['template_name'] = $template->template_name;
 		$array['template_id'] = $event->template->id;
 		$array['section_id'] = $event->template->section_id;
-		
+
 		Mail::send('emails.template', $array, function($message)
 		{
-			$message->from(env('MAIL_USERNAME'));
+			$message->from($user->email);
 			$message->to(Helper::setting('administrator_email'));
 			$message->subject('Notification from the ' . Helper::setting('tool_name'));
 		});
-		
 	}
 }

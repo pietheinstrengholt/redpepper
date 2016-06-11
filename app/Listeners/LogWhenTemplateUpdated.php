@@ -19,7 +19,7 @@ class LogWhenTemplateUpdated
 	public function handle(TemplateUpdated $event)
 	{
 		\Log::info("TEMPLATE UPDATED {$event->template->template_name}"); 
-		
+
 		$log = new Log;
 		$log->log_event = 'Template';
 		$log->action = 'Updated';

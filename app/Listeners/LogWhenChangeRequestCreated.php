@@ -23,7 +23,7 @@ class LogWhenChangeRequestCreated
 	public function handle(ChangeRequestCreated $event)
 	{
 		\Log::info("CHANGEREQUEST CREATED {$event->changerequest->id}"); 
-		
+
 		$log = new Log;
 		$log->log_event = 'Changerequest';
 		$log->action = 'Created';
@@ -33,31 +33,31 @@ class LogWhenChangeRequestCreated
 		$log->save();
 
 		$array = array();
-		
+
 		$array['changerequest_id'] = $event->changerequest->id;
 		$user = User::findOrFail(Auth::user()->id);
 		$array['username'] = $user->username;
 		$template = Template::findOrFail($event->changerequest->template_id);
 		$array['template_name'] = $template->template_name;
-		
+
 		if (!(Helper::setting('superadmin_process_directly') == "yes" && Auth::user()->role == "superadmin")) {
-		
+
 			//email the system administrator
 			if (!empty(Helper::setting('administrator_email'))) {
 				Mail::send('emails.changerequest', $array, function($message)
 				{
-					$message->from(env('MAIL_USERNAME'));
+					$message->from($user->username);
 					$message->to(Helper::setting('administrator_email'));
 					$message->subject('Notification from the ' . Helper::setting('tool_name'));
-				});				
+				});
 			}
-			
+
 			//email the approver if set
 			if ($event->changerequest->approver) {
 				$approver = User::findOrFail($event->changerequest->approver);
 				Mail::send('emails.changerequest', $array, function($message) use ($approver)
 				{
-					$message->from(env('MAIL_USERNAME'));
+					$message->from($user->username);
 					$message->to($approver->email);
 					$message->subject('Notification from the ' . Helper::setting('tool_name'));
 				});
