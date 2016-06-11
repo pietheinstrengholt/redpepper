@@ -50,9 +50,70 @@
 	}
 	</style>
 </head>
+
 <body>
+<div class="block">
+<!-- start textbox-with-title -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" id="backgroundTable" st-sortable="fulltext">
+<tbody>
+<tr>
+<td>
+<table width="580" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth" modulebg="edit">
+<tbody>
+<!-- Spacing -->
+<tr>
+<td width="100%" height="30"></td>
+</tr>
+<!-- Spacing -->
+<tr>
+<td>
+<table width="540" align="center" cellpadding="0" cellspacing="0" border="0" class="devicewidthinner">
+<tbody>
+
+<div class="block">
+<!-- Full + text -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" id="backgroundTable" st-sortable="fullimage">
+<tbody>
+<tr>
+<td>
+<table width="580" align="center" cellspacing="0" cellpadding="0" border="0" class="devicewidth" modulebg="edit">
+<tbody>
+<tr>
+<td width="100%" height="20"></td>
+</tr>
+<tr>
+<td>
+<table width="540" align="center" cellspacing="0" cellpadding="0" border="0" class="devicewidthinner">
+<tbody>
+
 <h2>RADAR Changerequest notification</h2>
 <h4>A new template {{ $template_name }} has been created by {{ $username }}.</h4>
 <h4><a href="{!! url('sections/' . $section_id . '/templates/' . $template_id); !!}">Click here</a> to see the new template</h4>
-<small>If you have any questions, please send an email to: <a href="mailto:frc@nl.abnamro.com">FRC RADAR</A></small>
+<small>If you have any questions, please send an email to: <a href="mailto:{!! App\Helper::setting('administrator_email') !!}">{!! App\Helper::setting('administrator_email') !!}</a></small>
+
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- end of textbox-with-title -->
+</div>
+
 </body>
