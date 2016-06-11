@@ -40,7 +40,7 @@ class LogWhenTemplateCreated
 
 		Mail::send('emails.template', $array, function($message)
 		{
-			$message->from($user->email);
+			$message->from(Auth::user()->email);
 			$message->to(Helper::setting('administrator_email'));
 			$message->subject('Notification from the ' . Helper::setting('tool_name'));
 		});

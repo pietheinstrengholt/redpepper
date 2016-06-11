@@ -46,7 +46,7 @@ class LogWhenChangeRequestCreated
 			if (!empty(Helper::setting('administrator_email'))) {
 				Mail::send('emails.changerequest', $array, function($message)
 				{
-					$message->from($user->username);
+					$message->from(Auth::user()->email);
 					$message->to(Helper::setting('administrator_email'));
 					$message->subject('Notification from the ' . Helper::setting('tool_name'));
 				});
@@ -57,7 +57,7 @@ class LogWhenChangeRequestCreated
 				$approver = User::findOrFail($event->changerequest->approver);
 				Mail::send('emails.changerequest', $array, function($message) use ($approver)
 				{
-					$message->from($user->username);
+					$message->from(Auth::user()->email);
 					$message->to($approver->email);
 					$message->subject('Notification from the ' . Helper::setting('tool_name'));
 				});
