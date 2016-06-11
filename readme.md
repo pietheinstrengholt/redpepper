@@ -54,4 +54,3 @@ TODO
 * Remove fields such as template process_and_organisation_description, etc.
 * When search maximize the results (word count no more than 50 before result and 50 after)
 * jQuery 3.0?
-* Email to administrator, email subject and screen
