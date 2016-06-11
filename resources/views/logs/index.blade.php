@@ -36,7 +36,7 @@
 			@if ($log->changerequest_id)
 				<a href="{!! url('/') . '/changerequests/' . $log->changerequest_id . '/edit'; !!}">{{ $log->changerequest_id }}</a>
 			@endif
-			</td>			
+			</td>
 			
 			<td>
 			@if ($log->section_id)

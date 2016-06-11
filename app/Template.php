@@ -49,6 +49,11 @@ class Template extends Model
 	{
 		return $this->hasMany('App\Template', 'parent_id');
 	}
+
+	public function logs()
+	{
+		return $this->hasMany('App\Template', 'template_id', 'id');
+	}
 }
 
 ?>

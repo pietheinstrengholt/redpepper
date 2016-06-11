@@ -15,18 +15,26 @@
 	</tr>
 
 	@foreach( $logs as $log )
-		@if ($log->action == "Updated" || $log->action == "Approved" && !(empty($log->template)))
-			<tr>
+		@if ($log->action == "Updated" || $log->action == "Approved")
+			<tr id="{{ $log->id }}">
 			<td>
 			@if ($log->log_event == "Changerequest")
-				<a href="{!! url('/') . '/changerequests/' . $log->changerequest_id . '/edit'; !!}">Changerequest {{ $log->changerequest_id }}</a> has been approved for template 
-				<a href="{!! url('/') . '/sections/' . $log->template->section_id . '/templates/' . $log->template_id; !!}">{{ $log->template->template_name }}</a>
+				<a href="{!! url('/') . '/changerequests/' . $log->changerequest_id . '/edit'; !!}">Changerequest {{ $log->changerequest_id }}</a> has been approved {{ $log->template_id }}
+				@if ($log->template)
+					for template <a href="{!! url('/') . '/sections/' . $log->template->section_id . '/templates/' . $log->template_id; !!}">{{ $log->template->template_name }}</a>
+				@endif
 			@endif
 			@if ($log->log_event == "Template")
-				Template <a href="{!! url('/') . '/sections/' . $log->template->section_id . '/templates/' . $log->template_id; !!}">{{ $log->template->template_name }}</a> has been updated.
+				@if ($log->template)
+					Template <a href="{!! url('/') . '/sections/' . $log->template->section_id . '/templates/' . $log->template_id; !!}">{{ $log->template->template_name }}</a> has been updated.
+				@endif
 			@endif
-			</td>			
-			<td>{{ $log->creator->firstname }} {{ $log->creator->lastname }} ({{ $log->creator->username }})</td>
+			</td>
+			<td>
+			@if ($log->creator)
+				{{ $log->creator->firstname }} {{ $log->creator->lastname }} ({{ $log->creator->username }})
+			@endif
+			</td>
 			<td>{{ $log->created_at }}</td>
 			</tr>
 		@endif
