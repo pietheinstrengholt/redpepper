@@ -52,5 +52,5 @@ TODO
 * Add more efficient way to lookup reference value
 * Change and compare of template changes
 * Remove fields such as template process_and_organisation_description, etc.
-* When search maximize the results (word count no more than 50 before result and 50 after)
+* When search maximize the results (word count no more than 50 before result and 50 after) - use strip_tags to remove html tags and helper function
 * jQuery 3.0?
