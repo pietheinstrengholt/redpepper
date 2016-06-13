@@ -33,27 +33,26 @@ class TemplateController extends Controller
 	//function to compile list with sections
 	public function sectionList(Request $request)
 	{
-		
 		//set empty var
 		$sectionRights = array();
-		
+
 		$sections = Section::orderBy('section_name', 'asc')->get();
-		
+
 		foreach ($sections as $section) {
 			if ($request->user()->can('update-section', $section)) {
 				array_push($sectionRights,$section->id);
 			}
 		}
-		
+
 		//abort if sectionRights array is empty
 		if (empty($sectionRights)) {
 			abort(403, 'Unauthorized action. You don\'t have access to any sections.');
 		}
-		
+
 		//return Array with sections
 		return $sectionRights;
 	}
-		
+
 	//function to show template
 	public function show(Request $request, Section $section, Template $template)
 	{
@@ -86,10 +85,10 @@ class TemplateController extends Controller
 
 		$disabledFields = $this->getDisabledFields($template);
 		$propertyFields = $this->getPropertyFields($template);
-		
+
 		$technicaltype = TechnicalType::where('id', $template->type_id)->first();
 		$descriptions = TechnicalDescription::where('type_id', $template->type_id)->orderBy('content', 'asc')->get();
-		
+
 		//get parent and children
 		$parent = $template->parent()->first();
 		if (Auth::guest()) {
@@ -98,7 +97,7 @@ class TemplateController extends Controller
 			$children = $template->children()->orderBy('template_name', 'asc')->get();
 		}
 		$children = $children->sortBy('template_name', SORT_NATURAL);
-		
+
 		return view('templates.show', compact('section', 'template', 'disabledFields', 'propertyFields', 'searchvalue', 'technicaltype', 'descriptions','parent','children'));
 	}
 
@@ -173,9 +172,9 @@ class TemplateController extends Controller
 		$templates = Template::orderBy('template_name', 'asc')->where('section_id', $template->section_id)->where('id', '!=', $template->id)->where('parent_id', null)->orWhere(function ($query) use ($template) {
 			$query->where('section_id', $template->section_id)->where('id', '!=', $template->id)->where('parent_id', 0);
 		})->get();
-		
+
 		$templates = $templates->sortBy('template_name', SORT_NATURAL);
-		
+
 		//validate if user can update section (see AuthServiceProvider)
 		if ($request->user()->can('update-section', $section)) {
 			return view('templates.edit', compact('sections', 'section', 'template','templates','types'));
@@ -189,7 +188,7 @@ class TemplateController extends Controller
 		//retrieve list with sections based on user id and user role
 		$sectionlist = $this->sectionList($request);
 		$sections = Section::whereIn('id', $sectionlist)->orderBy('section_name', 'asc')->get();
-		
+
 		//use default value to select from dropdown
 		if (!empty($section)) {
 			//get non child templates within section
@@ -201,7 +200,7 @@ class TemplateController extends Controller
 			$templates = null;
 			$section = null;
 		}
-		
+
 		return view('templates.create', compact('sections','section','templates'));
 	}
 
@@ -259,7 +258,7 @@ class TemplateController extends Controller
 			$template->visible = $request->input('visible');
 			$template->created_by = Auth::user()->id;
 			$template->save();
-			
+
 			//only create rows and columns if a valid value for both is given
 			if ($request->input('inputrows') > 0 && $request->input('inputcolumns') > 0) {
 
@@ -463,28 +462,30 @@ class TemplateController extends Controller
 	}
 
 	//function to delete template
-	public function destroy(Section $section, Template $template)
+	public function destroy(Section $section, Template $template, Request $request)
 	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-			abort(403, 'Unauthorized action.');
+		if ($request->user()->can('update-section', $section)) {
+
+			if (Auth::user()->role == "builder" && $template->visible == "True") {
+				abort(403, 'Unauthorized action. A template can only be deleted when set to non visible. Please change the template properties to be set to hidden for guest users and try again.');
+			}
+
+			//remove all related template content
+			TemplateRow::where('template_id', $template->id)->delete();
+			TemplateColumn::where('template_id', $template->id)->delete();
+			Requirement::where('template_id', $template->id)->delete();
+			Technical::where('template_id', $template->id)->delete();
+			ChangeRequest::where('template_id', $template->id)->delete();
+			//TODO: use for each procedure to also delete children content
+			Template::where('parent_id', $template->id)->delete();
+
+			//log Event
+			Event::fire(new TemplateDeleted($template));
+
+			//delete template
+			$template->delete();
+			return Redirect::route('sections.show', $section->id)->with('message', 'Template deleted.');
 		}
-
-		//remove all related template content
-		TemplateRow::where('template_id', $template->id)->delete();
-		TemplateColumn::where('template_id', $template->id)->delete();
-		Requirement::where('template_id', $template->id)->delete();
-		Technical::where('template_id', $template->id)->delete();
-		ChangeRequest::where('template_id', $template->id)->delete();
-		//TODO: use for each procedure to also delete children content
-		Template::where('parent_id', $template->id)->delete();
-
-		//log Event
-		Event::fire(new TemplateDeleted($template));
-
-		//delete template
-		$template->delete();
-		return Redirect::route('sections.show', $section->id)->with('message', 'Template deleted.');
 	}
 
 	//content for the pop-up
@@ -516,18 +517,18 @@ class TemplateController extends Controller
 			'field_property2' => Requirement::where('template_id', $request->input('template_id'))->where('row_code', $row_code)->where('column_code', $column_code)->where('content_type', 'property2')->first()
 		]);
 	}
-	
+
 	public function manual($id)
 	{
 		$template = Template::where('id', $id)->first();
-		
+
 		//abort if sectionRights array is empty
 		if (empty($template)) {
 			abort(403, 'No template has been found for this selection.');
 		}
-		
+
 		$technical = Technical::where('template_id', $id)->orderBy('row_code', 'asc')->orderBy('column_code', 'asc')->get();
-		
+
 		return view('templates.manual', compact('template','technical'));
 	}
 
@@ -541,9 +542,9 @@ class TemplateController extends Controller
 		//upload image with random string
 		$file = $request->file('imagefile');
 		$extension = $file->getClientOriginalExtension();
-		
+
 		$validExtensions = array("jpeg", "jpg", "png", "gif");
-		
+
 		if (in_array(strtolower($extension), $validExtensions)) {
 			$random = str_random(10);
 			$file->move(public_path() . '/img/upload/', $random . '.' . $extension);

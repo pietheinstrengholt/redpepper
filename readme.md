@@ -53,4 +53,3 @@ TODO
 * Change and compare of template changes
 * Remove fields such as template process_and_organisation_description, etc.
 * jQuery 3.0?
-* Builder template laten verwijderen, alleen als die op niet visible staat

@@ -5,29 +5,30 @@ namespace App\Providers;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use App\UserRights;
+use App\Section;
 
 class AuthServiceProvider extends ServiceProvider
 {
-    /**
-     * The policy mappings for the application.
-     *
-     * @var array
-     */
-    protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
-    ];
+	/**
+	 * The policy mappings for the application.
+	 *
+	 * @var array
+	 */
+	protected $policies = [
+		'App\Model' => 'App\Policies\ModelPolicy',
+	];
 
-    /**
-     * Register any application authentication / authorization services.
-     *
-     * @param  \Illuminate\Contracts\Auth\Access\Gate  $gate
-     * @return void
-     */
+	/**
+	 * Register any application authentication / authorization services.
+	 *
+	 * @param  \Illuminate\Contracts\Auth\Access\Gate  $gate
+	 * @return void
+	 */
 	public function boot(GateContract $gate)
 	{
 		$this->registerPolicies($gate);
-		
-        $gate->define('update-section', function ($user, $section) {
+
+		$gate->define('update-section', function ($user, $section) {
 			if ($user->role === "superadmin") {
 				return true;
 			}
@@ -37,9 +38,9 @@ class AuthServiceProvider extends ServiceProvider
 					return true;
 				}
 			}
-        });
-		
-        $gate->define('create-changerequest', function ($user, $template) {
+		});
+
+		$gate->define('create-changerequest', function ($user, $template) {
 			if ($user->role === "superadmin") {
 				return true;
 			}
@@ -49,9 +50,9 @@ class AuthServiceProvider extends ServiceProvider
 					return true;
 				}
 			}
-        });
-		
-        $gate->define('approve-changerequest', function ($user, $template) {
+		});
+
+		$gate->define('approve-changerequest', function ($user, $template) {
 			if ($user->role === "superadmin") {
 				return true;
 			}
@@ -61,7 +62,7 @@ class AuthServiceProvider extends ServiceProvider
 					return true;
 				}
 			}
-        });
+		});
 
 		$gate->define('superadmin', function ($user) {
 			return $user->role === "superadmin";
