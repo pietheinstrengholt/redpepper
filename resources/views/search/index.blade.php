@@ -17,8 +17,8 @@
 		@foreach( $templates as $template )
 			<tr>
 			<td><a href="{!! url('sections/' . $template->section_id . '/templates/' . $template->id); !!}">{{ $template->template_name }}</a></td>
-			<td>{!! App\Helper::highlightInput($search,App\Helper::returnSearch($search,strip_tags($template->template_shortdesc),10)) !!}</td>
-			<td>{!! App\Helper::highlightInput($search,App\Helper::returnSearch($search,strip_tags($template->template_longdesc),10)) !!}</td>
+			<td>{!! App\Helper::highlightInput($search,App\Helper::returnSearch($search,strip_tags($template->template_shortdesc),25)) !!}</td>
+			<td>{!! App\Helper::highlightInput($search,App\Helper::returnSearch($search,strip_tags($template->template_longdesc),25)) !!}</td>
 			</tr>
 		@endforeach
 
@@ -82,7 +82,7 @@
 			<td>{{ $requirement->row_code }}</td>
 			<td>{{ $requirement->column_code }}</td>
 			<td>{{ $requirement->content_type }}</td>
-			<td>{!! App\Helper::highlightInput($search,$requirement->content) !!}</td>
+			<td>{!! App\Helper::highlightInput($search,App\Helper::returnSearch($search,strip_tags($requirement->content),25)) !!}</td>
 			</tr>
 		@endforeach
 
