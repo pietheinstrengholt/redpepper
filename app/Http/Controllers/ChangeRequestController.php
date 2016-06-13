@@ -143,17 +143,17 @@ class ChangeRequestController extends Controller
 			'field_property2' => Requirement::where('template_id', $_GET['template_id'])->where('row_code', $row_code)->where('column_code', $column_code)->where('content_type', 'property2')->first(),
 			'approvers' => $approvers
 		]);
-    }
+	}
 
-    public function cleanup()
-    {
+	public function cleanup()
+	{
 		//check for superadmin permissions
-        if (Gate::denies('superadmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
 		ChangeRequest::where('status', 'rejected')->orWhere('status', 'approved')->delete();
 		return Redirect::route('changerequests.index')->with('message', 'Cleanup performed.');
-    }
+	}
 
 	//set compare granularity level
 	public function compare($from, $to) {
@@ -161,12 +161,14 @@ class ChangeRequestController extends Controller
 		$diffHTML = FineDiff::renderDiffToHTMLFromOpcodes($from, $diff);
 		return $diffHTML;
 	}
+
 	//set compare granularity level
 	public function compare_character($from, $to) {
 		$diff = FineDiff::getDiffOpcodes($from, $to, FineDiff::$characterGranularity);
 		$diffHTML = FineDiff::renderDiffToHTMLFromOpcodes($from, $diff);
 		return $diffHTML;
 	}
+
 	//set compare granularity level
 	public function compare_word($from, $to) {
 		$diff = FineDiff::getDiffOpcodes($from, $to, FineDiff::$wordGranularity);
@@ -316,7 +318,7 @@ class ChangeRequestController extends Controller
 			'allowedToChange' => $allowedToChange
 		]);
 	}
-	
+
 	public function process(ChangeRequest $ChangeRequest) {
 		//get draft content
 		$DraftRegulation_row = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'regulation')->first();

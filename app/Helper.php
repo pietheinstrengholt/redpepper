@@ -74,6 +74,31 @@ class Helper {
 	public static function highlightInput($input1, $input2) {
 		return str_ireplace($input1, "<strong>$input1</strong>", $input2);
 	}
+	
+	public static function returnSearch($query, $str, $wordcount) {
+		$explode = explode($query, $str);
+		$result = null;
+		//if explode count is one the query was not found
+		if (count($explode) == 1) {
+			$result = implode(' ', array_slice(str_word_count($explode[0], 2), -$wordcount, $wordcount)) . " ";
+		}
+		//if explode count is more than one the query was found at least one time
+		if (count($explode) > 1) {
+			//check for if the string begins with the query
+			if (!empty($explode[0])) {
+				$result =  "..." . implode(' ', array_slice(str_word_count($explode[0], 2), -$wordcount, $wordcount)) . " ";
+			}
+
+			$result = $result . $query;
+
+			if (!empty($explode[1])) {
+				$result = $result . " " . implode(' ', array_slice(str_word_count($explode[1], 2), 0, $wordcount)) . "...";
+			}
+		}
+		//return result
+		return $result;
+	}
+
 }
 
 ?>

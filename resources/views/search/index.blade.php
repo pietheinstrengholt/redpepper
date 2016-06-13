@@ -17,8 +17,8 @@
 		@foreach( $templates as $template )
 			<tr>
 			<td><a href="{!! url('sections/' . $template->section_id . '/templates/' . $template->id); !!}">{{ $template->template_name }}</a></td>
-			<td>{!! App\Helper::highlightInput($search,$template->template_shortdesc) !!}</td>
-			<td>{!! App\Helper::highlightInput($search,$template->template_longdesc) !!}</td>
+			<td>{!! App\Helper::highlightInput($search,App\Helper::returnSearch($search,strip_tags($template->template_shortdesc),10)) !!}</td>
+			<td>{!! App\Helper::highlightInput($search,App\Helper::returnSearch($search,strip_tags($template->template_longdesc),10)) !!}</td>
 			</tr>
 		@endforeach
 
