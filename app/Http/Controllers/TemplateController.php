@@ -485,6 +485,8 @@ class TemplateController extends Controller
 			//delete template
 			$template->delete();
 			return Redirect::route('sections.show', $section->id)->with('message', 'Template deleted.');
+		} else {
+			abort(403, 'Unauthorized action. You don\'t have rights to this template or section');
 		}
 	}
 
