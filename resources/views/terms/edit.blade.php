@@ -2,7 +2,14 @@
 @extends('layouts.master')
 
 @section('content')
-	<h2>Edit Terms "{{ $term->term_name }}"</h2>
+
+	<ul class="breadcrumb breadcrumb-section">
+	  <li><a href="{!! url('/'); !!}">Home</a></li>
+	  <li><a href="{!! url('/terms'); !!}">Terms</a></li>
+	  <li class="active">{{ $term->term_name }}</li>
+	</ul>
+
+	<h2>Edit Term</h2>
 
 	@if (count($errors) > 0)
 		<div class="alert alert-danger">

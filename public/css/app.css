@@ -341,3 +341,75 @@ code {
 
 #htmldiff.onlyDeletions ins {display:none}
 #htmldiff.onlyInsertions del {display:none}
+
+
+.twitter-typeahead .tt-query,
+.twitter-typeahead .tt-hint {
+	margin-bottom: 0;
+}
+
+.tt-dropdown-menu {
+	width: 600px;
+	min-height:60px;
+	margin-top: 0px;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+	-moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+	box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+	display: block;
+	padding: 3px 20px;
+}
+
+.tt-suggestion :hover {
+	color: #66afe9;
+}
+
+.tt-suggestion.tt-is-under-cursor {
+	color: #fff;
+	background-color: #0081c2;
+	background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
+	background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
+	background-image: -o-linear-gradient(top, #0088cc, #0077b3);
+	background-image: linear-gradient(to bottom, #0088cc, #0077b3);
+	background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0)
+}
+
+.tt-suggestion.tt-is-under-cursor a {
+  /* color: #fff; */
+}
+
+.tt-suggestion p {
+	margin: 0;
+}
+
+.tt-suggestions .term-glossary {
+	float: right;
+	font-style: italic;
+}
+
+.tt-suggestions .term-termname {
+	font-size: 17px;
+	font-weight: bold;
+}
+
+.tt-suggestions .term-description {
+	margin: 0;
+}
+
+span.twitter-typeahead {
+	width: 100%;
+}
+
+.empty-message {
+	padding: 10px;
+}

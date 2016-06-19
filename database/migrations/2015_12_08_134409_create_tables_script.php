@@ -237,7 +237,7 @@ class CreateTables extends Migration
 	{
 		Schema::drop('t_usernames');
 		Schema::drop('t_password_resets');
-		Schema::drop('t_usernames_rights');		
+		Schema::drop('t_usernames_rights');
 		Schema::drop('t_departments');
 		Schema::drop('t_templates');
 		Schema::drop('t_template_columns');
@@ -247,9 +247,9 @@ class CreateTables extends Migration
 		Schema::drop('t_technical_types');
 		Schema::drop('t_technical_souces');
 		Schema::drop('t_changes_content');
-		Schema::drop('t_changes_technical');	
+		Schema::drop('t_changes_technical');
 		Schema::drop('t_history_content');
-		Schema::drop('t_history_technical');	
+		Schema::drop('t_history_technical');
 		Schema::drop('t_changes');
 		Schema::drop('t_sections');
 		Schema::drop('t_settings');

@@ -149,3 +149,15 @@ Route::get('/imageupload', function() {
 	return view('imageupload.image-dialog');
 });
 Route::post('/imageupload', 'TemplateController@imageUpload');
+
+//api bim
+Route::get('/api/terms', 'TermController@apiIndex');
+Route::get('/api/terms/{id}', 'TermController@apiShow');
+Route::get('/api/ontologies', 'OntologyController@apiIndex');
+Route::get('/api/ontologies/{id}', 'OntologyController@apiShow');
+Route::get('/api/relations', 'RelationController@apiIndex');
+Route::get('/api/relations/{id}', 'RelationController@apiShow');
+Route::get('/api/glossaries', 'GlossaryController@apiIndex');
+Route::get('/api/glossaries/{id}', 'GlossaryController@apiShow');
+Route::get('/api/status', 'StatusController@apiIndex');
+Route::get('/api/status/{id}', 'StatusController@apiShow');

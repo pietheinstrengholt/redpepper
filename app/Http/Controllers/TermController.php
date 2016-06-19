@@ -2,14 +2,18 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Term;
+use App\Glossary;
+use App\Ontology;
+use App\Status;
+use App\Relation;
 use App\User;
 use Gate;
 use Illuminate\Http\Request;
 use Redirect;
 class TermController extends Controller
 {
-    public function index(Request $request)
-    {
+	public function index(Request $request)
+	{
 		$terms = Term::orderBy('term_name', 'asc')->get();
 		
 		//create an array with all first letters from all terms in the database, used for pagination
@@ -30,8 +34,8 @@ class TermController extends Controller
 			}
 		}
 
-  		return view('terms.index', compact('terms','letters'));
-    }
+		return view('terms.index', compact('terms','letters'));
+	}
 
 	public function show(Term $term)
 	{
@@ -41,18 +45,19 @@ class TermController extends Controller
 		}
 		return view('terms.show', compact('term'));
 	}
-	
+
 	public function edit(Term $term)
 	{
 		//check for superadmin permissions
 		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');
 		}
-		//check if id property exists
-		if (!$term->id) {
-			abort(403, 'This term no longer exists in the database.');
-		}
-		return view('terms.edit', compact('term'));
+
+		$statuses = Status::orderBy('status_name', 'asc')->get();
+		$glossaries = Glossary::orderBy('glossary_name', 'asc')->get();
+		$relations = Relation::orderBy('relation_name', 'asc')->get();
+
+		return view('terms.edit', compact('term','statuses','glossaries','relations'));
 	}
 
 	public function create(Term $term)
@@ -61,7 +66,12 @@ class TermController extends Controller
 		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');
 		}
-		return view('terms.create', compact('term'));
+
+		$statuses = Status::orderBy('status_name', 'asc')->get();
+		$glossaries = Glossary::orderBy('glossary_name', 'asc')->get();
+		$relations = Relation::orderBy('relation_name', 'asc')->get();
+
+		return view('terms.create', compact('term','statuses','glossaries','relations'));
 	}
 
 	public function store(Request $request)
@@ -70,13 +80,16 @@ class TermController extends Controller
 		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');
 		}
+
 		//validate input form
 		$this->validate($request, [
 			'term_name' => 'required|min:3',
-			'term_definition' => 'required'
+			'term_description' => 'required',
+			'glossary_id' => 'required',
+			'status_id' => 'required'
 		]);
 		Term::create($request->all());
-		return Redirect::route('terms.index')->with('message', 'Term created');
+		return Redirect::to('/terms?letter=' . substr($request->input('term_name'), 0, 1))->with('message', 'Term created.');
 	}
 
 	public function update(Term $term, Request $request)
@@ -85,13 +98,30 @@ class TermController extends Controller
 		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');
 		}
+
 		//validate input form
 		$this->validate($request, [
 			'term_name' => 'required|min:3',
-			'term_definition' => 'required'
+			'term_description' => 'required',
+			'status_id' => 'required'
 		]);
+
+		//delete existing content
+		Ontology::where('subject_id', $request->input('term_id'))->delete();
+
+		foreach($request->input('Relations') as $relation) {
+			if (!empty($relation['relation_id']) && !empty($relation['object_id'])) {
+				$ontology = new Ontology;
+				$ontology->subject_id = $request->input('term_id');
+				$ontology->relation_id = $relation['relation_id'];
+				$ontology->object_id = $relation['object_id'];
+				$ontology->status_id = $request->input('status_id');
+				$ontology->save();
+			}
+		}
+
 		$term->update($request->all());
-		return Redirect::route('terms.show', $term->slug)->with('message', 'Term updated.');
+		return Redirect::to('/terms?letter=' . substr($term->term_name, 0, 1))->with('message', 'Term updated.');
 	}
 
 	public function destroy(Term $term)
@@ -100,7 +130,35 @@ class TermController extends Controller
 		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');
 		}
+
 		$term->delete();
-		return Redirect::route('terms.index')->with('message', 'Term deleted.');
+		return Redirect::to('/terms?letter=' . substr($term->term_name, 0, 1))->with('message', 'Term deleted.');
+	}
+
+	public function apiIndex()
+	{
+		$terms = Term::orderBy('term_name', 'asc')->get();
+		//return response()->json($terms);
+
+		$result = array();
+		foreach ($terms as $term) {
+			array_push($result, array(
+					"id"  => round($term->id),
+					"term_name"  => $term->term_name,
+					"term_description" => preg_replace("/^(.{250})([^\.]*\.)(.*)$/", "\\1\\2", $term->term_description),
+					"glossary_name" => $term->glossary->glossary_name,
+					"value" => $term->term_name,
+					"tokens" => array($term->term_name)
+				)
+			);
+		}
+
+		return response()->json($result);
+	}
+
+	public function apiShow($id)
+	{
+		$term = Term::with('glossary')->with('status')->with('objects')->get()->find($id);
+		return response()->json($term);
 	}
 }
