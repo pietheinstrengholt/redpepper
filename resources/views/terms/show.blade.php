@@ -16,6 +16,6 @@
 	
 	<dl class="dl-horizontal">
 	<dt>Term definition:</dt>
-	<dd>{!! App\Helper::contentAdjust($term->term_definition) !!}</dd>
+	<dd>{!! App\Helper::contentAdjust($term->term_description) !!}</dd>
 	</dl>
 @endsection
