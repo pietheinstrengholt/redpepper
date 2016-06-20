@@ -55,6 +55,5 @@ TODO
 * jQuery 3.0?
 * rename fields to be consistent; shortdesc, visible
 * non-alpha term controller index
-* query remote for search terms using api
 * custom property fields for terms
 * owner_id with relation to user

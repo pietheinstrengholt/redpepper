@@ -4,19 +4,59 @@
 <script src="{{ URL::asset('js/typeahead.bundle.js') }}"></script>
 
 <script type="text/javascript">
-$("document").ready(function(){
-	
+
+function myTypeahead() {
+	//set url
 	var myRegex = /.+?(?=index.php)/;
 	var myUrl = myRegex.exec(window.location.href);
+
+	var haunt, repos, sources;
+	repos = new Bloodhound({
+		datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.value); },
+		queryTokenizer: Bloodhound.tokenizers.whitespace,
+		limit: 100,
+		/* prefetch: {
+			name: 'terms',
+			url: myUrl[0] + 'index.php/api/terms',
+		} */
+		remote: {
+			url: myUrl[0] + 'index.php/api/terms?search=%QUERY',
+			wildcard: '%QUERY'
+		}
+	});
+
+	//initialize data
+	repos.initialize();
 	
-	//clear cache
+	$('input.typeahead').typeahead(null, {
+		name: 'repos',
+		source: repos.ttAdapter(),
+		templates: {
+			empty: '<div class="term-box" ><p class="term-glossary"></p><p style="margin-left:10px; color:red;" class="term-tername"> No matches</p><p class="term-description"></p></div>',
+			suggestion: Handlebars.compile([
+				'<div class="term-box" id="@{{id}}">',
+				'<p class="term-glossary">@{{glossary_name}}</p>',
+				'<p class="term-termname">@{{term_name}}</p>',
+				'<p class="term-description">@{{term_description}}</p>',
+				'</div>'
+			].join(''))
+		}
+	});
+}
+
+$("document").ready(function(){
+
+	//clear typeahead cache
 	localStorage.clear();
+	
+	//destroy typeahead
 	$('input.typeahead').typeahead('destroy');
 	$('input.searcheahead').typeahead('destroy');
+
 	//set clone count to the number of current relations
 	var cloneCount = {{ $term->objects->count() }};
-	$('body').on('click', '.add-more', function(event) {
 
+	$('body').on('click', '.add-more', function(event) {
 		//increase clone count
 		cloneCount++;
 		//temporary disable typeahead on all input dialogs
@@ -28,20 +68,7 @@ $("document").ready(function(){
 		$( "div.dropdown-relationships#" + cloneCount + ' input.hidden-object').attr('name', 'Relations[' + cloneCount + '][object_id]');
 
 		//activate typeahead on all input dialogs
-		$('input.typeahead').typeahead(null, {
-		name: 'repos',
-		source: repos.ttAdapter(),
-			templates: {
-				empty: '<div class="term-box" ><p class="term-glossary"></p><p style="margin-left:10px; color:red;" class="term-tername"> No matches</p><p class="term-description"></p></div>',
-				suggestion: Handlebars.compile([
-					'<div class="term-box" id="@{{id}}">',
-					'<p class="term-glossary">@{{glossary_name}}</p>',
-					'<p class="term-termname">@{{term_name}}</p>',
-					'<p class="term-description">@{{term_description}}</p>',
-					'</div>'
-				].join(''))
-			}
-		});
+		myTypeahead();
 
 		//add delete button
 		$('div#' + cloneCount + ' div#last.col-md-2').append( "<span style=\"float:left; margin-left: 5px;\"><button type=\"button\" class=\"btn btn-danger remove\">-</button></span>" );
@@ -62,33 +89,8 @@ $("document").ready(function(){
 		$('div#' + row_id + '.dropdown-relationships input.hidden-object').attr("value",object_id);
 	});
 
-	var haunt, repos, sources;
-	repos = new Bloodhound({
-		datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.value); },
-		queryTokenizer: Bloodhound.tokenizers.whitespace,
-		limit: 100,
-			prefetch: {
-				name: 'terms',
-				url: myUrl[0] + 'index.php/api/terms',
-			}
-		}
-	);
-
-	repos.initialize();
-	$('input.typeahead').typeahead(null, {
-		name: 'repos',
-		source: repos.ttAdapter(),
-		templates: {
-			empty: '<div class="empty-message">No matches.</div>',
-			suggestion: Handlebars.compile([
-				'<div class="term-box" id="@{{id}}">',
-				'<p class="term-glossary">@{{glossary_name}}</p>',
-				'<p class="term-termname">@{{term_name}}</p>',
-				'<p class="term-description">@{{term_description}}</p>',
-				'</div>'
-			].join(''))
-		}
-	});
+	//initialize typeahead ion initial load
+	myTypeahead();
 });
 </script>
 

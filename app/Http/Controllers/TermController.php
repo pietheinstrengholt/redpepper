@@ -135,9 +135,16 @@ class TermController extends Controller
 		return Redirect::to('/terms?letter=' . substr($term->term_name, 0, 1))->with('message', 'Term deleted.');
 	}
 
-	public function apiIndex()
+	public function apiIndex(Request $request)
 	{
-		$terms = Term::orderBy('term_name', 'asc')->get();
+		if ($request->has('search')) {
+			$terms = Term::where('term_name', 'like', '%' . $request->input('search') . '%')->orderBy('term_name', 'asc')->orWhere(function ($query) use ($request) {
+						$query->where('term_description', 'like', '%' . $request->input('search') . '%')->orderBy('term_name', 'asc');
+					})->get();
+		} else {
+			$terms = Term::orderBy('term_name', 'asc')->get();
+		}
+
 		//return response()->json($terms);
 
 		$result = array();
