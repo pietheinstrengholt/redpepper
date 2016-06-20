@@ -13,8 +13,8 @@ use Redirect;
 class TechnicalSourceController extends Controller
 {
 
-    public function index()
-    {
+	public function index()
+	{
 		//check for superadmin permissions
 		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');

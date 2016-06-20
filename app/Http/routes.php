@@ -26,6 +26,9 @@ Route::model('changerequests', 'ChangeRequest');
 Route::model('logs', 'Log');
 Route::model('terms', 'Term');
 Route::model('subjects', 'Subject');
+Route::model('glossaries', 'Glossary');
+Route::model('relations', 'Relation');
+Route::model('statuses', 'Status');
 
 // Use IDs in URLs
 Route::bind('sections', function($value, $route) {
@@ -68,6 +71,18 @@ Route::bind('subjects', function($value, $route) {
 	return App\Subject::whereId($value)->first();
 });
 
+Route::bind('glossaries', function($value, $route) {
+	return App\Glossary::whereId($value)->first();
+});
+
+Route::bind('relations', function($value, $route) {
+	return App\Relation::whereId($value)->first();
+});
+
+Route::bind('statuses', function($value, $route) {
+	return App\Status::whereId($value)->first();
+});
+
 // User routes...
 Route::get('users/{id}/rights', ['middleware' => 'auth', 'uses' => 'UserController@rights']);
 Route::get('users/{id}/password', ['middleware' => 'auth', 'uses' => 'UserController@password']);
@@ -99,6 +114,9 @@ Route::resource('changerequests', 'ChangeRequestController');
 Route::resource('logs', 'LogController');
 Route::resource('terms', 'TermController');
 Route::resource('subjects', 'SubjectController');
+Route::resource('glossaries', 'GlossaryController');
+Route::resource('relations', 'RelationController');
+Route::resource('statuses', 'StatusController');
 
 // Settings
 Route::get('settings', ['middleware' => 'auth', 'uses' => 'SettingController@index']);
@@ -159,5 +177,5 @@ Route::get('/api/relations', 'RelationController@apiIndex');
 Route::get('/api/relations/{id}', 'RelationController@apiShow');
 Route::get('/api/glossaries', 'GlossaryController@apiIndex');
 Route::get('/api/glossaries/{id}', 'GlossaryController@apiShow');
-Route::get('/api/status', 'StatusController@apiIndex');
-Route::get('/api/status/{id}', 'StatusController@apiShow');
+Route::get('/api/statuses', 'StatusController@apiIndex');
+Route::get('/api/statuses/{id}', 'StatusController@apiShow');
