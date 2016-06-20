@@ -53,11 +53,12 @@ class TermController extends Controller
 			abort(403, 'Unauthorized action.');
 		}
 
+		$owners = User::orderBy('username', 'asc')->get();
 		$statuses = Status::orderBy('status_name', 'asc')->get();
 		$glossaries = Glossary::orderBy('glossary_name', 'asc')->get();
 		$relations = Relation::orderBy('relation_name', 'asc')->get();
 
-		return view('terms.edit', compact('term','statuses','glossaries','relations'));
+		return view('terms.edit', compact('term','statuses','glossaries','relations','owners'));
 	}
 
 	public function create(Term $term)
@@ -67,11 +68,12 @@ class TermController extends Controller
 			abort(403, 'Unauthorized action.');
 		}
 
+		$owners = User::orderBy('username', 'asc')->get();
 		$statuses = Status::orderBy('status_name', 'asc')->get();
 		$glossaries = Glossary::orderBy('glossary_name', 'asc')->get();
 		$relations = Relation::orderBy('relation_name', 'asc')->get();
 
-		return view('terms.create', compact('term','statuses','glossaries','relations'));
+		return view('terms.create', compact('term','statuses','glossaries','relations','owners'));
 	}
 
 	public function store(Request $request)
@@ -86,7 +88,8 @@ class TermController extends Controller
 			'term_name' => 'required|min:3',
 			'term_description' => 'required',
 			'glossary_id' => 'required',
-			'status_id' => 'required'
+			'status_id' => 'required',
+			'owner_id' => 'required'
 		]);
 		Term::create($request->all());
 		return Redirect::to('/terms?letter=' . substr($request->input('term_name'), 0, 1))->with('message', 'Term created.');
@@ -103,7 +106,9 @@ class TermController extends Controller
 		$this->validate($request, [
 			'term_name' => 'required|min:3',
 			'term_description' => 'required',
-			'status_id' => 'required'
+			'glossary_id' => 'required',
+			'status_id' => 'required',
+			'owner_id' => 'required'
 		]);
 
 		//delete existing content
@@ -165,7 +170,7 @@ class TermController extends Controller
 
 	public function apiShow($id)
 	{
-		$term = Term::with('glossary')->with('status')->with('objects')->get()->find($id);
+		$term = Term::with('glossary')->with('status')->with('objects')->with('owner')->get()->find($id);
 		return response()->json($term);
 	}
 }

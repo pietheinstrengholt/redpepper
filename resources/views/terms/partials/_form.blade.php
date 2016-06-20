@@ -124,7 +124,17 @@ $("document").ready(function(){
 		</div>
 	</div>
 
+	<div class="form-group">
+		{!! Form::label('owner_id', 'Owner:', array('class' => 'col-sm-3 control-label')) !!}
+		<div class="col-sm-6">
+		{!! Form::select('owner_id', $owners->lists('username', 'id'), $term->owner_id, ['id' => 'owner_id', 'class' => 'form-control']) !!}
+		</div>
+	</div>
+
 	@if ( $term->id )
+		<div class="col-sm-2"></div>
+		<div class="col-sm-10"><h4>Relations</h4></div>
+		
 		<input type="hidden" name="term_id" value="{{ $term->id }}">
 
 		<!-- start div relations -->
