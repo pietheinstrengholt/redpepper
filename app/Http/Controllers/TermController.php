@@ -170,7 +170,7 @@ class TermController extends Controller
 
 	public function apiShow($id)
 	{
-		$term = Term::with('glossary')->with('status')->with('objects')->with('owner')->get()->find($id);
+		$term = Term::with('glossary')->with('status')->with('objects')->with('owner')->with('properties')->get()->find($id);
 		return response()->json($term);
 	}
 }

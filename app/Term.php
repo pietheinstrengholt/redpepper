@@ -29,6 +29,11 @@ class Term extends Model
 	{
 		return $this->hasMany('App\Ontology','subject_id','id');
 	}
+
+	public function properties()
+	{
+		return $this->hasMany('App\TermProperty');
+	}
 }
 
 
