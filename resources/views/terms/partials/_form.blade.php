@@ -27,7 +27,7 @@ function myTypeahead() {
 
 	//initialize data
 	repos.initialize();
-	
+
 	$('input.typeahead').typeahead(null, {
 		name: 'repos',
 		source: repos.ttAdapter(),
@@ -35,7 +35,7 @@ function myTypeahead() {
 			empty: '<div class="term-box" ><p class="term-glossary"></p><p style="margin-left:10px; color:red;" class="term-tername"> No matches</p><p class="term-description"></p></div>',
 			suggestion: Handlebars.compile([
 				'<div class="term-box" id="@{{id}}">',
-				'<p class="term-glossary">@{{glossary_name}}</p>',
+				'<p style="color:#f48024;" class="term-glossary">@{{glossary_name}}</p>',
 				'<p class="term-termname">@{{term_name}}</p>',
 				'<p class="term-description">@{{term_description}}</p>',
 				'</div>'
@@ -48,34 +48,54 @@ $("document").ready(function(){
 
 	//clear typeahead cache
 	localStorage.clear();
-	
+
 	//destroy typeahead
 	$('input.typeahead').typeahead('destroy');
 	$('input.searcheahead').typeahead('destroy');
 
 	//set clone count to the number of current relations
-	var cloneCount = {{ $term->objects->count() }};
+	var objectsCount = {{ $term->objects->count() }};
+	var propertiesCount = {{ $term->properties->count() }};
 
-	$('body').on('click', '.add-more', function(event) {
-		//increase clone count
-		cloneCount++;
+	$('body').on('click', '.object-add-more', function(event) {
+		//increase objects count
+		objectsCount++;
 		//temporary disable typeahead on all input dialogs
 		$('input.typeahead').typeahead('destroy');
 
 		//clone 
-		$( "div.dropdown-relationships#0" ).clone().attr('id', cloneCount).appendTo( "div#relations" ).find("input[type='text']").val("");
-		$( "div.dropdown-relationships#" + cloneCount + ' select').attr('name', 'Relations[' + cloneCount + '][relation_id]');
-		$( "div.dropdown-relationships#" + cloneCount + ' input.hidden-object').attr('name', 'Relations[' + cloneCount + '][object_id]');
+		$("div.dropdown-relationships#0").clone().attr('id', objectsCount).appendTo("div#relations-wrapper").find("input[type='text']").val("");
+		$("div.dropdown-relationships#" + objectsCount + ' select').attr('name', 'Relations[' + objectsCount + '][relation_id]');
+		$("div.dropdown-relationships#" + objectsCount + ' input.hidden-object').attr('name', 'Relations[' + objectsCount + '][object_id]');
 
 		//activate typeahead on all input dialogs
 		myTypeahead();
 
 		//add delete button
-		$('div#' + cloneCount + ' div#last.col-md-2').append( "<span style=\"float:left; margin-left: 5px;\"><button type=\"button\" class=\"btn btn-danger remove\">-</button></span>" );
+		$('div.dropdown-relationships#' + objectsCount + ' div#last.col-md-1').append("<span><button style=\"margin-top: 10px;\" type=\"button\" class=\"btn btn-danger btn-xs object-remove\">remove</button></span>");
+	});
+
+	$('body').on('click', '.property-add-more', function(event) {
+		//increase properties count
+		propertiesCount++;
+		console.log(propertiesCount);
+
+		//clone 
+		$("div#0.row.dropdown-properties").clone().attr('id', propertiesCount).appendTo("div#properties").find("input[type='text']").val("");
+		$("div#" + propertiesCount + ".row.dropdown-properties" + " input#property_name.form-control").attr('name', 'Properties[' + propertiesCount + '][property_name]');
+		$("div#" + propertiesCount + ".row.dropdown-properties" + " input#property_value.form-control").attr('name', 'Properties[' + propertiesCount + '][property_value]');
+
+		//add delete button
+		$('div.dropdown-properties#' + propertiesCount + ' div#last.col-md-1').append("<span><button style=\"margin-top: 10px;\" type=\"button\" class=\"btn btn-danger btn-xs property-remove\">remove</button></span>");
 	});
 
 	//function to delete div element when clicking on delete button
-	$('body').on('click', '.remove', function(event) {
+	$('body').on('click', '.object-remove', function(event) {
+		$(this).closest("div.row").remove();
+	});
+
+	//function to delete div element when clicking on delete button
+	$('body').on('click', '.property-remove', function(event) {
 		$(this).closest("div.row").remove();
 	});
 
@@ -127,76 +147,119 @@ $("document").ready(function(){
 	<div class="form-group">
 		{!! Form::label('owner_id', 'Owner:', array('class' => 'col-sm-3 control-label')) !!}
 		<div class="col-sm-6">
-		{!! Form::select('owner_id', $owners->lists('username', 'id'), $term->owner_id, ['id' => 'owner_id', 'class' => 'form-control']) !!}
+		@if ( $term->id )
+			{!! Form::select('owner_id', $owners->lists('username', 'id'), $term->owner_id, ['id' => 'owner_id', 'class' => 'form-control']) !!}
+		@else
+			{!! Form::select('owner_id', $owners->lists('username', 'id'), Auth::user()->id, ['id' => 'owner_id', 'class' => 'form-control']) !!}
+			<input type="hidden" name="created_by" value="{{ Auth::user()->id }}">
+		@endif
 		</div>
 	</div>
+	
+	<div class="col-sm-1"></div>
 
 	@if ( $term->id )
-		<div class="col-sm-2"></div>
-		<div class="col-sm-10"><h4>Relations</h4></div>
-		
+		<div style="background-color: #f7f7f9; border: 1px solid #e1e1e8; margin-bottom: 10px;" class="col-sm-11">
 		<input type="hidden" name="term_id" value="{{ $term->id }}">
 
 		<!-- start div relations -->
-		<div id="relations">
+		<div class="term" id="relations">
+			<div class="term" id="relations-wrapper">
+			<h4>Relations</h4>
 
-			@if ( $term->objects->count() )
-				@foreach( $term->objects as $key => $object )
-					<div id="{{ $key }}" class="row dropdown-relationships" style="margin-top: 4px;">
-						<div id="first" class="col-md-2">
+				@if ( $term->objects->count() )
+					@foreach( $term->objects as $key => $object )
+						<div id="{{ $key }}" class="row dropdown-relationships" style="margin-top: 4px;">
 							<input class="hidden-object" type="hidden" name="Relations[{{ $key }}][object_id]" value="{{ $object->object_id }}">
+							<div class="col-md-3">
+								<input class="form-control" id="disabledInput" type="text" placeholder="{{ $object->subject->term_name }}" disabled>
+							</div>
+							<div class="col-md-3">
+								<select name="Relations[{{ $key }}][relation_id]" class="form-control">
+								@foreach($relations as $relation)
+									@if ($object->relation_id == $relation->id)
+										<option selected="selected" value="{{ $relation->id }}">{{ $relation->relation_name }}</option>
+									@else
+										<option value="{{ $relation->id }}">{{ $relation->relation_name }}</option>
+									@endif
+								@endforeach
+								</select>
+							</div>
+							<div class="col-md-5">
+								<input name="Relations[{{ $key }}][object_name]" class="form-control typeahead" value="{{ $object->object->term_name }}" type="text" data-provide="typeahead" autocomplete="off">
+							</div>
+							<div id="last" style="padding-left: 0px;" class="col-md-1">
+								@if ($key > 0)
+									<span><button type="button" style="margin-top: 10px;" class="btn btn-danger object-remove">remove</button></span>
+								@endif
+							</div>
+						</div>
+					@endforeach
+				@else
+					<div id="0" class="row dropdown-relationships">
+						<input class="hidden-object" type="hidden" name="Relations[0][object_id]" value="">
+						<div class="col-md-3">
+							<input class="form-control" id="disabledInput" type="text" placeholder="{{ $term->term_name }}" disabled>
 						</div>
 						<div class="col-md-3">
-							<input class="form-control" id="disabledInput" type="text" placeholder="{{ $object->subject->term_name }}" disabled>
-						</div>
-						<div class="col-md-2">
-							<select name="Relations[{{ $key }}][relation_id]" class="form-control">
-							@foreach($relations as $relation)
-								@if ($object->relation_id == $relation->id)
-									<option selected="selected" value="{{ $relation->id }}">{{ $relation->relation_name }}</option>
-								@else
+							<select name="Relations[0][relation_id]" class="form-control">
+								@foreach($relations as $relation)
 									<option value="{{ $relation->id }}">{{ $relation->relation_name }}</option>
-								@endif
-							@endforeach
+								@endforeach
 							</select>
 						</div>
-						<div class="col-md-3">
-							<input name="Relations[{{ $key }}][object_name]" class="form-control typeahead" value="{{ $object->object->term_name }}" type="text" data-provide="typeahead" autocomplete="off">
+						<div class="col-md-5">
+							<input name="Relations[0][object_name]" class="form-control typeahead" type="text" placeholder="Search for terms" data-provide="typeahead" autocomplete="off">
 						</div>
-						<div id="last" class="col-md-2">
-							<span style="float:left; margin-left: 5px;"><button type="button" class="btn btn-default add-more">+</button></span>
-							@if ($key > 0)
-								<span style="float:left; margin-left: 5px;"><button type="button" class="btn btn-danger remove">-</button></span>
-							@endif
+						<div id="last" style="padding-left: 0px;" class="col-md-1">
 						</div>
 					</div>
-				@endforeach
-			@else
-				<div id="0" class="row dropdown-relationships">
-					<div id="first" class="col-md-2">
-						<input class="hidden-object" type="hidden" name="Relations[0][object_id]" value="">
-					</div>
-					<div class="col-md-3">
-						<input class="form-control" id="disabledInput" type="text" placeholder="{{ $term->term_name }}" disabled>
-					</div>
-					<div class="col-md-2">
-						<select name="Relations[0][relation_id]" class="form-control">
-							@foreach($relations as $relation)
-								<option value="{{ $relation->id }}">{{ $relation->relation_name }}</option>
-							@endforeach
-						</select>
-					</div>
-					<div class="col-md-3">
-						<input name="Relations[0][object_name]" class="form-control typeahead" type="text" placeholder="Search for terms" data-provide="typeahead" autocomplete="off">
-					</div>
-					<div id="last" class="col-md-2">
-						<span style="width: 30px; float:left; margin-left: 5px;"><button type="button" class="btn btn-default add-more">+</button></span>
-					</div>
-				</div>
-			@endif
+				@endif
 
-		<!-- end div relations -->
+			<!-- end div relations -->
+			</div>
+			<span><button type="button" style="margin-top:5px;" class="btn btn-success btn-xs object-add-more">add new relation</button></span>
 		</div>
+
+		<!-- start div relations -->
+		<div style="margin-top: 20px;" class="term" id="properties">
+			<div class="term" id="properties-wrapper">
+			<h4>Properties</h4>
+
+				@if ( $term->properties->count() )
+					@foreach( $term->properties as $key => $property )
+						<div id="{{ $key }}" class="row dropdown-properties" style="margin-top: 4px;">
+							<div class="col-md-5">
+								<input id="property_name" name="Properties[{{ $key }}][property_name]" class="form-control" type="text" value="{{ $property->property_name }}">
+							</div>
+							<div class="col-md-6">
+								<input id="property_value" name="Properties[{{ $key }}][property_value]" class="form-control" type="text" value="{{ $property->property_value }}">
+							</div>
+							<div id="last" style="padding-left: 0px;" class="col-md-1">
+								@if ($key > 0)
+									<span><button style="margin-top: 10px;" type="button" class="btn btn-danger btn-xs property-remove">remove</button></span>
+								@endif
+							</div>
+						</div>
+					@endforeach
+				@else
+					<div id="0" class="row dropdown-properties" style="margin-top: 4px;">
+						<div class="col-md-5">
+							<input id="property_name" name="Properties[0][property_name]" class="form-control" type="text" placeholder="Enter property name">
+						</div>
+						<div class="col-md-6">
+							<input id="property_value" name="Properties[0][property_value]" class="form-control" type="text" placeholder="Enter property value">
+						</div>
+						<div id="last" style="padding-left: 0px;" class="col-md-1">
+						</div>
+					</div>
+				@endif
+
+			<!-- end div relations -->
+			</div>
+		</div>
+		<span><button type="button" style="margin-top:5px; margin-bottom: 10px;" class="btn btn-success btn-xs property-add-more">add new property</button></span>
+	</div>
 	@endif
 
 	<div class="form-group">
