@@ -190,7 +190,7 @@ $("document").ready(function(){
 							</div>
 							<div id="last" style="padding-left: 0px;" class="col-md-1">
 								@if ($key > 0)
-									<span><button type="button" style="margin-top: 10px;" class="btn btn-danger object-remove">remove</button></span>
+									<span><button type="button" style="margin-top: 10px;" class="btn btn-danger btn-xs object-remove">remove</button></span>
 								@endif
 							</div>
 						</div>
