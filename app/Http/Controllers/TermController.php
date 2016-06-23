@@ -9,6 +9,7 @@ use App\Status;
 use App\Relation;
 use App\User;
 use Gate;
+use Auth;
 use Illuminate\Http\Request;
 use Redirect;
 class TermController extends Controller
