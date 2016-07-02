@@ -55,4 +55,4 @@ TODO
 * jQuery 3.0?
 * rename fields to be consistent; shortdesc, visible
 * non-alpha term controller index
-* custom property fields for terms
+* sebject, section, template together
