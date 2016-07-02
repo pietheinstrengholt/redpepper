@@ -6,9 +6,10 @@
 	@include('tinymce.template')
 
 	<ul class="breadcrumb breadcrumb-section">
-	<li><a href="{!! url('/'); !!}">Home</a></li>
-	<li><a href="{!! url('/sections/' . $template->section_id); !!}">{{ $template->section->section_name }}</a></li>
-	<li class="active">{{ $template->template_name }}</li>
+		<li><a href="{!! url('/'); !!}">Home</a></li>
+		<li><a href="{!! url('/sections?subject_id=' . $section->subject_id); !!}">{{ $section->subject->subject_name }}</a></li>
+		<li><a href="{!! url('/sections/' . $template->section_id); !!}">{{ $template->section->section_name }}</a></li>
+		<li class="active">{{ $template->template_name }}</li>
 	</ul>
 
 	<h2>Edit Template "{{ $template->template_name }}"</h2>

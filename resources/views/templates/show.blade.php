@@ -5,7 +5,7 @@
 
 	<ul class="breadcrumb breadcrumb-section">
 		<li><a href="{!! url('/'); !!}">Home</a></li>
-		<li><a href="{!! url('/sections'); !!}">Sections</a></li>
+		<li><a href="{!! url('/sections?subject_id=' . $template->section->subject_id); !!}">{{ $template->section->subject->subject_name }}</a></li>
 		<li><a href="{!! url('/sections/' . $template->section->id); !!}">{{ $template->section->section_name }}</a></li>
 		@if ( $parent )
 			<li><a href="{!! url('/sections/' . $parent->section->id . '/templates/' . $parent->id); !!}">{{ $parent->template_name }}</a></li>
