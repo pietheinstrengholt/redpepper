@@ -64,6 +64,13 @@ class AuthServiceProvider extends ServiceProvider
 			}
 		});
 
+		//added to show hidden content
+		$gate->define('see-nonvisible-content', function ($user) {
+			if ($user->role === "superadmin" || $user->role === "builder" || $user->role === "admin" || $user->role === "contributor" || $user->role === "reviewer") {
+				return true;
+			}
+		});
+
 		$gate->define('superadmin', function ($user) {
 			return $user->role === "superadmin";
 		});

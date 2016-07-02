@@ -11,10 +11,10 @@ use App\User;
 class SubjectBlockComposer {
 	public function compose(View $view) {
 		//only non guests will see the hidden templates
-		if (Auth::guest()) {
-			$view->with('subjects', Subject::orderBy('subject_order', 'asc')->orderBy('subject_name', 'asc')->where('visible', '<>' , 'False')->get());
-		} else {
+		if (Gate::allows('see-nonvisible-content')) {
 			$view->with('subjects', Subject::orderBy('subject_order', 'asc')->orderBy('subject_name', 'asc')->get());
+		} else {
+			$view->with('subjects', Subject::orderBy('subject_order', 'asc')->orderBy('subject_name', 'asc')->where('visible', '<>' , 'False')->get());
 		}
 	}
 }

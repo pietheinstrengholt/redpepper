@@ -57,7 +57,7 @@ class TemplateController extends Controller
 	public function show(Request $request, Section $section, Template $template)
 	{
 		//check if visible is set to false and user is a guest
-		if (Auth::guest() && $template->visible == "False") {
+		if (Gate::denies('see-nonvisible-content') && $template->visible == "False") {
 			abort(403, 'Unauthorized action. This template hasn\'t been published yet.');
 		}
 
@@ -91,10 +91,10 @@ class TemplateController extends Controller
 
 		//get parent and children
 		$parent = $template->parent()->first();
-		if (Auth::guest()) {
-			$children = $template->children()->orderBy('template_name', 'asc')->where('visible', '<>' , 'False')->get();
-		} else {
+		if (Gate::allows('see-nonvisible-content')) {
 			$children = $template->children()->orderBy('template_name', 'asc')->get();
+		} else {
+			$children = $template->children()->orderBy('template_name', 'asc')->where('visible', '<>' , 'False')->get();
 		}
 		$children = $children->sortBy('template_name', SORT_NATURAL);
 

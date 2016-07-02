@@ -28,17 +28,17 @@ class SectionController extends Controller
 		}
 
 		//only non guests can see all sections
-		if (Auth::guest()) {
-			if ($request->has('subject_id')) {
-				$sections = Section::with('subject')->orderBy('section_name', 'asc')->where('subject_id', $request->input('subject_id'))->where('visible', '<>' , 'False')->get();
-			} else {
-				$sections = Section::with('subject')->orderBy('section_name', 'asc')->where('visible', '<>' , 'False')->get();
-			}
-		} else {
+		if (Gate::allows('see-nonvisible-content')) {
 			if ($request->has('subject_id')) {
 				$sections = Section::with('subject')->orderBy('section_name', 'asc')->where('subject_id', $request->input('subject_id'))->get();
 			} else {
 				$sections = Section::with('subject')->orderBy('section_name', 'asc')->get();
+			}
+		} else {
+			if ($request->has('subject_id')) {
+				$sections = Section::with('subject')->orderBy('section_name', 'asc')->where('subject_id', $request->input('subject_id'))->where('visible', '<>' , 'False')->get();
+			} else {
+				$sections = Section::with('subject')->orderBy('section_name', 'asc')->where('visible', '<>' , 'False')->get();
 			}
 		}
 
@@ -56,10 +56,10 @@ class SectionController extends Controller
 	public function manuals()
 	{
 		//only non guests can see all sections
-		if (Auth::guest()) {
-			$sections = Section::orderBy('section_name', 'asc')->where('visible', '<>' , 'False')->get();
-		} else {
+		if (Gate::allows('see-nonvisible-content')) {
 			$sections = Section::orderBy('section_name', 'asc')->get();
+		} else {
+			$sections = Section::orderBy('section_name', 'asc')->where('visible', '<>' , 'False')->get();
 		}
 
 		//sort sections on natural ordering
@@ -81,18 +81,18 @@ class SectionController extends Controller
 		}
 
 		//check if visible is set to false and user is a guest
-		if (Auth::guest() && $section->visible == "False") {
+		if (Gate::denies('see-nonvisible-content') && $section->visible == "False") {
 			abort(403, 'Unauthorized action.');
 		}
 
 		//only non guests will see the hidden templates
-		if (Auth::guest()) {
-			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->where('visible', '<>' , 'False')->where('parent_id', null)->orWhere(function ($query) use ($section) {
-				$query->where('section_id', $section->id)->where('visible', '<>' , 'False')->where('parent_id', 0);
-			})->get();
-		} else {
+		if (Gate::allows('see-nonvisible-content')) {
 			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->where('parent_id', null)->orWhere(function ($query) use ($section) {
 				$query->where('section_id', $section->id)->where('parent_id', 0);
+			})->get();
+		} else {
+			$templates = Template::orderBy('template_name', 'asc')->where('section_id', $section->id)->where('visible', '<>' , 'False')->where('parent_id', null)->orWhere(function ($query) use ($section) {
+				$query->where('section_id', $section->id)->where('visible', '<>' , 'False')->where('parent_id', 0);
 			})->get();
 		}
 
@@ -107,10 +107,10 @@ class SectionController extends Controller
 		$section = Section::where('id', $id)->first();
 		
 		//only non guests can see all sections
-		if (Auth::guest()) {
-			$templates = Template::with('requirements')->where('visible', '<>' , 'False')->where('section_id', $id)->get();
-		} else {
+		if (Gate::allows('see-nonvisible-content')) {
 			$templates = Template::with('requirements')->where('section_id', $id)->get();
+		} else {
+			$templates = Template::with('requirements')->where('visible', '<>' , 'False')->where('section_id', $id)->get();
 		}
 
 		if (!$section) {
@@ -166,11 +166,13 @@ class SectionController extends Controller
 		//set subject_id if argument is given
 		if ($request->has('subject_id')) {
 			$subject_id = $request->input('subject_id');
+			$subject = Subject::where('id', $request->input('subject_id'))->first();
 		} else {
 			$subject_id = null;
+			$subject = null;
 		}
 
-		return view('sections.create', compact('section','subjects','subject_id'));
+		return view('sections.create', compact('section','subjects','subject','subject_id'));
 	}
 
 	public function store(Request $request)
