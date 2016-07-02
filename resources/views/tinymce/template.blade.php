@@ -3,13 +3,16 @@
 
 <script>tinymce.init({ 	
 	selector:'textarea#template_shortdesc',
-	valid_elements: "p,h1,h2,h3,h4,h5,a[href|target],strong/b,i/em,br,table[*],tbody[*],thead[*],tr[*],td[*],ul,ol,li,img[src|height|width]",
+	valid_elements: "p,h1,h2,h3,h4,h5,a[href|target],strong/b,i/em,u,br,table[*],tbody[*],thead[*],tr[*],td[*],ul,ol,li,img[src|height|width]",
+	formats : {
+		underline : {inline : 'u', exact : true}
+	},
 	height: 200,
 	plugins: [
 		'link image imageupload'
 	],
 	menubar: '',
-	toolbar: 'undo redo | bold italic | link | bullist numlist',
+	toolbar: 'undo redo | bold italic underline | link | bullist numlist',
 	relative_urls: false,
 	statusbar: false,
 	style_format_merge: true,
@@ -19,7 +22,10 @@
 
 <script>tinymce.init({ 	
 	selector:'textarea#template_longdesc',
-	valid_elements: "p,h1,h2,h3,h4,h5,a[href|target],strong/b,i/em,br,table[*],tbody[*],thead[*],tr[*],td[*],ul,ol,li,img[src|height|width]",
+	valid_elements: "p,h1,h2,h3,h4,h5,a[href|target],strong/b,i/em,u,br,table[*],tbody[*],thead[*],tr[*],td[*],ul,ol,li,img[src|height|width]",
+	formats : {
+		underline : {inline : 'u', exact : true}
+	},
 	height: 400,
 	plugins: [
 		'link image imageupload table nonbreaking'
@@ -33,7 +39,7 @@
 		{title : 'Paragraph', block : 'p'},
 	],
 	menubar: '',
-	toolbar: 'undo redo | alignleft aligncenter alignright | styleselect | bold italic | outdent indent | link | imageupload | bullist numlist | table | nonbreaking',
+	toolbar: 'undo redo | alignleft aligncenter alignright | styleselect | bold italic underline | outdent indent | link | imageupload | bullist numlist | table | nonbreaking',
 	relative_urls: false,
 	statusbar: false,
 	style_format_merge: true,
