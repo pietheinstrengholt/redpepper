@@ -12,8 +12,8 @@ use Redirect;
 
 class SubjectController extends Controller
 {	
-    public function index(Request $request)
-    {		
+	public function index(Request $request)
+	{
 		$subjects = Subject::orderBy('subject_name', 'asc')->get();
 
 		//abort if sectionRights array is empty
@@ -25,7 +25,7 @@ class SubjectController extends Controller
 	}
 
 	public function edit(Request $request, Subject $subject)
-	{	
+	{
 		//check for superadmin permissions
 		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');

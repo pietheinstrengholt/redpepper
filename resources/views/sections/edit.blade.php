@@ -6,9 +6,13 @@
 	@include('tinymce.section')
 
 	<ul class="breadcrumb breadcrumb-section">
-	<li><a href="{!! url('/'); !!}">Home</a></li>
-	<li><a href="{!! url('/sections/'); !!}">Sections</a></li>
-	<li class="active">{{ $section->section_name }}</li>
+		<li><a href="{!! url('/'); !!}">Home</a></li>
+		@if ( $section->subject )
+			<li><a href="{!! url('/sections?subject_id=' . $section->subject_id); !!}">{{ $section->subject->subject_name }}</a></li>
+		@else
+			<li><a href="{!! url('/sections/'); !!}">Sections</a></li>
+		@endif
+		<li class="active">{{ $section->section_name }}</li>
 	</ul>
 
 	<h2>Edit Section "{{ $section->section_name }}"</h2>
