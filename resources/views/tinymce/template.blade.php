@@ -28,7 +28,7 @@
 	},
 	height: 400,
 	plugins: [
-		'link image imageupload table nonbreaking'
+		'link image imageupload table nonbreaking searchreplace'
 	],
 	style_formats : [
 		{title : 'Heading 1', block : 'h1'},
@@ -39,7 +39,7 @@
 		{title : 'Paragraph', block : 'p'},
 	],
 	menubar: '',
-	toolbar: 'undo redo | alignleft aligncenter alignright | styleselect | bold italic underline | outdent indent | link | imageupload | bullist numlist | table | nonbreaking',
+	toolbar: 'undo redo | alignleft aligncenter alignright | styleselect | bold italic underline | outdent indent | link | imageupload | bullist numlist | table | nonbreaking  | searchreplace',
 	relative_urls: false,
 	statusbar: false,
 	style_format_merge: true,
