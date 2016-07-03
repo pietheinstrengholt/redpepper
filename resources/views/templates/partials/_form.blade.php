@@ -105,6 +105,13 @@
 	@endif
 
 	<div class="form-group">
+		{!! Form::label('template_type', 'Template option:', array('class' => 'col-sm-3 control-label')) !!}
+		<div class="col-sm-5">
+		{!! Form::select('template_type', [null => 'Normal template, with no restrictions', 'non-clickable' => 'Non-clickable template, do not show pop-ups when clicking cells'], $template->template_type, ['id' => 'template_type', 'class' => 'form-control']) !!}
+		</div>
+	</div>
+
+	<div class="form-group">
 		{!! Form::submit($submit_text, ['class' => 'btn btn-primary']) !!}
 	</div>
 

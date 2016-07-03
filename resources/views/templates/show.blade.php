@@ -138,16 +138,24 @@
 					<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="disabled" id="{{ $field }}"></td>
 				@else
 					@if (strpos($field,$searchvalue) !== false)
-						<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="tablecell highlight" id="{{ $field }}">
-							@if (array_key_exists($field, $propertyFields))
-								{{ $propertyFields[$field] }}
-							@endif
+						@if ($template->template_type == 'non-clickable')
+							<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="non-clickable highlight" id="{{ $field }}">
+						@else
+							<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="tablecell highlight" id="{{ $field }}">
+						@endif
+						@if (array_key_exists($field, $propertyFields))
+							{{ $propertyFields[$field] }}
+						@endif
 						</td>
 					@else
-						<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="tablecell" id="{{ $field }}">
-							@if (array_key_exists($field, $propertyFields))
-								{{ $propertyFields[$field] }}
-							@endif
+						@if ($template->template_type == 'non-clickable')
+							<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="non-clickable" id="{{ $field }}">
+						@else
+							<td title="{{ $column->column_description }} - {{ $row->row_description }}" class="tablecell" id="{{ $field }}">
+						@endif
+						@if (array_key_exists($field, $propertyFields))
+							{{ $propertyFields[$field] }}
+						@endif
 						</td>
 					@endif
 				@endif

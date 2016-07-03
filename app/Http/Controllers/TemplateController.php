@@ -256,6 +256,7 @@ class TemplateController extends Controller
 			$template->template_shortdesc = $request->input('template_shortdesc');
 			$template->template_longdesc = $request->input('template_longdesc');
 			$template->visible = $request->input('visible');
+			$template->template_type = $request->input('template_type');
 			$template->created_by = Auth::user()->id;
 			$template->save();
 
