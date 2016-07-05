@@ -12,14 +12,6 @@ class CreateBimScript extends Migration
 	*/
 	public function up()
 	{
-		if (Schema::hasTable('t_bim_glossaries')) {
-			Schema::drop('t_bim_glossaries');
-		}
-
-		if (Schema::hasTable('t_bim_terms')) {
-			Schema::drop('t_bim_terms');
-		}
-
 		if (Schema::hasTable('t_bim_terms_properties')) {
 			Schema::drop('t_bim_terms_properties');
 		}
@@ -28,8 +20,16 @@ class CreateBimScript extends Migration
 			Schema::drop('t_bim_ontology');
 		}
 
+		if (Schema::hasTable('t_bim_terms')) {
+			Schema::drop('t_bim_terms');
+		}
+
 		if (Schema::hasTable('t_bim_relation_types')) {
 			Schema::drop('t_bim_relation_types');
+		}
+
+		if (Schema::hasTable('t_bim_glossaries')) {
+			Schema::drop('t_bim_glossaries');
 		}
 
 		if (Schema::hasTable('t_bim_status')) {
