@@ -11,6 +11,8 @@
 	<style>
 	line {
 		stroke: #666;
+		stroke-width: 2px;
+		stroke-opacity: 0.6;
 	}
 
 	.node {
@@ -63,6 +65,7 @@
 		//initialising hierarchical data
 		root = d3.hierarchy(root);
 		
+		//remove spinner when the load is completed
 		$("#spinner").hide();
 
 		var i = 0;
@@ -87,13 +90,26 @@
 			.call(d3.zoom().scaleExtent([1 / 2, 8]).on("zoom", zoomed))
 			.append("g")
 			.attr("transform", "translate(40,0)");
+			
+		// Per-type arrow markers, as they don't inherit styles.
+		svg.append("svg:defs").append("svg:marker")
+			.attr("id", "triangle")
+			.attr("refX", 11)
+			.attr("refY", 6)
+			.attr("markerWidth", 30)
+			.attr("markerHeight", 30)
+			.attr("orient", "auto")
+			.append("path")
+			.style("fill", "#666")
+			.style("stroke-opacity", "0.6")
+			.attr("d", "M 2 3 8 6 2 8 2 0");
 
 		function zoomed() {
 			svg.attr("transform", d3.event.transform);
 		}
 
 		simulation = d3.forceSimulation()
-			.force("link", d3.forceLink().id(function(d) {
+			.force("link", d3.forceLink().distance(100).strength(2).id(function(d) {
 				return d.id;
 			}))
 			.force("charge", d3.forceManyBody())
@@ -116,7 +132,9 @@
 
 			var linkEnter = linkSvg.enter()
 				.append("line")
-				.attr("class", "link");
+				.attr("class", "link")
+				//added an arrow, see per-type arrow markers added
+				.attr("marker-end", "url(#triangle)");
 
 			linkSvg = linkEnter.merge(linkSvg)
 
