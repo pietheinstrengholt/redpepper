@@ -208,6 +208,24 @@ class TermController extends Controller
 	public function apiShow($id)
 	{
 		$term = Term::with('glossary')->with('status')->with('objects')->with('owner')->with('properties')->get()->find($id);
-		return response()->json($term);
+		$termArray = $term->toArray();
+		$termArray['children'] = array();
+		
+		if ($term->objects) {
+			foreach ($term->objects as $key => $object) {
+				$array = array('term_name' => $object->object->term_name, '_children' => null);
+				$term2 = Term::with('glossary')->with('status')->with('objects')->with('owner')->with('properties')->get()->find($object->object->id);
+				if ($term2->objects) {
+					$array['children'] = array();
+					foreach ($term2->objects as $key => $object2) {
+						$array2 = array('term_name' => $object2->object->term_name, '_children' => null);
+						array_push($array['children'],$array2);
+					}
+				}
+				array_push($termArray['children'],$array);
+			}
+		}
+		
+		return response()->json($termArray);
 	}
 }
