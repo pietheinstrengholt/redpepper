@@ -60,7 +60,7 @@
 	var width = 960,
 		height = 450;
 
-	$.getJSON('http://thuis.strengholt-online.nl/laravel3/public/index.php/api/terms/{{ $term->id }}', function(root) {
+	$.getJSON('{{ URL::to('/') }}/api/terms/{{ $term->id }}', function(root) {
 
 		//initialising hierarchical data
 		root = d3.hierarchy(root);
