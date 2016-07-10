@@ -5,7 +5,7 @@
 
 	<head>
 	<script src="{{ URL::asset('js/d3.v4.1.0.min.js') }}"></script>
-	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+	<link rel="stylesheet" href="{{ URL::asset('css/font-awesome.min.css') }}">
 	</head>
 	
 	<style>
