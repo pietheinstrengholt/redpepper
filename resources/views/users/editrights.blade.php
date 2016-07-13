@@ -39,15 +39,18 @@
 		<table class="table table-striped table-condensed">
 		<tr class="success">
 		<th><h4>Section</h4></th>
+		<th><h4>Group</h4></th>
 		<th style="text-align: center;"><h4>Selected rights</h4></th>
 		</tr>
 		<tr class="allrights notvisible">
 		<td><strong>All</strong></td>
+		<td></td>
 		<td style="text-align: center;"><input type="checkbox"></td>
 		</tr>
 		@foreach( $sections as $section )
 			<tr>
 			<td><strong>{{ $section->section_name }}</strong></td>
+			<td><strong>{{ $section->subject->subject_name }}</strong></td>
 			@if ( in_array($section->id, $sectionrights) )
 				<td class="rights" style="text-align: center;"><input name="section[{{ $section->id }}]" id="section_rights" checked type="checkbox" value="{{ $section->id }}"></td>
 			@else
