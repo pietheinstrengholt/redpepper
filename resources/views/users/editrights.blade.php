@@ -50,7 +50,11 @@
 		@foreach( $sections as $section )
 			<tr>
 			<td><strong>{{ $section->section_name }}</strong></td>
-			<td><strong>{{ $section->subject->subject_name }}</strong></td>
+			<td>
+			@if ($section->subject)
+				<strong>{{ $section->subject->subject_name }}</strong>
+			@endif
+			</td>
 			@if ( in_array($section->id, $sectionrights) )
 				<td class="rights" style="text-align: center;"><input name="section[{{ $section->id }}]" id="section_rights" checked type="checkbox" value="{{ $section->id }}"></td>
 			@else
