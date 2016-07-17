@@ -56,3 +56,4 @@ TODO
 * rename fields to be consistent; shortdesc, visible
 * non-alpha term controller index
 * sebject, section, template together
+* bim landing page with option blocks
