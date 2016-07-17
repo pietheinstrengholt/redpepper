@@ -133,7 +133,7 @@ $("document").ready(function(){
 	<div class="form-group">
 		{!! Form::label('glossary_id', 'Glossary:', array('class' => 'col-sm-3 control-label')) !!}
 		<div class="col-sm-6">
-		{!! Form::select('glossary_id', $glossaries->lists('glossary_name', 'id'), $term->glossary_id, ['id' => 'glossary_id', 'class' => 'form-control']) !!}
+		{!! Form::select('glossary_id', $glossaries->lists('glossary_name', 'id'), $glossary_id, ['id' => 'glossary_id', 'class' => 'form-control']) !!}
 		</div>
 	</div>
 

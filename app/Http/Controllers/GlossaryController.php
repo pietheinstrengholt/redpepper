@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Glossary;
+use App\Term;
 use App\User;
 use App\Status;
 use Gate;
@@ -46,6 +47,37 @@ class GlossaryController extends Controller
 
 		return view('glossaries.create', compact('glossary','statuses'));
 	}
+
+	public function show(Glossary $glossary, Request $request)
+	{
+		//check if id property exists
+		if (!$glossary->id) {
+			abort(403, 'This glossary no longer exists in the database.');
+		}
+
+		$terms = Term::where('glossary_id', $glossary->id)->orderBy('term_name', 'asc')->get();
+
+		//create an array with all first letters from all terms in the database, used for pagination
+		$letters = array();
+		if (!empty($terms)) {
+			foreach ($terms as $term) {
+				array_push($letters,substr(strtoupper($term->term_name), 0, 1));
+			}
+			$letters = array_unique($letters);
+		}
+		
+		//if letters are not empty check if letter is set with argument, else take first letter from array
+		if (!empty($letters)) {
+			if ($request->has('letter')) {
+				$terms = Term::where('glossary_id', $glossary->id)->orderBy('term_name', 'asc')->where('term_name', 'LIKE', $request->input('letter').'%')->get();
+			} else {
+				$terms = Term::where('glossary_id', $glossary->id)->orderBy('term_name', 'asc')->where('term_name', 'LIKE', $letters[0].'%')->get();
+			}
+		}
+
+		return view('glossaries.show', compact('glossary','terms','letters'));
+	}
+
 
 	public function store(Request $request)
 	{

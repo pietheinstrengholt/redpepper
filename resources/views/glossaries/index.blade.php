@@ -24,7 +24,7 @@
 
 		@foreach( $glossaries as $glossary )
 			<tr>
-			<td>{{ $glossary->glossary_name }}</td>
+			<td><a href="{!! url('glossaries'); !!}/{{ $glossary->id }}">{{ $glossary->glossary_name }}</a></td>
 			<td>{{ $glossary->glossary_description }}</td>
 			{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('glossaries.destroy', $glossary->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this glossary?\')')) !!}
 			<td>

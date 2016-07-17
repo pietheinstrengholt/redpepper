@@ -22,7 +22,7 @@ class TermController extends Controller
 		$letters = array();
 		if (!empty($terms)) {
 			foreach ($terms as $term) {
-				array_push($letters,substr($term->term_name, 0, 1));
+				array_push($letters,substr(strtoupper($term->term_name), 0, 1));
 			}
 			$letters = array_unique($letters);
 		}
@@ -50,6 +50,11 @@ class TermController extends Controller
 
 	public function edit(Term $term)
 	{
+		//check if id property exists
+		if (!$term->id) {
+			abort(403, 'This term no longer exists in the database.');
+		}
+
 		//check for superadmin permissions
 		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');
@@ -59,11 +64,12 @@ class TermController extends Controller
 		$statuses = Status::orderBy('status_name', 'asc')->get();
 		$glossaries = Glossary::orderBy('glossary_name', 'asc')->get();
 		$relations = Relation::orderBy('relation_name', 'asc')->get();
+		$glossary_id = $term->glossary_id;
 
-		return view('terms.edit', compact('term','statuses','glossaries','relations','owners'));
+		return view('terms.edit', compact('term','statuses','glossaries','relations','owners','glossary_id'));
 	}
 
-	public function create(Term $term)
+	public function create(Term $term, Request $request)
 	{
 		//check for superadmin permissions
 		if (Gate::denies('superadmin')) {
@@ -74,8 +80,10 @@ class TermController extends Controller
 		$statuses = Status::orderBy('status_name', 'asc')->get();
 		$glossaries = Glossary::orderBy('glossary_name', 'asc')->get();
 		$relations = Relation::orderBy('relation_name', 'asc')->get();
+		$glossary_id = $request->input('glossary_id');
+		$glossary = Glossary::where('id', $request->input('glossary_id'))->first();
 
-		return view('terms.create', compact('term','statuses','glossaries','relations','owners'));
+		return view('terms.create', compact('term','statuses','glossaries','relations','owners','glossary_id','glossary'));
 	}
 
 	public function store(Request $request)

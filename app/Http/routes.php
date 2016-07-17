@@ -25,6 +25,7 @@ Route::model('users', 'User');
 Route::model('changerequests', 'ChangeRequest');
 Route::model('logs', 'Log');
 Route::model('terms', 'Term');
+Route::model('termproperties', 'TermProperty');
 Route::model('subjects', 'Subject');
 Route::model('glossaries', 'Glossary');
 Route::model('relations', 'Relation');
@@ -65,6 +66,10 @@ Route::bind('logs', function($value, $route) {
 
 Route::bind('terms', function($value, $route) {
 	return App\Term::whereId($value)->first();
+});
+
+Route::bind('termproperties', function($value, $route) {
+	return App\TermProperty::whereId($value)->first();
 });
 
 Route::bind('subjects', function($value, $route) {
@@ -113,6 +118,7 @@ Route::resource('users', 'UserController');
 Route::resource('changerequests', 'ChangeRequestController');
 Route::resource('logs', 'LogController');
 Route::resource('terms', 'TermController');
+Route::resource('termproperties', 'TermPropertyController');
 Route::resource('subjects', 'SubjectController');
 Route::resource('glossaries', 'GlossaryController');
 Route::resource('relations', 'RelationController');
