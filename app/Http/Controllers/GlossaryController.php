@@ -12,13 +12,9 @@ class GlossaryController extends Controller
 {
 	public function index()
 	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-			abort(403, 'Unauthorized action.');
-		}
-  		$glossaries = Glossary::orderBy('glossary_name', 'asc')->get();
-  		return view('glossaries.index', compact('glossaries'));
-    }
+		$glossaries = Glossary::orderBy('glossary_name', 'asc')->get();
+		return view('glossaries.index', compact('glossaries'));
+	}
 
 	public function edit(Glossary $glossary)
 	{

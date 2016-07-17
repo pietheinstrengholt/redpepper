@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('index');
 });
 
+Route::get('/bim', function () {
+    return view('bim.index');
+});
+
 // Provide controller methods with object instead of ID
 Route::model('sections', 'Section');
 Route::model('templates', 'Template');
