@@ -90,11 +90,6 @@
 		</div>
 	</div>
 
-	{{-- Admin users and builder users who created the template are not allowed to change the visibility of the template --}}
-	@if (Auth::user()->role == "admin" || (Auth::user()->id == $template->created_by && Auth::user()->role == "builder"))
-		{!! Form::hidden('visible','False') !!}
-	@endif
-
 	@if ((Auth::user()->id != $template->created_by && Auth::user()->role == "builder") || Auth::user()->role == "superadmin")
 		<div class="form-group">
 			{!! Form::label('visible', 'Visible:', array('class' => 'col-sm-3 control-label')) !!}
