@@ -34,6 +34,7 @@ Route::model('subjects', 'Subject');
 Route::model('glossaries', 'Glossary');
 Route::model('relations', 'Relation');
 Route::model('statuses', 'Status');
+Route::model('fileupload', 'FileUpload');
 
 // Use IDs in URLs
 Route::bind('sections', function($value, $route) {
@@ -92,6 +93,10 @@ Route::bind('statuses', function($value, $route) {
 	return App\Status::whereId($value)->first();
 });
 
+Route::bind('fileupload', function($value, $route) {
+	return App\FileUpload::whereId($value)->first();
+});
+
 // User routes...
 Route::get('users/{id}/rights', ['middleware' => 'auth', 'uses' => 'UserController@rights']);
 Route::get('users/{id}/password', ['middleware' => 'auth', 'uses' => 'UserController@password']);
@@ -127,6 +132,7 @@ Route::resource('subjects', 'SubjectController');
 Route::resource('glossaries', 'GlossaryController');
 Route::resource('relations', 'RelationController');
 Route::resource('statuses', 'StatusController');
+Route::resource('fileupload', 'FileUploadController');
 
 // Settings
 Route::get('settings', ['middleware' => 'auth', 'uses' => 'SettingController@index']);

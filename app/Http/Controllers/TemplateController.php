@@ -557,7 +557,5 @@ class TemplateController extends Controller
 			$error = "An error occurred while processing the image. Unknown extension type.";
 			return view('imageupload.image-upload', compact('error'));
 		}
-		
-
 	}
 }

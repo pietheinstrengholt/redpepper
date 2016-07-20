@@ -168,7 +168,7 @@ class ExcelController extends Controller
 				$templatestructure = array();
 				$templatecolumns = array();
 				$templaterows = array();
-				$errors = array();				
+				$errors = array();
 
 				foreach($sheets as $sheet)
 				{

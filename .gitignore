@@ -15,3 +15,4 @@ Homestead.json
 deploy.sh
 version
 /public/img/upload
+/public/files

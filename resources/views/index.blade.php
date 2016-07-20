@@ -29,7 +29,7 @@
 					<h3>{!! App\Helper::setting('main_message2') !!}</h3>
 					<hr id="home-divider" class="intro-divider">
 					<ul class="list-inline intro-social-buttons">
-						<li><a href="doc/FRC_RADAR_Tooling_User_Manual.pdf" class="btn btn-default btn-lg"><span class="network-name"><span class="glyphicon home glyphicon-folder-open" aria-hidden="true"></span>Instructions</span></a></li>
+						<li><a href="{{ url('fileupload') }}" class="btn btn-default btn-lg"><span class="network-name"><span class="glyphicon home glyphicon-folder-open" aria-hidden="true"></span>Instructions</span></a></li>
 						<li><a href="{{ url('advancedsearch') }}" class="btn btn-default btn-lg"><span class="network-name"><span class="glyphicon home glyphicon-search" aria-hidden="true"></span>Advanced search</span></a></li>
 						<li id="changes"><p class="btn btn-default btn-lg"><span class="network-name"><span class="glyphicon home glyphicon-list-alt" aria-hidden="true"></span>Latest changes</span></p></li>
 					</ul>
