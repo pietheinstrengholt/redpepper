@@ -23,7 +23,7 @@ class FileUploadController extends Controller
 		}
 		//check if id property exists
 		if (!$fileupload->id) {
-			abort(403, 'This glossary no longer exists in the database.');
+			abort(403, 'This file no longer exists in the database.');
 		}
 
 		return view('fileupload.edit', compact('fileupload'));
@@ -74,10 +74,10 @@ class FileUploadController extends Controller
 
 				//exit if file name is not unique
 				if ($filecheck) {
-					return Redirect::route('fileupload.index')->with('message', 'An error occurred while processing the file. The file already exists.');
+					abort(403, 'An error occurred while processing the file. The file already exists.');
 				}
 			} else {
-				return Redirect::route('fileupload.index')->with('message', 'An error occurred while processing the file. Unknown extension type.');
+				abort(403, 'An error occurred while processing the file. Unknown extension type.');
 			}
 		}
 
