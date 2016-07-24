@@ -52,8 +52,10 @@
 		</table>
 	@endif
 
-	<p>
-	{!! link_to_route('fileupload.create', 'Upload new file') !!}
-	</p>
+	@can('superadmin')
+		<p>
+		{!! link_to_route('fileupload.create', 'Upload new file') !!}
+		</p>
+	@endcan
 
 @endsection
