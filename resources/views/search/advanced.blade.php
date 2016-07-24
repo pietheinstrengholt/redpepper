@@ -34,7 +34,11 @@
 	@if ( $sections->count() )
 		@foreach( $sections as $section )
 			<div class="checkbox">
-			<label><input type="checkbox" name="sections[{{ $section->id }}]" value="{{ $section->id }}">{{ $section->section_name }}</label>
+			<label><input type="checkbox" name="sections[{{ $section->id }}]" value="{{ $section->id }}">{{ $section->section_name }}
+			@if ($section->subject)
+				({{ $section->subject->subject_name }})
+			@endif
+			</label>
 			</div>
 		@endforeach
 	@endif
