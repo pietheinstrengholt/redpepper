@@ -62,8 +62,18 @@ class TermController extends Controller
 
 		$owners = User::orderBy('username', 'asc')->get();
 		$statuses = Status::orderBy('status_name', 'asc')->get();
+		
+		if (count($statuses) == 0) {
+			abort(403, 'No statuses found in the database. Please ask the administrator to create a status.');
+		}
+		
 		$glossaries = Glossary::orderBy('glossary_name', 'asc')->get();
 		$relations = Relation::orderBy('relation_name', 'asc')->get();
+		
+		if (count($relations) == 0) {
+			abort(403, 'No relation types found in the database. Please ask the administrator to create a relation type.');
+		}
+		
 		$glossary_id = $term->glossary_id;
 
 		return view('terms.edit', compact('term','statuses','glossaries','relations','owners','glossary_id'));
