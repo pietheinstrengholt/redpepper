@@ -226,21 +226,55 @@ class TermController extends Controller
 	public function apiShow($id)
 	{
 		$term = Term::with('glossary')->with('status')->with('objects')->with('owner')->with('properties')->get()->find($id);
-		$termArray = $term->toArray();
-		$termArray['children'] = array();
+
+		//create array for looking up links
+		$lookupArray = array();
+
+		//add term properties to array
+		$termArray['term'] = array('id' => $term->id, 'term_name' => $term->term_name, 'term_description' => $term->term_description, 'glossary_id' => $term->glossary_id, 'glossary_name' => $term->glossary->glossary_name, 'owner_firstname' => $term->owner->firstname, 'owner_lastname' => $term->owner->lastname, 'status_name' => $term->status->status_name);
+
+		//create empty arrays for nodes and links
+		$termArray['nodes'] = array();
+		$termArray['links'] = array();
+
+		//push term id for looking up
+		array_push($lookupArray,$term->id);
 		
+		//push term to nodes
+		array_push($termArray['nodes'],array('id' => $term->id, 'term_name' => $term->term_name));
+
 		if ($term->objects) {
 			foreach ($term->objects as $key => $object) {
-				$array = array('term_name' => $object->object->term_name, '_children' => null);
+
+				//validate if id already exists
+				if (!in_array($object->object->id, $lookupArray)) {
+					//push term id for looking up
+					array_push($lookupArray,$object->object->id);
+
+					//push term to nodes
+					array_push($termArray['nodes'],array('id' => $object->object->id, 'term_name' => $object->object->term_name));
+				}
+
+				//push links
+				array_push($termArray['links'],array('source' => 0, 'target' => array_search($object->object->id, $lookupArray), 'link_name' => $object->relation->relation_name));
+				
 				$term2 = Term::with('glossary')->with('status')->with('objects')->with('owner')->with('properties')->get()->find($object->object->id);
 				if ($term2->objects) {
-					$array['children'] = array();
 					foreach ($term2->objects as $key => $object2) {
-						$array2 = array('term_name' => $object2->object->term_name, '_children' => null);
-						array_push($array['children'],$array2);
+
+						//validate if id already exists
+						if (!in_array($object2->object->id, $lookupArray)) {
+							//push term id for looking up
+							array_push($lookupArray,$object2->object->id);
+							
+							//push term to nodes
+							array_push($termArray['nodes'],array('id' => $object2->object->id, 'term_name' => $object2->object->term_name));
+						}
+
+						//push links
+						array_push($termArray['links'],array('source' => array_search($object2->subject->id, $lookupArray), 'target' => array_search($object2->object->id, $lookupArray), 'link_name' => $object2->relation->relation_name));
 					}
 				}
-				array_push($termArray['children'],$array);
 			}
 		}
 		
