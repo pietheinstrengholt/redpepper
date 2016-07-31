@@ -56,4 +56,8 @@ TODO
 * rename fields to be consistent; shortdesc, visible
 * non-alpha term controller index
 * sebject, section, template together
-* bim landing page with option blocks
+* Add bim landing page with option blocks
+* Add showing relation name in d3js visual
+* Retrieving more elements when double clicking
+* Filtering when adding same relation to object
+* Bim users and rights, workflows
