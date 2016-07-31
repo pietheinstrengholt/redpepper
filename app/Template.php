@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Template extends Model
 {
-	protected $fillable = ['section_id','parent_id','template_name','template_shortdesc','template_longdesc','frequency_description','reporting_dates_description','main_changes_description','links_other_temp_description','process_and_organisation_description','type_id','sortorder','visible','template_type'];
+	protected $fillable = ['section_id','parent_id','template_name','template_shortdesc','template_longdesc','frequency_description','reporting_dates_description','main_changes_description','links_other_temp_description','process_and_organisation_description','type_id','sortorder','visible','template_type','row_header_desc'];
 	protected $guarded = [];
 	protected $table = 't_templates';
 

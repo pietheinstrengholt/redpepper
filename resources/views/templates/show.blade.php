@@ -94,7 +94,13 @@
 		<tr class="success">
 
 		<td class="header content">Row#</td>
-		<td class="header">Row description</td>
+		<td class="header">
+		@if ($template->row_header_desc)
+			{{ $template->row_header_desc }}
+		@else
+			Row description
+		@endif
+		</td>
 		{{-- Compare if there are any references used, if not equal show reference column --}}
 		@if ( $emptyReferences->count() <> $template->rows->count() )
 			<td class="header">Reference</td>

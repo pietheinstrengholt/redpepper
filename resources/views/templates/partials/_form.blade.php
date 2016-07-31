@@ -61,6 +61,13 @@
 		</div>
 	@endif
 
+	<div class="form-group">
+		{!! Form::label('row_header_desc', 'Optional row header description:', array('class' => 'col-sm-3 control-label')) !!}
+		<div class="col-sm-5">
+		{!! Form::text('row_header_desc', null, array('class' => 'form-control', 'placeholder' => 'Enter a optional description to replace the row description in the header')) !!}
+		</div>
+	</div>
+
 	{{-- Only allow superadmin to change the section of a template --}}
 	@if (Auth::user()->role == "superadmin")
 		<div class="form-group">
