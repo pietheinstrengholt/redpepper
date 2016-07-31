@@ -17,13 +17,19 @@
 		<table style="margin-bottom:20px;" class="table section-table dialog table-striped" border="1">
 
 		<tr class="success">
-		<td style="width:40%;" class="header">Name</td>
-		<td class="header">Description</td>
+		<td>Name</td>
+		<td>Subject</td>
+		<td>Description</td>
 		</tr>
 
 		@foreach( $sections as $section )
 			<tr>
 			<td><a href="{{ url('manuals/' . $section->id) }}">{{ $section->section_name }}</a></td>
+			<td>
+			@if ($section->subject)
+				{{ $section->subject->subject_name }}
+			@endif
+			</td>
 			<td>{!! html_entity_decode(e($section->section_description)) !!}</td>
 			</tr>
 		@endforeach
