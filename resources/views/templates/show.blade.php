@@ -95,7 +95,10 @@
 
 		<td class="header content">Row#</td>
 		<td class="header">Row description</td>
-		<td class="header">Reference</td>
+		{{-- Compare if there are any references used, if not equal show reference column --}}
+		@if ( $emptyReferences->count() <> $template->rows->count() )
+			<td class="header">Reference</td>
+		@endif
 
 		@foreach( $template->columns as $column )
 			<td class="content header" id="$column->column_code">
@@ -109,7 +112,10 @@
 
 		<td></td>
 		<td></td>
-		<td></td>
+		{{-- Compare if there are any references used, if not equal show reference column --}}
+		@if ( $emptyReferences->count() <> $template->rows->count() )
+			<td></td>
+		@endif
 
 		@foreach( $template->columns as $column )
 			<td class="column">
@@ -127,7 +133,10 @@
 			<tr>
 			<td class="desc">{{ $row->row_code }}</td>
 			<td class="desc property{{ $row->row_property }}">{{ $row->row_description }}</td>
-			<td class="desc property{{ $row->reference }}">{{ $row->row_reference }}</td>
+			{{-- Compare if there are any references used, if not equal show reference column --}}
+			@if ( $emptyReferences->count() <> $template->rows->count() )
+				<td class="desc property{{ $row->reference }}">{{ $row->row_reference }}</td>
+			@endif
 			<!-- Table cell information, column and row combination -->
 			@foreach( $template->columns as $column )
 

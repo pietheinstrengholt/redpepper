@@ -98,7 +98,12 @@ class TemplateController extends Controller
 		}
 		$children = $children->sortBy('template_name', SORT_NATURAL);
 
-		return view('templates.show', compact('section', 'template', 'disabledFields', 'propertyFields', 'searchvalue', 'technicaltype', 'descriptions','parent','children'));
+		//determine if the row_reference field is used, check on Null and Empty
+		$emptyReferences = TemplateRow::where('template_id', $template->id)->where('row_reference', '=', null)->orWhere(function ($query) use ($template) {
+			$query->where('template_id', $template->id)->where('row_reference', '=', '');
+		})->get();
+
+		return view('templates.show', compact('section', 'template', 'disabledFields', 'propertyFields', 'searchvalue', 'technicaltype', 'descriptions','parent','children','emptyReferences'));
 	}
 
 	//function to disabled fields
