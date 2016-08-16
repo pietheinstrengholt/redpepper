@@ -120,23 +120,23 @@ class ExcelController extends Controller
 
 				//delete existing content
 				TechnicalDescription::where('type_id', $request->input('type_id'))->delete();
-				
+
 				//convert excel to array
 				$excelImport = $reader->toArray();
-				
+
 				//create empty array to validate for unique results
 				$validate = array();
-				
+
 				//parse excel array, add new content to database
 				foreach($excelImport as $row) {
-					
+
 					if (!empty($row['value']) && !empty($row['description']) && !(in_array($row['value'], $validate, true))) {
 						$description = new TechnicalDescription;
 						$description->type_id = $request->input('type_id');
 						$description->content = $row['value'];
 						$description->description = $row['description'];
 						$description->save();
-						
+
 						array_push($validate, $row['value']);
 					}
 				}
@@ -162,6 +162,8 @@ class ExcelController extends Controller
 			$validation = Excel::load($request->file('excel'), function ($reader) use ($request, &$templatestructure, &$errors) {
 
 				// Getting all sheets
+				$reader->setReadDataOnly(true);
+				$reader->ignoreEmpty();
 				$sheets = $reader->get();
 				
 				//create empty arrays for build structure and for validation
