@@ -35,7 +35,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="col-md-3 col-sm-6 hero-feature">
 					<div class="well" style="background-color: #2c3e50; opacity: 0.8;">
 					<div class="caption" style="padding:0px;">
@@ -50,7 +50,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="col-md-3 col-sm-6 hero-feature">
 					<div class="well" style="background-color: #f39c12; opacity: 0.8;">
 					<div class="caption" style="padding:0px;">
@@ -65,7 +65,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 		</div>
 
 	</div>

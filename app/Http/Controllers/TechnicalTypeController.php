@@ -37,7 +37,7 @@ class TechnicalTypeController extends Controller
 
 		return view('types.edit', compact('type'));
 	}
-	
+
 	public function show(TechnicalType $type)
 	{
 		//check for superadmin permissions
@@ -49,7 +49,7 @@ class TechnicalTypeController extends Controller
 		if (!$type->id) {
 			abort(403, 'This type no longer exists in the database.');
 		}
-		
+
 		$descriptions = TechnicalDescription::where('type_id', $type->id)->orderBy('content', 'asc')->get();
 
 		return view('types.show', compact('type','descriptions'));

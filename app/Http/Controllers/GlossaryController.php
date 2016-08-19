@@ -26,7 +26,7 @@ class GlossaryController extends Controller
 		if (!$glossary->id) {
 			abort(403, 'This glossary no longer exists in the database.');
 		}
-		
+
 		$statuses = Status::orderBy('status_name', 'asc')->get();
 
 		return view('glossaries.edit', compact('glossary','statuses'));
@@ -38,7 +38,7 @@ class GlossaryController extends Controller
 		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');
 		}
-		
+
 		$statuses = Status::orderBy('status_name', 'asc')->get();
 
 		return view('glossaries.create', compact('glossary','statuses'));
@@ -61,7 +61,7 @@ class GlossaryController extends Controller
 			}
 			$letters = array_unique($letters);
 		}
-		
+
 		//if letters are not empty check if letter is set with argument, else take first letter from array
 		if (!empty($letters)) {
 			if ($request->has('letter')) {

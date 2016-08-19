@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Redirect;
 
 class SubjectController extends Controller
-{	
+{
 	public function index(Request $request)
 	{
 		$subjects = Subject::orderBy('subject_name', 'asc')->get();
@@ -20,7 +20,7 @@ class SubjectController extends Controller
 		if (empty($subjects)) {
 			abort(403, 'No subjects have been found. Please ask your administrator to add any subjects.');
 		}
-		
+
 		return view('subjects.index', compact('subjects'));
 	}
 

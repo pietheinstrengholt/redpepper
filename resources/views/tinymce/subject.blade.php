@@ -1,6 +1,6 @@
 <!-- /resources/views/tinymce/subject.blade.php -->
 <script src="{{ URL::asset('js/tinymce/tinymce.min.js') }}"></script>
-<script>tinymce.init({ 	
+<script>tinymce.init({
 	selector:'textarea#subject_longdesc',
 	valid_elements: "p,a[href|target],strong/b,i/em,u,br,ul,ol,li",
 	formats : {

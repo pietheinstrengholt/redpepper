@@ -17,7 +17,7 @@
 	</ul>
 
 	<h2>Edit Template "{{ $template->template_name }}"</h2>
-	
+
 	@if (count($errors) > 0)
 		<div class="alert alert-danger">
 		<ul>
@@ -26,7 +26,7 @@
 		@endforeach
 		</ul>
 		</div>
-	@endif	
+	@endif
 
 	{!! Form::model($template, ['method' => 'PATCH', 'route' => ['sections.templates.update', $section->id, $template->id]]) !!}
 	@include('templates/partials/_form', ['submit_text' => 'Edit Template'])

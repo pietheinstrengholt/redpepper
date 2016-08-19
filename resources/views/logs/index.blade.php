@@ -18,7 +18,7 @@
 
 		<tr class="success">
 		<td class="header">Event type</td>
-		<td class="header">Action</td>		
+		<td class="header">Action</td>
 		<td class="header">Changerequest id</td>
 		<td class="header">Section</td>
 		<td class="header">Template</td>
@@ -31,13 +31,13 @@
 			<tr>
 			<td>{{ $log->log_event }}</td>
 			<td>{{ $log->action }}</td>
-			
+
 			<td>
 			@if ($log->changerequest_id)
 				<a href="{!! url('/') . '/changerequests/' . $log->changerequest_id . '/edit'; !!}">{{ $log->changerequest_id }}</a>
 			@endif
 			</td>
-			
+
 			<td>
 			@if ($log->section_id)
 				@if ($log->section)
@@ -74,9 +74,9 @@
 
 		</table>
 	@endif
-	
+
 	<div class="pagination">
 		{!! $logs->render() !!}
-	</div>	
+	</div>
 
 @endsection

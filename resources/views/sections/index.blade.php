@@ -44,7 +44,7 @@
 			<td><a href="{{ route('sections.show', $section->id) }}">{{ $section->section_name }}</a></td>
 			@if ( !$subject )
 				<td>
-				@if (!empty($section->subject)) 
+				@if (!empty($section->subject))
 					{{ $section->subject->subject_name }}
 				@endif
 				</td>

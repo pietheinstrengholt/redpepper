@@ -17,15 +17,15 @@ class LogController extends Controller
         if (Gate::denies('superadmin')) {
             abort(403, 'Unauthorized action.');
         }
-		
+
 		$logs = Log::orderBy('id', 'desc')->paginate(20);
 		return view('logs.index', compact('logs'));
 	}
-	
+
 	public function show()
 	{
 		$logs = Log::where('log_event', 'Changerequest')->orderBy('id', 'desc')->get();
 		return view('logs.show', compact('logs'));
 	}
-	
+
 }

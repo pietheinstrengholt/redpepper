@@ -69,7 +69,7 @@ class ExcelController extends Controller
 
 		return view('excel.uploadtemplate', compact('sections'));
 	}
-	
+
 	public function uploadreferenceform()
 	{
 		//only a superadmin has permissions to create new sections
@@ -105,7 +105,7 @@ class ExcelController extends Controller
 			return $letter;
 		}
 	}
-	
+
 	public function uploadreferenceexcel(Request $request)
 	{
 		//validate input form
@@ -143,7 +143,7 @@ class ExcelController extends Controller
 
 			});
 		}
-		
+
 		return Redirect::to('/types/' . $request->input('type_id'))->with('message', 'Content successfully added to the database.');
 	}
 
@@ -165,7 +165,7 @@ class ExcelController extends Controller
 				$reader->setReadDataOnly(true);
 				$reader->ignoreEmpty();
 				$sheets = $reader->get();
-				
+
 				//create empty arrays for build structure and for validation
 				$templatestructure = array();
 				$templatecolumns = array();
@@ -176,7 +176,7 @@ class ExcelController extends Controller
 				{
 					$worksheetTitle = $sheet->getTitle();
 					$arraySheet = $sheet->toArray();
-					
+
 					//TODO:add validation when structure is incorrect or no content exists on sheet
 					//get column and row count from imported excel
 					$highestRow = count($arraySheet) + 1;
@@ -374,6 +374,8 @@ class ExcelController extends Controller
 							}
 						}
 					}
+
+
 
 					//validatie work sheet with the name column_content
 					if ($worksheetTitle == "template_content") {
@@ -801,7 +803,7 @@ class ExcelController extends Controller
 	{
 
 		$template = Template::findOrFail($id);
-		
+
 		//create two array for row_code and column_code lookup usage
 		$row_code_array = array();
 		$column_code_array = array();
@@ -910,10 +912,10 @@ class ExcelController extends Controller
 						//get row_code and column_code from array
 						$disabled_row_code = $disabledrows['row_code'];
 						$disabled_column_code = $disabledrows['column_code'];
-						
+
 						//check if disabled row and columns exist in the structure of the template
 						if (array_key_exists($disabled_row_code, $templatestructure['rows']) && array_key_exists($disabled_column_code, $templatestructure['columns'])) {
-						
+
 							//get row_code and column name from structure
 							$structurerowid = $templatestructure['rows'][$disabled_row_code];
 							$structurecolumnid = $templatestructure['columns'][$disabled_column_code];
@@ -968,10 +970,10 @@ class ExcelController extends Controller
 				$columncontentcount = 2;
 				//add content to excel
 				if (!empty($column_content )) {
-					
+
 					//create empty array for validation and extraction of only unique values
 					$column_content_array = array();
-					
+
 					foreach($column_content  as $key => $value) {
 						$column_code = trim($value['column_code']);
 						if (!(in_array($column_code . $value['content_type'], $column_content_array, true))) {
@@ -979,7 +981,7 @@ class ExcelController extends Controller
 							->setCellValueExplicit('B' . $columncontentcount, $value['content_type'])
 							->setCellValueExplicit('C' . $columncontentcount, $value['content']);
 							$columncontentcount++;
-							
+
 							//push column_code and content_type combination to unique array for validation
 							array_push($column_content_array, $column_code . $value['content_type']);
 						}
@@ -1019,20 +1021,20 @@ class ExcelController extends Controller
 
 				//add content to excel
 				if (!empty($row_contents)) {
-					
+
 					//create empty array for validation and extraction of only unique values
 					$row_content_array = array();
-					
+
 					foreach($row_contents as $key => $value) {
 						$row_code = trim($value['row_code']);
-						
+
 						if (!(in_array($row_code . $value['content_type'], $row_content_array, true))) {
-						
+
 							$sheet->setCellValueExplicit('A' . $rowcontentcount, $row_code)
 							->setCellValueExplicit('B' . $rowcontentcount, $value['content_type'])
 							->setCellValueExplicit('C' . $rowcontentcount, $value['content']);
 							$rowcontentcount++;
-							
+
 							//push row_code and content_type combination to unique array for validation
 							array_push($row_content_array, $row_code . $value['content_type']);
 						}

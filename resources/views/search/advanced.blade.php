@@ -4,7 +4,7 @@
 @section('content')
 	<h2>Advanced search</h2>
 	<h4>Use the search form below</h4>
-	
+
 	@if (count($errors) > 0)
 		<div class="alert alert-danger">
 		<ul>
@@ -13,7 +13,7 @@
 		@endforeach
 		</ul>
 		</div>
-	@endif	
+	@endif
 
 	{!! Form::open(array('action' => 'SearchController@search', 'id' => 'form')) !!}
 

@@ -22,17 +22,17 @@
 				@endforeach
 			</ul>
 		@endif
-		
+
 		<div class="form-group">
 		  <label>Email:</label>
 		  <input type="email" name="email" value="{{ old('email') }}" style="width:550px;" class="form-control">
 		</div>
-		
+
 		<div class="form-group">
 		  <label>Password:</label>
 		  <input type="password" name="password"style="width:350px;" class="form-control">
 		</div>
-		
+
 		<div class="form-group">
 		  <label>Confirm Password:</label>
 		  <input type="password" name="password_confirmation" style="width:350px;" class="form-control">

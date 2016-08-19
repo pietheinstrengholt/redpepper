@@ -1,7 +1,7 @@
 <!-- /resources/views/tinymce/section.blade.php -->
 <script src="{{ URL::asset('js/tinymce/tinymce.min.js') }}"></script>
 
-<script>tinymce.init({ 	
+<script>tinymce.init({
 	selector:'textarea#section_longdesc',
 valid_elements: "p,h1,h2,h3,h4,h5,a[href|target],strong/b,i/em,u,br,table[*],tbody[*],thead[*],tr[*],td[*],ul,ol,li,img[src|height|width]",
 	formats : {

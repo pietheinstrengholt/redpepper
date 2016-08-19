@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 use Redirect;
 
 class SectionController extends Controller
-{	
+{
 	public function index(Request $request)
 	{
 		//set subject_id if argument is given
@@ -44,7 +44,7 @@ class SectionController extends Controller
 
 		//sort sections on natural ordering
 		$sections = $sections->sortBy('section_name', SORT_NATURAL);
-		
+
 		//abort if sectionRights array is empty
 		if (empty($sections)) {
 			abort(403, 'No sections have been found. Please ask your administrator to add any sections.');
@@ -105,7 +105,7 @@ class SectionController extends Controller
 	public function showmanual($id)
 	{
 		$section = Section::where('id', $id)->first();
-		
+
 		//only non guests can see all sections
 		if (Gate::allows('see-nonvisible-content')) {
 			$templates = Template::with('requirements')->where('section_id', $id)->get();
@@ -116,12 +116,12 @@ class SectionController extends Controller
 		if (!$section) {
 			abort(403, 'This section no longer exists in the database.');
 		}
-		
+
 		//abort if sectionRights array is empty
 		if (empty($templates)) {
 			abort(403, 'No templates have been found for this selection.');
 		}
-		
+
 		//sort templates on natural ordering
 		$templates = $templates->sortBy('template_name', SORT_NATURAL);
 
@@ -129,22 +129,22 @@ class SectionController extends Controller
 	}
 
 	public function edit(Request $request, Section $section)
-	{	
+	{
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action.');
 		}
-		
+
 		//check if id property exists
 		if (!$section->id) {
 			abort(403, 'This section no longer exists in the database.');
 		}
-		
+
 		//retrieve subjects for dropdown
 		$subjects = Subject::orderBy('subject_name', 'asc')->get();
-		
+
 		//set subject_id variable, workaround for create function
 		$subject_id = $section->subject_id;
-		
+
 		//validate if user can update section (see AuthServiceProvider)
 		if ($request->user()->can('update-section', $section)) {
 			return view('sections.edit', compact('section','subjects','subject_id'));
@@ -162,7 +162,7 @@ class SectionController extends Controller
 
 		//retrieve subjects for dropdown
 		$subjects = Subject::orderBy('subject_name', 'asc')->get();
-		
+
 		//set subject_id if argument is given
 		if ($request->has('subject_id')) {
 			$subject_id = $request->input('subject_id');
@@ -198,7 +198,7 @@ class SectionController extends Controller
 	public function update(Request $request, Section $section)
 	{
 		//validate if user can update section (see AuthServiceProvider)
-		
+
 		if ($request->user()->can('update-section', $section)) {
 
 			//validate input form

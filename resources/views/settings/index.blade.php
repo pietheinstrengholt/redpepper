@@ -61,15 +61,15 @@
 <h5><label for="usr">Allow super admin to process changes directly:</label></h5>
 <select name="superadmin_process_directly" class="form-control" style="width: 100px; margin-top: -10px;" id="visible">
 @if (!empty($config_array['superadmin_process_directly']))
-	@if ($config_array['superadmin_process_directly'] == "yes") 
-		<option value="yes" selected="selected">Yes</option> 
-	@else 
-		<option value="yes">Yes</option> 
+	@if ($config_array['superadmin_process_directly'] == "yes")
+		<option value="yes" selected="selected">Yes</option>
+	@else
+		<option value="yes">Yes</option>
 	@endif
 	@if ($config_array['superadmin_process_directly'] == "no")
-		<option value="no" selected="selected">No</option> 
-	@else 
-		<option value="no">No</option> 
+		<option value="no" selected="selected">No</option>
+	@else
+		<option value="no">No</option>
 	@endif
 @else
 	<option value="yes">Yes</option>

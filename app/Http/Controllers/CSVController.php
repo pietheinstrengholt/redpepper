@@ -42,7 +42,7 @@ class CSVController extends Controller
 				if ($request->file('csv')->isValid()) {
 
 					$file = array('csv' => $request->file('csv'));
-					
+
 					//Abort if the file extension is not CSV
 					if ($request->file('csv')->getClientOriginalExtension() <> 'csv') {
 						abort(403, 'Unable to import CSV file, filetype is no CSV');
@@ -53,7 +53,7 @@ class CSVController extends Controller
 
 						//Create array from csv content
 						$csvarray = $reader->toArray();
-						
+
 						//Abort when only a header is used and no content can be found
 						if (empty($csvarray)) {
 							abort(403, 'Unable to import CSV file, no content is found');
@@ -66,17 +66,17 @@ class CSVController extends Controller
 							$templates = Template::where('section_id', $request->input('section_id'))->get();
 							$sources =  TechnicalSource::all();
 							$types =  TechnicalType::all();
-							
+
 							//Abort when there are no templates
 							if (empty($templates)) {
 								abort(403, 'Unable to import CSV file, no templates found for this section');
 							}
-							
+
 							//Abort when there are no sources
 							if (empty($sources)) {
 								abort(403, 'Unable to import CSV file, no sources are found in the database');
 							}
-							
+
 							//Abort when there are no types
 							if (empty($types)) {
 								abort(403, 'Unable to import CSV file, no types are found in the database');
@@ -87,19 +87,19 @@ class CSVController extends Controller
 							foreach ($templates as $template) {
 								array_push($templatesArray,$template->id);
 							}
-							
+
 							//Create empty array for template id validation
 							$sourcesArray = array();
 							foreach ($sources as $source) {
 								array_push($sourcesArray,$source->id);
 							}
-							
+
 							//Create empty array for template id validation
 							$typesArray = array();
 							foreach ($types as $type) {
 								array_push($typesArray,$type->id);
 							}
-						
+
 							//validate before import CSV content
 							//TODO: validate in CSV for existing row_code, column_code in template
 							foreach ($csvarray as $csv) {
@@ -116,7 +116,7 @@ class CSVController extends Controller
 									abort(403, 'type id used in CSV file can\'t be matched with any type id in the database');
 								}
 							}
-							
+
 							//remove existing content if count is zero
 							foreach ($templates as $template) {
 								Technical::where('template_id', $template->id)->delete();
@@ -135,7 +135,7 @@ class CSVController extends Controller
 								$technical->created_by = Auth::user()->id;
 								$technical->save();
 							}
-							
+
 							//log Event
 							Event::fire(new SectionUpdated($section));
 						}

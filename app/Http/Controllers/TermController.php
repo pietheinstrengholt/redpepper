@@ -17,7 +17,7 @@ class TermController extends Controller
 	public function index(Request $request)
 	{
 		$terms = Term::orderBy('term_name', 'asc')->get();
-		
+
 		//create an array with all first letters from all terms in the database, used for pagination
 		$letters = array();
 		if (!empty($terms)) {
@@ -26,7 +26,7 @@ class TermController extends Controller
 			}
 			$letters = array_unique($letters);
 		}
-		
+
 		//if letters are not empty check if letter is set with argument, else take first letter from array
 		if (!empty($letters)) {
 			if ($request->has('letter')) {
@@ -62,18 +62,18 @@ class TermController extends Controller
 
 		$owners = User::orderBy('username', 'asc')->get();
 		$statuses = Status::orderBy('status_name', 'asc')->get();
-		
+
 		if (count($statuses) == 0) {
 			abort(403, 'No statuses found in the database. Please ask the administrator to create a status.');
 		}
-		
+
 		$glossaries = Glossary::orderBy('glossary_name', 'asc')->get();
 		$relations = Relation::orderBy('relation_name', 'asc')->get();
-		
+
 		if (count($relations) == 0) {
 			abort(403, 'No relation types found in the database. Please ask the administrator to create a relation type.');
 		}
-		
+
 		$glossary_id = $term->glossary_id;
 
 		return view('terms.edit', compact('term','statuses','glossaries','relations','owners','glossary_id'));
@@ -239,7 +239,7 @@ class TermController extends Controller
 
 		//push term id for looking up
 		array_push($lookupArray,$term->id);
-		
+
 		//push term to nodes
 		array_push($termArray['nodes'],array('id' => $term->id, 'term_name' => $term->term_name));
 
@@ -257,7 +257,7 @@ class TermController extends Controller
 
 				//push links
 				array_push($termArray['links'],array('source' => 0, 'target' => array_search($object->object->id, $lookupArray), 'link_name' => $object->relation->relation_name));
-				
+
 				$term2 = Term::with('glossary')->with('status')->with('objects')->with('owner')->with('properties')->get()->find($object->object->id);
 				if ($term2->objects) {
 					foreach ($term2->objects as $key => $object2) {
@@ -266,7 +266,7 @@ class TermController extends Controller
 						if (!in_array($object2->object->id, $lookupArray)) {
 							//push term id for looking up
 							array_push($lookupArray,$object2->object->id);
-							
+
 							//push term to nodes
 							array_push($termArray['nodes'],array('id' => $object2->object->id, 'term_name' => $object2->object->term_name));
 						}
@@ -277,7 +277,7 @@ class TermController extends Controller
 				}
 			}
 		}
-		
+
 		return response()->json($termArray);
 	}
 }

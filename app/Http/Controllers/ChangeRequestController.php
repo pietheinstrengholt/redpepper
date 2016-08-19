@@ -88,13 +88,13 @@ class ChangeRequestController extends Controller
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
 		}
-		
+
 		if ($request->has('template_id') && $request->has('cell_id')) {
 			$template = Template::findOrFail($request->input('template_id'));
 		} else {
 			abort(404, 'Content cannot be found with invalid arguments.');
 		}
-		
+
 		//exit when the user has no permission
 		if ($request->user()->cannot('create-changerequest', $template)) {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
@@ -104,17 +104,17 @@ class ChangeRequestController extends Controller
 		list($before, $after) = explode('-row', $_GET['cell_id'], 2);
 		$column_code = str_ireplace("column", "", "$before");
 		$row_code = $after;
-		
+
 		//build list with users with section_id rights
 		$userrights = UserRights::where('section_id', $template->section_id)->select('username_id')->get();
 		$userList = array();
-		
+
 		if (!empty($userrights)) {
 			foreach($userrights as $userright) {
 				array_push($userList,$userright->username_id);
 			}
 		}
-		
+
 		//build list with superadmins
 		$superadmins = User::orderBy('firstname', 'asc')->where('id', '<>', Auth::user()->id)->where('role', 'superadmin')->get();
 		if (!empty($superadmins)) {
@@ -122,7 +122,7 @@ class ChangeRequestController extends Controller
 				array_push($userList,$superadmin->id);
 			}
 		}
-		
+
 		//query the users based on the roles, list with user rights and superadmins
 		$approvers = User::orderBy('firstname', 'asc')->where('id', '<>', Auth::user()->id)->whereIn('id', $userList)->whereIn('role', array("superadmin","builder","admin","reviewer"))->get();
 
@@ -182,7 +182,7 @@ class ChangeRequestController extends Controller
 		if (!$ChangeRequest->id) {
 			abort(403, 'Change request no longer exists in the database.');
 		}
-		
+
 		//set allowed to change to no
 		$allowedToChange = "no";
 
@@ -190,10 +190,10 @@ class ChangeRequestController extends Controller
 
 			//check for admin, builder, reviewer if not own submitted changerequest is reviewed
 			if (Auth::user()->role == "admin" || Auth::user()->role == "builder" || Auth::user()->role == "reviewer") {
-				
+
 				//set allowed to change to yes
 				$allowedToChange = "yes";
-				
+
 				//user are not allowed to approve own changes
 				//TODO: add setting to allow superadmin to approve own changes
 				if ($ChangeRequest->creator_id == Auth::user()->id) {
@@ -206,15 +206,15 @@ class ChangeRequestController extends Controller
 					$allowedToChange = "no";
 				}
 			}
-			
+
 			//superadmin has also rights to change
 			if (Auth::user()->role == "superadmin") {
-				
+
 				//set allowed to change to yes
 				$allowedToChange = "yes";
 			}
 		}
-		
+
 		if ($ChangeRequest->status <> 'approved') {
 			//get current content
 			$current_regulation_row = Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'regulation')->first();
@@ -238,7 +238,7 @@ class ChangeRequestController extends Controller
 			$draft_field_property1 = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property1')->first();
 			$draft_field_property2 = DraftRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property2')->first();
 		}
-		
+
 		if ($ChangeRequest->status == 'approved') {
 			//get current content
 			$current_regulation_row = HistoryRequirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'regulation')->where('change_type', 'existing')->first();
@@ -250,7 +250,7 @@ class ChangeRequestController extends Controller
 			$current_field_interpretation = HistoryRequirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'interpretation')->where('change_type', 'existing')->first();
 			$current_field_property1 = HistoryRequirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property1')->where('change_type', 'existing')->first();
 			$current_field_property2 = HistoryRequirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property2')->where('change_type', 'existing')->first();
-			
+
 			//get draft content
 			$draft_regulation_row = HistoryRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'regulation')->where('change_type', 'new')->first();
 			$draft_interpretation_row = HistoryRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', null)->where('content_type', 'interpretation')->where('change_type', 'new')->first();
@@ -262,7 +262,7 @@ class ChangeRequestController extends Controller
 			$draft_field_property1 = HistoryRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property1')->where('change_type', 'new')->first();
 			$draft_field_property2 = HistoryRequirement::where('changerequest_id', $ChangeRequest->id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property2')->where('change_type', 'new')->first();
 		}
-		
+
 		//perform comparison
 		$ChangeRequest->regulation_row = $this->compare_word($current_regulation_row['content'], $draft_regulation_row['content']);
 		$ChangeRequest->interpretation_row = $this->compare_word($current_interpretation_row['content'], $draft_interpretation_row['content']);
@@ -304,7 +304,7 @@ class ChangeRequestController extends Controller
 				$draft_technical_string = $draft_technical_string . $str;
 			}
 		}
-		
+
 		//one of the two technical should not be empty
 		if (!empty($draft_technical) || !empty($current_technical)) {
 			$ChangeRequest->technical = $this->compare($current_technical_string,$draft_technical_string);
@@ -345,7 +345,7 @@ class ChangeRequestController extends Controller
 			$field_property2 = Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'property2')->first();
 			$field_regulation = Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'regulation')->first();
 			$field_interpretation = Requirement::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->where('content_type', 'interpretation')->first();
-			
+
 			$technical = Technical::where('template_id', $ChangeRequest->template_id)->where('row_code', $ChangeRequest->row_code)->where('column_code', $ChangeRequest->column_code)->get();
 
 			//delete any existing if empty is proposed
@@ -814,7 +814,7 @@ class ChangeRequestController extends Controller
 				if ($ChangeRequest['change_type'] == 'approved') {
 					abort(403, 'Error: change request already processed!');
 				}
-				
+
 				//reopen changerequest
 				if ($request->input('change_type') == 'reopen') {
 					$ChangeRequest->status = "pending";
@@ -828,7 +828,7 @@ class ChangeRequestController extends Controller
 					$ChangeRequest->status = "rejected";
 					$ChangeRequest->comment = $request->input('comment');
 					$ChangeRequest->save();
-					
+
 					//log Event
 					Event::fire(new ChangeRequestRejected($ChangeRequest));
 				}
@@ -839,10 +839,10 @@ class ChangeRequestController extends Controller
 					$ChangeRequest->status = "approved";
 					$ChangeRequest->comment = $request->input('comment');
 					$ChangeRequest->save();
-					
+
 					//process changerequest
 					$this->process($ChangeRequest);
-					
+
 					//log Event
 					Event::fire(new ChangeRequestApproved($ChangeRequest));
 				}
@@ -985,14 +985,14 @@ class ChangeRequestController extends Controller
 				$draftrequirement->content = $request->input('field_regulation');
 				$draftrequirement->save();
 			}
-			
+
 			//if approver field is set, extend object with approver, see listener LogWhenChangeRequestCreated
 			if ($request->has('approver')) {
 				$ChangeRequest->approver = $request->input('approver');
 			}
-			
+
 			if (Helper::setting('superadmin_process_directly') == "yes" && Auth::user()->role == "superadmin") {
-				
+
 				//update change request
 				$ChangeRequest->status = "approved";
 				$ChangeRequest->comment = "Changerequest directly approved without review";
@@ -1003,17 +1003,17 @@ class ChangeRequestController extends Controller
 
 				//log Event
 				Event::fire(new ChangeRequestApproved($ChangeRequest));
-				
+
 				//redirect back to template page
-				return Redirect::route('sections.templates.show', [$request->input('section_id'), $request->input('template_id')])->with('message', 'Content directly updated without review approval.');	
-				
+				return Redirect::route('sections.templates.show', [$request->input('section_id'), $request->input('template_id')])->with('message', 'Content directly updated without review approval.');
+
 			} else {
-				
+
 				//log Event
 				Event::fire(new ChangeRequestCreated($ChangeRequest));
-				
+
 				//redirect back to template page
-				return Redirect::route('sections.templates.show', [$request->input('section_id'), $request->input('template_id')])->with('message', '<a style="color:white;" href="' . url('/') . '/changerequests/' . $ChangeRequest->id . '/edit">Change request</a> submitted for review.');				
+				return Redirect::route('sections.templates.show', [$request->input('section_id'), $request->input('template_id')])->with('message', '<a style="color:white;" href="' . url('/') . '/changerequests/' . $ChangeRequest->id . '/edit">Change request</a> submitted for review.');
 			}
 		}
 	}

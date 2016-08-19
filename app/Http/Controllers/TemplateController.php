@@ -214,7 +214,7 @@ class TemplateController extends Controller
 	{
 		$template = Template::findOrFail($id);
 		$section = Section::findOrFail($template->section_id);
-		
+
 		//validate if user can update section (see AuthServiceProvider)
 		if ($request->user()->can('update-section', $section)) {
 			$disabledFields = $this->getDisabledFields($template);
@@ -239,14 +239,14 @@ class TemplateController extends Controller
 			'visible' => 'required',
 			'section_id' => 'required'
 		]);
-		
+
 		//validate when type is template
 		if ($request->input('template-type') == "template") {
 			$this->validate($request, [
 				'inputrows' => 'required|numeric',
 				'inputcolumns' => 'required|numeric'
 			]);
-			
+
 			if ($request->input('inputrows') == 0 || $request->input('inputcolumns') == 0) {
 				abort(403, 'Error: Template should not contain any zero values.');
 			}

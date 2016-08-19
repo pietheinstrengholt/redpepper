@@ -16,7 +16,7 @@
 		@endif
 		<li class="active">{{ $template->template_name }}</li>
 	</ul>
-	
+
 	@if ( $children->count() )
 		<table class="table section-table dialog table-striped" border="1">
 
@@ -184,7 +184,7 @@
 		</table>
 
 	@endif
-	
+
 	@if ( $parent )
 		<p><a href="{!! url('/sections/' . $parent->section->id . '/templates/' . $parent->id); !!}">Back to template</a></p>
 	@else
