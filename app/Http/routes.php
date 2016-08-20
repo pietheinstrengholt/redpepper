@@ -153,6 +153,7 @@ Route::post('/excel/uploadreference', ['middleware' => 'auth', 'uses' => 'ExcelC
 
 // CSV routes...
 Route::get('/csv/import', ['middleware' => 'auth', 'uses' => 'CSVController@import']);
+Route::get('/csv/seeids', ['middleware' => 'auth', 'uses' => 'CSVController@seeids']);
 Route::post('/csv/uploadcsv', ['middleware' => 'auth', 'uses' => 'CSVController@uploadcsv']);
 
 // Changerequest routes...

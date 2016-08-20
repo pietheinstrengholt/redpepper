@@ -157,4 +157,17 @@ class CSVController extends Controller
 		$sections = Section::all();
 		return view('csv.import', compact('sections'));
 	}
+
+	public function seeids()
+	{
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
+
+		$templates = Template::all();
+		$sources =  TechnicalSource::all();
+		$types =  TechnicalType::all();
+		return view('csv.seeids', compact('templates','sources','types'));
+	}
 }

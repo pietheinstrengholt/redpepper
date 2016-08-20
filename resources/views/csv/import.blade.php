@@ -21,7 +21,7 @@
 		</div>
 	@endif
 
-	<strong>Example:</strong> The file needs to be in the following format, including header and stored as comma separated<br><br>
+	<strong>Example:</strong> The file needs to be in the following format, including header and stored as comma separated. To see an overview with all template, sources and type id's, please click <a href="{{ url('csv/seeids') }}">here</a>.<br><br>
 	<pre>template_id;row_code;column_code;source_id;type_id;content;description
 999;020;010;5;1;10001010;Cash on hand
 999;030;010;5;1;10002010;Balances with central banks other than mandatory reserve deposits and readily convertible in cash
