@@ -14,22 +14,16 @@ jQuery(document).ready(function () {
 
 			//if the warning button is clicked, redirect user to edit cell screen
 			if ($('button#modal-update').hasClass('btn-warning')) {
-
 				window.location.replace(url + '/updatecell?template_id=' + template_id + '&cell_id=' + cell_id);
-
 			} else {
-
 				//trigger hidden submit button in template change form and close pop-up
 				$('button#approve-changes.btn').trigger('click');
 				$('#template-modal').modal('hide');
 
 				//enable html scrollbar - avoid double scrolling or unwanted client behaviour
-				$("html").css("overflow", "initial");
-
+				$("html").css("overflow", "auto");
 			}
-
 		});
-
 	//end of time-out function
 	}, 0);
 
@@ -131,7 +125,7 @@ jQuery(document).ready(function () {
 
 	//enable html scrollbar when closing modal
 	$('#template-modal').on('hidden.bs.modal', function () {
-	  $("html").css("overflow", "initial");
+		$("html").css("overflow", "auto");
 	});
 
 	//mark hidden check-box if cell in table is clicked
