@@ -16,11 +16,13 @@
 			<table class="table section-table dialog table-striped" border="1">
 			<tr class="success">
 			<td class="header">template_id</td>
+			<td class="header">section_name</td>
 			<td class="header">template_name</td>
 			</tr>
 			@foreach ($templates as $template)
 				<tr>
 				<td>{{ $template->id }}</td>
+				<td>{{ $template->section->section_name }}</td>
 				<td>{{ $template->template_name }}</td>
 				</tr>
 			@endforeach
