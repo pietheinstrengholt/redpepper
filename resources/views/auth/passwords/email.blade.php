@@ -1,3 +1,4 @@
+@extends('layouts.master')
 
 <!-- Main Content -->
 @section('content')
