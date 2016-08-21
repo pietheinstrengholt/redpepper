@@ -16,7 +16,7 @@ startpage.h6 {
 }
 
 .topnav {
-    font-size: 14px; 
+    font-size: 14px;
 }
 
 .lead {
@@ -203,8 +203,8 @@ div.alert.alert-danger {
 html,body {
 	height:100%;
 }
-      
-.row-flex, .row-flex > div[class*='col-'] {  
+
+.row-flex, .row-flex > div[class*='col-'] {
 	display: -webkit-box;
 	display: -moz-box;
 	display: -ms-flexbox;

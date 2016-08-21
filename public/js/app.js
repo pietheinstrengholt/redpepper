@@ -14,7 +14,7 @@ jQuery(document).ready(function () {
 
 			//if the warning button is clicked, redirect user to edit cell screen
 			if ($('button#modal-update').hasClass('btn-warning')) {
-				
+
 				window.location.replace(url + '/updatecell?template_id=' + template_id + '&cell_id=' + cell_id);
 
 			} else {
@@ -32,7 +32,7 @@ jQuery(document).ready(function () {
 
 	//end of time-out function
 	}, 0);
-	
+
 	//functionality to automatically check other checkboxes
 	$( "tr.allrights input" ).click(function() {
 		if (this.checked) {
@@ -58,7 +58,7 @@ jQuery(document).ready(function () {
 		$('.modal-body').css('height', size.height - (offset + offsetBody));
 		$('#myModal').css('top', 0);
 	}
-	
+
 	//open window and rescale
 	$(window).bind("resize", rescale);
 
@@ -82,7 +82,7 @@ jQuery(document).ready(function () {
 			type: 'GET',
 			url: url + '/cell',
 			data: {
-				"template_id" : template_id, 
+				"template_id" : template_id,
 				"cell_id" : cell_id
 			},
 			success: function(data)
@@ -104,7 +104,7 @@ jQuery(document).ready(function () {
 		$("button#modal-update").text("Change values");
 
 	});
-	
+
 	//functionality when a field in the template is clicked
 	$("li#changes").click(function() {
 
@@ -133,7 +133,7 @@ jQuery(document).ready(function () {
 	$('#template-modal').on('hidden.bs.modal', function () {
 	  $("html").css("overflow", "initial");
 	});
-	
+
 	//mark hidden check-box if cell in table is clicked
 	$("table.template-structure td.value").click(function() {
 		if ($(this).find('input').is(':checked')) {
@@ -157,7 +157,7 @@ jQuery(document).ready(function () {
 			$(this).attr('previousValue', 'checked');
 		}
 	});
-	
+
 	//needed for technical content editing
 	var cloneCount = 1000;
 
@@ -183,5 +183,5 @@ jQuery(document).ready(function () {
 		$( 'tr#' + cloneCount + ' td.action input').attr('name', 'technical[' + cloneCount + '][action]');
 
 	});
-	
+
 });

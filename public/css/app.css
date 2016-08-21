@@ -14,10 +14,10 @@
 /* General & Master blade template */
 
 @media (min-width: 1400px) {
-  .container {
-    width: 1300px;
-	/* margin-left: 2%; */
-  }
+	.container {
+		width: 1300px;
+		/* margin-left: 2%; */
+	}
 }
 
 @media (max-width: 980px) {
@@ -155,7 +155,7 @@ modal.fade {
 }
 
 div.modal-body {
-	overflow-y: scroll; 
+	overflow-y: scroll;
 	margin-right: 1px;
 }
 
@@ -184,17 +184,17 @@ tr.header2 {
 }
 
 td.column {
-	text-align: center; 
+	text-align: center;
 	font-weight: bold;
 }
 
 td.content.header {
-	min-width: overflow-hidden; 
+	min-width: overflow-hidden;
 	word-wrap: break-word;
 }
 
 td.error, tr.error {
-	background-color: #e74c3c; 
+	background-color: #e74c3c;
 	color: #ffffff;
 }
 
