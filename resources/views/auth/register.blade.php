@@ -2,10 +2,7 @@
 @extends('layouts.master')
 
 @section('content')
-
-	<h2>Register</h2>
-	<h4>Please use the register form below</h4>
-
+<div class="container">
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
@@ -23,7 +20,7 @@
 							</div>
 						@endif
 
-						<form class="form-horizontal" role="form" method="POST" action="<?php echo url('/auth/register'); ?>">
+						<form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
 							<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
 							<div class="form-group">
@@ -88,5 +85,5 @@
 			</div>
 		</div>
 	</div>
-
+</div>
 @endsection

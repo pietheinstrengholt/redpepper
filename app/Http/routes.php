@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('index');
 });
 
+Route::get('/home', function () {
+    return view('index');
+});
+
 Route::get('/bim', function () {
     return view('bim.index');
 });
@@ -167,13 +171,10 @@ Route::get('/search', 'SearchController@search');
 Route::get('/advancedsearch', 'SearchController@advancedsearch');
 
 // Authentication routes...
-Route::get('/auth/login', 'Auth\AuthController@getLogin');
-Route::post('/auth/login', 'Auth\AuthController@postLogin');
-Route::get('/auth/logout', 'Auth\AuthController@getLogout');
-
-// Registration routes...
-Route::get('/auth/register', 'Auth\AuthController@getRegister');
-Route::post('/auth/register', 'Auth\AuthController@postRegister');
+Route::auth();
+Route::get('/register', 'Auth\AuthController@getRegister');
+Route::post('/login', 'Auth\AuthController@postLogin');
+//Route::post('register', 'Auth\AuthController@postRegister');
 
 //Manuals
 Route::get('/manuals', 'SectionController@manuals');

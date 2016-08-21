@@ -39,9 +39,9 @@ class AuthController extends Controller
 
 	use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
-	protected $redirectPath = '/';
-
-	protected $loginPath = '/public/auth/login';
+	protected $redirectTo = '/';
+	protected $loginPath = '/login';
+	protected $redirectAfterLogout = '/login';
 
 	/**
 	* Create a new authentication controller instance.
@@ -52,7 +52,7 @@ class AuthController extends Controller
 	{
 		$this->user = $user;
 		$this->auth = $auth;
-		$this->middleware('guest', ['except' => 'getLogout']);
+		$this->middleware($this->guestMiddleware(), ['except' => 'logout']);
 	}
 
 	/**
@@ -112,8 +112,8 @@ class AuthController extends Controller
 		return redirect('/');
 	}
 
-	return redirect('auth/login')->withErrors([
-		'username' => 'The username or the password is invalid. Please try again.',
+	return redirect('/login')->withErrors([
+			'username' => 'The username or the password is invalid. Please try again.',
 		]);
 	}
 
