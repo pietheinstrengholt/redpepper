@@ -10,6 +10,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule !^public /index.php [L,NC]
 
+<FilesMatch "^\.|server\.php|artisan|\.(md|js|json|lock|yml|xml|sh)">
     Order allow,deny
     Deny from all
 </FilesMatch>
