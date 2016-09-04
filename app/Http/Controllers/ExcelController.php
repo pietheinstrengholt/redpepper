@@ -261,7 +261,9 @@ class ExcelController extends Controller
 
 									//more than 2 rows and 3th column is where the row style is stored
 									if ($row > 2 && $column == 3) {
-										$templatestructure['rows'][$rowid]['row_style'] = $val;
+										if ($val == "bold" || $val == "tab" || $val == "doubletab") {
+											$templatestructure['rows'][$rowid]['row_property'] = $val;
+										}
 									}
 
 									//more than 2 rows and 4th column is where the row reference is stored
@@ -659,6 +661,9 @@ class ExcelController extends Controller
 					$row->row_code = $rowline['row_code'];
 					$row->row_description = $rowline['row_description'];
 					$row->row_reference = $rowline['row_reference'];
+					if (!empty($rowline['row_property'])) {
+						$row->row_property = $rowline['row_property'];
+					}
 					$row->save();
 					$i++;
 				}
