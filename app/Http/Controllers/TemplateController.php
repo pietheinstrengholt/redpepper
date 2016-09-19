@@ -556,7 +556,7 @@ class TemplateController extends Controller
 		if (in_array(strtolower($extension), $validExtensions)) {
 			$random = str_random(10);
 			$file->move(public_path() . '/img/upload/', $random . '.' . $extension);
-			$file_path = str_replace("/index.php","",url()) . '/img/upload/' . $random . '.' . $extension;
+			$file_path = str_replace("/public/index.php","",url('')) . '/public/img/upload/' . $random . '.' . $extension;
 			return view('imageupload.image-upload', compact('file_path'));
 		} else {
 			$error = "An error occurred while processing the image. Unknown extension type.";

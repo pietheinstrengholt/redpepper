@@ -10,7 +10,7 @@
 		<div id="upload_form">
 			<p>
 				<!-- Change the url here to reflect your image handling controller -->
-				{!! Form::open(array('url' => url() . '/imageupload', 'method' => 'POST', 'files' => true, 'target' => 'upload_target')) !!}
+				{!! Form::open(array('url' => Request::url(), 'method' => 'POST', 'files' => true, 'target' => 'upload_target')) !!}
 				{!! Form::file('imagefile', array('onChange' => 'this.form.submit(); ImageUpload.inProgress();')) !!}
 				{!! Form::close() !!}
 			</p>
