@@ -24,8 +24,8 @@
 
 		@foreach( $terms as $term )
 			<tr>
-			<td><a href="{!! url('terms'); !!}/{{ $term->id }}">{{ $term->term_name }}</a></td>
-			<td>{{ $term->term_definition }}</td>
+			<td>{{ $term->term_name }}</td>
+			<td>{{ $term->term_description }}</td>
 			<td>
 			@if (!Auth::guest())
 				{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('terms.destroy', $term->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this term?\')')) !!}
@@ -34,7 +34,7 @@
 				{!! Form::close() !!}
 			@endif
 			</td>
-			
+
 			</tr>
 		@endforeach
 
@@ -44,15 +44,5 @@
 	<p>
 	{!! link_to_route('terms.create', 'Create Term') !!}
 	</p>
-	
-	@if ( !empty($letters) )
-		<div class="pagination">
-		<ul class="pagination">
-		@foreach( $letters as $letter )
-			<li><a href="{!! url('terms?letter='); !!}{{ $letter }}">{{ $letter }}</a></li>
-		@endforeach
-		</ul>
-		</div>
-	@endif
 
 @endsection

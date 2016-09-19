@@ -5,12 +5,7 @@
 
 	<ul class="breadcrumb breadcrumb-section">
 		<li><a href="{!! url('/'); !!}">Home</a></li>
-		<li><a href="{!! url('/glossaries/'); !!}">Glossaries</a></li>
-		@if ($glossary)
-			<li><a href="{!! url('/glossaries/' . $glossary->id); !!}">{{ $glossary->glossary_name }}</a></li>
-		@else
-			<li><a href="{!! url('/terms'); !!}">Terms</a></li>
-		@endif
+		<li><a href="{!! url('/terms'); !!}">Terms</a></li>
 		<li class="active">Create new term</li>
 	</ul>
 
