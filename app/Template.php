@@ -39,7 +39,7 @@ class Template extends Model
 	{
 		return $this->hasMany('App\Technical', 'template_id', 'id');
 	}
-	
+
 	public function parent()
 	{
 		return $this->belongsTo('App\Template', 'parent_id');

@@ -14,7 +14,7 @@ class HistoryTechnical extends Model
 	{
 		return $this->belongsTo('App\ChangeRequest');
 	}
-	
+
 	public function type()
 	{
 		return $this->hasOne('App\TechnicalType', 'id', 'type_id');
@@ -29,7 +29,7 @@ class HistoryTechnical extends Model
 	{
 		return $this->belongsTo('App\Template');
 	}
-	
+
 }
 
 ?>

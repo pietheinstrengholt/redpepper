@@ -18,13 +18,13 @@ class Helper {
 		} else {
 			$lastDate = $object['created_at'];
 		}
-		
+
 		$user = User::find($object['created_by']);
-		
+
 		if (!empty($user)) {
 			return "Last updated at " . date('d F Y', strtotime($lastDate)) . " by " . $user->firstname . " " . $user->lastname;
 		} else {
-			return "Last updated at " . date('d F Y', strtotime($lastDate));			
+			return "Last updated at " . date('d F Y', strtotime($lastDate));
 		}
 	}
 
@@ -44,7 +44,7 @@ class Helper {
 	public static function addTermLinks($text) {
 		//retrieve words from database
 		$words = Term::all();
-		
+
 		if (!empty($words)) {
 			//build dictionary with values that needs replacement
 			$patterns = array();
@@ -59,12 +59,12 @@ class Helper {
 			}
 
 			//return text, replace words from dictionary with hyperlinks
-			return str_replace($patterns, $replacements, $text);			
+			return str_replace($patterns, $replacements, $text);
 		} else {
 			return $text;
 		}
 	}
-	
+
 	public static function contentAdjust($input) {
 		$output = self::formatUrlsInText($input);
 		$output = self::addTermLinks($output);
@@ -74,7 +74,7 @@ class Helper {
 	public static function highlightInput($input1, $input2) {
 		return str_ireplace($input1, "<strong>$input1</strong>", $input2);
 	}
-	
+
 	public static function returnSearch($query, $str, $wordcount) {
 		$explode = explode($query, $str);
 		$result = null;

@@ -18,7 +18,7 @@ class Log extends Model
 	public function user()
 	{
 		return $this->belongsTo('App\User', 'username_id', 'id');
-	}	
+	}
 
 	public function section()
 	{
