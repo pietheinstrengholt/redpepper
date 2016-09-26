@@ -32,7 +32,7 @@
 
 	<br>
 	{!! Form::file('csv') !!}
-	<p class="errors">{!!$errors->first('csv')!!}</p>
+	<p class="errors">{!! $errors->first('csv') !!}</p>
 
 	<div class="form-group">
 	<label for="caption">Section name</label>

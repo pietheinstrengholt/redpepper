@@ -37,7 +37,7 @@
 			</div>
 			<div class="col-sm-6">
 			{!! Form::file('fileupload') !!}
-			<p class="errors">{!!$errors->first('fileupload')!!}</p>
+			<p class="errors">{!! $errors->first('fileupload') !!}</p>
 			</div>
 		</div>
 

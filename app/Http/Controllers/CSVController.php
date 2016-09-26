@@ -30,6 +30,11 @@ class CSVController extends Controller
 			abort(403, 'Unauthorized action.');
         }
 
+		//show error when file is to large
+		if ( !empty($_SERVER['CONTENT_LENGTH']) && empty($_FILES) && empty($_POST) ) {
+			abort(403, 'The uploaded file was too large. You must upload a file smaller than ' . ini_get("upload_max_filesize"));
+		}
+
 		//validate input form
 		$this->validate($request, [
 			'csv' => 'required',

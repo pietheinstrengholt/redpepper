@@ -26,7 +26,7 @@
 
 	<br>
 	{!! Form::file('excel') !!}
-	<p class="errors">{!!$errors->first('excel')!!}</p>
+	<p class="errors">{!! $errors->first('excel') !!}</p>
 
 	<div class="form-group">
 	<label for="caption">Type name</label>
