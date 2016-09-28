@@ -36,10 +36,14 @@ class CSVController extends Controller
 		}
 
 		//validate input form
-		$this->validate($request, [
+		/* $this->validate($request, [
 			'csv' => 'required',
 			'formname' => 'required'
-		]);
+		]); */
+
+		if (empty($request->input('section_id')) || empty($request->input('section_id'))) {
+			abort(403, 'No section selected or file uploaded');
+		}
 
 		//validate if message type is post
 		if ($request->isMethod('post')) {
@@ -49,6 +53,7 @@ class CSVController extends Controller
 
 				//get file content
 				$file = Input::file('csv');
+
 				$content = file_get_contents($file->getPathName());
 
 				//Abort if the file extension is not CSV
