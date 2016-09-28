@@ -37,7 +37,8 @@ class CSVController extends Controller
 
 		//validate input form
 		$this->validate($request, [
-			'section_id' => 'required'
+			'section_id' => 'required',
+			'csv' => 'required'
 		]);
 
 		//validate if message type is post
