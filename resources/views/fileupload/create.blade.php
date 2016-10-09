@@ -41,6 +41,10 @@
 			</div>
 		</div>
 
+		@if (!empty($section_id))
+			<input type="hidden" name="section_id" value="{{ $section_id }}">
+		@endif
+
 		<div class="form-group">
 			<button type="submit" class="btn btn-primary">Upload</button>
 		</div>

@@ -7,11 +7,12 @@ use Gate;
 use Auth;
 use Illuminate\Http\Request;
 use Redirect;
+use App\Section;
 class FileUploadController extends Controller
 {
 	public function index()
 	{
-		$files = FileUpload::orderBy('file_name', 'asc')->get();
+		$files = FileUpload::orderBy('file_name', 'asc')->whereNull('section_id')->get();
 		return view('fileupload.index', compact('files'));
 	}
 
@@ -29,14 +30,20 @@ class FileUploadController extends Controller
 		return view('fileupload.edit', compact('fileupload'));
 	}
 
-	public function create(FileUpload $fileupload)
+	public function create(FileUpload $fileupload, Request $request)
 	{
 		//check for superadmin permissions
 		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');
 		}
 
-		return view('fileupload.create', compact('fileupload'));
+		//if section_id is provided use this in the view
+		if ($request->has('section_id')) {
+			$section_id = $request->input('section_id');
+			return view('fileupload.create', compact('fileupload','section_id'));
+		} else {
+			return view('fileupload.create', compact('fileupload'));
+		}
 	}
 
 	public function store(Request $request)
@@ -60,9 +67,16 @@ class FileUploadController extends Controller
 
 		if ($request->file('fileupload')) {
 
+			//set path based on section_id argument
+			if ($request->has('section_id')) {
+				$path = '/files/' . $request->input('section_id') . '/';
+			} else {
+				$path = '/files/';
+			}
+
 			//create files upload folder, if not exists
-			if (!file_exists(public_path() . '/files/')) {
-				mkdir(public_path() . '/files/', 0777, true);
+			if (!file_exists(public_path() . $path)) {
+				mkdir(public_path() . $path, 0777, true);
 			}
 
 			//upload image with random string
@@ -89,15 +103,23 @@ class FileUploadController extends Controller
 
 		//Save file
 		$fileupload = new FileUpload;
+		if ($request->has('section_id')) {
+			$fileupload->section_id = $request->input('section_id');
+		}
 		$fileupload->file_name = $filename;
 		$fileupload->file_description = $request->input('file_description');
 		$fileupload->created_by = Auth::user()->id;
 		$fileupload->save();
 
 		//Move file to files folder
-		$file->move(public_path() . '/files/', $filename);
+		$file->move(public_path() . $path, $filename);
 
-		return Redirect::route('fileupload.index')->with('message', 'File uploaded');
+		//redirect based whether a section_id has been provided
+		if ($request->has('section_id')) {
+			return Redirect::route('sections.show', array('section_id' => $request->input('section_id')))->with('message', 'File uploaded.');
+		} else {
+			return Redirect::route('fileupload.index')->with('message', 'File uploaded.');
+		}
 	}
 
 	public function update(FileUpload $fileupload, Request $request)
@@ -113,7 +135,13 @@ class FileUploadController extends Controller
 		]);
 
 		$fileupload->update($request->all());
-		return Redirect::route('fileupload.show', $fileupload->slug)->with('message', 'File details updated.');
+
+		//redirect based whether a section_id has been provided
+		if ($request->has('section_id')) {
+			return Redirect::route('sections.show', array('section_id' => $request->input('section_id')))->with('message', 'File details updated.');
+		} else {
+			return Redirect::route('fileupload.show', $fileupload->slug)->with('message', 'File details updated.');
+		}
 	}
 
 	public function destroy(FileUpload $fileupload)
@@ -129,7 +157,14 @@ class FileUploadController extends Controller
 			unlink('/' . base_path() . '/public/files/' . $fileupload->file_name);
 		}
 
-		$fileupload->delete();
-		return Redirect::route('fileupload.index')->with('message', 'File deleted.');
+		//redirect based whether a section_id has been provided
+		if ($fileupload->section_id) {
+			$section_id = $fileupload->section_id;
+			$fileupload->delete();
+			return Redirect::route('sections.show', array('section_id' => $section_id))->with('message', 'File deleted.');
+		} else {
+			$fileupload->delete();
+			return Redirect::route('fileupload.index')->with('message', 'File deleted.');
+		}
 	}
 }

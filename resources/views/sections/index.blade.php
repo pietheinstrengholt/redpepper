@@ -19,7 +19,7 @@
 	@else
 		<h2>Sections</h2>
 	@endif
-	<h4>Please make a selection of one of the following items</h4>
+	<h4>Please make a selection of one of the following sections</h4>
 
 	@if ( !$sections->count() )
 		No sections found in the database!<br><br>

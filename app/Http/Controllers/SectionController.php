@@ -10,6 +10,7 @@ use App\Subject;
 use App\Template;
 use App\User;
 use App\UserRights;
+use App\FileUpload;
 use Auth;
 use Event;
 use Gate;
@@ -80,6 +81,9 @@ class SectionController extends Controller
 			abort(403, 'This section no longer exists in the database.');
 		}
 
+		//also show files overview on the section index page
+		$files = FileUpload::orderBy('file_name', 'asc')->where('section_id', $section->id)->get();
+
 		//check if visible is set to false and user is a guest
 		if (Gate::denies('see-nonvisible-content') && $section->visible == "False") {
 			abort(403, 'Unauthorized action.');
@@ -99,7 +103,7 @@ class SectionController extends Controller
 		//sort templates on natural ordering
 		$templates = $templates->sortBy('template_name', SORT_NATURAL);
 
-		return view('sections.show', compact('section', 'templates'));
+		return view('sections.show', compact('section', 'templates', 'files'));
 	}
 
 	public function showmanual($id)

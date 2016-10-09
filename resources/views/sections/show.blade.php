@@ -61,6 +61,47 @@
 	@can('update-section', $section)
 		| {!! link_to_route('sections.templates.create', 'Create Template', $section->id) !!}
 	@endcan
-	</p>
+	@if ( $files->count() )
+		</p>
+	@endif
+
+	@if ( $files->count() )
+		<br>
+		<h4>The following files are relevant for this section</h4>
+		<table class="table section-table dialog table-striped" border="1">
+
+		<tr class="success">
+		<td class="header" style="width:30%;">File name</td>
+		<td class="header">Description</td>
+		<td class="header" style="width: 120px;">Options</td>
+		</tr>
+
+		@foreach( $files as $file )
+			<tr>
+			<td><a href="{{ URL::asset('/files') }}/{{ $section->id }}/{{ $file->file_name }}">{{ $file->file_name }}</a></td>
+			<td>{{ $file->file_description }}</td>
+			@can('update-section', $section)
+				{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('fileupload.destroy', $file->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this file?\')')) !!}
+				<td>
+				{!! link_to_route('fileupload.edit', 'Edit', array($file->id), array('class' => 'btn btn-info btn-xs')) !!}
+				{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
+				</td>
+				{!! Form::close() !!}
+			@else
+				<td></td>
+			@endcan
+			</tr>
+		@endforeach
+
+		</table>
+	@endif
+
+	@can('update-section', $section)
+		@if ( $files->count() )
+			<p>{!! link_to_route('fileupload.create', 'Upload new file', array('section_id' => $section->id))  !!}</p>
+		@else
+			| {!! link_to_route('fileupload.create', 'Upload new file', array('section_id' => $section->id))  !!}
+		@endif
+	@endcan
 
 @endsection

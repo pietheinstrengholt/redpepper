@@ -32,6 +32,10 @@
 			</div>
 		</div>
 
+		@if ($fileupload->section_id)
+			<input type="hidden" name="section_id" value="{{ $fileupload->section_id }}">
+		@endif
+
 		<div class="form-group">
 			<button type="submit" class="btn btn-primary">Update file description</button>
 		</div>
