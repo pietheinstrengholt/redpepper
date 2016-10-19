@@ -34,33 +34,40 @@
 	</div>
 	</div>
 
-	@if ( $sections->count() )
+	@if ( $subjects->count() )
 		<div class="form-group">
 		<table class="table table-striped table-condensed">
 		<tr class="success">
-		<th><h4>Section</h4></th>
-		<th><h4>Group</h4></th>
+		<th><h4>Section or group</h4></th>
 		<th style="text-align: center;"><h4>Selected rights</h4></th>
 		</tr>
-		<tr class="allrights notvisible">
+		<tr class="allrights danger notvisible">
 		<td><strong>All</strong></td>
-		<td></td>
 		<td style="text-align: center;"><input type="checkbox"></td>
 		</tr>
-		@foreach( $sections as $section )
-			<tr>
-			<td><strong>{{ $section->section_name }}</strong></td>
-			<td>
-			@if ($section->subject)
-				<strong>{{ $section->subject->subject_name }}</strong>
-			@endif
-			</td>
-			@if ( in_array($section->id, $sectionrights) )
-				<td class="rights" style="text-align: center;"><input name="section[{{ $section->id }}]" id="section_rights" checked type="checkbox" value="{{ $section->id }}"></td>
+		@foreach( $subjects as $subject )
+			<tr class="master warning" id="{{ $subject->id }}">
+			<td><strong>{{ $subject->subject_name }}</strong></td>
+			@if ( in_array($subject->id, $subjectrights) )
+				<td class="rights" style="text-align: center;"><input name="subject[{{ $subject->id }}]" id="subject_rights" checked type="checkbox" value="{{ $subject->id }}"></td>
 			@else
-				<td class="rights" style="text-align: center;"><input name="section[{{ $section->id }}]" id="section_rights" type="checkbox" value="{{ $section->id }}"></td>
+				<td class="rights" style="text-align: center;"><input name="subject[{{ $subject->id }}]" id="subject_rights" type="checkbox" value="{{ $subject->id }}"></td>
 			@endif
 			</tr>
+			@foreach( $subject->sections as $section )
+				<tr class="slave" id="{{ $subject->id }}">
+				<td>
+				@if ($section->subject)
+					<strong style="padding-left:20px;">{{ $section->section_name }}</strong>
+				@endif
+				</td>
+				@if ( in_array($section->id, $sectionrights) )
+					<td class="rights" style="text-align: center;"><input name="section[{{ $section->id }}]" id="subject_rights" checked type="checkbox" value="{{ $section->id }}"></td>
+				@else
+					<td class="rights" style="text-align: center;"><input name="section[{{ $section->id }}]" id="subject_rights" type="checkbox" value="{{ $section->id }}"></td>
+				@endif
+				</tr>
+			@endforeach
 		@endforeach
 		</table>
 		</div>

@@ -1,4 +1,3 @@
-
 /* Landscape phones and portrait tablets */
 @media (max-width: 767px) {
     div.intro-header-col-lg-12 {height:200px;}
@@ -412,4 +411,24 @@ span.twitter-typeahead {
 
 .empty-message {
 	padding: 10px;
+}
+
+/* blocks on subject pages */
+
+div.well {
+	line-height: 1.42857143;
+	border: 1px solid #ecf0f1;
+	border-radius: 4px;
+}
+
+div.well.sub {
+	background-color: #f5f8fa;
+}
+
+div.content-container {
+	margin-top:-20px;
+}
+
+div#footer, p.p-more-info, h3.center, p.center {
+	text-align: center;
 }

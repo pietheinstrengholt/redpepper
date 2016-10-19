@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Subject;
+use App\Section;
 use App\User;
 use App\UserRights;
 use Auth;
@@ -24,6 +25,21 @@ class SubjectController extends Controller
 		return view('subjects.index', compact('subjects'));
 	}
 
+	public function show(Subject $subject)
+	{
+		//only non guests can see all sections
+		if (Gate::allows('see-nonvisible-content')) {
+			$sections = Section::with('subject')->orderBy('section_name', 'asc')->where('subject_id', $subject->id)->get();
+		} else {
+			$sections = Section::with('subject')->orderBy('section_name', 'asc')->where('subject_id', $subject->id)->where('visible', '<>' , 'False')->get();
+		}
+
+		//sort sections on natural ordering
+		$sections = $sections->sortBy('section_name', SORT_NATURAL);
+
+		return view('subjects.show', compact('subject','sections'));
+	}
+
 	public function edit(Request $request, Subject $subject)
 	{
 		//check for superadmin permissions
@@ -36,7 +52,9 @@ class SubjectController extends Controller
 			abort(403, 'This subject no longer exists in the database.');
 		}
 
-		return view('subjects.edit', compact('subject'));
+		$subjects = Subject::orderBy('subject_name', 'asc')->where('id', '!=', $subject->id)->get();
+
+		return view('subjects.edit', compact('subject','subjects'));
 	}
 
 	public function create(Request $request, Subject $subject)
@@ -46,7 +64,9 @@ class SubjectController extends Controller
 			abort(403, 'Unauthorized action.');
 		}
 
-		return view('subjects.create', compact('subject'));
+		$subjects = Subject::orderBy('subject_name', 'asc')->get();
+
+		return view('subjects.create', compact('subject','subjects'));
 	}
 
 	public function store(Request $request)

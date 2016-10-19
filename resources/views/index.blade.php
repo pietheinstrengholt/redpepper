@@ -51,10 +51,12 @@
 						<div class="caption" style="padding:0px;">
 							<div class="clearfix"></div>
 							<div class="content-container">
-								<h3 class="center"><a href="{{ url('sections') }}?subject_id={{ $subject->id }}">{{ $subject->subject_name }}</a></h3>
+								<h3 class="center">
+									<a href="{{ route('subjects.show', $subject->id) }}">{{ $subject->subject_name }}</a>
+								</h3>
 								<p class="center">{{ $subject->subject_description }}</p>
 								<p class="p-more-info">
-									<a href="{{ url('sections') }}?subject_id={{ $subject->id }}" class="btn {{ $buttons[$buttonvalue] }}">More info</a>
+									<a href="{{ route('subjects.show', $subject->id) }}" class="btn {{ $buttons[$buttonvalue] }}">More info</a>
 								</p>
 								<div class="clearfix"></div>
 							</div>

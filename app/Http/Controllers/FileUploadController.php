@@ -32,27 +32,24 @@ class FileUploadController extends Controller
 
 	public function create(FileUpload $fileupload, Request $request)
 	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-			abort(403, 'Unauthorized action.');
-		}
-
 		//if section_id is provided use this in the view
 		if ($request->has('section_id')) {
-			$section_id = $request->input('section_id');
-			return view('fileupload.create', compact('fileupload','section_id'));
+			$section = Section::where('id', $request->input('section_id'))->first();
+			if ($request->user()->can('update-section', $section)) {
+				$section_id = $request->input('section_id');
+				return view('fileupload.create', compact('fileupload','section_id'));
+			}
 		} else {
+			//check for superadmin permissions
+			if (Gate::denies('superadmin')) {
+				abort(403, 'Unauthorized action.');
+			}
 			return view('fileupload.create', compact('fileupload'));
 		}
 	}
 
 	public function store(Request $request)
 	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-			abort(403, 'Unauthorized action.');
-		}
-
 		//validate input form
 		$this->validate($request, [
 			'fileupload' => 'required',
@@ -69,8 +66,15 @@ class FileUploadController extends Controller
 
 			//set path based on section_id argument
 			if ($request->has('section_id')) {
-				$path = '/files/' . $request->input('section_id') . '/';
+				$section = Section::where('id', $request->input('section_id'))->first();
+				if ($request->user()->can('update-section', $section)) {
+					$path = '/files/' . $request->input('section_id') . '/';
+				}
 			} else {
+				//check for superadmin permissions
+				if (Gate::denies('superadmin')) {
+					abort(403, 'Unauthorized action.');
+				}
 				$path = '/files/';
 			}
 
@@ -124,11 +128,6 @@ class FileUploadController extends Controller
 
 	public function update(FileUpload $fileupload, Request $request)
 	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-			abort(403, 'Unauthorized action.');
-		}
-
 		//validate input form
 		$this->validate($request, [
 			'file_description' => 'required'
@@ -138,19 +137,21 @@ class FileUploadController extends Controller
 
 		//redirect based whether a section_id has been provided
 		if ($request->has('section_id')) {
-			return Redirect::route('sections.show', array('section_id' => $request->input('section_id')))->with('message', 'File details updated.');
+			$section = Section::where('id', $request->input('section_id'))->first();
+			if ($request->user()->can('update-section', $section)) {
+				return Redirect::route('sections.show', array('section_id' => $request->input('section_id')))->with('message', 'File details updated.');
+			}
 		} else {
+			//check for superadmin permissions
+			if (Gate::denies('superadmin')) {
+				abort(403, 'Unauthorized action.');
+			}
 			return Redirect::route('fileupload.show', $fileupload->slug)->with('message', 'File details updated.');
 		}
 	}
 
 	public function destroy(FileUpload $fileupload)
 	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-			abort(403, 'Unauthorized action.');
-		}
-
 		//check if not exists
 		if (file_exists(public_path() . '/files/' . $fileupload->file_name)) {
 			//remove file from upload folder
@@ -159,10 +160,17 @@ class FileUploadController extends Controller
 
 		//redirect based whether a section_id has been provided
 		if ($fileupload->section_id) {
-			$section_id = $fileupload->section_id;
-			$fileupload->delete();
-			return Redirect::route('sections.show', array('section_id' => $section_id))->with('message', 'File deleted.');
+			$section = Section::where('id', $fileupload->section_id)->first();
+			if ($request->user()->can('update-section', $section)) {
+				$section_id = $fileupload->section_id;
+				$fileupload->delete();
+				return Redirect::route('sections.show', array('section_id' => $section_id))->with('message', 'File deleted.');
+			}
 		} else {
+			//check for superadmin permissions
+			if (Gate::denies('superadmin')) {
+				abort(403, 'Unauthorized action.');
+			}
 			$fileupload->delete();
 			return Redirect::route('fileupload.index')->with('message', 'File deleted.');
 		}

@@ -75,11 +75,11 @@
 					<li class="divider"></li>
 					<li><a href="{{ URL::to('/terms') }}"><span class="glyphicon glyphicon-grain" aria-hidden="true"></span> Terms</a></li>
 					<li class="divider"></li>
-					<li><a href="{{ URL::to('/subjects') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit subjects</a></li>
+					<li><a href="{{ URL::to('/subjects') }}"><span class="glyphicon glyphicon glyphicon-th-large" aria-hidden="true"></span> Edit building blocks</a></li>
 					<li><a href="{{ URL::to('/types') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit types</a></li>
 					<li><a href="{{ URL::to('/sources') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit sources</a></li>
-					<li><a href="{{ URL::to('/departments') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit departments</a></li>
-					<li><a href="{{ URL::to('/users') }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit users</a></li>
+					<li><a href="{{ URL::to('/departments') }}"><span class="glyphicon glyphicon glyphicon-user" aria-hidden="true"></span> Edit departments</a></li>
+					<li><a href="{{ URL::to('/users') }}"><span class="glyphicon glyphicon glyphicon-user" aria-hidden="true"></span> Edit users</a></li>
 					<li class="divider"></li>
 					<li><a href="{{ URL::to('/csv/import') }}"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Import technical</a></li>
 					<li class="divider"></li>
@@ -96,7 +96,7 @@
 						<li><a href="{{ URL::to('/excel/uploadreference') }}"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Upload type descriptions</a></li>
 					@endif
 					<li class="divider"></li>
-					<li><a href="{{ URL::to('/sections/0/templates/create') }}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Create new template</a></li>
+					<li><a href="{{ URL::to('/sections/0/templates/create') }}"><span class="glyphicon glyphicon glyphicon-th" aria-hidden="true"></span> Create new template</a></li>
 				  @endif
 				</ul>
 			  </li>

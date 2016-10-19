@@ -19,62 +19,7 @@ use Redirect;
 
 class SectionController extends Controller
 {
-	public function index(Request $request)
-	{
-		//set subject_id if argument is given
-		if ($request->has('subject_id')) {
-			$subject = Subject::where('id', $request->input('subject_id'))->first();
-		} else {
-			$subject = null;
-		}
-
-		//only non guests can see all sections
-		if (Gate::allows('see-nonvisible-content')) {
-			if ($request->has('subject_id')) {
-				$sections = Section::with('subject')->orderBy('section_name', 'asc')->where('subject_id', $request->input('subject_id'))->get();
-			} else {
-				$sections = Section::with('subject')->orderBy('section_name', 'asc')->get();
-			}
-		} else {
-			if ($request->has('subject_id')) {
-				$sections = Section::with('subject')->orderBy('section_name', 'asc')->where('subject_id', $request->input('subject_id'))->where('visible', '<>' , 'False')->get();
-			} else {
-				$sections = Section::with('subject')->orderBy('section_name', 'asc')->where('visible', '<>' , 'False')->get();
-			}
-		}
-
-		//sort sections on natural ordering
-		$sections = $sections->sortBy('section_name', SORT_NATURAL);
-
-		//abort if sectionRights array is empty
-		if (empty($sections)) {
-			abort(403, 'No sections have been found. Please ask your administrator to add any sections.');
-		}
-
-		return view('sections.index', compact('sections','subject'));
-	}
-
-	public function manuals()
-	{
-		//only non guests can see all sections
-		if (Gate::allows('see-nonvisible-content')) {
-			$sections = Section::orderBy('section_name', 'asc')->get();
-		} else {
-			$sections = Section::orderBy('section_name', 'asc')->where('visible', '<>' , 'False')->get();
-		}
-
-		//sort sections on natural ordering
-		$sections = $sections->sortBy('section_name', SORT_NATURAL);
-
-		//abort if sectionRights array is empty
-		if (empty($sections)) {
-			abort(403, 'No sections have been found. Please ask your administrator to add any sections.');
-		}
-
-		return view('manuals.index', compact('sections'));
-	}
-
-	public function show(Section $section)
+	public function show(Section $section, Subject $subject)
 	{
 		//check if id property exists
 		if (!$section->id) {
@@ -106,33 +51,7 @@ class SectionController extends Controller
 		return view('sections.show', compact('section', 'templates', 'files'));
 	}
 
-	public function showmanual($id)
-	{
-		$section = Section::where('id', $id)->first();
-
-		//only non guests can see all sections
-		if (Gate::allows('see-nonvisible-content')) {
-			$templates = Template::with('requirements')->where('section_id', $id)->get();
-		} else {
-			$templates = Template::with('requirements')->where('visible', '<>' , 'False')->where('section_id', $id)->get();
-		}
-
-		if (!$section) {
-			abort(403, 'This section no longer exists in the database.');
-		}
-
-		//abort if sectionRights array is empty
-		if (empty($templates)) {
-			abort(403, 'No templates have been found for this selection.');
-		}
-
-		//sort templates on natural ordering
-		$templates = $templates->sortBy('template_name', SORT_NATURAL);
-
-		return view('manuals.show', compact('section', 'templates'));
-	}
-
-	public function edit(Request $request, Section $section)
+	public function edit(Request $request, Section $section, Subject $subject)
 	{
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action.');
@@ -157,13 +76,8 @@ class SectionController extends Controller
 		}
 	}
 
-	public function create(Request $request, Section $section)
+	public function create(Request $request, Section $section, Subject $subject)
 	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-			abort(403, 'Unauthorized action.');
-		}
-
 		//retrieve subjects for dropdown
 		$subjects = Subject::orderBy('subject_name', 'asc')->get();
 
@@ -174,6 +88,11 @@ class SectionController extends Controller
 		} else {
 			$subject_id = null;
 			$subject = null;
+		}
+
+		//check if the user has the rights permissions
+		if (Auth::user()->cant('update-subject', $subject)) {
+			abort(403, 'Unauthorized action.');
 		}
 
 		return view('sections.create', compact('section','subjects','subject','subject_id'));
@@ -199,7 +118,7 @@ class SectionController extends Controller
 		return Redirect::route('sections.index', array('subject_id' => $request->input('subject_id')))->with('message', 'Section created');
 	}
 
-	public function update(Request $request, Section $section)
+	public function update(Request $request, Section $section, Subject $subject)
 	{
 		//validate if user can update section (see AuthServiceProvider)
 
@@ -220,7 +139,7 @@ class SectionController extends Controller
 		}
 	}
 
-	public function destroy(Section $section)
+	public function destroy(Section $section, Subject $subject)
 	{
 		//check for superadmin permissions
 		if (Gate::denies('superadmin')) {
@@ -237,5 +156,51 @@ class SectionController extends Controller
 
 		$section->delete();
 		return Redirect::route('sections.index')->with('message', 'Section deleted.');
+	}
+
+	public function manuals()
+	{
+		//only non guests can see all sections
+		if (Gate::allows('see-nonvisible-content')) {
+			$sections = Section::orderBy('section_name', 'asc')->get();
+		} else {
+			$sections = Section::orderBy('section_name', 'asc')->where('visible', '<>' , 'False')->get();
+		}
+
+		//sort sections on natural ordering
+		$sections = $sections->sortBy('section_name', SORT_NATURAL);
+
+		//abort if sectionRights array is empty
+		if (empty($sections)) {
+			abort(403, 'No sections have been found. Please ask your administrator to add any sections.');
+		}
+
+		return view('manuals.index', compact('sections'));
+	}
+
+	public function showmanual($id)
+	{
+		$section = Section::where('id', $id)->first();
+
+		//only non guests can see all sections
+		if (Gate::allows('see-nonvisible-content')) {
+			$templates = Template::with('requirements')->where('section_id', $id)->get();
+		} else {
+			$templates = Template::with('requirements')->where('visible', '<>' , 'False')->where('section_id', $id)->get();
+		}
+
+		if (!$section) {
+			abort(403, 'This section no longer exists in the database.');
+		}
+
+		//abort if sectionRights array is empty
+		if (empty($templates)) {
+			abort(403, 'No templates have been found for this selection.');
+		}
+
+		//sort templates on natural ordering
+		$templates = $templates->sortBy('template_name', SORT_NATURAL);
+
+		return view('manuals.show', compact('section', 'templates'));
 	}
 }

@@ -7,7 +7,7 @@
 
 	<ul class="breadcrumb breadcrumb-section">
 	  <li><a href="{!! url('/'); !!}">Home</a></li>
-	  <li><a href="{!! url('/subjects'); !!}">Subjects</a></li>
+	  <li><a href="{!! url('/subjects'); !!}">Building Blocks</a></li>
 	  <li class="active">{{ $subject->subject_name }}</li>
 	</ul>
 

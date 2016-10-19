@@ -26,7 +26,7 @@
 	<div class="form-group">
 		{!! Form::label('subject_id', 'Section group:', array('class' => 'col-sm-3 control-label')) !!}
 		<div class="col-sm-4">
-		{!! Form::select('subject_id', $subjects->lists('subject_name', 'id'), $subject_id, ['id' => 'subject_id', 'class' => 'form-control']) !!}
+		{!! Form::select('subject_id', $subjects->lists('subject_name', 'id'), $subject->id, ['id' => 'subject_id', 'class' => 'form-control']) !!}
 		</div>
 	</div>
 

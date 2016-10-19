@@ -55,13 +55,13 @@
 			<div rows="6" title="{!! App\Helper::returnHistory($interpretation_row) !!}" id="row_interpretation">{!! App\Helper::contentAdjust(nl2br(e($interpretation_row['content']))) !!}</div>
 		@else
 			<div rows="6" id="row_interpretation">No interpretation found in the database...<br><br></div>
-		@endif		
+		@endif
 	</td>
 	<td class="info-right im-content">
 		<h4><b>Name:</b></h4>
 		<div rows="1" title="{!! App\Helper::returnHistory($column) !!}" id="colname">{{ $column->column_description }}</div>
 		<h4><b>Regulation:</b></h4>
-		@if ( $regulation_column )		
+		@if ( $regulation_column )
 			<div rows="7" title="{!! App\Helper::returnHistory($regulation_column) !!}" id="column_regulation">{!! App\Helper::contentAdjust(nl2br(e($regulation_column['content']))) !!}</div>
 		@else
 			<div rows="7" id="column_regulation">No regulation found in the database...<br><br></div>
@@ -105,14 +105,14 @@
 									@if ($description->content == $row->content)
 										{{--*/ $description_type = $description->description; /*--}}
 									@endif
-								@endforeach						
+								@endforeach
 							@else
 								{{--*/ $description_type = $row->description; /*--}}
 							@endif
 
 							@if ( empty($description_type) )
 								{{--*/ $description_type = $row->description; /*--}}
-							@endif							
+							@endif
 
 							<td class="description">{{ $description_type }}</td>
 						</tr>

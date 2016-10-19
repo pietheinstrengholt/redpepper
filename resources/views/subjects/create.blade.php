@@ -7,8 +7,8 @@
 
 	<ul class="breadcrumb breadcrumb-section">
 	  <li><a href="{!! url('/'); !!}">Home</a></li>
-	  <li><a href="{!! url('/subjects'); !!}">Subjects</a></li>
-	  <li class="active">Create new subject</li>
+	  <li><a href="{!! url('/subjects'); !!}">Building Blocks</a></li>
+	  <li class="active">Create new building block</li>
 	</ul>
 
 	<h2>Create subject</h2>

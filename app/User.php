@@ -40,4 +40,14 @@ class User extends Model implements AuthenticatableContract,
 	{
 		return $this->hasMany('App\UserRights', 'id', 'username_id');
 	}
+
+	public function sections()
+    {
+        return $this->belongsToMany('App\Section', 't_usernames_rights', 'username_id', 'section_id');
+    }
+
+	public function subjects()
+    {
+        return $this->belongsToMany('App\Subject', 't_usernames_rights', 'username_id', 'subject_id');
+    }
 }

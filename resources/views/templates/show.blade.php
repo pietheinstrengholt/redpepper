@@ -5,13 +5,12 @@
 
 	<ul class="breadcrumb breadcrumb-section">
 		<li><a href="{!! url('/'); !!}">Home</a></li>
-		@if ( $template->section->subject )
-			<li><a href="{!! url('/sections?subject_id=' . $template->section->subject->id); !!}">{{ $template->section->subject->subject_name }}</a></li>
-		@else
-			<li><a href="{!! url('/sections'); !!}">Sections</a></li>
+		@if ($section->subject->parent)
+			<li><a href="{{ route('subjects.show', $template->section->subject->parent->id) }}">{{ $template->section->subject->parent->subject_name }}</a></li>
 		@endif
+		<li><a href="{{ route('subjects.show', $template->section->subject->id) }}">{{ $template->section->subject->subject_name }}</a></li>
 		<li><a href="{!! url('/sections/' . $template->section->id); !!}">{{ $template->section->section_name }}</a></li>
-		@if ( $parent )
+		@if ( $template->parent )
 			<li><a href="{!! url('/sections/' . $parent->section->id . '/templates/' . $parent->id); !!}">{{ $parent->template_name }}</a></li>
 		@endif
 		<li class="active">{{ $template->template_name }}</li>

@@ -8,6 +8,7 @@ use App\Events\UserDeleted;
 use App\Http\Controllers\Controller;
 use App\Log;
 use App\Section;
+use App\Subject;
 use App\User;
 use App\UserRights;
 use Auth;
@@ -65,15 +66,22 @@ class UserController extends Controller
 		$userrights = UserRights::where('username_id', $id)->get();
 
 		$sectionrights = array();
+		$subjectrights = array();
+
 		$userrights = $userrights->toArray();
 		if (!empty($userrights)) {
 			foreach ($userrights as $userright) {
-				array_push($sectionrights,$userright['section_id']);
+				if (isset($userright['section_id'])) {
+					array_push($sectionrights,$userright['section_id']);
+				}
+				if (isset($userright['subject_id'])) {
+					array_push($subjectrights,$userright['subject_id']);
+				}
 			}
 		}
 
-		$sections = Section::orderBy('section_name', 'asc')->get();
-		return view('users.editrights', compact('user', 'roles', 'sections', 'sectionrights'));
+		$subjects = Subject::orderBy('subject_name', 'asc')->get();
+		return view('users.editrights', compact('user', 'roles', 'subjects', 'sectionrights', 'subjectrights'));
 	}
 
 	public function password($id)
@@ -155,13 +163,22 @@ class UserController extends Controller
 			User::where('id', $request->input('username_id'))->update(['role' => $request->input('role')]);
 			UserRights::where('username_id', $request->input('username_id'))->delete();
 
+			//add rights for selected sections
 			if ($request->has('section')) {
-
 				foreach($request->input('section') as $key => $value) {
-					//create new rights
 					$UserRights = new UserRights;
 					$UserRights->username_id = $request->input('username_id');
 					$UserRights->section_id = $value;
+					$UserRights->save();
+				}
+			}
+
+			//add rights for selected subjects
+			if ($request->has('subject')) {
+				foreach($request->input('subject') as $key => $value) {
+					$UserRights = new UserRights;
+					$UserRights->username_id = $request->input('username_id');
+					$UserRights->subject_id = $value;
 					$UserRights->save();
 				}
 			}

@@ -287,3 +287,7 @@ hr#home-divider {
 span.glyphicon.home  {
 	margin-right:3px;
 }
+
+body.startpage {
+	background-color: #f5f8fa;
+}

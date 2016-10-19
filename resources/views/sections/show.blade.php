@@ -5,21 +5,19 @@
 
 	<ul class="breadcrumb breadcrumb-section">
 		<li><a href="{!! url('/'); !!}">Home</a></li>
-		@if ( $section->subject )
-			<li><a href="{!! url('/sections?subject_id=' . $section->subject->id); !!}">{{ $section->subject->subject_name }}</a></li>
-		@else
-			<li><a href="{!! url('/sections'); !!}">Sections</a></li>
+		@if ($section->subject->parent)
+			<li><a href="{{ route('subjects.show', $section->subject->parent->id) }}">{{ $section->subject->parent->subject_name }}</a></li>
 		@endif
+		<li><a href="{{ route('subjects.show', $section->subject->id) }}">{{ $section->subject->subject_name }}</a></li>
 		<li class="active">{{ $section->section_name }}</li>
 	</ul>
 
-	<h2>{{ $section->section_name }}</h2>
+	<h4 class="tinymce">{!! html_entity_decode(e($section->section_description)) !!}</h4>
+	<h4 class="tinymce">{!! html_entity_decode(e($section->section_longdesc)) !!}</h4>
 
 	@if ( !$section->templates->count() )
 		<p>This section has no items.</p><br>
 	@else
-		<h4 class="tinymce">{!! html_entity_decode(e($section->section_description)) !!}</h4>
-		<h4 class="tinymce">{!! html_entity_decode(e($section->section_longdesc)) !!}</h4>
 		<h5>Total overview of all items</h5>
 
 		<table class="table section-table dialog table-striped" border="1">

@@ -5,6 +5,10 @@
 
 	<ul class="breadcrumb breadcrumb-section">
 	  <li><a href="{!! url('/'); !!}">Home</a></li>
+	  @if ($section->subject->parent)
+		  <li><a href="{{ route('subjects.show', $template->section->subject->parent->id) }}">{{ $template->section->subject->parent->subject_name }}</a></li>
+	  @endif
+	  <li><a href="{{ route('subjects.show', $template->section->subject->id) }}">{{ $template->section->subject->subject_name }}</a></li>
 	  <li><a href="{!! url('/sections/' . $template->section_id . '/templates/' . $template->id); !!}">{{ $template->template_name }}</a></li>
 	  <li class="active">Manual</li>
 	</ul>
@@ -15,9 +19,9 @@
 	<h5>{!! html_entity_decode(e($template->template_longdesc)) !!}</h5>
 
 	@if ( $template->requirements->count() )
-	
+
 		<h5><strong>Template content</strong></h5>
-	
+
 		<table class="table table-bordered book" border="0">
 		<tr class="success">
 		<td>Row code</td>
@@ -37,10 +41,10 @@
 		@endforeach
 		</table>
 	@endif
-	
+
 	<!-- technical content -->
 	@if ( $technical->count() )
-		
+
 		<h5><strong>Technical template content</strong></h5>
 
 		<!-- technical content -->
@@ -68,14 +72,14 @@
 								@if ($description->content == $row->content)
 									{{--*/ $description_type = $description->description; /*--}}
 								@endif
-							@endforeach						
+							@endforeach
 						@else
 							{{--*/ $description_type = $row->description; /*--}}
 						@endif
 
 						@if ( empty($description_type) )
 							{{--*/ $description_type = $row->description; /*--}}
-						@endif							
+						@endif
 
 						<td class="description">{{ $description_type }}</td>
 					</tr>

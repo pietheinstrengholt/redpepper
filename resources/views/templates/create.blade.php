@@ -18,7 +18,7 @@
 				//empty input fields when hiding
 				$("input#inputrows").val("");
 				$("input#inputcolumns").val("");
-				
+
 			}
 
 			if (strSelect == "template") {
@@ -27,7 +27,7 @@
 		});
 	});
 	</script>
-	
+
 	<ul class="breadcrumb breadcrumb-section">
 	<li><a href="{!! url('/'); !!}">Home</a></li>
 	@if (!empty($section) && $section->id != 0)
@@ -74,7 +74,7 @@
 			{!! Form::textarea('template_longdesc', null, ['class' => 'form-control', 'rows' => '7']) !!}
 			</div>
 		</div>
-		
+
 		@if (!empty($section) && $section->id != 0)
 			<input type="hidden" name="section_id" value="{{ $section->id }}">
 			<div class="form-group">
@@ -102,7 +102,7 @@
 		@else
 			{!! Form::hidden('visible','False') !!}
 		@endif
-		
+
 		<div class="form-group">
 			{!! Form::label('visible', 'Template or document:', array('class' => 'col-sm-3 control-label')) !!}
 			<div class="col-sm-5">
@@ -112,7 +112,7 @@
 			</select>
 			</div>
 		</div>
-		
+
 		<div id="template">
 			<div class="form-group">
 				<label for="inputcolumns" class="col-sm-3 control-label">Number of Columns</label>

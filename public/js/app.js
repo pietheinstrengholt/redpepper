@@ -177,5 +177,18 @@ jQuery(document).ready(function () {
 		$( 'tr#' + cloneCount + ' td.action input').attr('name', 'technical[' + cloneCount + '][action]');
 
 	});
+	
+	//functionality to automatically check other checkboxes
+	$( "tr.master input" ).click(function() {
+		//capture id of the section and the checkbox type
+		var id = $(this).closest("tr").attr("id");
+		if (this.checked) {
+			//check all checkboxes with same right type and same section id
+			$('tr.slave#' + id + ' input').prop('checked', true);
+		} else {
+			//uncheck all checkboxes with same right type and same section id
+			$('tr.slave#' + id + ' input').prop('checked', false);
+		}
+	});
 
 });

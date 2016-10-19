@@ -7,11 +7,10 @@
 
 	<ul class="breadcrumb breadcrumb-section">
 		<li><a href="{!! url('/'); !!}">Home</a></li>
-		@if ( $section->subject )
-			<li><a href="{!! url('/sections?subject_id=' . $section->subject_id); !!}">{{ $section->subject->subject_name }}</a></li>
-		@else
-			<li><a href="{!! url('/sections/'); !!}">Sections</a></li>
+		@if ($section->subject->parent)
+			<li><a href="{{ route('subjects.show', $section->subject->parent->id) }}">{{ $section->subject->parent->subject_name }}</a></li>
 		@endif
+		<li><a href="{{ route('subjects.show', $section->subject->id) }}">{{ $section->subject->subject_name }}</a></li>
 		<li class="active">{{ $section->section_name }}</li>
 	</ul>
 

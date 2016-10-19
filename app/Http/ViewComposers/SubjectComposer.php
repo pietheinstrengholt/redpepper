@@ -12,9 +12,9 @@ class SubjectComposer {
 	public function compose(View $view) {
 		//only non guests will see the hidden templates
 		if (Auth::guest()) {
-			$view->with('subjects', Subject::orderBy('subject_name', 'asc')->where('visible', '<>' , 'False')->get());
+			$view->with('subjects', Subject::orderBy('subject_name', 'asc')->where('visible', '<>' , 'False')->where('parent_id', null)->get());
 		} else {
-			$view->with('subjects', Subject::orderBy('subject_name', 'asc')->get());
+			$view->with('subjects', Subject::orderBy('subject_name', 'asc')->where('parent_id', null)->get());
 		}
 	}
 }
