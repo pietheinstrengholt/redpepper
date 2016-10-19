@@ -88,6 +88,6 @@ class TermController extends Controller
 		}
 
 		$term->delete();
-		return Redirect::to('/terms')->with('message', 'Term and related ontology deleted.');
+		return Redirect::to('/terms')->with('message', 'Term deleted.');
 	}
 }
