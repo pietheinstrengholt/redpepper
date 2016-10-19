@@ -19,6 +19,7 @@ use App\Template;
 use App\TemplateColumn;
 use App\TemplateRow;
 use App\User;
+use App\Term;
 use App\UserRights;
 use Auth;
 use Event;
@@ -28,7 +29,6 @@ use Maatwebsite\Excel\Facades\Excel;
 use Redirect;
 use Session;
 use Validator;
-
 
 class ExcelController extends Controller
 {
@@ -45,6 +45,117 @@ class ExcelController extends Controller
 			}
 		}
 		return $sectionRights;
+	}
+
+	public function uploadterms()
+	{
+		//only a superadmin has permissions to create new sections
+        if (Gate::denies('superadmin')) {
+            abort(403, 'Unauthorized action.');
+        }
+		return view('excel.terms');
+	}
+
+	//function to export Excel template
+	public function downloadtemplate()
+	{
+		Excel::create('import_template', function($excel) {
+			// Our first sheet
+			$excel->sheet('terms', function($sheet) {
+				$sheet->SetCellValue('A1', 'id');
+				$sheet->getStyle('A1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('A')->setWidth(6);
+				$sheet->getStyle('A1')->getFill()->getStartColor()->setARGB('dff0d8');
+				$sheet->SetCellValue('B1', 'term_name');
+				$sheet->getStyle('B1')->getFont()->setBold(true);
+				$sheet->getStyle('B1')->getFill()->getStartColor()->setARGB('dff0d8');
+				$sheet->getColumnDimension('B')->setWidth(30);
+				$sheet->SetCellValue('C1', 'term_definition');
+				$sheet->getStyle('C1')->getFont()->setBold(true);
+				$sheet->getColumnDimension('C')->setWidth(150);
+				$sheet->getStyle('C1')->getFill()->getStartColor()->setARGB('dff0d8');
+				$sheet->cells('A1:C1', function($cells) {
+					$cells->setBackground('#18bc9c');
+				});
+			});
+		})->download('xlsx');
+	}
+
+
+	public function postterms(Request $request)
+	{
+		//validate input form
+		$this->validate($request, [
+			'excel' => 'required|mimes:xls,xlsx'
+		]);
+
+		//create empty arrays for build structure and for validation
+		$results = array();
+
+		if ($request->file('excel')->isValid()) {
+			$validation = Excel::load($request->file('excel'), function ($reader) use ($request, &$errors, &$results) {
+
+				// Getting all sheets
+				$reader->setReadDataOnly(true);
+				$reader->ignoreEmpty();
+				$sheets = $reader->get();
+
+				//empty array for unique term names validation
+				$term_names = array();
+
+				$arraySheet = $sheets->toArray();
+
+				//get column and row count from imported excel
+				$highestRow = count($arraySheet) + 1;
+				if (array_key_exists(0,$arraySheet)) {
+					$highestColumn = $this->getExcelColumnNumber(count($arraySheet[0]));
+					$highestColumnIndex = count($arraySheet[0]) + 1;
+				} else {
+					$highestColumn = 0;
+					$highestColumnIndex = 1;
+				}
+
+				$i = 0;
+
+				foreach ($arraySheet as $key => $content) {
+					$i++;
+
+					if (isset($content['id'])) {
+						$results['terms'][$i]['id'] = $content['id'];
+						if ($content['id'] != $i) {
+							abort(403, 'Sequence is incorrect for line ' + $i);
+						}
+					}
+					if (isset($content['term_name'])) {
+						$results['terms'][$i]['term_name'] = $content['term_name'];
+						if (in_array($content['term_name'], $term_names)) {
+							abort(403, 'Existin term name found on line ' + $i);
+						}
+						array_push($term_names, $content['term_name']);
+					}
+
+					if (isset($content['term_definition'])) {
+						$results['terms'][$i]['term_definition'] = $content['term_definition'];
+						if (empty($content['term_definition'])) {
+							abort(403, 'Empty definition found on line ' + $i);
+						}
+					}
+				}
+			});
+
+			if (empty($results['terms'])) {
+				abort(403, 'Incorrect Excel file. The terms sheet is empty.');
+			}
+			foreach ($results['terms'] as $key => $term) {
+				//create new term
+				$new_term = new Term;
+				$new_term->term_name = $term['term_name'];
+				$new_term->term_description = $term['term_definition'];
+				$new_term->created_by = Auth::user()->id;
+				$new_term->save();
+			}
+		}
+		return Redirect::to('/excel/terms/')->with('message', 'New content successfully added to the database.');
 	}
 
 	public function uploadtemplateform()
