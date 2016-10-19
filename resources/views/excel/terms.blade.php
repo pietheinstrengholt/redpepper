@@ -1,3 +1,4 @@
+<!-- /resources/views/excel/terms.blade.php -->
 @extends('layouts.master')
 
 @section('content')
