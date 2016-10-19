@@ -26,7 +26,7 @@
 		</div>
 	@endif
 
-	{!! Form::model($section, ['method' => 'PATCH', 'route' => ['sections.update', $section->id]]) !!}
+	{!! Form::model($section, ['method' => 'PATCH', 'route' => ['subjects.sections.update', $subject->id, $section->id]]) !!}
 	@include('sections/partials/_form', ['submit_text' => 'Edit Section'])
 	{!! Form::close() !!}
 @endsection

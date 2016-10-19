@@ -20,6 +20,7 @@ Route::get('/home', function () {
 });
 
 // Provide controller methods with object instead of ID
+Route::model('subjects', 'Subject');
 Route::model('sections', 'Section');
 Route::model('templates', 'Template');
 Route::model('sources', 'TechnicalSource');
@@ -29,10 +30,14 @@ Route::model('users', 'User');
 Route::model('changerequests', 'ChangeRequest');
 Route::model('logs', 'Log');
 Route::model('terms', 'Term');
-Route::model('subjects', 'Subject');
 Route::model('fileupload', 'FileUpload');
 
 // Use IDs in URLs
+
+Route::bind('subjects', function($value, $route) {
+	return App\Subject::whereId($value)->first();
+});
+
 Route::bind('sections', function($value, $route) {
 	return App\Section::whereId($value)->first();
 });
@@ -69,10 +74,6 @@ Route::bind('terms', function($value, $route) {
 	return App\Term::whereId($value)->first();
 });
 
-Route::bind('subjects', function($value, $route) {
-	return App\Subject::whereId($value)->first();
-});
-
 Route::bind('fileupload', function($value, $route) {
 	return App\FileUpload::whereId($value)->first();
 });
@@ -92,14 +93,16 @@ Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
 Route::post('password/reset', 'Auth\PasswordController@postReset');
 
 // Template routes...
+Route::get('templates/create', 'TemplateController@create');
 Route::get('templatemanual/{id}', 'TemplateController@manual');
 Route::get('templatestructure/{id}', ['middleware' => 'auth', 'uses' => 'TemplateController@structure']);
 Route::post('changestructure', ['middleware' => 'auth', 'uses' => 'TemplateController@changestructure']);
 Route::post('newtemplate', ['middleware' => 'auth', 'uses' => 'TemplateController@newtemplate']);
 
 // Model routes...
-Route::resource('sections', 'SectionController');
-Route::resource('sections.templates', 'TemplateController');
+Route::resource('subjects', 'SubjectController');
+Route::resource('subjects.sections', 'SectionController');
+Route::resource('subjects.sections.templates', 'TemplateController');
 Route::resource('sources', 'TechnicalSourceController');
 Route::resource('types', 'TechnicalTypeController');
 Route::resource('departments', 'DepartmentController');
@@ -107,7 +110,6 @@ Route::resource('users', 'UserController');
 Route::resource('changerequests', 'ChangeRequestController');
 Route::resource('logs', 'LogController');
 Route::resource('terms', 'TermController');
-Route::resource('subjects', 'SubjectController');
 Route::resource('fileupload', 'FileUploadController');
 
 // Settings

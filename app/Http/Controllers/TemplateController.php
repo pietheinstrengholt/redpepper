@@ -11,6 +11,7 @@ use App\Events\TemplateDeleted;
 use App\Http\Controllers\Controller;
 use App\Requirement;
 use App\Section;
+use App\Subject;
 use App\Technical;
 use App\TechnicalSource;
 use App\TechnicalType;
@@ -54,7 +55,7 @@ class TemplateController extends Controller
 	}
 
 	//function to show template
-	public function show(Request $request, Section $section, Template $template)
+	public function show(Subject $subject, Section $section, Template $template, Request $request)
 	{
 		//check if visible is set to false and user is a guest
 		if (Gate::denies('see-nonvisible-content') && $template->visible == "False") {
@@ -103,7 +104,7 @@ class TemplateController extends Controller
 			$query->where('template_id', $template->id)->where('row_reference', '=', '');
 		})->get();
 
-		return view('templates.show', compact('section', 'template', 'disabledFields', 'propertyFields', 'searchvalue', 'technicaltype', 'descriptions','parent','children','emptyReferences'));
+		return view('templates.show', compact('subject','section', 'template', 'disabledFields', 'propertyFields', 'searchvalue', 'technicaltype', 'descriptions','parent','children','emptyReferences'));
 	}
 
 	//function to disabled fields
@@ -157,7 +158,7 @@ class TemplateController extends Controller
 	}
 
 	//function to edit template
-	public function edit(Request $request, Section $section, Template $template)
+	public function edit(Subject $subject, Section $section, Template $template, Request $request)
 	{
 		//guests are not allowed to change templates
 		if (Auth::guest()) {
@@ -182,13 +183,13 @@ class TemplateController extends Controller
 
 		//validate if user can update section (see AuthServiceProvider)
 		if ($request->user()->can('update-section', $section)) {
-			return view('templates.edit', compact('sections', 'section', 'template','templates','types'));
+			return view('templates.edit', compact('subject','sections', 'section', 'template','templates','types'));
 		} else {
 			abort(403, 'Unauthorized action.');
 		}
 	}
 
-	public function create(Request $request, Section $section)
+	public function create(Request $request)
 	{
 		//retrieve list with sections based on user id and user role
 		$sectionlist = $this->sectionList($request);
@@ -206,7 +207,7 @@ class TemplateController extends Controller
 			$section = null;
 		}
 
-		return view('templates.create', compact('sections','section','templates'));
+		return view('templates.create', compact('subject','sections','section','templates'));
 	}
 
 	//function to structure template
@@ -254,8 +255,10 @@ class TemplateController extends Controller
 
 		if ($request->isMethod('post')) {
 
+			$section = Section::findOrFail($request->input('section_id'));
+
 			$template = new Template;
-			$template->section_id = $request->input('section_id');
+			$template->section_id = $section->id;
 			$template->parent_id = $request->input('parent_id');
 			$template->template_name = $request->input('template_name');
 			$template->template_shortdesc = $request->input('template_shortdesc');
@@ -314,7 +317,7 @@ class TemplateController extends Controller
 			Event::fire(new TemplateCreated($template));
 
 		}
-		return Redirect::to('/sections/' . $request->input('section_id') . '/templates/' . $template->id);
+		return Redirect::to('/subjects/' . $section->subject_id . '/sections/' . $section->id . '/templates/' . $template->id);
 	}
 
 	//function to structure template
@@ -418,11 +421,11 @@ class TemplateController extends Controller
 
 			}
 		}
-		return Redirect::route('sections.show', $request->input('section_id'))->with('message', 'Template structure updated.');
+		return Redirect::route('subjects.sections.show', array($template->section->subject, $template->section))->with('message', 'Template structure updated.');
 	}
 
 	//function to add new template
-	public function store(Section $section)
+	public function store(Subject $subject, Section $section)
 	{
 		//exit when user is a guest
 		if (Auth::guest()) {
@@ -446,7 +449,7 @@ class TemplateController extends Controller
 	}
 
 	//function to update template
-	public function update(Section $section, Template $template, Request $request)
+	public function update(Subject $subject, Section $section, Template $template, Request $request)
 	{
 		//exit when user is a guest
 		if (Auth::guest()) {
@@ -464,11 +467,11 @@ class TemplateController extends Controller
 
 		$input = array_except($request->all(), '_method');
 		$template->update($input);
-		return Redirect::route('sections.templates.show', [$section->id, $template->id])->with('message', 'Template updated.');
+		return Redirect::route('subjects.sections.templates.show', [$subject->id, $section->id, $template->id])->with('message', 'Template updated.');
 	}
 
 	//function to delete template
-	public function destroy(Section $section, Template $template, Request $request)
+	public function destroy(Subject $subject, Section $section, Template $template, Request $request)
 	{
 		if ($request->user()->can('update-section', $section)) {
 
@@ -490,7 +493,7 @@ class TemplateController extends Controller
 
 			//delete template
 			$template->delete();
-			return Redirect::route('sections.show', $section->id)->with('message', 'Template deleted.');
+			return Redirect::route('subjects.sections.show', [$subject->id, $section->id])->with('message', 'Template deleted.');
 		} else {
 			abort(403, 'Unauthorized action. You don\'t have rights to this template or section');
 		}

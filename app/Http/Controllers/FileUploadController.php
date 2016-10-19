@@ -18,10 +18,19 @@ class FileUploadController extends Controller
 
 	public function edit(FileUpload $fileupload)
 	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
-			abort(403, 'Unauthorized action.');
+		//if section_id is set, check if user has correct rights
+		if ($fileupload->section_id) {
+			$section = Section::where('id', $fileupload->section_id)->first();
+			if (Auth::user()->cant('update-section', $section)) {
+				abort(403, 'Unauthorized action.');
+			}
+		} else {
+			//check for superadmin permissions
+			if (Gate::denies('superadmin')) {
+				abort(403, 'Unauthorized action.');
+			}
 		}
+
 		//check if id property exists
 		if (!$fileupload->id) {
 			abort(403, 'This file no longer exists in the database.');
@@ -61,12 +70,11 @@ class FileUploadController extends Controller
 			abort(403, 'The uploaded file was too large. You must upload a file smaller than ' . ini_get("upload_max_filesize"));
 		}
 
-
 		if ($request->file('fileupload')) {
 
 			//set path based on section_id argument
 			if ($request->has('section_id')) {
-				$section = Section::where('id', $request->input('section_id'))->first();
+				$section = Section::findOrFail($request->input('section_id'));
 				if ($request->user()->can('update-section', $section)) {
 					$path = '/files/' . $request->input('section_id') . '/';
 				}
@@ -120,7 +128,7 @@ class FileUploadController extends Controller
 
 		//redirect based whether a section_id has been provided
 		if ($request->has('section_id')) {
-			return Redirect::route('sections.show', array('section_id' => $request->input('section_id')))->with('message', 'File uploaded.');
+			return Redirect::route('subjects.sections.show', array($section->subject, $section))->with('message', 'File uploaded.');
 		} else {
 			return Redirect::route('fileupload.index')->with('message', 'File uploaded.');
 		}
@@ -139,7 +147,7 @@ class FileUploadController extends Controller
 		if ($request->has('section_id')) {
 			$section = Section::where('id', $request->input('section_id'))->first();
 			if ($request->user()->can('update-section', $section)) {
-				return Redirect::route('sections.show', array('section_id' => $request->input('section_id')))->with('message', 'File details updated.');
+				return Redirect::route('subjects.sections.show', array($section->subject, $section))->with('message', 'File details updated.');
 			}
 		} else {
 			//check for superadmin permissions
@@ -161,13 +169,14 @@ class FileUploadController extends Controller
 		//redirect based whether a section_id has been provided
 		if ($fileupload->section_id) {
 			$section = Section::where('id', $fileupload->section_id)->first();
-			if ($request->user()->can('update-section', $section)) {
-				$section_id = $fileupload->section_id;
-				$fileupload->delete();
-				return Redirect::route('sections.show', array('section_id' => $section_id))->with('message', 'File deleted.');
+			//check if user has rights to delete file
+			if (Auth::user()->cant('update-section', $section)) {
+				abort(403, 'Unauthorized action.');
 			}
+			$fileupload->delete();
+			return Redirect::route('subjects.sections.show', array($section->subject, $section))->with('message', 'File deleted.');
 		} else {
-			//check for superadmin permissions
+			//check if user has rights to delete file
 			if (Gate::denies('superadmin')) {
 				abort(403, 'Unauthorized action.');
 			}

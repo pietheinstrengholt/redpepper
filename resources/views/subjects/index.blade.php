@@ -25,7 +25,7 @@
 
 		@foreach( $subjects as $subject )
 			<tr>
-			<td>{{ $subject->subject_name }}</td>
+			<td>{!! link_to_route('subjects.show', $subject->subject_name, $subject) !!}</td>
 			<td>{{ $subject->subject_description }}</td>
 			<td>
 			@if ($subject->parent)
@@ -44,8 +44,10 @@
 		</table>
 	@endif
 
-	<p>
-	{!! link_to_route('subjects.create', 'Create Building block') !!}
-	</p>
+	@if (Auth::check())
+		<p>
+		{!! link_to_route('subjects.create', 'Create Building block') !!}
+		</p>
+	@endif
 
 @endsection

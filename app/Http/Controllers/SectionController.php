@@ -19,7 +19,7 @@ use Redirect;
 
 class SectionController extends Controller
 {
-	public function show(Section $section, Subject $subject)
+	public function show(Subject $subject, Section $section)
 	{
 		//check if id property exists
 		if (!$section->id) {
@@ -48,10 +48,10 @@ class SectionController extends Controller
 		//sort templates on natural ordering
 		$templates = $templates->sortBy('template_name', SORT_NATURAL);
 
-		return view('sections.show', compact('section', 'templates', 'files'));
+		return view('sections.show', compact('subject', 'section', 'templates', 'files'));
 	}
 
-	public function edit(Request $request, Section $section, Subject $subject)
+	public function edit(Subject $subject, Section $section, Request $request)
 	{
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action.');
@@ -70,25 +70,16 @@ class SectionController extends Controller
 
 		//validate if user can update section (see AuthServiceProvider)
 		if ($request->user()->can('update-section', $section)) {
-			return view('sections.edit', compact('section','subjects','subject_id'));
+			return view('sections.edit', compact('subject','section','subjects','subject_id'));
 		} else {
 			abort(403, 'Unauthorized action.');
 		}
 	}
 
-	public function create(Request $request, Section $section, Subject $subject)
+	public function create(Subject $subject, Section $section, Request $request)
 	{
 		//retrieve subjects for dropdown
 		$subjects = Subject::orderBy('subject_name', 'asc')->get();
-
-		//set subject_id if argument is given
-		if ($request->has('subject_id')) {
-			$subject_id = $request->input('subject_id');
-			$subject = Subject::where('id', $request->input('subject_id'))->first();
-		} else {
-			$subject_id = null;
-			$subject = null;
-		}
 
 		//check if the user has the rights permissions
 		if (Auth::user()->cant('update-subject', $subject)) {
@@ -98,10 +89,10 @@ class SectionController extends Controller
 		return view('sections.create', compact('section','subjects','subject','subject_id'));
 	}
 
-	public function store(Request $request)
+	public function store(Subject $subject, Section $section, Request $request)
 	{
-		//only a superadmin has permissions to create new sections
-		if (Gate::denies('superadmin')) {
+		//check if the user has the rights permissions
+		if (Auth::user()->cant('update-subject', $subject)) {
 			abort(403, 'Unauthorized action.');
 		}
 
@@ -115,10 +106,10 @@ class SectionController extends Controller
 		$section = Section::create($request->all());
 
 		Event::fire(new SectionCreated($section));
-		return Redirect::route('sections.index', array('subject_id' => $request->input('subject_id')))->with('message', 'Section created');
+		return Redirect::route('subjects.show', array($subject))->with('message', 'Section created');
 	}
 
-	public function update(Request $request, Section $section, Subject $subject)
+	public function update(Subject $subject, Section $section, Request $request)
 	{
 		//validate if user can update section (see AuthServiceProvider)
 
@@ -133,16 +124,16 @@ class SectionController extends Controller
 			$section->update($request->all());
 
 			Event::fire(new SectionUpdated($section));
-			return Redirect::route('sections.show', $section->id)->with('message', 'Section updated.');
+			return Redirect::route('subjects.show', array($subject))->with('message', 'Section updated.');
 		} else {
 			abort(403, 'Unauthorized action.');
 		}
 	}
 
-	public function destroy(Section $section, Subject $subject)
+	public function destroy(Subject $subject, Section $section, Request $request)
 	{
-		//check for superadmin permissions
-		if (Gate::denies('superadmin')) {
+		//check if the user has the rights permissions
+		if (Auth::user()->cant('update-subject', $subject)) {
 			abort(403, 'Unauthorized action.');
 		}
 
@@ -155,7 +146,7 @@ class SectionController extends Controller
 		Event::fire(new SectionDeleted($section));
 
 		$section->delete();
-		return Redirect::route('sections.index')->with('message', 'Section deleted.');
+		return Redirect::route('subjects.show', array($subject))->with('message', 'Section deleted.');
 	}
 
 	public function manuals()

@@ -23,7 +23,7 @@
 		</div>
 	@endif
 
-	{!! Form::model(new App\Section, ['route' => ['sections.store']]) !!}
+	{!! Form::model(new App\Section, array('route' => array('subjects.sections.store', $subject))) !!}
 	@include('sections/partials/_form', ['submit_text' => 'Create Section'])
 	<input type="hidden" name="created_by" value="{!! Auth::user()->id !!}">
 	{!! Form::close() !!}

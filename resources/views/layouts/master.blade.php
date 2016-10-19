@@ -52,7 +52,7 @@
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Subjects <span class="caret"></span></a>
 					<ul class="dropdown-menu" role="menu">
 						@foreach( $subjects as $subject )
-							<li><a href="{{ route('sections.index', array('subject_id' => $subject->id)) }}">{{ $subject->subject_name }}</a></li>
+							<li><a href="{{ route('subjects.show', $subject) }}">{{ $subject->subject_name }}</a></li>
 						@endforeach
 					</ul>
 				  </li>
@@ -96,7 +96,7 @@
 						<li><a href="{{ URL::to('/excel/uploadreference') }}"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Upload type descriptions</a></li>
 					@endif
 					<li class="divider"></li>
-					<li><a href="{{ URL::to('/sections/0/templates/create') }}"><span class="glyphicon glyphicon glyphicon-th" aria-hidden="true"></span> Create new template</a></li>
+					<li><a href="{{ URL::to('/templates/create') }}"><span class="glyphicon glyphicon glyphicon-th" aria-hidden="true"></span> Create new template</a></li>
 				  @endif
 				</ul>
 			  </li>

@@ -76,7 +76,7 @@
 			@else
 				<tr>
 			@endif
-			<td><a href="{{ route('sections.show', $section->id) }}">{{ $section->section_name }}</a></td>
+			<td>{!! link_to_route('subjects.sections.show', $section->section_name, array($subject, $section)) !!}</a></td>
 			@if ( !$subject )
 				<td>
 				@if (!empty($section->subject))
@@ -86,12 +86,12 @@
 			@endif
 			<td>{!! html_entity_decode(e($section->section_description)) !!}</td>
 			<td>
-			@can('superadmin', $section)
-				{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('sections.destroy', $section->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this section?\')')) !!}
+			@can('update-section', $section)
+				{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('subjects.sections.destroy', $subject, $section), 'onsubmit' => 'return confirm(\'Are you sure to delete this section?\')')) !!}
 				{!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs', 'style' => 'margin-left:3px;')) !!}
 			@endcan
 			@can('update-section', $section)
-				{!! link_to_route('sections.edit', 'Edit', array($section->id), array('class' => 'btn btn-info btn-xs')) !!}
+				{!! link_to_route('subjects.sections.edit', 'Edit', array($subject, $section), array('class' => 'btn btn-info btn-xs')) !!}
 			@endcan
 			{!! Form::close() !!}
 			</td>
@@ -103,7 +103,7 @@
 
 	@if (Auth::user()->can('update-subject', $subject))
 		<p>
-		{!! link_to_route('sections.create', 'Create Section', array('subject_id' => $subject->id))  !!}
+		{!! link_to_route('subjects.sections.create', 'Create Section', array($subject, $section))  !!}
 		</p>
 	@endif
 
