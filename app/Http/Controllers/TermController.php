@@ -13,7 +13,49 @@ class TermController extends Controller
 	{
 		$terms = Term::orderBy('term_name', 'asc')->get();
 
-		return view('terms.index', compact('terms'));
+		//create an array with all first letters from all terms in the database, used for pagination
+		$letters = array();
+		if (!empty($terms)) {
+			foreach ($terms as $term) {
+				$letter = substr(strtoupper($term->term_name), 0, 1);
+				if (!ctype_alpha($letter)) {
+					$letter = "[0-9]";
+				}
+				array_push($letters,$letter);
+			}
+			$letters = array_unique($letters);
+		}
+
+		//if letters are not empty check if letter is set with argument, else take first letter from array
+		if (!empty($letters)) {
+			//check if letter argument is set
+			if ($request->has('letter')) {
+				//check if the array with letters contains the letter from argument, else use the first one
+				if (in_array($request->input('letter'), $letters)) {
+					$letter = $request->input('letter');
+				} else {
+					$letter = $letters[0];
+				}
+			//no argument is set, use the first letter
+			} else {
+				$letter = $letters[0];
+			}
+			if ($letter == "[0-9]") {
+				$values = array('1','2','3','4','5','6','7','8','9','0');
+				$terms = Term::where(function($q) use ($values) {
+						  for ($i = 0; $i < count($values); $i++){
+			                  $q->orwhere('term_name', 'LIKE',  $values[$i] .'%');
+			               }
+				      })->orderBy('term_name', 'asc')->get();
+			} else {
+				//get results
+				$terms = Term::where('term_name', 'LIKE', $letter.'%')->orderBy('term_name', 'asc')->get();
+			}
+		} else {
+			$terms = collect();
+		}
+
+		return view('terms.index', compact('terms', 'letters', 'letter'));
 	}
 
 	public function edit(Term $term)

@@ -41,8 +41,24 @@
 		</table>
 	@endif
 
-	<p>
-	{!! link_to_route('terms.create', 'Create Term') !!}
-	</p>
+	@if (Auth::check())
+		<p>
+		{!! link_to_route('terms.create', 'Create Term') !!}
+		</p>
+	@endif
+
+	@if ( !empty($letters) )
+		<div class="text-center">
+		<ul class="pagination">
+		@foreach( $letters as $page )
+			@if ($page == $letter)
+				<li class="active"><a href="{{ url()->current() }}?letter={{ $page }}">{{ $page }}</a></li>
+			@else
+				<li><a href="{{ url()->current() }}?letter={{ $page }}">{{ $page }}</a></li>
+			@endif
+		@endforeach
+		</ul>
+		</div>
+	@endif
 
 @endsection
