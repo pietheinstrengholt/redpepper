@@ -146,6 +146,10 @@ class ExcelController extends Controller
 			if (empty($results['terms'])) {
 				abort(403, 'Incorrect Excel file. The terms sheet is empty.');
 			}
+
+			//truncate table
+			Term::truncate();
+
 			foreach ($results['terms'] as $key => $term) {
 				//create new term
 				$new_term = new Term;
