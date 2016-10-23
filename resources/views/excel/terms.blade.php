@@ -8,7 +8,7 @@
 	<li class="active">Import terms</li>
 	</ul>
 
-	<h2>Import terms and relations into a Glossary</h2>
+	<h2>Import terms</h2>
 	<h4>Please make use of the upload form below</h4>
 
 	<p>This page can be used to import terms into the application. The Excel file to be used contains a single sheet. The terms sheet is used for the terms and definitions. Be sure that every term uses its own unique id and the sequence is correct.</p>
