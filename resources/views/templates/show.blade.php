@@ -5,18 +5,18 @@
 
 	<ul class="breadcrumb breadcrumb-section">
 		<li><a href="{!! url('/'); !!}">Home</a></li>
-		@if ($section->subject->parent)
+		@if ($template->section->subject->parent)
 			<li><a href="{{ route('subjects.show', $template->section->subject->parent) }}">{{ $template->section->subject->parent->subject_name }}</a></li>
 		@endif
 		<li><a href="{{ route('subjects.show', $template->section->subject) }}">{{ $template->section->subject->subject_name }}</a></li>
 		<li><a href="{{ route('subjects.sections.show', array($template->section->subject, $template->section)) }}">{{ $template->section->section_name }}</a></li>
 		@if ( $template->parent )
-			<li><a href="{{ route('subjects.sections.templates.show', array($template->section->subject, $template->section, $parent)) }}">{{ $parent->template_name }}</a></li>
+			<li><a href="{{ route('subjects.sections.templates.show', array($template->section->subject, $template->section, $template->parent)) }}">{{ $template->parent->template_name }}</a></li>
 		@endif
 		<li class="active">{{ $template->template_name }}</li>
 	</ul>
 
-	@if ( $children->count() )
+	@if ( $template->children->count() )
 		<table class="table section-table dialog table-striped" border="1">
 
 		<tr class="success">
@@ -24,21 +24,21 @@
 		<td class="header">Short description</td>
 		<td class="header" style="width: 245px;">Options</td>
 		</tr>
-		@foreach( $children as $child )
+		@foreach( $template->children as $child )
 			@if ($child->visible == "False")
 				<tr class="notvisible">
 			@else
 				<tr>
 			@endif
-			{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('subjects.sections.templates.destroy', $subject, $section, $child), 'onsubmit' => 'return confirm(\'Are you sure to delete this template?\')')) !!}
-			<td><a href="{{ route('subjects.sections.templates.show', [$subject, $section, $child]) }}">{{ $child->template_name }}</a></td>
+			{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('subjects.sections.templates.destroy', $subject, $template->section, $child), 'onsubmit' => 'return confirm(\'Are you sure to delete this template?\')')) !!}
+			<td><a href="{{ route('subjects.sections.templates.show', [$subject, $template->section, $child]) }}">{{ $child->template_name }}</a></td>
 			<td>{!! html_entity_decode(e($child->template_shortdesc)) !!}</td>
 			<td>
 			@if ( $child->rows->count() && $child->columns->count() )
 				<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $child->id }}">Export</a>
 			@endif
-			@can('update-section', $section)
-				{!! link_to_route('subjects.sections.templates.edit', 'Edit', array($subject, $section, $child), array('class' => 'btn btn-info btn-xs')) !!}
+			@can('update-section', $template->section)
+				{!! link_to_route('subjects.sections.templates.edit', 'Edit', array($subject, $template->section, $child), array('class' => 'btn btn-info btn-xs')) !!}
 				@if ( $child->rows->count() && $child->columns->count() )
 					<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('templatestructure') . '/' . $child->id }}">Structure</a>
 				@endif
@@ -184,10 +184,10 @@
 
 	@endif
 
-	@if ( $parent )
-		<p>{!! link_to_route('subjects.sections.templates.show', 'Back to template', array($subject, $section, $parent))  !!}</p>
+	@if ( $template->parent )
+		<p>{!! link_to_route('subjects.sections.templates.show', 'Back to template', array($template->section->subject, $template->section, $template->parent))  !!}</p>
 	@else
-		<p>{!! link_to_route('subjects.sections.show', 'Back to Sections', array($subject, $section))  !!}</p>
+		<p>{!! link_to_route('subjects.sections.show', 'Back to Sections', array($template->section->subject, $template->section))  !!}</p>
 	@endif
 
 @include('templates.modal')

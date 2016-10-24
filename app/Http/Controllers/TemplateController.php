@@ -86,12 +86,10 @@ class TemplateController extends Controller
 
 		$disabledFields = $this->getDisabledFields($template);
 		$propertyFields = $this->getPropertyFields($template);
-
 		$technicaltype = TechnicalType::where('id', $template->type_id)->first();
 		$descriptions = TechnicalDescription::where('type_id', $template->type_id)->orderBy('content', 'asc')->get();
 
 		//get parent and children
-		$parent = $template->parent()->first();
 		if (Gate::allows('see-nonvisible-content')) {
 			$children = $template->children()->orderBy('template_name', 'asc')->get();
 		} else {
@@ -104,7 +102,9 @@ class TemplateController extends Controller
 			$query->where('template_id', $template->id)->where('row_reference', '=', '');
 		})->get();
 
-		return view('templates.show', compact('subject','section', 'template', 'disabledFields', 'propertyFields', 'searchvalue', 'technicaltype', 'descriptions','parent','children','emptyReferences'));
+		$template->load('section.subject', 'rows', 'columns', 'children', 'parent');
+
+		return view('templates.show', compact('template', 'disabledFields', 'propertyFields', 'searchvalue', 'technicaltype', 'descriptions', 'emptyReferences'));
 	}
 
 	//function to disabled fields
@@ -214,10 +214,9 @@ class TemplateController extends Controller
 	public function structure(Request $request, $id)
 	{
 		$template = Template::findOrFail($id);
-		$section = Section::findOrFail($template->section_id);
 
 		//validate if user can update section (see AuthServiceProvider)
-		if ($request->user()->can('update-section', $section)) {
+		if ($request->user()->can('update-section', $template->section)) {
 			$disabledFields = $this->getDisabledFields($template);
 			return view('templates.structure', compact('template', 'disabledFields'));
 		} else {
