@@ -49,7 +49,7 @@ class Helper {
 			//build dictionary with values that needs replacement
 			$patterns = array();
 			foreach ($words as $word) {
-				$patterns[$word->id] = $word->term_name;
+				$patterns[$word->id] = strtolower($word->term_name);
 			}
 
 			//build dictionary with values the replacements
@@ -59,7 +59,7 @@ class Helper {
 			}
 
 			//return text, replace words from dictionary with hyperlinks
-			return str_replace($patterns, $replacements, $text);
+			return str_ireplace($patterns, $replacements, $text);
 		} else {
 			return $text;
 		}
