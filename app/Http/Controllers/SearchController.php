@@ -17,7 +17,6 @@ use Validator;
 
 class SearchController extends Controller
 {
-
 	public function search(Request $request)
 	{
 		//validate input form
@@ -52,11 +51,11 @@ class SearchController extends Controller
 					}
 
 					return view('search.index', [
-						'rows' => TemplateRow::where('row_description', 'like', '%' . $request->input('search') . '%')->whereIn('template_id', $templatesArray)->get(),
-						'columns' => TemplateColumn::where('column_description', 'like', '%' . $request->input('search') . '%')->whereIn('template_id', $templatesArray)->get(),
-						'content' => Requirement::where('content', 'like', '%' . $request->input('search') . '%')->where('content_type', '<>', 'disabled')->whereIn('template_id', $templatesArray)->whereIn('content_type', $typeslist)->get(),
-						'technicals' => Technical::where('content', 'like', '%' . $request->input('search') . '%')->orWhere('description', 'like', '%' . $request->input('search') . '%')->whereIn('template_id', $templatesArray)->get(),
-						'templates' => Template::whereIn('id', $templatesArray)->where('template_shortdesc', 'like', '%' . $request->input('search') . '%')->orWhere(function ($query) use ($request, $templatesArray) {
+						'rows' => TemplateRow::with('template.section')->where('row_description', 'like', '%' . $request->input('search') . '%')->whereIn('template_id', $templatesArray)->get(),
+						'columns' => TemplateColumn::with('template.section')->where('column_description', 'like', '%' . $request->input('search') . '%')->whereIn('template_id', $templatesArray)->get(),
+						'content' => Requirement::with('template.section')->where('content', 'like', '%' . $request->input('search') . '%')->where('content_type', '<>', 'disabled')->whereIn('template_id', $templatesArray)->whereIn('content_type', $typeslist)->get(),
+						'technicals' => Technical::with('template.section')->where('content', 'like', '%' . $request->input('search') . '%')->orWhere('description', 'like', '%' . $request->input('search') . '%')->whereIn('template_id', $templatesArray)->get(),
+						'templates' => Template::with('section')->whereIn('id', $templatesArray)->where('template_shortdesc', 'like', '%' . $request->input('search') . '%')->orWhere(function ($query) use ($request, $templatesArray) {
 							$query->whereIn('id', $templatesArray)->where('template_longdesc', 'like', '%' . $request->input('search') . '%');
 						})->get(),
 						'search' => $request->input('search')
@@ -65,11 +64,11 @@ class SearchController extends Controller
 				} else {
 					//no types and selections are selected
 					return view('search.index', [
-						'rows' => TemplateRow::where('row_description', 'like', '%' . $request->input('search') . '%')->get(),
-						'columns' => TemplateColumn::where('column_description', 'like', '%' . $request->input('search') . '%')->get(),
-						'content' => Requirement::where('content', 'like', '%' . $request->input('search') . '%')->where('content_type', '<>', 'disabled')->get(),
-						'technicals' => Technical::where('content', 'like', '%' . $request->input('search') . '%')->orWhere('description', 'like', '%' . $request->input('search') . '%')->get(),
-						'templates' => Template::where('template_shortdesc', 'like', '%' . $request->input('search') . '%')->orWhere(function ($query) use ($request) {
+						'rows' => TemplateRow::with('template.section')->where('row_description', 'like', '%' . $request->input('search') . '%')->get(),
+						'columns' => TemplateColumn::with('template.section')->where('column_description', 'like', '%' . $request->input('search') . '%')->get(),
+						'content' => Requirement::with('template.section')->where('content', 'like', '%' . $request->input('search') . '%')->where('content_type', '<>', 'disabled')->get(),
+						'technicals' => Technical::with('template.section')->where('content', 'like', '%' . $request->input('search') . '%')->orWhere('description', 'like', '%' . $request->input('search') . '%')->get(),
+						'templates' => Template::with('section')->where('template_shortdesc', 'like', '%' . $request->input('search') . '%')->orWhere(function ($query) use ($request) {
 							$query->where('template_longdesc', 'like', '%' . $request->input('search') . '%');
 						})->get(),
 						'search' => $request->input('search')
