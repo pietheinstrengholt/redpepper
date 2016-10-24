@@ -13,7 +13,7 @@
 
 	<h2>{{ $subject->subject_name }}</h2>
 	<h3>{!! html_entity_decode(e($subject->subject_description)) !!}</h3>
-	<h4>{!! html_entity_decode(e($subject->subject_longdesc)) !!}</h4>
+	<h4>{!! App\Helper::contentAdjust(html_entity_decode(e($subject->subject_longdesc))) !!}</h4>
 
 	@if ( $subject->children )
 		<h4>This block has the following sub building blocks</h4>
@@ -101,10 +101,12 @@
 		</table>
 	@endif
 
-	@if (Auth::user()->can('update-subject', $subject))
-		<p>
-		{!! link_to_route('subjects.sections.create', 'Create Section', array($subject, $section))  !!}
-		</p>
+	@if (Auth::check())
+		@if (Auth::user()->can('update-subject', $subject))
+			<p>
+			{!! link_to_route('subjects.sections.create', 'Create Section', array($subject, $section))  !!}
+			</p>
+		@endif
 	@endif
 
 @endsection
