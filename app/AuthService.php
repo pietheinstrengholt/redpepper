@@ -10,6 +10,8 @@ class AuthService {
 
 	public function getSectionsList()
 	{
+		//this function is needed to return all the sections where the user has rights on. Auth::user()->sections, will only return the sections that have been added manually.
+
 		//set empty var
 		$sectionRights = array();
 

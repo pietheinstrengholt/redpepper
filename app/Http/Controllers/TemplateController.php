@@ -156,9 +156,10 @@ class TemplateController extends Controller
 			abort(403, 'This template no longer exists in the database.');
 		}
 
-		//retrieve list with sections based on user id and user role
+		//retrieve list with sections via the AuthService Model and not by using Auth::user()->sections;
 		$sectionlist = $this->authService->getSectionsList();
 		$sections = Section::whereIn('id', $sectionlist)->orderBy('section_name', 'asc')->get();
+
 		$types = TechnicalType::orderBy('type_name', 'asc')->get();
 		//get non child templates wihtin section and not equal to own template id
 		$templates = Template::orderBy('template_name', 'asc')->where('section_id', $template->section_id)->where('id', '!=', $template->id)->where('parent_id', null)->orWhere(function ($query) use ($template) {
@@ -182,7 +183,7 @@ class TemplateController extends Controller
 			abort(403, 'Unauthorized action.');
 		}
 
-		//retrieve list with sections based on user id and user role
+		//retrieve list with sections via the AuthService Model and not by using Auth::user()->sections;
 		$sectionlist = $this->authService->getSectionsList();
 		$sections = Section::whereIn('id', $sectionlist)->orderBy('section_name', 'asc')->get();
 
