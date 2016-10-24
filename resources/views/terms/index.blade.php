@@ -24,7 +24,7 @@
 
 		@foreach( $terms as $term )
 			<tr>
-			<td>{{ $term->term_name }}</td>
+			<td><a href="{!! route('terms.show',['term'=>$term]); !!}">{{ $term->term_name }}</a></td>
 			<td>{{ $term->term_description }}</td>
 			<td>
 			@if (!Auth::guest())

@@ -58,6 +58,16 @@ class TermController extends Controller
 		return view('terms.index', compact('terms', 'letters', 'letter'));
 	}
 
+	public function show(Term $term)
+	{
+		//check if id property exists
+		if (!$term->id) {
+			abort(403, 'This term no longer exists in the database.');
+		}
+
+		return view('terms.show', compact('term'));
+	}
+
 	public function edit(Term $term)
 	{
 		//check if id property exists
