@@ -102,6 +102,7 @@ class TemplateController extends Controller
 			$query->where('template_id', $template->id)->where('row_reference', '=', '');
 		})->get();
 
+		//eager load additional content
 		$template->load('section.subject', 'rows', 'columns', 'children', 'parent');
 
 		return view('templates.show', compact('template', 'disabledFields', 'propertyFields', 'searchvalue', 'technicaltype', 'descriptions', 'emptyReferences'));
