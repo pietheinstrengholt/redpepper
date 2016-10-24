@@ -30,15 +30,15 @@
 			@else
 				<tr>
 			@endif
-			{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('subjects.sections.templates.destroy', $subject, $template->section, $child), 'onsubmit' => 'return confirm(\'Are you sure to delete this template?\')')) !!}
-			<td><a href="{{ route('subjects.sections.templates.show', [$subject, $template->section, $child]) }}">{{ $child->template_name }}</a></td>
+			{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('subjects.sections.templates.destroy', $template->section->subject, $template->section, $child), 'onsubmit' => 'return confirm(\'Are you sure to delete this template?\')')) !!}
+			<td><a href="{{ route('subjects.sections.templates.show', [$template->section->subject, $template->section, $child]) }}">{{ $child->template_name }}</a></td>
 			<td>{!! html_entity_decode(e($child->template_shortdesc)) !!}</td>
 			<td>
 			@if ( $child->rows->count() && $child->columns->count() )
 				<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $child->id }}">Export</a>
 			@endif
 			@can('update-section', $template->section)
-				{!! link_to_route('subjects.sections.templates.edit', 'Edit', array($subject, $template->section, $child), array('class' => 'btn btn-info btn-xs')) !!}
+				{!! link_to_route('subjects.sections.templates.edit', 'Edit', array($template->section->subject, $template->section, $child), array('class' => 'btn btn-info btn-xs')) !!}
 				@if ( $child->rows->count() && $child->columns->count() )
 					<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('templatestructure') . '/' . $child->id }}">Structure</a>
 				@endif
