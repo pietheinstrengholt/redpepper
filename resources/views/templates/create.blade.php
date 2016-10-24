@@ -75,14 +75,8 @@
 			</div>
 		</div>
 
-		@if (!empty($section) && $section->id != 0)
+		@if (!empty($section))
 			<input type="hidden" name="section_id" value="{{ $section->id }}">
-			<div class="form-group">
-				{!! Form::label('parent_id', 'Optional parent:', array('class' => 'col-sm-3 control-label')) !!}
-				<div class="col-sm-5">
-				{!! Form::select('parent_id', $templates->lists('template_name', 'id'), null, ['id' => 'parent_id', 'placeholder' => 'Optional parent', 'class' => 'form-control']) !!}
-				</div>
-			</div>
 		@else
 			<div class="form-group">
 				{!! Form::label('section_id', 'Section:', array('class' => 'col-sm-3 control-label')) !!}
