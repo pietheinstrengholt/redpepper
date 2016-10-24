@@ -32,6 +32,7 @@
 						<li><a href="{{ url('fileupload') }}" class="btn btn-default btn-lg"><span class="network-name"><span class="glyphicon home glyphicon-folder-open" aria-hidden="true"></span>Instructions</span></a></li>
 						<li><a href="{{ url('advancedsearch') }}" class="btn btn-default btn-lg"><span class="network-name"><span class="glyphicon home glyphicon-search" aria-hidden="true"></span>Advanced search</span></a></li>
 						<li id="changes"><p class="btn btn-default btn-lg"><span class="network-name"><span class="glyphicon home glyphicon-list-alt" aria-hidden="true"></span>Latest changes</span></p></li>
+						<li><a href="{{ url('terms') }}" class="btn btn-default btn-lg"><span class="network-name"><span class="glyphicon home glyphicon-list-alt" aria-hidden="true"></span>FRIM</span></a></li>
 					</ul>
 				</div>
 			</div>
