@@ -868,11 +868,14 @@ class ChangeRequestController extends Controller
 			'row_code' => 'required',
 			'column_code' => 'required'
 		]);
+		
+		//check if template exist
+		$template = Template::findOrFail($request->input('template_id'));
 
 		if ($request->isMethod('post')) {
 
 			$ChangeRequest = new ChangeRequest;
-			$ChangeRequest->template_id = $request->input('template_id');
+			$ChangeRequest->template_id = $template->id;
 			$ChangeRequest->row_code = $request->input('row_code');
 			$ChangeRequest->column_code = $request->input('column_code');
 			$ChangeRequest->creator_id = Auth::user()->id;
@@ -882,7 +885,7 @@ class ChangeRequestController extends Controller
 			if ($request->has('regulation_row')) {
 				$draftrequirement = new DraftRequirement;
 				$draftrequirement->changerequest_id = $ChangeRequest->id;
-				$draftrequirement->template_id = $request->input('template_id');
+				$draftrequirement->template_id = $template->id;
 				$draftrequirement->row_code = $request->input('row_code');
 				$draftrequirement->column_code = null;
 				$draftrequirement->content_type = 'regulation';
@@ -893,7 +896,7 @@ class ChangeRequestController extends Controller
 			if ($request->has('interpretation_row')) {
 				$draftrequirement = new DraftRequirement;
 				$draftrequirement->changerequest_id = $ChangeRequest->id;
-				$draftrequirement->template_id = $request->input('template_id');
+				$draftrequirement->template_id = $template->id;
 				$draftrequirement->row_code = $request->input('row_code');
 				$draftrequirement->column_code = null;
 				$draftrequirement->content_type = 'interpretation';
@@ -904,7 +907,7 @@ class ChangeRequestController extends Controller
 			if ($request->has('regulation_column')) {
 				$draftrequirement = new DraftRequirement;
 				$draftrequirement->changerequest_id = $ChangeRequest->id;
-				$draftrequirement->template_id = $request->input('template_id');
+				$draftrequirement->template_id = $template->id;
 				$draftrequirement->row_code = null;
 				$draftrequirement->column_code = $request->input('column_code');
 				$draftrequirement->content_type = 'regulation';
@@ -915,7 +918,7 @@ class ChangeRequestController extends Controller
 			if ($request->has('interpretation_column')) {
 				$draftrequirement = new DraftRequirement;
 				$draftrequirement->changerequest_id = $ChangeRequest->id;
-				$draftrequirement->template_id = $request->input('template_id');
+				$draftrequirement->template_id = $template->id;
 				$draftrequirement->row_code = null;
 				$draftrequirement->column_code = $request->input('column_code');
 				$draftrequirement->content_type = 'interpretation';
@@ -945,7 +948,7 @@ class ChangeRequestController extends Controller
 			if ($request->has('field_property1')) {
 				$draftrequirement = new DraftRequirement;
 				$draftrequirement->changerequest_id = $ChangeRequest->id;
-				$draftrequirement->template_id = $request->input('template_id');
+				$draftrequirement->template_id = $template->id;
 				$draftrequirement->row_code = $request->input('row_code');
 				$draftrequirement->column_code = $request->input('column_code');
 				$draftrequirement->content_type = 'property1';
@@ -956,7 +959,7 @@ class ChangeRequestController extends Controller
 			if ($request->has('field_property2')) {
 				$draftrequirement = new DraftRequirement;
 				$draftrequirement->changerequest_id = $ChangeRequest->id;
-				$draftrequirement->template_id = $request->input('template_id');
+				$draftrequirement->template_id = $template->id;
 				$draftrequirement->row_code = $request->input('row_code');
 				$draftrequirement->column_code = $request->input('column_code');
 				$draftrequirement->content_type = 'property2';
@@ -967,7 +970,7 @@ class ChangeRequestController extends Controller
 			if ($request->has('field_interpretation')) {
 				$draftrequirement = new DraftRequirement;
 				$draftrequirement->changerequest_id = $ChangeRequest->id;
-				$draftrequirement->template_id = $request->input('template_id');
+				$draftrequirement->template_id = $template->id;
 				$draftrequirement->row_code = $request->input('row_code');
 				$draftrequirement->column_code = $request->input('column_code');
 				$draftrequirement->content_type = 'interpretation';
@@ -978,7 +981,7 @@ class ChangeRequestController extends Controller
 			if ($request->has('field_regulation')) {
 				$draftrequirement = new DraftRequirement;
 				$draftrequirement->changerequest_id = $ChangeRequest->id;
-				$draftrequirement->template_id = $request->input('template_id');
+				$draftrequirement->template_id = $template->id;
 				$draftrequirement->row_code = $request->input('row_code');
 				$draftrequirement->column_code = $request->input('column_code');
 				$draftrequirement->content_type = 'regulation';
@@ -1005,7 +1008,7 @@ class ChangeRequestController extends Controller
 				Event::fire(new ChangeRequestApproved($ChangeRequest));
 
 				//redirect back to template page
-				return Redirect::route('sections.templates.show', [$request->input('section_id'), $request->input('template_id')])->with('message', 'Content directly updated without review approval.');
+				return Redirect::route('subjects.sections.templates.show', [$template->section->subject->id, $template->section->id, $template->id])->with('message', 'Content directly updated without review approval.');
 
 			} else {
 
@@ -1013,7 +1016,7 @@ class ChangeRequestController extends Controller
 				Event::fire(new ChangeRequestCreated($ChangeRequest));
 
 				//redirect back to template page
-				return Redirect::route('sections.templates.show', [$request->input('section_id'), $request->input('template_id')])->with('message', '<a style="color:white;" href="' . url('/') . '/changerequests/' . $ChangeRequest->id . '/edit">Change request</a> submitted for review.');
+				return Redirect::route('subjects.sections.templates.show', [$template->section->subject->id, $template->section->id, $template->id])->with('message', '<a style="color:white;" href="' . url('/') . '/changerequests/' . $ChangeRequest->id . '/edit">Change request</a> submitted for review.');
 			}
 		}
 	}
