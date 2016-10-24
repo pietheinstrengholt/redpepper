@@ -28,31 +28,16 @@ use Illuminate\Http\Request;
 use Redirect;
 use Session;
 use Validator;
+use App\AuthService;
 
 class TemplateController extends Controller
 {
-	//function to compile list with sections
-	public function sectionList(Request $request)
-	{
-		//set empty var
-		$sectionRights = array();
+	protected $authService;
 
-		$sections = Section::orderBy('section_name', 'asc')->get();
-
-		foreach ($sections as $section) {
-			if ($request->user()->can('update-section', $section)) {
-				array_push($sectionRights,$section->id);
-			}
-		}
-
-		//abort if sectionRights array is empty
-		if (empty($sectionRights)) {
-			abort(403, 'Unauthorized action. You don\'t have access to any sections.');
-		}
-
-		//return Array with sections
-		return $sectionRights;
-	}
+    public function __construct(AuthService $authService)
+    {
+       $this->authService = $authService;
+    }
 
 	//function to show template
 	public function show(Subject $subject, Section $section, Template $template, Request $request)
@@ -162,7 +147,7 @@ class TemplateController extends Controller
 	public function edit(Subject $subject, Section $section, Template $template, Request $request)
 	{
 		//guests are not allowed to change templates
-		if (Auth::guest()) {
+		if (Auth::user()->cant('update-section', $template->section)) {
 			abort(403, 'Unauthorized action.');
 		}
 
@@ -172,7 +157,7 @@ class TemplateController extends Controller
 		}
 
 		//retrieve list with sections based on user id and user role
-		$sectionlist = $this->sectionList($request);
+		$sectionlist = $this->authService->getSectionsList();
 		$sections = Section::whereIn('id', $sectionlist)->orderBy('section_name', 'asc')->get();
 		$types = TechnicalType::orderBy('type_name', 'asc')->get();
 		//get non child templates wihtin section and not equal to own template id
@@ -190,10 +175,15 @@ class TemplateController extends Controller
 		}
 	}
 
-	public function create(Request $request)
+	public function create(Subject $subject, Section $section, Template $template, Request $request)
 	{
+		//exit when user is a guest
+		if (Auth::guest()) {
+			abort(403, 'Unauthorized action.');
+		}
+
 		//retrieve list with sections based on user id and user role
-		$sectionlist = $this->sectionList($request);
+		$sectionlist = $this->authService->getSectionsList();
 		$sections = Section::whereIn('id', $sectionlist)->orderBy('section_name', 'asc')->get();
 
 		//use default value to select from dropdown
@@ -209,20 +199,6 @@ class TemplateController extends Controller
 		}
 
 		return view('templates.create', compact('subject','sections','section','templates'));
-	}
-
-	//function to structure template
-	public function structure(Request $request, $id)
-	{
-		$template = Template::findOrFail($id);
-
-		//validate if user can update section (see AuthServiceProvider)
-		if ($request->user()->can('update-section', $template->section)) {
-			$disabledFields = $this->getDisabledFields($template);
-			return view('templates.structure', compact('template', 'disabledFields'));
-		} else {
-			abort(403, 'Unauthorized action.');
-		}
 	}
 
 	//function to create new template
@@ -321,14 +297,36 @@ class TemplateController extends Controller
 	}
 
 	//function to structure template
-	public function changestructure(Request $request)
+	public function structure(Subject $subject, Section $section, Template $template)
+	{
+		//check if id property exists
+		if (!$template->id) {
+			abort(403, 'This template no longer exists in the database.');
+		}
+
+		//guests are not allowed to change templates
+		if (Auth::user()->cant('update-section', $template->section)) {
+			abort(403, 'Unauthorized action.');
+		}
+
+		//get disabled fields
+		$disabledFields = $this->getDisabledFields($template);
+
+		return view('templates.structure', compact('template', 'disabledFields'));
+	}
+
+	//function to structure template
+	public function changestructure(Subject $subject, Section $section, Template $template, Request $request)
 	{
 		//exit when user is a guest
 		if (Auth::guest()) {
 			abort(403, 'Unauthorized action. You don\'t have access to this template or section');
 		}
 
-		$template = Template::findOrFail($request->input('template_id'));
+		//check if id property exists
+		if (!$template->id) {
+			abort(403, 'This template no longer exists in the database.');
+		}
 
 		if ($request->isMethod('post')) {
 
@@ -500,6 +498,7 @@ class TemplateController extends Controller
 	}
 
 	//content for the pop-up
+	//TODO: use route
 	public function getCellContent(Request $request)
 	{
 		if ($request->has('template_id') && $request->has('cell_id')) {
@@ -529,16 +528,17 @@ class TemplateController extends Controller
 		]);
 	}
 
-	public function manual($id)
+	public function manual(Subject $subject, Section $section, Template $template)
 	{
-		$template = Template::where('id', $id)->first();
-
-		//abort if sectionRights array is empty
-		if (empty($template)) {
-			abort(403, 'No template has been found for this selection.');
+		//check if id property exists
+		if (!$template->id) {
+			abort(403, 'This template no longer exists in the database.');
 		}
 
-		$technical = Technical::where('template_id', $id)->orderBy('row_code', 'asc')->orderBy('column_code', 'asc')->get();
+		//eager load additional content
+		$template->load('section.subject', 'rows', 'columns', 'requirements');
+
+		$technical = Technical::where('template_id', $template->id)->orderBy('row_code', 'asc')->orderBy('column_code', 'asc')->get();
 
 		return view('templates.manual', compact('template','technical'));
 	}
