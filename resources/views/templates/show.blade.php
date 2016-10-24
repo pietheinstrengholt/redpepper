@@ -60,7 +60,7 @@
 		<h4>{!! App\Helper::contentAdjust(nl2br(e($template->main_changes_description))) !!}</h4>
 		<h4>{!! App\Helper::contentAdjust(nl2br(e($template->links_other_temp_description))) !!}</h4>
 		<h4>{!! App\Helper::contentAdjust(nl2br(e($template->process_and_organisation_description))) !!}</h4>
-		<h5><a href="{!! url('/templatemanual/' . $template->id); !!}"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print manual</a></h5>
+		<h5><a href="{{ url('subjects') . '/' . $template->section->subject->id . '/sections/' . $template->section->id . '/templates/' . $template->id . '/manual' }}"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print manual</a></h5>
 	@endif
 
 	@if ( $descriptions->count() )

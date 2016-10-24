@@ -94,10 +94,10 @@ Route::post('password/reset', 'Auth\PasswordController@postReset');
 
 // Template routes...
 Route::get('templates/create', 'TemplateController@create');
-Route::get('templatemanual/{id}', 'TemplateController@manual');
-Route::get('templatestructure/{id}', ['middleware' => 'auth', 'uses' => 'TemplateController@structure']);
-Route::post('changestructure', ['middleware' => 'auth', 'uses' => 'TemplateController@changestructure']);
 Route::post('newtemplate', ['middleware' => 'auth', 'uses' => 'TemplateController@newtemplate']);
+Route::get('subjects/{subject}/sections/{section}/templates/{template}/manual', 'TemplateController@manual');
+Route::get('subjects/{subject}/sections/{section}/templates/{template}/structure', ['middleware' => 'auth', 'uses' => 'TemplateController@structure']);
+Route::post('subjects/{subject}/sections/{section}/templates/{template}/changestructure', ['middleware' => 'auth', 'uses' => 'TemplateController@changestructure']);
 
 // Model routes...
 Route::resource('subjects', 'SubjectController');

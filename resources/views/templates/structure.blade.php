@@ -22,7 +22,7 @@
 		<p><strong>Error:</strong> This template has no columns or no rows. Ask the administrator to change the properties of this template to show only the descriptions.</p>
 	@else
 
-		{!! Form::open(array('action' => 'TemplateController@changestructure', 'id' => 'form')) !!}
+		{!! Form::open(array('action' => array('TemplateController@changestructure', $template->section->subject, $template->section, $template))) !!}
 		<input name="template_id" type="hidden" value="{{ $template->id }}"/>
 		<input name="section_id" type="hidden" value="{{ $template->section_id }}"/>
 		<button style="margin-bottom:15px;" type="submit" class="btn btn-warning">Submit new template structure</button>
