@@ -104,7 +104,7 @@
 	@if (Auth::check())
 		@if (Auth::user()->can('update-subject', $subject))
 			<p>
-			{!! link_to_route('subjects.sections.create', 'Create Section', array($subject, $section))  !!}
+			{!! link_to_route('subjects.sections.create', 'Create Section', array($subject))  !!}
 			</p>
 		@endif
 	@endif
