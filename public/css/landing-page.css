@@ -92,6 +92,11 @@ div#footer, p.p-more-info, h3.center, p.center {
 	text-align: center;
 }
 
+div.well p.center {
+	overflow: hidden;
+	max-height: 104px;
+}
+
 @media(max-width:767px) {
 	.intro-message {
 		padding-bottom: 15%;
