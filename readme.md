@@ -54,10 +54,3 @@ TODO
 * Remove fields such as template process_and_organisation_description, etc.
 * jQuery 3.0?
 * rename fields to be consistent; shortdesc, visible
-* non-alpha term controller index
-* sebject, section, template together
-* Add bim landing page with option blocks
-* Add showing relation name in d3js visual
-* Retrieving more elements when double clicking
-* Filtering when adding same relation to object
-* Bim users and rights, workflows
