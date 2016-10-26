@@ -30,6 +30,7 @@ use Illuminate\Http\Request;
 use Redirect;
 use Session;
 use Validator;
+use App\Helpers\ActivityLog;
 
 class ChangeRequestController extends Controller
 {
@@ -61,17 +62,17 @@ class ChangeRequestController extends Controller
 
 		//contributors and builders can only see own submitted changes
 		if (Auth::user()->role == "contributor") {
-			$changerequests = ChangeRequest::where('creator_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(15);
+			$changerequests = ChangeRequest::where('creator_id', Auth::user()->id)->with('template.section.subject','creator')->orderBy('created_at', 'desc')->paginate(15);
 		}
 
 		if (Auth::user()->role == "admin" || Auth::user()->role == "reviewer" || Auth::user()->role == "builder") {
 			$templateList = $this->templateRights(Auth::user()->id);
-			$changerequests = ChangeRequest::whereIn('template_id', $templateList)->orderBy('created_at', 'desc')->paginate(15);
+			$changerequests = ChangeRequest::whereIn('template_id', $templateList)->with('template.section.subject','creator')->orderBy('created_at', 'desc')->paginate(15);
 		}
 
 		//superadmin users can see all
 		if (Auth::user()->role == "superadmin") {
-			$changerequests = ChangeRequest::orderBy('created_at', 'desc')->paginate(15);
+			$changerequests = ChangeRequest::orderBy('created_at', 'desc')->with('template.section.subject','creator')->paginate(15);
 		}
 
 		//check if any change request are found
@@ -152,6 +153,10 @@ class ChangeRequestController extends Controller
 			abort(403, 'Unauthorized action.');
 		}
 		ChangeRequest::where('status', 'rejected')->orWhere('status', 'approved')->delete();
+
+		//Log actvity
+		ActivityLog::submit("All processed changerequests were deleted.");
+
 		return Redirect::route('changerequests.index')->with('message', 'Cleanup performed.');
 	}
 
@@ -631,7 +636,6 @@ class ChangeRequestController extends Controller
 				$HistoryRequirement->submission_date = $ChangeRequest->created_at;
 				$HistoryRequirement->approved_by = Auth::user()->id;
 				$HistoryRequirement->save();
-
 			}
 
 			//delete any existing if empty is proposed
@@ -831,6 +835,7 @@ class ChangeRequestController extends Controller
 
 					//log Event
 					Event::fire(new ChangeRequestRejected($ChangeRequest));
+					ActivityLog::submit("Changerequest \"" . $ChangeRequest->id . "\" rejected.");
 				}
 
 				if ($request->input('change_type') == "approved") {
@@ -845,6 +850,7 @@ class ChangeRequestController extends Controller
 
 					//log Event
 					Event::fire(new ChangeRequestApproved($ChangeRequest));
+					ActivityLog::submit("Changerequest \"" . $ChangeRequest->id . "\" approved.");
 				}
 			}
 		}
@@ -855,6 +861,7 @@ class ChangeRequestController extends Controller
 	{
 		//log Event
 		Event::fire(new ChangeRequestDeleted($ChangeRequest));
+		ActivityLog::submit("Changerequest \"" . $ChangeRequest->id . "\" deleted.");
 
 		$ChangeRequest->delete();
 		return Redirect::route('changerequests.index')->with('message', 'ChangeRequest deleted.');
@@ -868,7 +875,7 @@ class ChangeRequestController extends Controller
 			'row_code' => 'required',
 			'column_code' => 'required'
 		]);
-		
+
 		//check if template exist
 		$template = Template::findOrFail($request->input('template_id'));
 
@@ -1006,6 +1013,7 @@ class ChangeRequestController extends Controller
 
 				//log Event
 				Event::fire(new ChangeRequestApproved($ChangeRequest));
+				ActivityLog::submit("Changerequest \"" . $ChangeRequest->id . "\" created.");
 
 				//redirect back to template page
 				return Redirect::route('subjects.sections.templates.show', [$template->section->subject->id, $template->section->id, $template->id])->with('message', 'Content directly updated without review approval.');
@@ -1014,6 +1022,7 @@ class ChangeRequestController extends Controller
 
 				//log Event
 				Event::fire(new ChangeRequestCreated($ChangeRequest));
+				ActivityLog::submit("Changerequest \"" . $ChangeRequest->id . "\" created.");
 
 				//redirect back to template page
 				return Redirect::route('subjects.sections.templates.show', [$template->section->subject->id, $template->section->id, $template->id])->with('message', '<a style="color:white;" href="' . url('/') . '/changerequests/' . $ChangeRequest->id . '/edit">Change request</a> submitted for review.');

@@ -29,6 +29,7 @@ use Redirect;
 use Session;
 use Validator;
 use App\AuthService;
+use App\Helpers\ActivityLog;
 
 class TemplateController extends Controller
 {
@@ -292,6 +293,7 @@ class TemplateController extends Controller
 
 			//log Event
 			Event::fire(new TemplateCreated($template));
+			ActivityLog::submit("Template " . $template->template_name . " was created.");
 
 		}
 		return Redirect::to('/subjects/' . $section->subject_id . '/sections/' . $section->id . '/templates/' . $template->id);
@@ -417,6 +419,7 @@ class TemplateController extends Controller
 
 				//log Event
 				Event::fire(new TemplateUpdated($template));
+				ActivityLog::submit("Template \"" . $template->template_name . "\" was updated.");
 
 			}
 		}
@@ -443,6 +446,7 @@ class TemplateController extends Controller
 
 		//log Event
 		Event::fire(new TemplateCreated($template));
+		ActivityLog::submit("Template \"" . $template->template_name . "\" was created.");
 
 		return Redirect::route('sections.show', $section->id)->with('message', 'Template created.');
 	}
@@ -463,6 +467,7 @@ class TemplateController extends Controller
 
 		//log Event
 		Event::fire(new TemplateUpdated($template));
+		ActivityLog::submit("Template \"" . $template->template_name . "\" was updated.");
 
 		$input = array_except($request->all(), '_method');
 		$template->update($input);
@@ -489,6 +494,7 @@ class TemplateController extends Controller
 
 			//log Event
 			Event::fire(new TemplateDeleted($template));
+			ActivityLog::submit("Template \"" . $template->template_name . "\" was deleted.");
 
 			//delete template
 			$template->delete();

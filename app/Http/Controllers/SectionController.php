@@ -16,6 +16,7 @@ use Event;
 use Gate;
 use Illuminate\Http\Request;
 use Redirect;
+use App\Helpers\ActivityLog;
 
 class SectionController extends Controller
 {
@@ -106,6 +107,8 @@ class SectionController extends Controller
 		$section = Section::create($request->all());
 
 		Event::fire(new SectionCreated($section));
+		ActivityLog::submit("Section " . $section->section_name . " was created.");
+
 		return Redirect::route('subjects.show', array($subject))->with('message', 'Section created');
 	}
 
@@ -124,6 +127,8 @@ class SectionController extends Controller
 			$section->update($request->all());
 
 			Event::fire(new SectionUpdated($section));
+			ActivityLog::submit("Section " . $section->section_name . " was updated.");
+
 			return Redirect::route('subjects.show', array($subject))->with('message', 'Section updated.');
 		} else {
 			abort(403, 'Unauthorized action.');
@@ -144,6 +149,7 @@ class SectionController extends Controller
 
 		//log Event
 		Event::fire(new SectionDeleted($section));
+		ActivityLog::submit("Section " . $section->section_name . " was deleted.");
 
 		$section->delete();
 		return Redirect::route('subjects.show', array($subject))->with('message', 'Section deleted.');

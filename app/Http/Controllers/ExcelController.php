@@ -29,6 +29,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Redirect;
 use Session;
 use Validator;
+use App\Helpers\ActivityLog;
 
 class ExcelController extends Controller
 {
@@ -80,7 +81,6 @@ class ExcelController extends Controller
 			});
 		})->download('xlsx');
 	}
-
 
 	public function postterms(Request $request)
 	{
@@ -159,6 +159,10 @@ class ExcelController extends Controller
 				$new_term->save();
 			}
 		}
+
+		//log activity
+		ActivityLog::submit("Terms imported by Excel.");
+
 		return Redirect::to('/excel/terms/')->with('message', 'New content successfully added to the database.');
 	}
 
@@ -258,6 +262,9 @@ class ExcelController extends Controller
 
 			});
 		}
+
+		//Log activity
+		ActivityLog::submit("Types uploaded with Excel.");
 
 		return Redirect::to('/types/' . $request->input('type_id'))->with('message', 'Content successfully added to the database.');
 	}
@@ -911,7 +918,9 @@ class ExcelController extends Controller
 					}
 				}
 
+				//Log activity
 				Event::fire(new TemplateCreated($template));
+				ActivityLog::submit("Template " . $template->template_name . " was created.");
 
 				return Redirect::to('/sections')->with('message', 'New template successfully added to the database.');
 			}
@@ -921,7 +930,6 @@ class ExcelController extends Controller
 	//function to export template to excel
 	public function export($id)
 	{
-
 		$template = Template::findOrFail($id);
 
 		//create two array for row_code and column_code lookup usage
@@ -1264,8 +1272,6 @@ class ExcelController extends Controller
 						}
 					}
 				}
-
-
 			});
 
 			// Our sixth sheet
@@ -1339,6 +1345,9 @@ class ExcelController extends Controller
 				$sheet->getStyle('A6')->getFill()->getStartColor()->setARGB('dff0d8');
 			});
 		})->download('xlsx');
+
+		//Log activity
+		ActivityLog::submit("Template " . $template->template_name . " was exported.");
 	}
 
     public function exportchanges()
@@ -1531,5 +1540,9 @@ class ExcelController extends Controller
 				}
 			});
 		})->download('xlsx');
+
+		//Log activity
+		ActivityLog::submit("All changerequests were exported.");
+
     }
 }

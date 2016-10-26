@@ -20,6 +20,7 @@ use Redirect;
 use Session;
 use Validator;
 use Input;
+use App\Helpers\ActivityLog;
 
 class CSVController extends Controller
 {
@@ -180,6 +181,7 @@ class CSVController extends Controller
 
 				//log Event
 				Event::fire(new SectionUpdated($section));
+				ActivityLog::submit("CSV content imported.");
 
 				return Redirect::to('/sections')->with('message', 'CSV successfully imported to the database.');
 			}

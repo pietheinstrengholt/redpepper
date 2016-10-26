@@ -7,6 +7,8 @@ use Gate;
 use Auth;
 use Illuminate\Http\Request;
 use Redirect;
+use App\Helpers\ActivityLog;
+
 class TermController extends Controller
 {
 	public function index(Request $request)
@@ -105,7 +107,9 @@ class TermController extends Controller
 			'term_name' => 'required|min:3',
 			'term_description' => 'required'
 		]);
+
 		Term::create($request->all());
+
 		return Redirect::to('/terms')->with('message', 'Term created.');
 	}
 
@@ -124,6 +128,10 @@ class TermController extends Controller
 		]);
 
 		$term->update($request->all());
+		
+		//Log activity
+		ActivityLog::submit("Term " . $term->term_name . " was updated.");
+		
 		return Redirect::to('/terms')->with('message', 'Term updated.');
 	}
 
@@ -138,6 +146,9 @@ class TermController extends Controller
 		if (!$term->id) {
 			abort(403, 'This term no longer exists in the database.');
 		}
+		
+		//Log activity
+		ActivityLog::submit("Term " . $term->term_name . " was deleted.");
 
 		$term->delete();
 		return Redirect::to('/terms')->with('message', 'Term deleted.');

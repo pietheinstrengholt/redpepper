@@ -10,6 +10,7 @@ use Auth;
 use Gate;
 use Illuminate\Http\Request;
 use Redirect;
+use App\Helpers\ActivityLog;
 
 class SubjectController extends Controller
 {
@@ -84,6 +85,9 @@ class SubjectController extends Controller
 
 		$subject = Subject::create($request->all());
 
+		//Log activity
+		ActivityLog::submit("Subject " . $subject->subject_name . " was created.");
+
 		return Redirect::route('subjects.index')->with('message', 'Subject created');
 	}
 
@@ -102,6 +106,9 @@ class SubjectController extends Controller
 
 		$subject->update($request->all());
 
+		//Log activity
+		ActivityLog::submit("Subject " . $subject->subject_name . " was updated.");
+
 		return Redirect::route('subjects.index')->with('message', 'Subject updated.');
 	}
 
@@ -111,6 +118,9 @@ class SubjectController extends Controller
 		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');
 		}
+
+		//Log activity
+		ActivityLog::submit("Subject " . $subject->subject_name . " was deleted.");
 
 		$subject->delete();
 		return Redirect::route('subjects.index')->with('message', 'Subject deleted.');

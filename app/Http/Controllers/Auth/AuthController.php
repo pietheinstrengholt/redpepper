@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Contracts\Auth\Guard;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Helpers\ActivityLog;
 
 class AuthController extends Controller
 {
@@ -102,6 +103,7 @@ class AuthController extends Controller
 	{
 		if (Auth::attempt(['username' => $username, 'password' => $password])) {
 			// Authentication passed...
+			ActivityLog::submit("User logged on.");
 			return redirect('/');
 		}
 	}

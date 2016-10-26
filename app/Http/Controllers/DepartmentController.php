@@ -7,10 +7,10 @@ use App\User;
 use Gate;
 use Illuminate\Http\Request;
 use Redirect;
+use App\Helpers\ActivityLog;
 
 class DepartmentController extends Controller
 {
-
     public function index()
     {
 		//check for superadmin permissions
@@ -61,6 +61,7 @@ class DepartmentController extends Controller
 		]);
 
 		Department::create($request->all());
+
 		return Redirect::route('departments.index')->with('message', 'Department created');
 	}
 
@@ -78,6 +79,10 @@ class DepartmentController extends Controller
 		]);
 
 		$department->update($request->all());
+
+		//Log activity
+		ActivityLog::submit("Department " . $department->department_name . " was updated.");
+
 		return Redirect::route('departments.show', $department->slug)->with('message', 'Department updated.');
 	}
 
@@ -87,6 +92,9 @@ class DepartmentController extends Controller
 		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');
 		}
+
+		//Log activity
+		ActivityLog::submit("Department " . $department->department_name . " was deleted.");
 
 		$department->delete();
 		return Redirect::route('departments.index')->with('message', 'Department deleted.');

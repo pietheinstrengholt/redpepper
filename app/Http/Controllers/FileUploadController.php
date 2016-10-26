@@ -8,6 +8,8 @@ use Auth;
 use Illuminate\Http\Request;
 use Redirect;
 use App\Section;
+use App\Helpers\ActivityLog;
+
 class FileUploadController extends Controller
 {
 	public function index()
@@ -126,6 +128,9 @@ class FileUploadController extends Controller
 		//Move file to files folder
 		$file->move(public_path() . $path, $filename);
 
+		//Log activity
+		ActivityLog::submit("File has been uploaded.");
+
 		//redirect based whether a section_id has been provided
 		if ($request->has('section_id')) {
 			return Redirect::route('subjects.sections.show', array($section->subject, $section))->with('message', 'File uploaded.');
@@ -142,6 +147,9 @@ class FileUploadController extends Controller
 		]);
 
 		$fileupload->update($request->all());
+
+		//Log activity
+		ActivityLog::submit("File has been updated.");
 
 		//redirect based whether a section_id has been provided
 		if ($request->has('section_id')) {
@@ -165,6 +173,9 @@ class FileUploadController extends Controller
 			//remove file from upload folder
 			unlink('/' . base_path() . '/public/files/' . $fileupload->file_name);
 		}
+
+		//Log activity
+		ActivityLog::submit("File has been deleted.");
 
 		//redirect based whether a section_id has been provided
 		if ($fileupload->section_id) {

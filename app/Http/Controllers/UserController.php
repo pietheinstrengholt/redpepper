@@ -16,6 +16,7 @@ use Event;
 use Gate;
 use Illuminate\Http\Request;
 use Redirect;
+use App\Helpers\ActivityLog;
 
 class UserController extends Controller
 {
@@ -26,7 +27,7 @@ class UserController extends Controller
 			abort(403, 'Unauthorized action.');
 		}
 
-		$users = User::orderBy('username', 'asc')->get();
+		$users = User::with('department')->orderBy('username', 'asc')->get();
 		return view('users.index', compact('users'));
     }
 
@@ -117,6 +118,7 @@ class UserController extends Controller
 
 			//log Event
 			Event::fire(new UserUpdated($user));
+			ActivityLog::submit("User " . $user->username . " was updated.");
 		}
 		//return to user overview
 		return Redirect::route('users.index')->with('message', 'Password updated.');
@@ -141,6 +143,7 @@ class UserController extends Controller
 
 		//log Event
 		Event::fire(new UserUpdated($user));
+		ActivityLog::submit("User " . $user->username . " was updated.");
 
 		return Redirect::route('users.index')->with('message', 'User updated.');
 	}
@@ -190,6 +193,7 @@ class UserController extends Controller
 
 		//log Event
 		Event::fire(new UserUpdated($user));
+		ActivityLog::submit("Userrights for " . $user->username . " were updated.");
 
 		return Redirect::route('users.index')->with('message', 'User updated.');
 	}
@@ -209,6 +213,7 @@ class UserController extends Controller
 
 		//log Event
 		Event::fire(new UserDeleted($user));
+		ActivityLog::submit("User " . $user->username . " was deleted.");
 
 		//delete user
 		$user->delete();
