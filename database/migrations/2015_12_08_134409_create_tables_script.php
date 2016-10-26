@@ -25,7 +25,7 @@ class CreateTablesScript extends Migration
 				$table->rememberToken();
 				$table->timestamps();
 			});
-			
+
 			// Insert superadmin user
 			DB::table('t_usernames')->insert(
 				array(
@@ -253,7 +253,7 @@ class CreateTablesScript extends Migration
 				$table->string('row_code', 255);
 				$table->string('column_code', 255);
 				$table->integer('source_id')->unsigned();
-				$table->integer('type_id')->unsigned();			
+				$table->integer('type_id')->unsigned();
 				$table->string('content')->nullable();
 				$table->longText('description')->nullable();
 				$table->integer('approved_by');

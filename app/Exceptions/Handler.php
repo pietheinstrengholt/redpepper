@@ -32,7 +32,7 @@ class Handler extends ExceptionHandler
 	*/
 	public function report(Exception $e)
 	{
-		
+
 		/* if (config('app.debug')) {
 			$whoops = new \Whoops\Run;
 			$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
@@ -42,7 +42,7 @@ class Handler extends ExceptionHandler
 				$e->getHeaders()
 			);
 		} */
-		
+
 		return parent::report($e);
 	}
 

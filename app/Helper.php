@@ -5,6 +5,7 @@ use App\User;
 use App\Setting;
 use App\Term;
 
+//Todo: move Helper file to Helpers folder
 class Helper {
 
 	//function to make hyperlinks from urls
