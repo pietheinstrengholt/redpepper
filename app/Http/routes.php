@@ -15,10 +15,6 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get('/home', function () {
-    return view('index');
-});
-
 // Provide controller methods with object instead of ID
 Route::model('subjects', 'Subject');
 Route::model('sections', 'Section');
@@ -32,7 +28,6 @@ Route::model('terms', 'Term');
 Route::model('fileupload', 'FileUpload');
 
 // Use IDs in URLs
-
 Route::bind('subjects', function($value, $route) {
 	return App\Subject::whereId($value)->first();
 });
