@@ -101,6 +101,7 @@
 					<li><a href="{{ URL::to('/users') }}"><span class="glyphicon glyphicon glyphicon-user" aria-hidden="true"></span> Edit users</a></li>
 					<li class="divider"></li>
 					<li><a href="{{ URL::to('/csv/import') }}"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Import technical</a></li>
+					<li><a href="{{ URL::to('/excel/terms') }}"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Import terms</a></li>
 					<li class="divider"></li>
 				  @endif
 				  <li><a href="{{ URL::to('/changerequests') }}"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Change requests</a></li>
