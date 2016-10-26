@@ -123,13 +123,13 @@ class ExcelController extends Controller
 					if (isset($content['id'])) {
 						$results['terms'][$i]['id'] = $content['id'];
 						if ($content['id'] != $i) {
-							abort(403, 'Sequence is incorrect for line ' + $i);
+							abort(403, 'The excel file is incorrect. Sequence is incorrect for line ' . $i . '.');
 						}
 					}
 					if (isset($content['term_name'])) {
 						$results['terms'][$i]['term_name'] = $content['term_name'];
 						if (in_array($content['term_name'], $term_names)) {
-							abort(403, 'Existin term name found on line ' + $i);
+							abort(403, 'The excel file is incorrect. Existing term name found on line  ' . $i . '.');
 						}
 						array_push($term_names, $content['term_name']);
 					}
@@ -137,7 +137,7 @@ class ExcelController extends Controller
 					if (isset($content['term_definition'])) {
 						$results['terms'][$i]['term_definition'] = $content['term_definition'];
 						if (empty($content['term_definition'])) {
-							abort(403, 'Empty definition found on line ' + $i);
+							abort(403, 'The excel file is incorrect. Empty definition found on line ' . $i . '.');
 						}
 					}
 				}
