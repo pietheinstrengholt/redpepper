@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 use App\Department;
-use App\Events\UserCreated;
-use App\Events\UserUpdated;
-use App\Events\UserDeleted;
 use App\Http\Controllers\Controller;
 use App\Log;
 use App\Section;
@@ -12,7 +9,6 @@ use App\Subject;
 use App\User;
 use App\UserRights;
 use Auth;
-use Event;
 use Gate;
 use Illuminate\Http\Request;
 use Redirect;
@@ -116,8 +112,7 @@ class UserController extends Controller
 			//update password
 			User::where('id', $request->input('username_id'))->update(['password' => bcrypt($request->input('password'))]);
 
-			//log Event
-			Event::fire(new UserUpdated($user));
+			//log activity
 			ActivityLog::submit("User " . $user->username . " was updated.");
 		}
 		//return to user overview
@@ -141,8 +136,7 @@ class UserController extends Controller
 
 		$user->update($request->all());
 
-		//log Event
-		Event::fire(new UserUpdated($user));
+		//log activity
 		ActivityLog::submit("User " . $user->username . " was updated.");
 
 		return Redirect::route('users.index')->with('message', 'User updated.');
@@ -191,8 +185,7 @@ class UserController extends Controller
 		//find user
 		$user = User::findOrFail($request->input('username_id'));
 
-		//log Event
-		Event::fire(new UserUpdated($user));
+		//log activity
 		ActivityLog::submit("Userrights for " . $user->username . " were updated.");
 
 		return Redirect::route('users.index')->with('message', 'User updated.');
@@ -211,8 +204,7 @@ class UserController extends Controller
 		//find user
 		$user = User::findOrFail($user->id);
 
-		//log Event
-		Event::fire(new UserDeleted($user));
+		//log activity
 		ActivityLog::submit("User " . $user->username . " was deleted.");
 
 		//delete user

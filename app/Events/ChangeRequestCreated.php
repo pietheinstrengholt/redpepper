@@ -11,7 +11,7 @@ class ChangeRequestCreated extends Event
 	use SerializesModels;
 
 	public $changerequest;
-	
+
 	public function __construct(ChangeRequest $changerequest)
 	{
 		$this->changerequest = $changerequest;

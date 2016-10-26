@@ -12,8 +12,6 @@ use App\TemplateColumn;
 use App\TemplateRow;
 use App\User;
 use Auth;
-use Event;
-use App\Events\SectionUpdated;
 use Gate;
 use Illuminate\Http\Request;
 use Redirect;
@@ -179,8 +177,7 @@ class CSVController extends Controller
 					}
 				}
 
-				//log Event
-				Event::fire(new SectionUpdated($section));
+				//log activity
 				ActivityLog::submit("CSV content imported.");
 
 				return Redirect::to('/sections')->with('message', 'CSV successfully imported to the database.');

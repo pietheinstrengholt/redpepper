@@ -5,7 +5,6 @@ namespace App\Listeners;
 use App\Events\ChangeRequestCreated;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Log;
 use App\ChangeRequest;
 use Auth;
 use Mail;
@@ -22,16 +21,6 @@ class LogWhenChangeRequestCreated
 
 	public function handle(ChangeRequestCreated $event)
 	{
-		\Log::info("CHANGEREQUEST CREATED {$event->changerequest->id}"); 
-
-		$log = new Log;
-		$log->log_event = 'Changerequest';
-		$log->action = 'Created';
-		$log->changerequest_id = $event->changerequest->id;
-		$log->template_id = $event->changerequest->template_id;
-		$log->created_by = Auth::user()->id;
-		$log->save();
-
 		$array = array();
 
 		$array['changerequest_id'] = $event->changerequest->id;

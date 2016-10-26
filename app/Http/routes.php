@@ -28,7 +28,6 @@ Route::model('types', 'TechnicalType');
 Route::model('departments', 'Department');
 Route::model('users', 'User');
 Route::model('changerequests', 'ChangeRequest');
-Route::model('logs', 'Log');
 Route::model('terms', 'Term');
 Route::model('fileupload', 'FileUpload');
 
@@ -64,10 +63,6 @@ Route::bind('users', function($value, $route) {
 
 Route::bind('changerequests', function($value, $route) {
 	return App\ChangeRequest::whereId($value)->first();
-});
-
-Route::bind('logs', function($value, $route) {
-	return App\Log::whereId($value)->first();
 });
 
 Route::bind('terms', function($value, $route) {
@@ -108,7 +103,6 @@ Route::resource('types', 'TechnicalTypeController');
 Route::resource('departments', 'DepartmentController');
 Route::resource('users', 'UserController');
 Route::resource('changerequests', 'ChangeRequestController');
-Route::resource('logs', 'LogController');
 Route::resource('terms', 'TermController');
 Route::resource('fileupload', 'FileUploadController');
 

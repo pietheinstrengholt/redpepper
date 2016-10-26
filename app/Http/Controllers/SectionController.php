@@ -1,9 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Events\SectionCreated;
-use App\Events\SectionUpdated;
-use App\Events\SectionDeleted;
 use App\Http\Controllers\Controller;
 use App\Section;
 use App\Subject;
@@ -12,7 +9,6 @@ use App\User;
 use App\UserRights;
 use App\FileUpload;
 use Auth;
-use Event;
 use Gate;
 use Illuminate\Http\Request;
 use Redirect;
@@ -106,7 +102,7 @@ class SectionController extends Controller
 
 		$section = Section::create($request->all());
 
-		Event::fire(new SectionCreated($section));
+		//Log activity
 		ActivityLog::submit("Section " . $section->section_name . " was created.");
 
 		return Redirect::route('subjects.show', array($subject))->with('message', 'Section created');
@@ -126,7 +122,7 @@ class SectionController extends Controller
 
 			$section->update($request->all());
 
-			Event::fire(new SectionUpdated($section));
+			//Log activity
 			ActivityLog::submit("Section " . $section->section_name . " was updated.");
 
 			return Redirect::route('subjects.show', array($subject))->with('message', 'Section updated.');
@@ -147,8 +143,7 @@ class SectionController extends Controller
 
 		Template::where('section_id', $section->id)->delete();
 
-		//log Event
-		Event::fire(new SectionDeleted($section));
+		//Log activity
 		ActivityLog::submit("Section " . $section->section_name . " was deleted.");
 
 		$section->delete();

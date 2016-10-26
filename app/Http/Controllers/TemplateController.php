@@ -5,9 +5,6 @@ use App\ChangeRequest;
 use App\DraftField;
 use App\DraftRequirement;
 use App\DraftTechnical;
-use App\Events\TemplateCreated;
-use App\Events\TemplateUpdated;
-use App\Events\TemplateDeleted;
 use App\Http\Controllers\Controller;
 use App\Requirement;
 use App\Section;
@@ -22,7 +19,6 @@ use App\TemplateRow;
 use App\User;
 use App\UserRights;
 use Auth;
-use Event;
 use Gate;
 use Illuminate\Http\Request;
 use Redirect;
@@ -291,8 +287,7 @@ class TemplateController extends Controller
 				}
 			}
 
-			//log Event
-			Event::fire(new TemplateCreated($template));
+			//log activity
 			ActivityLog::submit("Template " . $template->template_name . " was created.");
 
 		}
@@ -417,8 +412,7 @@ class TemplateController extends Controller
 					}
 				}
 
-				//log Event
-				Event::fire(new TemplateUpdated($template));
+				//log activity
 				ActivityLog::submit("Template \"" . $template->template_name . "\" was updated.");
 
 			}
@@ -444,8 +438,7 @@ class TemplateController extends Controller
 		$input['section_id'] = $section->id;
 		$template = Template::create($input);
 
-		//log Event
-		Event::fire(new TemplateCreated($template));
+		//log activity
 		ActivityLog::submit("Template \"" . $template->template_name . "\" was created.");
 
 		return Redirect::route('sections.show', $section->id)->with('message', 'Template created.');
@@ -465,8 +458,7 @@ class TemplateController extends Controller
 			'template_shortdesc' => 'required|min:4'
 		]);
 
-		//log Event
-		Event::fire(new TemplateUpdated($template));
+		//log activity
 		ActivityLog::submit("Template \"" . $template->template_name . "\" was updated.");
 
 		$input = array_except($request->all(), '_method');
@@ -492,8 +484,7 @@ class TemplateController extends Controller
 			//TODO: use for each procedure to also delete children content
 			Template::where('parent_id', $template->id)->delete();
 
-			//log Event
-			Event::fire(new TemplateDeleted($template));
+			//log activity
 			ActivityLog::submit("Template \"" . $template->template_name . "\" was deleted.");
 
 			//delete template

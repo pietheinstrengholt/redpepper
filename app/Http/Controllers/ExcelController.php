@@ -5,7 +5,6 @@ use App\ChangeRequest;
 use App\DraftField;
 use App\DraftRequirement;
 use App\DraftTechnical;
-use App\Events\TemplateCreated;
 use App\HistoryRequirement;
 use App\HistoryTechnical;
 use App\Http\Controllers\Controller;
@@ -22,7 +21,6 @@ use App\User;
 use App\Term;
 use App\UserRights;
 use Auth;
-use Event;
 use Gate;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -919,7 +917,6 @@ class ExcelController extends Controller
 				}
 
 				//Log activity
-				Event::fire(new TemplateCreated($template));
 				ActivityLog::submit("Template " . $template->template_name . " was created.");
 
 				return Redirect::to('/sections')->with('message', 'New template successfully added to the database.');

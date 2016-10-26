@@ -5,9 +5,6 @@ use App\ChangeRequest;
 use App\DraftRequirement;
 use App\DraftTechnical;
 use App\Events\ChangeRequestCreated;
-use App\Events\ChangeRequestApproved;
-use App\Events\ChangeRequestRejected;
-use App\Events\ChangeRequestDeleted;
 use App\HistoryRequirement;
 use App\HistoryTechnical;
 use App\Http\Controllers\Controller;
@@ -833,8 +830,7 @@ class ChangeRequestController extends Controller
 					$ChangeRequest->comment = $request->input('comment');
 					$ChangeRequest->save();
 
-					//log Event
-					Event::fire(new ChangeRequestRejected($ChangeRequest));
+					//log activity
 					ActivityLog::submit("Changerequest \"" . $ChangeRequest->id . "\" rejected.");
 				}
 
@@ -848,8 +844,7 @@ class ChangeRequestController extends Controller
 					//process changerequest
 					$this->process($ChangeRequest);
 
-					//log Event
-					Event::fire(new ChangeRequestApproved($ChangeRequest));
+					//log activity
 					ActivityLog::submit("Changerequest \"" . $ChangeRequest->id . "\" approved.");
 				}
 			}
@@ -859,8 +854,7 @@ class ChangeRequestController extends Controller
 
 	public function destroy(ChangeRequest $ChangeRequest)
 	{
-		//log Event
-		Event::fire(new ChangeRequestDeleted($ChangeRequest));
+		//log activity
 		ActivityLog::submit("Changerequest \"" . $ChangeRequest->id . "\" deleted.");
 
 		$ChangeRequest->delete();
@@ -1011,8 +1005,7 @@ class ChangeRequestController extends Controller
 				//process changerequest
 				$this->process($ChangeRequest);
 
-				//log Event
-				Event::fire(new ChangeRequestApproved($ChangeRequest));
+				//log activity
 				ActivityLog::submit("Changerequest \"" . $ChangeRequest->id . "\" created.");
 
 				//redirect back to template page
@@ -1020,7 +1013,7 @@ class ChangeRequestController extends Controller
 
 			} else {
 
-				//log Event
+				//log activity and create event to send out notification
 				Event::fire(new ChangeRequestCreated($ChangeRequest));
 				ActivityLog::submit("Changerequest \"" . $ChangeRequest->id . "\" created.");
 

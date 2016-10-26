@@ -7,6 +7,7 @@ use App\User;
 use Gate;
 use Illuminate\Http\Request;
 use Redirect;
+use App\Helpers\ActivityLog;
 
 class SettingController extends Controller
 {
@@ -67,6 +68,9 @@ class SettingController extends Controller
 			'administrator_email' => 'required|email',
 			'superadmin_process_directly' => 'required',
 		]);
+
+		//Log activity
+		ActivityLog::submit("Settings updated.");
 
 		//truncate table
 		Setting::truncate();
