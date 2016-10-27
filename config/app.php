@@ -152,7 +152,6 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Collective\Bus\BusServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        App\Providers\ActivityLogServiceProvider::class,
 
     ],
 
@@ -212,6 +211,7 @@ return [
 		'FineDiff'  => 'App\Libraries\FineDiff',
 		'Excel'     => 'Maatwebsite\Excel\Facades\Excel',
 		'ActivityLog' => App\Helpers\ActivityLog::class,
+
     ],
 
 ];
