@@ -151,3 +151,6 @@ Route::get('/imageupload', function() {
 	return view('imageupload.image-dialog');
 });
 Route::post('/imageupload', 'TemplateController@imageUpload');
+
+//activities
+Route::get('activities', ['middleware' => 'auth', 'uses' => 'ActivityController@index']);

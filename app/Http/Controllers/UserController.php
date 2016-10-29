@@ -7,6 +7,7 @@ use App\Log;
 use App\Section;
 use App\Subject;
 use App\User;
+use App\Activity;
 use App\UserRights;
 use Auth;
 use Gate;
@@ -215,7 +216,12 @@ class UserController extends Controller
 
 	public function show(User $user)
 	{
-		abort(403, 'There is no page to retrieve the user details yet..');
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
+		$user->load('activities');
+		return view('users.show', compact('user'));
 	}
 
 }

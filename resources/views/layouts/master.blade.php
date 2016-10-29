@@ -19,7 +19,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta charset="utf-8">
-	
+
 	<!-- Favicon -->
 	<link rel="apple-touch-icon" sizes="57x57" href="{{ URL::asset('img/favicon/apple-icon-57x57.png') }}">
 	<link rel="apple-touch-icon" sizes="60x60" href="{{ URL::asset('img/favicon/apple-icon-60x60.png') }}">
@@ -107,7 +107,7 @@
 				  <li><a href="{{ URL::to('/changerequests') }}"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Change requests</a></li>
 				  @if (Auth::user()->role == "superadmin" || Auth::user()->role == "admin")
 					<li class="divider"></li>
-					<li><a href="{{ URL::to('/logs') }}"><span class="glyphicon glyphicon-certificate" aria-hidden="true"></span> User activities</a></li>
+					<li><a href="{{ URL::to('/activities') }}"><span class="glyphicon glyphicon-certificate" aria-hidden="true"></span> User activities</a></li>
 					<li class="divider"></li>
 				  @endif
 				  @if (Auth::user()->role == "superadmin" || Auth::user()->role == "admin" || Auth::user()->role == "builder")

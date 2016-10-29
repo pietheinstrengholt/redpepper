@@ -14,8 +14,8 @@ class StatusController extends Controller
 		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');
 		}
-  		$statuses = Status::orderBy('status_name', 'asc')->get();
-  		return view('statuses.index', compact('statuses'));
+		$statuses = Status::orderBy('status_name', 'asc')->get();
+		return view('statuses.index', compact('statuses'));
     }
 
 	public function edit(Status $status)
