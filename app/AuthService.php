@@ -29,6 +29,31 @@ class AuthService {
 		//return Array with sections
 		return $sectionRights;
 	}
+
+	public function getTemplatesList() {
+
+		if (Auth::check()) {
+
+			$userrights = UserRights::where('username_id', Auth::user()->id)->get();
+
+			$templatesRights = array();
+			$userrights = $userrights->toArray();
+			if (!empty($userrights)) {
+				foreach ($userrights as $userright) {
+					$templates = Template::where('section_id', $userright['section_id'])->get();
+					if (!empty($templates)) {
+						foreach ($templates as $template) {
+							array_push($templatesRights,$template->id);
+						}
+					}
+				}
+			}
+			return $templatesRights;
+		} else {
+			return null;
+		}
+	}
+
 }
 
 ?>

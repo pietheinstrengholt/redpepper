@@ -28,27 +28,16 @@ use Redirect;
 use Session;
 use Validator;
 use App\Helpers\ActivityLog;
+use App\AuthService;
 
 class ChangeRequestController extends Controller
 {
-	public function templateRights($id) {
+	protected $authService;
 
-		$userrights = UserRights::where('username_id', $id)->get();
-
-		$templatesRights = array();
-		$userrights = $userrights->toArray();
-		if (!empty($userrights)) {
-			foreach ($userrights as $userright) {
-				$templates = Template::where('section_id', $userright['section_id'])->get();
-				if (!empty($templates)) {
-					foreach ($templates as $template) {
-						array_push($templatesRights,$template->id);
-					}
-				}
-			}
-		}
-		return $templatesRights;
-	}
+    public function __construct(AuthService $authService)
+    {
+       $this->authService = $authService;
+    }
 
     public function index()
     {
@@ -63,7 +52,7 @@ class ChangeRequestController extends Controller
 		}
 
 		if (Auth::user()->role == "admin" || Auth::user()->role == "reviewer" || Auth::user()->role == "builder") {
-			$templateList = $this->templateRights(Auth::user()->id);
+			$templateList = $this->authService->getTemplatesList();
 			$changerequests = ChangeRequest::whereIn('template_id', $templateList)->with('template.section.subject','creator')->orderBy('created_at', 'desc')->paginate(15);
 		}
 
@@ -203,7 +192,7 @@ class ChangeRequestController extends Controller
 				}
 
 				//check if users have section rights
-				$templateList = $this->templateRights(Auth::user()->id);
+				$templateList = $this->authService->getTemplatesList();
 				if (!in_array($ChangeRequest->template_id, $templateList)) {
 					$allowedToChange = "no";
 				}

@@ -28,23 +28,16 @@ use Redirect;
 use Session;
 use Validator;
 use App\Helpers\ActivityLog;
+use App\AuthService;
 
 class ExcelController extends Controller
 {
-	//function to retrieve section rights based on user id
-	public function sectionRights($id) {
+	protected $authService;
 
-		$userrights = UserRights::where('username_id', $id)->get();
-
-		$sectionRights = array();
-		$userrights = $userrights->toArray();
-		if (!empty($userrights)) {
-			foreach ($userrights as $userright) {
-				array_push($sectionRights,$userright['section_id']);
-			}
-		}
-		return $sectionRights;
-	}
+    public function __construct(AuthService $authService)
+    {
+       $this->authService = $authService;
+    }
 
 	public function uploadterms()
 	{
@@ -172,7 +165,7 @@ class ExcelController extends Controller
 
 		//admin and builder are only permitted to upload to own sections
 		if (Auth::user()->role == "admin" || Auth::user()->role == "builder") {
-			$sectionList = $this->sectionRights(Auth::user()->id);
+			$sectionlist = $this->authService->getSectionsList();
 			$sections = Section::whereIn('id', $sectionList)->orderBy('section_name', 'asc')->get();
 			if (empty($sections)) {
 				abort(403, 'Unauthorized action. You don\'t have access to any sections');
