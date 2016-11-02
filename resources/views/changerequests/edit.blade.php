@@ -39,16 +39,16 @@
 				<dd><div class="content-box">{!! $changerequest->field_property2 !!}</div></dd>
 				</dl>
 			@endif
-			@if ($changerequest->field_regulation !== '')
-				<dl class="dl-horizontal">
-				<dt>Legal standard:</dt>
-				<dd><div class="content-box">{!! $changerequest->field_regulation !!}</div></dd>
-				</dl>
-			@endif
 			@if ($changerequest->field_interpretation !== '')
 				<dl class="dl-horizontal">
 				<dt>Interpretation:</dt>
 				<dd><div class="content-box">{!! $changerequest->field_interpretation !!}</div></dd>
+				</dl>
+			@endif
+			@if ($changerequest->field_regulation !== '')
+				<dl class="dl-horizontal">
+				<dt>Legal standard:</dt>
+				<dd><div class="content-box">{!! $changerequest->field_regulation !!}</div></dd>
 				</dl>
 			@endif
 			</td>
@@ -67,18 +67,18 @@
 		<td class="info-left im-content">
 			<h4><b>Name:</b></h4>
 			<div rows="1" id="row_name">{{ $template_row->row_description }}</div>
-			<h4><b>Legal standard:</b></h4>
-			<div rows="7" id="row_regulation">{!! nl2br($changerequest->regulation_row) !!}</div>
 			<h4><b>Interpretation:</b></h4>
 			<div rows="6" id="row_interpretation">{!! nl2br($changerequest->interpretation_row) !!}</div>
+			<h4><b>Legal standard:</b></h4>
+			<div rows="7" id="row_regulation">{!! nl2br($changerequest->regulation_row) !!}</div>
 		</td>
 		<td class="info-right im-content">
 			<h4><b>Name:</b></h4>
 			<div rows="1" id="coloumn_name">{{ $template_column->column_description }}</div>
-			<h4><b>Legal standard:</b></h4>
-			<div rows="7" id="column_regulation">{!! nl2br($changerequest->regulation_column) !!}</div>
 			<h4><b>Interpretation:</b></h4>
 			<div rows="6" id="column_interpretation">{!! nl2br($changerequest->interpretation_column) !!}</div>
+			<h4><b>Legal standard:</b></h4>
+			<div rows="7" id="column_regulation">{!! nl2br($changerequest->regulation_column) !!}</div>
 		</td>
 	</tr>
 	</table>

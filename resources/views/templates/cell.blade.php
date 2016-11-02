@@ -18,16 +18,16 @@
 	<dd><div title="{!! App\Helper::returnHistory($field_property2) !!}" class="content-box">{{ $field_property2->content }}</div></dd>
 	</dl>
 @endif
-@if ( $field_regulation )
-	<dl class="dl-horizontal">
-	<dt>Regulation:</dt>
-	<dd><div title="{!! App\Helper::returnHistory($field_regulation) !!}" class="content-box">{!! App\Helper::contentAdjust(nl2br(e($field_regulation->content))) !!}</div></dd>
-	</dl>
-@endif
 @if ( $field_interpretation )
 	<dl class="dl-horizontal">
 	<dt>Interpretation by {!! App\Helper::setting('bank_name') !!}:</dt>
 	<dd><div title="{!! App\Helper::returnHistory($field_interpretation) !!}" class="content-box">{!! App\Helper::contentAdjust(nl2br(e($field_interpretation->content))) !!}</div></dd>
+	</dl>
+@endif
+@if ( $field_regulation )
+	<dl class="dl-horizontal">
+	<dt>Regulation:</dt>
+	<dd><div title="{!! App\Helper::returnHistory($field_regulation) !!}" class="content-box">{!! App\Helper::contentAdjust(nl2br(e($field_regulation->content))) !!}</div></dd>
 	</dl>
 @endif
 </td>
@@ -44,33 +44,33 @@
 	<td class="info-left im-content">
 		<h4><b>Name:</b></h4>
 		<div rows="1" title="{!! App\Helper::returnHistory($row) !!}" id="rowname">{{ $row->row_description }}</div>
-		<h4><b>Regulation:</b></h4>
-		@if ( $regulation_row )
-			<div rows="7" title="{!! App\Helper::returnHistory($regulation_row) !!}" id="row_regulation">{!! App\Helper::contentAdjust(nl2br(e($regulation_row['content']))) !!}</div>
-		@else
-			<div rows="7" id="row_regulation">No regulation found in the database...<br><br></div>
-		@endif
 		<h4><b>Interpretation by {!! App\Helper::setting('bank_name') !!}:</b></h4>
 		@if ( $interpretation_row )
 			<div rows="6" title="{!! App\Helper::returnHistory($interpretation_row) !!}" id="row_interpretation">{!! App\Helper::contentAdjust(nl2br(e($interpretation_row['content']))) !!}</div>
 		@else
 			<div rows="6" id="row_interpretation">No interpretation found in the database...<br><br></div>
 		@endif
+		<h4><b>Regulation:</b></h4>
+		@if ( $regulation_row )
+			<div rows="7" title="{!! App\Helper::returnHistory($regulation_row) !!}" id="row_regulation">{!! App\Helper::contentAdjust(nl2br(e($regulation_row['content']))) !!}</div>
+		@else
+			<div rows="7" id="row_regulation">No regulation found in the database...<br><br></div>
+		@endif
 	</td>
 	<td class="info-right im-content">
 		<h4><b>Name:</b></h4>
 		<div rows="1" title="{!! App\Helper::returnHistory($column) !!}" id="colname">{{ $column->column_description }}</div>
-		<h4><b>Regulation:</b></h4>
-		@if ( $regulation_column )
-			<div rows="7" title="{!! App\Helper::returnHistory($regulation_column) !!}" id="column_regulation">{!! App\Helper::contentAdjust(nl2br(e($regulation_column['content']))) !!}</div>
-		@else
-			<div rows="7" id="column_regulation">No regulation found in the database...<br><br></div>
-		@endif
 		<h4><b>Interpretation by {!! App\Helper::setting('bank_name') !!}:</b></h4>
 		@if ( $interpretation_column )
 			<div rows="6" title="{!! App\Helper::returnHistory($interpretation_column) !!}" id="column_interpretation">{!! App\Helper::contentAdjust(nl2br(e($interpretation_column['content']))) !!}</div>
 		@else
 			<div rows="6" id="column_interpretation">No interpretation found in the database...<br><br></div>
+		@endif
+		<h4><b>Regulation:</b></h4>
+		@if ( $regulation_column )
+			<div rows="7" title="{!! App\Helper::returnHistory($regulation_column) !!}" id="column_regulation">{!! App\Helper::contentAdjust(nl2br(e($regulation_column['content']))) !!}</div>
+		@else
+			<div rows="7" id="column_regulation">No regulation found in the database...<br><br></div>
 		@endif
 	</td>
 </tr>

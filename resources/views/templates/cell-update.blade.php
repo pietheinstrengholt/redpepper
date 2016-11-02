@@ -42,13 +42,13 @@
 	</dl>
 
 	<dl class="dl-horizontal">
-	<dt>Regulation:</dt>
-	<dd><textarea form="form" name="field_regulation" class="form-control" rows="5" id="field_regulation">{{ $field_regulation['content'] }}</textarea></dd>
+	<dt>Interpretation:</dt>
+	<dd><textarea form="form" name="field_interpretation" class="form-control" rows="5" id="field_interpretation">{{ $field_interpretation['content'] }}</textarea></dd>
 	</dl>
 
 	<dl class="dl-horizontal">
-	<dt>Interpretation:</dt>
-	<dd><textarea form="form" name="field_interpretation" class="form-control" rows="5" id="field_interpretation">{{ $field_interpretation['content'] }}</textarea></dd>
+	<dt>Regulation:</dt>
+	<dd><textarea form="form" name="field_regulation" class="form-control" rows="5" id="field_regulation">{{ $field_regulation['content'] }}</textarea></dd>
 	</dl>
 
 	</td>
@@ -65,18 +65,18 @@
 		<td class="info-left im-content">
 			<h4><b>Name:</b></h4>
 			<div rows="1" id="rowname">{{ $row['row_description'] }}</div>
-			<h4><b>Regulation:</b></h4>
-			<textarea form="form" name="regulation_row" class="form-control" rows="7" id="regulation_row">{{ $regulation_row['content'] }}</textarea>
 			<h4><b>Interpretation:</b></h4>
 			<textarea form="form" name="interpretation_row" class="form-control" rows="6" id="interpretation_row">{{ $interpretation_row['content'] }}</textarea>
+			<h4><b>Regulation:</b></h4>
+			<textarea form="form" name="regulation_row" class="form-control" rows="7" id="regulation_row">{{ $regulation_row['content'] }}</textarea>
 		</td>
 		<td class="info-right im-content">
 			<h4><b>Name:</b></h4>
 			<div rows="1" id="colname">{{ $column['column_description'] }}</div>
-			<h4><b>Regulation:</b></h4>
-			<textarea form="form" name="regulation_column" class="form-control" rows="7" id="regulation_column">{{ $regulation_column['content'] }}</textarea>
 			<h4><b>Interpretation:</b></h4>
 			<textarea form="form" name="interpretation_column" class="form-control" rows="6" id="interpretation_column">{{ $interpretation_column['content'] }}</textarea>
+			<h4><b>Regulation:</b></h4>
+			<textarea form="form" name="regulation_column" class="form-control" rows="7" id="regulation_column">{{ $regulation_column['content'] }}</textarea>
 		</td>
 	</tr>
 	</table>
