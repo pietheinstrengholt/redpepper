@@ -13,9 +13,17 @@ use Gate;
 use Illuminate\Http\Request;
 use Redirect;
 use App\Helpers\ActivityLog;
+use App\AuthService;
 
 class SectionController extends Controller
 {
+	protected $authService;
+
+    public function __construct(AuthService $authService)
+    {
+       $this->authService = $authService;
+    }
+
 	public function show(Subject $subject, Section $section)
 	{
 		//check if id property exists
@@ -50,38 +58,36 @@ class SectionController extends Controller
 
 	public function edit(Subject $subject, Section $section, Request $request)
 	{
-		if (Auth::guest()) {
-			abort(403, 'Unauthorized action.');
-		}
-
 		//check if id property exists
 		if (!$section->id) {
 			abort(403, 'This section no longer exists in the database.');
 		}
 
-		//retrieve subjects for dropdown
-		$subjects = Subject::orderBy('subject_name', 'asc')->get();
+		//check if the user has the rights permissions
+		if ($request->user()->cant('update-section', $section)) {
+			abort(403, 'Unauthorized action.');
+		}
+
+		//retrieve list with subject via the AuthService Model and not by using Auth::user()->subjects;
+		$subjectlist = $this->authService->getSubjectsList();
+		$subjects = Subject::whereIn('id', $subjectlist)->orderBy('subject_name', 'asc')->get();
 
 		//set subject_id variable, workaround for create function
 		$subject_id = $section->subject_id;
 
-		//validate if user can update section (see AuthServiceProvider)
-		if ($request->user()->can('update-section', $section)) {
-			return view('sections.edit', compact('subject','section','subjects','subject_id'));
-		} else {
-			abort(403, 'Unauthorized action.');
-		}
+		return view('sections.edit', compact('subject','section','subjects','subject_id'));
 	}
 
 	public function create(Subject $subject, Section $section, Request $request)
 	{
-		//retrieve subjects for dropdown
-		$subjects = Subject::orderBy('subject_name', 'asc')->get();
-
 		//check if the user has the rights permissions
 		if (Auth::user()->cant('update-subject', $subject)) {
 			abort(403, 'Unauthorized action.');
 		}
+
+		//retrieve list with subject via the AuthService Model and not by using Auth::user()->subjects;
+		$subjectlist = $this->authService->getSubjectsList();
+		$subjects = Subject::whereIn('id', $subjectlist)->orderBy('subject_name', 'asc')->get();
 
 		return view('sections.create', compact('section','subjects','subject','subject_id'));
 	}

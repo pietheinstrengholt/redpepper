@@ -187,7 +187,7 @@
 	@if ( $template->parent )
 		<p>{!! link_to_route('subjects.sections.templates.show', 'Back to template', array($template->section->subject, $template->section, $template->parent))  !!}</p>
 	@else
-		<p>{!! link_to_route('subjects.sections.show', 'Back to Sections', array($template->section->subject, $template->section))  !!}</p>
+		<p>{!! link_to_route('subjects.sections.show', 'Back to Section', array($template->section->subject, $template->section))  !!}</p>
 	@endif
 
 @include('templates.modal')
