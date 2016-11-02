@@ -36,17 +36,17 @@
 
 	@if ( $subjects->count() )
 		<div class="form-group">
-		<table class="table table-striped table-condensed">
+		<table class="table table-striped table-condensed table-bordered">
 		<tr class="success">
 		<th><h4>Section or group</h4></th>
 		<th style="text-align: center;"><h4>Selected rights</h4></th>
 		</tr>
-		<tr class="allrights danger notvisible">
+		<tr class="allrights notvisible">
 		<td><strong>All</strong></td>
 		<td style="text-align: center;"><input type="checkbox"></td>
 		</tr>
 		@foreach( $subjects as $subject )
-			<tr class="master warning" id="{{ $subject->id }}">
+			<tr class="master" id="{{ $subject->id }}" style="background-color:#f9f9f9;">
 			<td><strong>{{ $subject->subject_name }}</strong></td>
 			@if ( in_array($subject->id, $subjectrights) )
 				<td class="rights" style="text-align: center;"><input name="subject[{{ $subject->id }}]" id="subject_rights" checked type="checkbox" value="{{ $subject->id }}"></td>
@@ -55,7 +55,7 @@
 			@endif
 			</tr>
 			@foreach( $subject->sections as $section )
-				<tr class="slave" id="{{ $subject->id }}">
+				<tr class="slave" id="{{ $subject->id }}" style="background-color:#e0e0e0;">
 				<td>
 				@if ($section->subject)
 					<strong style="padding-left:20px;">{{ $section->section_name }}</strong>

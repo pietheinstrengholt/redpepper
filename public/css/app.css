@@ -32,6 +32,7 @@
 [title]{
 	position:relative;
 }
+
 [title]:after{
 	content:attr(title);
 	color:#fff;
@@ -45,6 +46,7 @@
 	white-space:nowrap;
 	-webkit-transition:0.25s linear opacity;
 }
+
 [title]:hover:after{
 	left:5px;
 	opacity:1;
@@ -85,13 +87,7 @@ ul.breadcrumb-section {
 	margin-top: 20px ! important;
 }
 
-/* Sections and templates overview */
-tr.notvisible {
-  background-color:#FEF0C9 !important
-}
-
 /* Template */
-
 table.template tr td {
 	border-color: black;
 }
