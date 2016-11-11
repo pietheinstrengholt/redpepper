@@ -139,8 +139,8 @@ class SectionController extends Controller
 
 	public function destroy(Subject $subject, Section $section, Request $request)
 	{
-		//check if the user has the rights permissions
-		if (Auth::user()->cant('update-subject', $subject)) {
+		//only a superadmin has permissions to create new sections
+		if (Gate::denies('superadmin')) {
 			abort(403, 'Unauthorized action.');
 		}
 

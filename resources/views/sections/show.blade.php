@@ -40,7 +40,7 @@
 			@if ( $template->rows->count() && $template->columns->count() )
 				<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $template->id }}">Export</a>
 			@endif
-			@can('update-section', $section)
+			@can('superadmin')
 				{!! link_to_route('subjects.sections.templates.edit', 'Edit', array($subject->id, $section->id, $template->id), array('class' => 'btn btn-info btn-xs')) !!}
 				@if ( $template->rows->count() && $template->columns->count() )
 					<a class="btn btn-warning btn-xs" style="margin-left:2px;" href="{{ url('subjects') . '/' . $template->section->subject->id . '/sections/' . $template->section->id . '/templates/' . $template->id . '/structure' }}">Structure</a>
