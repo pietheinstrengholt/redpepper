@@ -3,6 +3,7 @@
 namespace App;
 use App\User;
 use App\Section;
+use App\Subject;
 use Auth;
 use Gate;
 
@@ -13,7 +14,7 @@ class AuthService {
 		//this function is needed to return all the subjects where the user has rights on.
 		$subjectRights = array();
 
-		$subjects = Section::orderBy('section_name', 'asc')->get();
+		$subjects = Subject::orderBy('subject_name', 'asc')->get();
 
 		foreach ($subjects as $subject) {
 			if (Auth::user()->can('update-subject', $subject)) {
