@@ -75,7 +75,7 @@
 			</div>
 		</div>
 
-		@if (!empty($section))
+		@if ($section->id)
 			<input type="hidden" name="section_id" value="{{ $section->id }}">
 		@else
 			<div class="form-group">
