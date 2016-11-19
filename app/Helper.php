@@ -50,12 +50,13 @@ class Helper {
 			//build dictionary with values that needs replacement
 			$patterns = array();
 			foreach ($words as $word) {
-				$patterns[$word->id] = strtolower($word->term_name);
+				$patterns[$word->id] = " " . strtolower($word->term_name) . " ";
 			}
 
 			//build dictionary with values the replacements
 			$replacements = array();
 			foreach ($words as $word) {
+				//TODO: use str_ireplace without losing case
 				$replacements[$word->id] = "<a href=\"" . url('terms') . "/" . $word->id . "\">" . $patterns[$word->id] . "</a>";
 			}
 
