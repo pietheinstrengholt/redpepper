@@ -70,6 +70,14 @@ class TermController extends Controller
 		return view('terms.show', compact('term'));
 	}
 
+	public function search(Request $request)
+	{
+		//check if id property exists
+		$term = Term::where('term_name', 'LIKE', $request->input('search'))->first();
+
+		return view('terms.search', compact('term'));
+	}
+
 	public function edit(Term $term)
 	{
 		//check if id property exists
@@ -128,10 +136,10 @@ class TermController extends Controller
 		]);
 
 		$term->update($request->all());
-		
+
 		//Log activity
 		ActivityLog::submit("Term " . $term->term_name . " was updated.");
-		
+
 		return Redirect::to('/terms')->with('message', 'Term updated.');
 	}
 
@@ -146,7 +154,7 @@ class TermController extends Controller
 		if (!$term->id) {
 			abort(403, 'This term no longer exists in the database.');
 		}
-		
+
 		//Log activity
 		ActivityLog::submit("Term " . $term->term_name . " was deleted.");
 

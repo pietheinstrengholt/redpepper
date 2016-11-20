@@ -154,3 +154,6 @@ Route::post('/imageupload', 'TemplateController@imageUpload');
 
 //activities
 Route::get('activities', ['middleware' => 'auth', 'uses' => 'ActivityController@index']);
+
+//term search
+Route::get('/searchterms', 'TermController@search');

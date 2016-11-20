@@ -43,28 +43,24 @@ class Helper {
 	}
 
 	public static function addTermLinks($text) {
+
 		//retrieve words from database
 		$words = Term::all();
 
+		//build dictionary with values the replacements
+		$array_of_words = array();
 		if (!empty($words)) {
-			//build dictionary with values that needs replacement
-			$patterns = array();
 			foreach ($words as $word) {
-				$patterns[$word->id] = " " . strtolower($word->term_name) . " ";
+				array_push($array_of_words,$word->term_name);
 			}
-
-			//build dictionary with values the replacements
-			$replacements = array();
-			foreach ($words as $word) {
-				//TODO: use str_ireplace without losing case
-				$replacements[$word->id] = "<a href=\"" . url('terms') . "/" . $word->id . "\">" . $patterns[$word->id] . "</a>";
-			}
-
-			//return text, replace words from dictionary with hyperlinks
-			return str_ireplace($patterns, $replacements, $text);
-		} else {
-			return $text;
 		}
+
+		//use preg_replace_callback to not loose case
+		$pattern = '#(?<=^|\W)('. implode('|', array_map('preg_quote', $array_of_words)) . ')(?=$|\W)#i';
+		$callback = function ($match) {
+		    return "<a class='bim-link' href=" . url('searchterms') . "?search=" . urlencode($match[0]) . ">" . $match[0] . "</a>";
+		};
+		return preg_replace_callback($pattern, $callback, $text);
 	}
 
 	public static function contentAdjust($input) {

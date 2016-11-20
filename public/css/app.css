@@ -428,3 +428,10 @@ div.content-container {
 div#footer, p.p-more-info, h3.center, p.center {
 	text-align: center;
 }
+
+/* bim links */
+a.bim-link {
+   color: #2c3e50;
+   background-color: #eafcf9;
+   text-decoration: none !important;
+}
