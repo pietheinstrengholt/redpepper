@@ -75,6 +75,11 @@ class TermController extends Controller
 		//check if id property exists
 		$term = Term::where('term_name', 'LIKE', $request->input('search'))->first();
 
+		//check if id property exists
+		if (!$term) {
+			abort(403, 'No terms with this name exist in the database.');
+		}
+
 		return view('terms.search', compact('term'));
 	}
 
