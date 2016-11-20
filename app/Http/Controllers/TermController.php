@@ -1,13 +1,13 @@
 <?php
 namespace App\Http\Controllers;
+use App\Helpers\ActivityLog;
 use App\Http\Controllers\Controller;
 use App\Term;
 use App\User;
-use Gate;
 use Auth;
+use Gate;
 use Illuminate\Http\Request;
 use Redirect;
-use App\Helpers\ActivityLog;
 
 class TermController extends Controller
 {

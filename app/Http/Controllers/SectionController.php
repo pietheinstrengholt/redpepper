@@ -1,19 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\AuthService;
+use App\FileUpload;
+use App\Helpers\ActivityLog;
 use App\Http\Controllers\Controller;
 use App\Section;
 use App\Subject;
 use App\Template;
 use App\User;
 use App\UserRights;
-use App\FileUpload;
 use Auth;
 use Gate;
 use Illuminate\Http\Request;
 use Redirect;
-use App\Helpers\ActivityLog;
-use App\AuthService;
 
 class SectionController extends Controller
 {

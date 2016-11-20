@@ -1,11 +1,12 @@
 <?php
 namespace App\Http\Controllers;
-use App\Http\Controllers\Controller;
 use App\Activity;
+use App\Http\Controllers\Controller;
 use App\User;
 use Gate;
 use Illuminate\Http\Request;
 use Redirect;
+
 class ActivityController extends Controller
 {
 	public function index()

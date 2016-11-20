@@ -1,24 +1,26 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\AuthService;
 use App\ChangeRequest;
 use App\DraftField;
 use App\DraftRequirement;
 use App\DraftTechnical;
+use App\Helpers\ActivityLog;
 use App\HistoryRequirement;
 use App\HistoryTechnical;
 use App\Http\Controllers\Controller;
 use App\Requirement;
 use App\Section;
 use App\Technical;
+use App\TechnicalDescription;
 use App\TechnicalSource;
 use App\TechnicalType;
-use App\TechnicalDescription;
 use App\Template;
 use App\TemplateColumn;
 use App\TemplateRow;
-use App\User;
 use App\Term;
+use App\User;
 use App\UserRights;
 use Auth;
 use Gate;
@@ -27,8 +29,6 @@ use Maatwebsite\Excel\Facades\Excel;
 use Redirect;
 use Session;
 use Validator;
-use App\Helpers\ActivityLog;
-use App\AuthService;
 
 class ExcelController extends Controller
 {

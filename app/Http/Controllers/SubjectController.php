@@ -1,16 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Helpers\ActivityLog;
 use App\Http\Controllers\Controller;
-use App\Subject;
 use App\Section;
+use App\Subject;
 use App\User;
 use App\UserRights;
 use Auth;
 use Gate;
 use Illuminate\Http\Request;
 use Redirect;
-use App\Helpers\ActivityLog;
 
 class SubjectController extends Controller
 {

@@ -1,13 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Setting;
+use App\Helpers\ActivityLog;
 use App\Http\Controllers\Controller;
+use App\Setting;
 use App\User;
 use Gate;
 use Illuminate\Http\Request;
 use Redirect;
-use App\Helpers\ActivityLog;
 
 class SettingController extends Controller
 {

@@ -6,6 +6,7 @@ use App\User;
 use Gate;
 use Illuminate\Http\Request;
 use Redirect;
+
 class StatusController extends Controller
 {
 	public function index()

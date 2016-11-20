@@ -1,18 +1,20 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\AuthService;
 use App\ChangeRequest;
 use App\DraftField;
 use App\DraftRequirement;
 use App\DraftTechnical;
+use App\Helpers\ActivityLog;
 use App\Http\Controllers\Controller;
 use App\Requirement;
 use App\Section;
 use App\Subject;
 use App\Technical;
+use App\TechnicalDescription;
 use App\TechnicalSource;
 use App\TechnicalType;
-use App\TechnicalDescription;
 use App\Template;
 use App\TemplateColumn;
 use App\TemplateRow;
@@ -24,8 +26,6 @@ use Illuminate\Http\Request;
 use Redirect;
 use Session;
 use Validator;
-use App\AuthService;
-use App\Helpers\ActivityLog;
 
 class TemplateController extends Controller
 {

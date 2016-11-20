@@ -1,14 +1,14 @@
 <?php
 namespace App\Http\Controllers;
-use App\Http\Controllers\Controller;
 use App\FileUpload;
+use App\Helpers\ActivityLog;
+use App\Http\Controllers\Controller;
+use App\Section;
 use App\User;
-use Gate;
 use Auth;
+use Gate;
 use Illuminate\Http\Request;
 use Redirect;
-use App\Section;
-use App\Helpers\ActivityLog;
 
 class FileUploadController extends Controller
 {

@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\AuthService;
 use App\ChangeRequest;
 use App\DraftRequirement;
 use App\DraftTechnical;
 use App\Events\ChangeRequestCreated;
+use App\Helper;
+use App\Helpers\ActivityLog;
 use App\HistoryRequirement;
 use App\HistoryTechnical;
 use App\Http\Controllers\Controller;
@@ -18,7 +21,6 @@ use App\Template;
 use App\TemplateColumn;
 use App\TemplateRow;
 use App\User;
-use App\Helper;
 use App\UserRights;
 use Auth;
 use Event;
@@ -27,8 +29,6 @@ use Illuminate\Http\Request;
 use Redirect;
 use Session;
 use Validator;
-use App\Helpers\ActivityLog;
-use App\AuthService;
 
 class ChangeRequestController extends Controller
 {

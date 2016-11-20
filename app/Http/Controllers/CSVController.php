@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Helpers\ActivityLog;
 use App\Http\Controllers\Controller;
 use App\Requirement;
 use App\Section;
@@ -14,11 +15,10 @@ use App\User;
 use Auth;
 use Gate;
 use Illuminate\Http\Request;
+use Input;
 use Redirect;
 use Session;
 use Validator;
-use Input;
-use App\Helpers\ActivityLog;
 
 class CSVController extends Controller
 {

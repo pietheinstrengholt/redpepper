@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Technical;
+use App\TechnicalDescription;
 use App\TechnicalSource;
 use App\TechnicalType;
-use App\TechnicalDescription;
 use App\User;
 use Gate;
 use Illuminate\Http\Request;

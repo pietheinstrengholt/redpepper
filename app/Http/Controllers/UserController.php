@@ -1,19 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Activity;
 use App\Department;
+use App\Helpers\ActivityLog;
 use App\Http\Controllers\Controller;
 use App\Log;
 use App\Section;
 use App\Subject;
 use App\User;
-use App\Activity;
 use App\UserRights;
 use Auth;
 use Gate;
 use Illuminate\Http\Request;
 use Redirect;
-use App\Helpers\ActivityLog;
 
 class UserController extends Controller
 {
