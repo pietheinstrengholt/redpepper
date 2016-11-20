@@ -55,3 +55,4 @@ TODO
 * jQuery 3.0?
 * rename fields to be consistent; shortdesc, visible
 * Move Helper file to Helpers folder
+* Helper bim - create hyperlink with id by looking up, instead of name
