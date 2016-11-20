@@ -19,10 +19,10 @@ class SectionController extends Controller
 {
 	protected $authService;
 
-    public function __construct(AuthService $authService)
-    {
-       $this->authService = $authService;
-    }
+	public function __construct(AuthService $authService)
+	{
+		 $this->authService = $authService;
+	}
 
 	public function show(Subject $subject, Section $section)
 	{

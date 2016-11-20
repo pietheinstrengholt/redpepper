@@ -45,10 +45,10 @@ class TermController extends Controller
 			if ($letter == "[0-9]") {
 				$values = array('1','2','3','4','5','6','7','8','9','0');
 				$terms = Term::where(function($q) use ($values) {
-						  for ($i = 0; $i < count($values); $i++){
-			                  $q->orwhere('term_name', 'LIKE',  $values[$i] .'%');
-			               }
-				      })->orderBy('term_name', 'asc')->get();
+					for ($i = 0; $i < count($values); $i++){
+			            $q->orwhere('term_name', 'LIKE',  $values[$i] .'%');
+			         }
+				   })->orderBy('term_name', 'asc')->get();
 			} else {
 				//get results
 				$terms = Term::where('term_name', 'LIKE', $letter.'%')->orderBy('term_name', 'asc')->get();
