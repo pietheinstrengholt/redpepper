@@ -22,7 +22,7 @@ class Subject extends Model
 
 	public function children()
 	{
-		return $this->hasMany('App\Subject', 'parent_id');
+		return $this->hasMany('App\Subject', 'parent_id')->orderBy('subject_order', 'asc')->orderBy('subject_name', 'asc');
 	}
 }
 
