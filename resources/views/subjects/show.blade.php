@@ -35,7 +35,7 @@
 							<h3 class="center">
 								<a href="{{ route('subjects.show', $sub->id) }}">{{ $sub->subject_name }}</a>
 							</h3>
-							<p class="center">{{ $sub->subject_description }}</p>
+							<p class="center">{!! App\Helper::contentAdjust(nl2br(e($sub->subject_description))) !!}</p>
 							<p class="p-more-info">
 								<a href="{{ route('subjects.show', $sub->id) }}" class="btn {{ $buttons[$buttonvalue] }}">More info</a>
 							</p>
@@ -84,7 +84,7 @@
 				@endif
 				</td>
 			@endif
-			<td>{!! html_entity_decode(e($section->section_description)) !!}</td>
+			<td>{!! App\Helper::contentAdjust(nl2br(e($section->section_description))) !!}</td>
 			<td>
 			@can('update-section', $section)
 				{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('subjects.sections.destroy', $subject, $section), 'onsubmit' => 'return confirm(\'Are you sure to delete this section?\')')) !!}
