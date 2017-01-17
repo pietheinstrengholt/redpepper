@@ -886,7 +886,10 @@ class ExcelController extends Controller
 							$technical->source_id = $sourcing['source'];
 							$technical->type_id = $sourcing['type'];
 							$technical->content = $sourcing['value'];
-							$technical->description = $sourcing['description'];
+							//avoid undefined index error if description is empty
+							if (array_key_exists('description', $sourcing)) {
+								$technical->description = $sourcing['description'];
+							}
 							$technical->save();
 
 							//submit new content to archive table
@@ -898,7 +901,10 @@ class ExcelController extends Controller
 							$HistoryTechnical->type_id = $sourcing['type'];
 							$HistoryTechnical->source_id = $sourcing['source'];
 							$HistoryTechnical->content = $sourcing['value'];
-							$HistoryTechnical->description = $sourcing['description'];
+							//avoid undefined index error if description is empty
+							if (array_key_exists('description', $sourcing)) {
+								$HistoryTechnical->description = $sourcing['description'];
+							}
 							$HistoryTechnical->change_type = 'excel';
 							$HistoryTechnical->created_by = Auth::user()->id;
 							$HistoryTechnical->submission_date = null;
