@@ -76,7 +76,7 @@
 
 		@foreach( $files as $file )
 			<tr>
-			<td><a href="{{ URL::asset('/files') }}/{{ $section->id }}/{{ $file->file_name }}">{{ $file->file_name }}</a></td>
+			<td><a target="_blank" href="{{ URL::asset('/files') }}/{{ $section->id }}/{{ $file->file_name }}">{{ $file->file_name }}</a></td>
 			<td>{{ $file->file_description }}</td>
 			@can('update-section', $section)
 				{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('fileupload.destroy', $file->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this file?\')')) !!}
