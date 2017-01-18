@@ -12,12 +12,14 @@ class CreateActivityLogScript extends Migration
 	*/
 	public function up()
 	{
-		Schema::create('t_activity_log', function (Blueprint $table) {
-			$table->increments('id');
-			$table->string('description');
-			$table->integer('created_by')->unsigned();
-			$table->timestamps();
-		});
+		if (!Schema::hasTable('t_activity_log')) {
+			Schema::create('t_activity_log', function (Blueprint $table) {
+				$table->increments('id');
+				$table->string('description');
+				$table->integer('created_by')->unsigned();
+				$table->timestamps();
+			})
+		}
 	}
 
 	/**
