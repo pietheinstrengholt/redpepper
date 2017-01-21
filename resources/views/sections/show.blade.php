@@ -12,8 +12,8 @@
 		<li class="active">{{ $section->section_name }}</li>
 	</ul>
 
-	<h4 class="tinymce">{!! App\Helper::contentAdjust(nl2br(e($section->section_description))) !!}</h4>
-	<h4 class="tinymce">{!! App\Helper::contentAdjust(nl2br(e($section->section_longdesc))) !!}</h4>
+	<h4 class="tinymce">{!! html_entity_decode(e($section->section_description)) !!}</h4>
+	<h4 class="tinymce">{!! html_entity_decode(e($section->section_longdesc)) !!}</h4>
 
 	@if ( !$section->templates->count() )
 		<p>This section has no items.</p><br>
