@@ -5,6 +5,8 @@ use App\Helpers\ActivityLog;
 use App\Http\Controllers\Controller;
 use App\Section;
 use App\Subject;
+use App\Template;
+use App\FileUpload;
 use App\User;
 use App\UserRights;
 use Auth;
@@ -119,10 +121,59 @@ class SubjectController extends Controller
 			abort(403, 'Unauthorized action.');
 		}
 
+		//abort if the subject has any children
+		$children = Subject::where('parent_id', $subject->id)->get();
+		if ($children->count()) {
+			abort(403, 'Unauthorized action. You must first delete the underlying blocks first!');
+		}
+
+
+		//check for superadmin permissions
+		if (Gate::denies('superadmin')) {
+			abort(403, 'Unauthorized action.');
+		}
+
+		//get all underlying sections of the subject block
+		$sections = Section::where('subject_id', $subject->id)->get();
+
+		foreach ($sections as $section) {
+			//get all related templates and content
+			$templates = Template::where('section_id', $section->id)->get();
+
+			//delete underlying templates
+			foreach ($templates as $template) {
+				Template::where('parent_id', $template->id)->delete();
+			}
+
+			//delete underlying templates
+			Template::where('section_id', $section->id)->delete();
+
+			//delete underlying files in upload folder
+			$files = FileUpload::where('section_id', $section->id)->get();
+			foreach ($files as $file) {
+				//check if not exists
+				if (file_exists(public_path() . '/files/' . $file->file_name)) {
+					//remove file from upload folder
+					unlink('/' . base_path() . '/public/files/' . $file->file_name);
+				}
+			}
+
+			//remove files from the database
+			FileUpload::where('section_id', $section->id)->delete();
+
+			//Log activity
+			ActivityLog::submit("Section " . $section->section_name . " was deleted.");
+
+			//delete ssection
+			$section->delete();
+		}
+
+		//delete subject
+		$subject->delete();
+
 		//Log activity
 		ActivityLog::submit("Subject " . $subject->subject_name . " was deleted.");
 
-		$subject->delete();
 		return Redirect::route('subjects.index')->with('message', 'Subject deleted.');
 	}
 }

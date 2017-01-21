@@ -144,10 +144,29 @@ class SectionController extends Controller
 			abort(403, 'Unauthorized action.');
 		}
 
-		//remove all related templates and content
+		//get all related templates and content
 		$templates = Template::where('section_id', $section->id)->get();
 
+		//delete underlying templates
+		foreach ($templates as $template) {
+			Template::where('parent_id', $template->id)->delete();
+		}
+
+		//delete underlying templates
 		Template::where('section_id', $section->id)->delete();
+
+		//delete underlying files in upload folder
+		$files = FileUpload::where('section_id', $section->id)->get();
+		foreach ($files as $file) {
+			//check if not exists
+			if (file_exists(public_path() . '/files/' . $file->file_name)) {
+				//remove file from upload folder
+				unlink('/' . base_path() . '/public/files/' . $file->file_name);
+			}
+		}
+
+		//remove files from the database
+		FileUpload::where('section_id', $section->id)->delete();
 
 		//Log activity
 		ActivityLog::submit("Section " . $section->section_name . " was deleted.");
