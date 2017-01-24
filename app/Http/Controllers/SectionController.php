@@ -152,26 +152,29 @@ class SectionController extends Controller
 			Template::where('parent_id', $template->id)->delete();
 		}
 
-		//delete underlying templates
+		//delete attached templates
 		Template::where('section_id', $section->id)->delete();
 
-		//delete underlying files in upload folder
+		//delete attached files in upload folder
 		$files = FileUpload::where('section_id', $section->id)->get();
 		foreach ($files as $file) {
 			//check if not exists
-			if (file_exists(public_path() . '/files/' . $file->file_name)) {
+			if (file_exists(public_path() . '/files/' . $section->id . '/' . $file->file_name)) {
 				//remove file from upload folder
-				unlink('/' . base_path() . '/public/files/' . $file->file_name);
+				unlink('/' . base_path() . '/public/files/' . $section->id . '/' . $file->file_name);
 			}
 		}
 
-		//remove files from the database
+		//remove attached files from the database
 		FileUpload::where('section_id', $section->id)->delete();
 
 		//Log activity
 		ActivityLog::submit("Section " . $section->section_name . " was deleted.");
 
+		//delete section
 		$section->delete();
+
+		//redirect back to corresponding subject overview page
 		return Redirect::route('subjects.show', array($subject))->with('message', 'Section deleted.');
 	}
 
