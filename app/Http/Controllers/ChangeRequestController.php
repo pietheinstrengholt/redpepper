@@ -8,7 +8,6 @@ use App\DraftTechnical;
 use App\Events\ChangeRequestCreated;
 use App\Helpers\ActivityLog;
 use App\Helpers\Settings;
-use App\Setting;
 use App\HistoryRequirement;
 use App\HistoryTechnical;
 use App\Http\Controllers\Controller;
@@ -985,9 +984,7 @@ class ChangeRequestController extends Controller
 				$ChangeRequest->approver = $request->input('approver');
 			}
 
-			$superadmin_process_directly = Setting::where('config_key', 'superadmin_process_directly')->first();
-
-			if ($superadmin_process_directly->config_value == "yes" && Auth::user()->role == "superadmin") {
+			if (Settings::get('superadmin_process_directly') == "yes" && Auth::user()->role == "superadmin") {
 
 				//update change request
 				$ChangeRequest->status = "approved";
