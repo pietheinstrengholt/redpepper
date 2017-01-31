@@ -10,7 +10,7 @@ use Auth;
 use Mail;
 use App\User;
 use App\Template;
-use App\Helper;
+use App\Helpers\Settings;
 
 class LogWhenChangeRequestCreated
 {
@@ -29,15 +29,15 @@ class LogWhenChangeRequestCreated
 		$template = Template::findOrFail($event->changerequest->template_id);
 		$array['template_name'] = $template->template_name;
 
-		if (!(Helper::setting('superadmin_process_directly') == "yes" && Auth::user()->role == "superadmin")) {
+		if (!(Settings::get('superadmin_process_directly') == "yes" && Auth::user()->role == "superadmin")) {
 
 			//email the system administrator
-			if (!empty(Helper::setting('administrator_email'))) {
+			if (!empty(Settings::get('administrator_email'))) {
 				Mail::send('emails.changerequest', $array, function($message)
 				{
 					$message->from(Auth::user()->email);
-					$message->to(Helper::setting('administrator_email'));
-					$message->subject('Notification from the ' . Helper::setting('tool_name'));
+					$message->to(Settings::get('administrator_email'));
+					$message->subject('Notification from the ' . Settings::get('tool_name'));
 				});
 			}
 
@@ -48,7 +48,7 @@ class LogWhenChangeRequestCreated
 				{
 					$message->from(Auth::user()->email);
 					$message->to($approver->email);
-					$message->subject('Notification from the ' . Helper::setting('tool_name'));
+					$message->subject('Notification from the ' . Settings::get('tool_name'));
 				});
 			}
 		}
