@@ -32,7 +32,7 @@
 			@endif
 			{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('subjects.sections.templates.destroy', $template->section->subject, $template->section, $child), 'onsubmit' => 'return confirm(\'Are you sure to delete this template?\')')) !!}
 			<td><a href="{{ route('subjects.sections.templates.show', [$template->section->subject, $template->section, $child]) }}">{{ $child->template_name }}</a></td>
-			<td>{!! html_entity_decode(e($child->template_shortdesc)) !!}</td>
+			<td>{!! App\Helper::contentAdjust($child->template_shortdesc) !!}</td>
 			<td>
 			@if ( $child->rows->count() && $child->columns->count() )
 				<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $child->id }}">Export</a>

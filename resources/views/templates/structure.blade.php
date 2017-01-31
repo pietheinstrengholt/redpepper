@@ -15,8 +15,8 @@
 	</ul>
 
 	<h2>{{ $template->template_name }}</h2>
-	<h4>{!! html_entity_decode(e($template->template_shortdesc)) !!}</h4>
-	<h4>{!! html_entity_decode(e($template->template_longdesc)) !!}</h4>
+	<h4>{!! App\Helper::contentAdjust($template->template_shortdesc) !!}</h4>
+	<h4>{!! App\Helper::contentAdjust($template->template_longdesc) !!}</h4>
 
 	@if ( !$template->columns->count() || !$template->rows->count() )
 		<p><strong>Error:</strong> This template has no columns or no rows. Ask the administrator to change the properties of this template to show only the descriptions.</p>
