@@ -12,8 +12,8 @@
 		<li class="active">{{ $section->section_name }}</li>
 	</ul>
 
-	<h4 class="tinymce">{!! html_entity_decode(e($section->section_description)) !!}</h4>
-	<h4 class="tinymce">{!! html_entity_decode(e($section->section_longdesc)) !!}</h4>
+	<h4 class="tinymce">{!! App\Helper::contentAdjust($section->section_description) !!}</h4>
+	<h4 class="tinymce">{!! App\Helper::contentAdjust($section->section_longdesc) !!}</h4>
 
 	@if ( !$section->templates->count() )
 		<p>This section has no items.</p><br>
@@ -35,7 +35,7 @@
 			@endif
 			{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('subjects.sections.templates.destroy', $subject->id, $section->id, $template->id), 'onsubmit' => 'return confirm(\'Are you sure to delete this template?\')')) !!}
 			<td><a href="{{ route('subjects.sections.templates.show', [$subject->id, $section->id, $template->id]) }}">{{ $template->template_name }}</a></td>
-			<td>{!! html_entity_decode(e($template->template_shortdesc)) !!}</td>
+			<td>{!! App\Helper::contentAdjust($template->template_shortdesc) !!}</td>
 			<td>
 			@if ( $template->rows->count() && $template->columns->count() )
 				<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $template->id }}">Export</a>

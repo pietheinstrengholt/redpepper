@@ -52,14 +52,14 @@
 	@endif
 
 	<h2>{{ $template->template_name }}</h2>
-	<h4 class="tinymce" title="{{ $template->template_name }}">{!! html_entity_decode(e($template->template_shortdesc)) !!}</h4>
-	<h4 class="tinymce" title="{{ $template->template_name }}">{!! html_entity_decode(e($template->template_longdesc)) !!}</h4>
+	<h4 class="tinymce" title="{{ $template->template_name }}">{!! App\Helper::contentAdjust($template->template_shortdesc) !!}</h4>
+	<h4 class="tinymce" title="{{ $template->template_name }}">{!! App\Helper::contentAdjust($template->template_longdesc) !!}</h4>
 	@if ( $template->rows->count() && $template->columns->count() )
-		<h4>{!! App\Helper::contentAdjust(nl2br(e($template->frequency_description))) !!}</h4>
-		<h4>{!! App\Helper::contentAdjust(nl2br(e($template->reporting_dates_description))) !!}</h4>
-		<h4>{!! App\Helper::contentAdjust(nl2br(e($template->main_changes_description))) !!}</h4>
-		<h4>{!! App\Helper::contentAdjust(nl2br(e($template->links_other_temp_description))) !!}</h4>
-		<h4>{!! App\Helper::contentAdjust(nl2br(e($template->process_and_organisation_description))) !!}</h4>
+		<h4>{!! App\Helper::contentAdjust($template->frequency_description) !!}</h4>
+		<h4>{!! App\Helper::contentAdjust($template->reporting_dates_description) !!}</h4>
+		<h4>{!! App\Helper::contentAdjust($template->main_changes_description) !!}</h4>
+		<h4>{!! App\Helper::contentAdjust($template->links_other_temp_description) !!}</h4>
+		<h4>{!! App\Helper::contentAdjust($template->process_and_organisation_description) !!}</h4>
 		<h5><a href="{{ url('subjects') . '/' . $template->section->subject->id . '/sections/' . $template->section->id . '/templates/' . $template->id . '/manual' }}"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print manual</a></h5>
 	@endif
 

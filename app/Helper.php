@@ -10,7 +10,7 @@ class Helper {
 
 	//function to make hyperlinks from urls
 	public static function formatUrlsInText($text) {
-		return preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a target="_blank" href="$1">$1</a>', $text);
+		return preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)(?=[^>]*(<|$))!i', '<a target="_blank" href="$1">$1</a>', $text);
 	}
 
 	public static function returnHistory($object) {
@@ -56,7 +56,7 @@ class Helper {
 		}
 
 		//use preg_replace_callback to not loose case
-		$pattern = '#(?<=^|\W)('. implode('|', array_map('preg_quote', $array_of_words)) . ')(?=$|\W)#i';
+		$pattern = '~('. implode('|', array_map('preg_quote', $array_of_words)) . ')(?![^<]*>|[^<>]*<\/)~';
 		$callback = function ($match) {
 		    return "<a class='bim-link' href=" . url('searchterms') . "?search=" . urlencode($match[0]) . ">" . $match[0] . "</a>";
 		};
@@ -64,8 +64,12 @@ class Helper {
 	}
 
 	public static function contentAdjust($input) {
+		//replace urls in text with hyperlinks
 		$output = self::formatUrlsInText($input);
+
+		//replace bim terms with hyperlinks
 		$output = self::addTermLinks($output);
+
 		return $output;
 	}
 
