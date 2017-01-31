@@ -166,7 +166,7 @@ class ExcelController extends Controller
 		//admin and builder are only permitted to upload to own sections
 		if (Auth::user()->role == "admin" || Auth::user()->role == "builder") {
 			$sectionlist = $this->authService->getSectionsList();
-			$sections = Section::whereIn('id', $sectionList)->orderBy('section_name', 'asc')->get();
+			$sections = Section::whereIn('id', $sectionlist)->orderBy('section_name', 'asc')->get();
 			if (empty($sections)) {
 				abort(403, 'Unauthorized action. You don\'t have access to any sections');
 			}
