@@ -918,6 +918,7 @@ class ExcelController extends Controller
 				//Log activity
 				ActivityLog::submit("Template " . $template->template_name . " was created.");
 
+				return Redirect::route('subjects.sections.show', [$template->section->subject->id, $template->section->id])->with('message', 'New template successfully added to the database.');
 			}
 		}
 	}
