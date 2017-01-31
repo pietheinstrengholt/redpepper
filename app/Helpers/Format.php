@@ -1,6 +1,7 @@
 <?php
 
 namespace app\Helpers;
+use App\Helpers\Format;
 use App\User;
 use App\Term;
 

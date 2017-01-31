@@ -1,6 +1,7 @@
 <?php
 
 namespace app\Helpers;
+use App\Helpers\Settings;
 use App\Setting;
 
 class Settings
