@@ -21,7 +21,7 @@
 		<div class="col-xs-12">
 			<dl class="dl-horizontal">
 			<dt>Term definition:</dt>
-			<dd id="term_description">{!! App\Helper::contentAdjust($term->term_description) !!}</dd>
+			<dd id="term_description">{!! Format::contentAdjust($term->term_description) !!}</dd>
 			</dl>
 		</div>
 	</div>

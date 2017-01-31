@@ -24,6 +24,6 @@ valid_elements: "p,h1,h2,h3,h4,h5,a[href|target],strong/b,i/em,u,br,table[*],tbo
 	relative_urls: false,
 	statusbar: false,
 	style_format_merge: true,
-	content_css: ["{!! URL::asset('css') . '/' . App\Helper::setting('css_style') !!}"],
+	content_css: ["{!! URL::asset('css') . '/' . Settings::get('css_style') !!}"],
 	content_style: "body {margin: 10px ! important; }",
 });</script>

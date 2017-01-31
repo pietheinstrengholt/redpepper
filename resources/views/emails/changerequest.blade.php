@@ -86,10 +86,10 @@
 <table width="540" align="center" cellspacing="0" cellpadding="0" border="0" class="devicewidthinner">
 <tbody>
 
-<h2>RADAR Changerequest notification</h2>
+<h2>{!! Settings::get('main_message1') !!} Changerequest notification</h2>
 <h4>A change request has been submitted for template {{ $template_name }} by {{ $username }}. The changerequest is pending for review</h4>
 <h4><a href="{!! url('changerequests/' . $changerequest_id . '/edit'); !!}">Click here</a> to review the change request</h4>
-<small>If you have any questions, please send an email to: <a href="mailto:{!! App\Helper::setting('administrator_email') !!}">{!! App\Helper::setting('administrator_email') !!}</a></small>
+<small>If you have any questions, please send an email to: <a href="mailto:{!! Settings::get('administrator_email') !!}">{!! Settings::get('administrator_email') !!}</a></small>
 
 </tbody>
 </table>

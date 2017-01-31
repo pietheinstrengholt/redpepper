@@ -12,8 +12,8 @@
 	</ul>
 
 	<h2>{{ $subject->subject_name }}</h2>
-	<h3 class="tinymce">{!! App\Helper::contentAdjust($subject->subject_description) !!}</h3>
-	<h4 class="tinymce">{!! App\Helper::contentAdjust($subject->subject_longdesc) !!}</h4>
+	<h3 class="tinymce">{!! Format::contentAdjust($subject->subject_description) !!}</h3>
+	<h4 class="tinymce">{!! Format::contentAdjust($subject->subject_longdesc) !!}</h4>
 
 	@if ( $subject->children )
 		<h4>This block has the following sub building blocks</h4>
@@ -35,7 +35,7 @@
 							<h3 class="center">
 								<a href="{{ route('subjects.show', $sub->id) }}">{{ $sub->subject_name }}</a>
 							</h3>
-							<p class="center">{!! App\Helper::contentAdjust($sub->subject_description) !!}</p>
+							<p class="center">{!! Format::contentAdjust($sub->subject_description) !!}</p>
 							<p class="p-more-info">
 								<a href="{{ route('subjects.show', $sub->id) }}" class="btn {{ $buttons[$buttonvalue] }}">More info</a>
 							</p>
@@ -84,7 +84,7 @@
 				@endif
 				</td>
 			@endif
-			<td>{!! App\Helper::contentAdjust($section->section_description) !!}</td>
+			<td>{!! Format::contentAdjust($section->section_description) !!}</td>
 			<td>
 			@can('update-section', $section)
 				{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('subjects.sections.destroy', $subject, $section), 'onsubmit' => 'return confirm(\'Are you sure to delete this section?\')')) !!}

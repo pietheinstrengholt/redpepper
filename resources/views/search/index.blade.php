@@ -17,8 +17,8 @@
 		@foreach( $templates as $template )
 			<tr>
 			<td><a href="{!! url('subjects/' . $template->section->subject_id . '/sections/' . $template->section_id . '/templates/' . $template->id); !!}">{{ $template->template_name }}</a></td>
-			<td>{!! App\Helper::highlightInput($search,App\Helper::returnSearch($search,strip_tags($template->template_shortdesc),25)) !!}</td>
-			<td>{!! App\Helper::highlightInput($search,App\Helper::returnSearch($search,strip_tags($template->template_longdesc),25)) !!}</td>
+			<td>{!! Format::highlightInput($search,Format::returnSearch($search,strip_tags($template->template_shortdesc),25)) !!}</td>
+			<td>{!! Format::highlightInput($search,Format::returnSearch($search,strip_tags($template->template_longdesc),25)) !!}</td>
 			</tr>
 		@endforeach
 
@@ -38,7 +38,7 @@
 			<tr>
 			<td><a href="{!! url('subjects/' . $row->template->section->subject_id . '/sections/' . $row->template->section_id . '/templates/' . $row->template_id . '?row=' . $row->row_code); !!}">{{ $row->template->template_name }}</a></td>
 			<td>{{ $row->row_code }}</td>
-			<td>{!! App\Helper::highlightInput($search,$row->row_description) !!}</td>
+			<td>{!! Format::highlightInput($search,$row->row_description) !!}</td>
 			</tr>
 		@endforeach
 
@@ -58,7 +58,7 @@
 			<tr>
 			<td><a href="{!! url('subjects/' . $column->template->section->subject_id . '/sections/' . $column->template->section_id . '/templates/' . $column->template_id . '?column=' . $column->column_code); !!}">{{ $column->template->template_name }}</a></td>
 			<td>{{ $column->column_code }}</td>
-			<td>{!! App\Helper::highlightInput($search,$column->column_description) !!}</td>
+			<td>{!! Format::highlightInput($search,$column->column_description) !!}</td>
 			</tr>
 		@endforeach
 
@@ -82,7 +82,7 @@
 			<td>{{ $requirement->row_code }}</td>
 			<td>{{ $requirement->column_code }}</td>
 			<td>{{ $requirement->content_type }}</td>
-			<td>{!! App\Helper::highlightInput($search,App\Helper::returnSearch($search,strip_tags($requirement->content),25)) !!}</td>
+			<td>{!! Format::highlightInput($search,Format::returnSearch($search,strip_tags($requirement->content),25)) !!}</td>
 			</tr>
 		@endforeach
 
@@ -109,8 +109,8 @@
 			<td>{{ $technical->column_code }}</td>
 			<td>{{ $technical->source->source_name }}</td>
 			<td>{{ $technical->type->type_name }}</td>
-			<td>{!! App\Helper::highlightInput($search,$technical->content) !!}</td>
-			<td>{!! App\Helper::highlightInput($search,$technical->description) !!}</td>
+			<td>{!! Format::highlightInput($search,$technical->content) !!}</td>
+			<td>{!! Format::highlightInput($search,$technical->description) !!}</td>
 			</tr>
 		@endforeach
 

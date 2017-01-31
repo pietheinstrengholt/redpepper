@@ -50,6 +50,6 @@
 	</style>
 </head>
 <body>
-<h2>RADAR Password reset</h2>
+<h2>{!! Settings::get('main_message1') !!} Password reset</h2>
 Click here to reset your password: {{ url('password/reset/'.$token) }}
 </body>

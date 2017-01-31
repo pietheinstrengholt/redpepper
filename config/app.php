@@ -211,7 +211,8 @@ return [
 		'FineDiff'  => 'App\Libraries\FineDiff',
 		'Excel'     => 'Maatwebsite\Excel\Facades\Excel',
 		'ActivityLog' => App\Helpers\ActivityLog::class,
-
+		'Settings' => App\Helpers\Settings::class,
+		'Format' => App\Helpers\Format::class,
     ],
 
 ];

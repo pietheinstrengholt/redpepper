@@ -2,7 +2,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Image Upload Dialog</title>
-	<link rel="stylesheet" href="{!! URL::asset('css') . '/' . App\Helper::setting('css_style') !!}">
+	<link rel="stylesheet" href="{!! URL::asset('css') . '/' . Settings::get('css_style') !!}">
 </head>
 <body>
 <div class="container">

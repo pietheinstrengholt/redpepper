@@ -1,12 +1,11 @@
 <?php
 
-namespace App;
+namespace app\Helpers;
 use App\User;
-use App\Setting;
 use App\Term;
 
-//Todo: move Helper file to Helpers folder
-class Helper {
+class Format
+{
 
 	//function to make hyperlinks from urls
 	public static function formatUrlsInText($text) {
@@ -26,19 +25,6 @@ class Helper {
 			return "Last updated at " . date('d F Y', strtotime($lastDate)) . " by " . $user->firstname . " " . $user->lastname;
 		} else {
 			return "Last updated at " . date('d F Y', strtotime($lastDate));
-		}
-	}
-
-	public static function setting($input) {
-		$setting = Setting::where('config_key', $input)->first();
-		if ($input == 'homescreen_image' && empty($setting)) {
-			return 'default.jpg';
-		}
-		if ($input == 'css_style' && empty($setting)) {
-			return 'bootstrap.min.css';
-		}
-		if (!empty($setting)) {
-			return $setting->config_value;
 		}
 	}
 
@@ -70,7 +56,8 @@ class Helper {
 		//replace bim terms with hyperlinks
 		$output = self::addTermLinks($output);
 
-		return $output;
+		//add nl2br to add line breaks
+		return nl2br($output);
 	}
 
 	public static function highlightInput($input1, $input2) {

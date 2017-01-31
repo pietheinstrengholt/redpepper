@@ -29,13 +29,13 @@
 			<td class="changerequest">
 			@if ($changerequest->field_property1 !== '')
 				<dl class="dl-horizontal">
-				<dt>{!! App\Helper::setting('fieldname_property1') !!}:</dt>
+				<dt>{!! Settings::get('fieldname_property1') !!}:</dt>
 				<dd><div class="content-box">{!! $changerequest->field_property1 !!}</div></dd>
 				</dl>
 			@endif
 			@if ($changerequest->field_property2 !== '')
 				<dl class="dl-horizontal">
-				<dt>{!! App\Helper::setting('fieldname_property2') !!}:</dt>
+				<dt>{!! Settings::get('fieldname_property2') !!}:</dt>
 				<dd><div class="content-box">{!! $changerequest->field_property2 !!}</div></dd>
 				</dl>
 			@endif
@@ -95,7 +95,7 @@
 	@endif
 
 
-	@if ($allowedToChange == 'yes' && $changerequest->status == 'pending' || (App\Helper::setting('superadmin_process_directly') == "yes" && Auth::user()->role == "superadmin"))
+	@if ($allowedToChange == 'yes' && $changerequest->status == 'pending' || (Settings::get('superadmin_process_directly') == "yes" && Auth::user()->role == "superadmin"))
 		{!! Form::open(array('action' => 'ChangeRequestController@update', 'id' => 'form')) !!}
 		<textarea form="form" name="comment" style="width: 600px;" class="form-control" rows="3" id="comment" class="comment" placeholder="Please enter a comment about this change"></textarea>
 
@@ -113,7 +113,7 @@
 		{!! Form::close() !!}
 	@endif
 
-	@if ($allowedToChange == 'yes' && $changerequest->status == 'rejected' || (App\Helper::setting('superadmin_process_directly') == "yes" && Auth::user()->role == "superadmin"))
+	@if ($allowedToChange == 'yes' && $changerequest->status == 'rejected' || (Settings::get('superadmin_process_directly') == "yes" && Auth::user()->role == "superadmin"))
 		{!! Form::open(array('action' => 'ChangeRequestController@update', 'id' => 'form')) !!}
 		<textarea form="form" name="comment" style="width: 600px;" class="form-control" rows="3" id="comment" class="comment" placeholder="Please enter a comment about this change"></textarea>
 

@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', 'HomeController@index');
 
 // Provide controller methods with object instead of ID
 Route::model('subjects', 'Subject');
@@ -147,10 +145,8 @@ Route::get('/manuals', 'SectionController@manuals');
 Route::get('/manuals/{id}', 'SectionController@showmanual');
 
 //image upload
-Route::get('/imageupload', function() {
-	return view('imageupload.image-dialog');
-});
-Route::post('/imageupload', 'TemplateController@imageUpload');
+Route::get('/imageupload', 'TemplateController@GetImageUpload');
+Route::post('/imageupload', 'TemplateController@PostImageUpload');
 
 //activities
 Route::get('activities', ['middleware' => 'auth', 'uses' => 'ActivityController@index']);

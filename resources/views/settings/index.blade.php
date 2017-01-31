@@ -25,37 +25,37 @@
 
 <div class="form-group">
   <label for="usr">Bank name:</label>
-  <input name="bank_name" type="text" style="width:550px;" class="form-control" id="usr" value="{!! App\Helper::setting('bank_name') !!}" placeholder="{!! App\Helper::setting('bank_name') !!}">
+  <input name="bank_name" type="text" style="width:550px;" class="form-control" id="usr" value="{!! Settings::get('bank_name') !!}" placeholder="{!! Settings::get('bank_name') !!}">
 </div>
 
 <div class="form-group">
   <label for="usr">Field property1:</label>
-  <input name="fieldname_property1" type="text" style="width:550px;" class="form-control" id="usr" value="{!! App\Helper::setting('fieldname_property1') !!}" placeholder="{!! App\Helper::setting('fieldname_property1') !!}">
+  <input name="fieldname_property1" type="text" style="width:550px;" class="form-control" id="usr" value="{!! Settings::get('fieldname_property1') !!}" placeholder="{!! Settings::get('fieldname_property1') !!}">
 </div>
 
 <div class="form-group">
   <label for="usr">Field property2:</label>
-  <input name="fieldname_property2" type="text" style="width:550px;" class="form-control" id="usr" value="{!! App\Helper::setting('fieldname_property2') !!}" placeholder="{!! App\Helper::setting('fieldname_property2') !!}">
+  <input name="fieldname_property2" type="text" style="width:550px;" class="form-control" id="usr" value="{!! Settings::get('fieldname_property2') !!}" placeholder="{!! Settings::get('fieldname_property2') !!}">
 </div>
 
 <div class="form-group">
   <label for="usr">Welcome screen header text:</label>
-  <input name="main_message1" type="text" style="width:550px;" class="form-control" id="usr" value="{!! App\Helper::setting('main_message1') !!}" placeholder="{!! App\Helper::setting('main_message1') !!}">
+  <input name="main_message1" type="text" style="width:550px;" class="form-control" id="usr" value="{!! Settings::get('main_message1') !!}" placeholder="{!! Settings::get('main_message1') !!}">
 </div>
 
 <div class="form-group">
   <label for="usr">Welcome screen sub text:</label>
-  <input name="main_message2" type="text" style="width:550px;" class="form-control" id="usr" value="{!! App\Helper::setting('main_message2') !!}" placeholder="{!! App\Helper::setting('main_message2') !!}">
+  <input name="main_message2" type="text" style="width:550px;" class="form-control" id="usr" value="{!! Settings::get('main_message2') !!}" placeholder="{!! Settings::get('main_message2') !!}">
 </div>
 
 <div class="form-group">
   <label for="usr">Tool name:</label>
-  <input name="tool_name" type="text" style="width:550px;" class="form-control" id="usr" value="{!! App\Helper::setting('tool_name') !!}" placeholder="{!! App\Helper::setting('tool_name') !!}">
+  <input name="tool_name" type="text" style="width:550px;" class="form-control" id="usr" value="{!! Settings::get('tool_name') !!}" placeholder="{!! Settings::get('tool_name') !!}">
 </div>
 
 <div class="form-group">
   <label for="usr">Administrator email message:</label>
-  <input name="administrator_email" type="email" style="width:550px;" class="form-control" id="usr" value="{!! App\Helper::setting('administrator_email') !!}" placeholder="{!! App\Helper::setting('administrator_email') !!}">
+  <input name="administrator_email" type="email" style="width:550px;" class="form-control" id="usr" value="{!! Settings::get('administrator_email') !!}" placeholder="{!! Settings::get('administrator_email') !!}">
 </div>
 
 <h5><label for="usr">Allow super admin to process changes directly:</label></h5>

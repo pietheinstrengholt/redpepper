@@ -16,7 +16,7 @@
 	relative_urls: false,
 	statusbar: false,
 	style_format_merge: true,
-	content_css: ["{!! URL::asset('css') . '/' . App\Helper::setting('css_style') !!}"],
+	content_css: ["{!! URL::asset('css') . '/' . Settings::get('css_style') !!}"],
 	content_style: "body {margin: 10px ! important; }",
 });</script>
 
@@ -43,6 +43,6 @@
 	relative_urls: false,
 	statusbar: false,
 	style_format_merge: true,
-	content_css: ["{!! URL::asset('css') . '/' . App\Helper::setting('css_style') !!}"],
+	content_css: ["{!! URL::asset('css') . '/' . Settings::get('css_style') !!}"],
 	content_style: "body {margin: 10px ! important; }",
 });</script>

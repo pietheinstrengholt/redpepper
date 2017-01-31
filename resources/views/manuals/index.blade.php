@@ -30,7 +30,7 @@
 				{{ $section->subject->subject_name }}
 			@endif
 			</td>
-			<td>{!! html_entity_decode(e($section->section_description)) !!}</td>
+			<td>{!! Format::contentAdjust($section->section_description) !!}</td>
 			</tr>
 		@endforeach
 

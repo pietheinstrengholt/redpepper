@@ -33,7 +33,7 @@
 
 			@if ( $changerequest->status == "pending" )
 				<tr>
-					<td><a href="{!! url('changerequests/') . "/" . $changerequest->id . "/edit" !!}">{{ $changerequest->id }}</a></td>
+					<td>{!! link_to_route('changerequests.edit', $changerequest->id, array($changerequest)) !!}</td>
 					<td><a href="{!! url('subjects/' . $changerequest->template->section->subject->id . '/sections/' . $changerequest->template->section->id . '/templates/' . $changerequest->template->id . '?row=' . $changerequest->row_code . '&column=' . $changerequest->column_code); !!}">{{ $changerequest->template->template_name }}</a></td>
 					<td>{{ $changerequest->creator->username }}</td>
 					<td></td>
@@ -53,7 +53,7 @@
 				</tr>
 			@else
 				<tr style="background-color:#F5F5F5;">
-					<td><a href="{!! url('changerequests/') . "/" . $changerequest->id . "/edit" !!}">{{ $changerequest->id }}</a></td>
+					<td>{!! link_to_route('changerequests.edit', $changerequest->id, array($changerequest)) !!}</td>
 					<td><a href="{!! url('subjects/' . $changerequest->template->section->subject->id . '/sections/' . $changerequest->template->section_id . '/templates/' . $changerequest->template_id . '?row=' . $changerequest->row_code . '&column=' . $changerequest->column_code); !!}">{{ $changerequest->template->template_name }}</a></td>
 					<td>{{ $changerequest->creator->username }}</td>
 					<td></td>

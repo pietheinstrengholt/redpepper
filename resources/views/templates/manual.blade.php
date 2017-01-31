@@ -15,9 +15,9 @@
 	</ul>
 
 	<h4>{{ $template->template_name }}</h4>
-	<h5 class="tinymce">{!! App\Helper::contentAdjust($template->template_shortdesc) !!}</h5>
-	<h5 class="tinymce">{!! App\Helper::contentAdjust($template->section_shortdesc) !!}</h5>
-	<h5>{!! App\Helper::contentAdjust($template->template_longdesc) !!}</h5>
+	<h5 class="tinymce">{!! Format::contentAdjust($template->template_shortdesc) !!}</h5>
+	<h5 class="tinymce">{!! Format::contentAdjust($template->section_shortdesc) !!}</h5>
+	<h5>{!! Format::contentAdjust($template->template_longdesc) !!}</h5>
 
 	@if ( $template->requirements->count() )
 

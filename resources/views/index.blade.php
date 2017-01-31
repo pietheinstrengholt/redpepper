@@ -7,7 +7,7 @@
 {{--*/ $buttons = array("btn-danger", "btn-primary", "btn-success", "btn-warning"); /*--}}
 
 <!-- Header -->
-<div id="intro-header" class="intro-header" style="background: url({{ URL::asset('/img/background') }}/{!! App\Helper::setting('homescreen_image') !!}) no-repeat center center; background-size:cover; ">
+<div id="intro-header" class="intro-header" style="background: url({{ URL::asset('/img/background') }}/{!! Settings::get('homescreen_image') !!}) no-repeat center center; background-size:cover; ">
 	<div class="container">
 
 		<div id="intro-header-row" class="row">
@@ -25,8 +25,8 @@
 						</div>
 					@endif
 
-					<h1>{!! App\Helper::setting('main_message1') !!}</h1>
-					<h3>{!! App\Helper::setting('main_message2') !!}</h3>
+					<h1>{!! Settings::get('main_message1') !!}</h1>
+					<h3>{!! Settings::get('main_message2') !!}</h3>
 					<hr id="home-divider" class="intro-divider">
 					<ul class="list-inline intro-social-buttons">
 						<li><a href="{{ url('fileupload') }}" class="btn btn-default btn-lg"><span class="network-name"><span class="glyphicon home glyphicon-folder-open" aria-hidden="true"></span>Instructions</span></a></li>
@@ -75,7 +75,7 @@
 
 		<div id="page-content2" class="row">
 			<div class="col-md-12 col-sm-12" id="footer">
-				<p class="muted credit" id="top">For questions contact the <a class="credit" href="mailto:{!! App\Helper::setting('administrator_email') !!}">FRC team</a>, developed by Piethein Strengholt<img id="pepper" src="{{ URL::asset('img/pepper-small.png') }}" alt="redpepper" height="16" width="16"></p>
+				<p class="muted credit" id="top">For questions contact the <a class="credit" href="mailto:{!! Settings::get('administrator_email') !!}">FRC team</a>, developed by Piethein Strengholt<img id="pepper" src="{{ URL::asset('img/pepper-small.png') }}" alt="redpepper" height="16" width="16"></p>
 				@if (file_exists(base_path() . '/version'))
 					<p class="muted credit"><small>version: 2.0-{{ file_get_contents(base_path() . '/version') }}</small></p>
 				@endif

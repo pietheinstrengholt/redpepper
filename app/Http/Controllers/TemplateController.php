@@ -541,7 +541,7 @@ class TemplateController extends Controller
 		return view('templates.manual', compact('template','technical'));
 	}
 
-	public function imageUpload(Request $request)
+	public function PostImageUpload(Request $request)
 	{
 		//create upload folder, if not exists
 		if (!file_exists(public_path() . '/img/upload/')) {
@@ -563,5 +563,9 @@ class TemplateController extends Controller
 			$error = "An error occurred while processing the image. Unknown extension type.";
 			return view('imageupload.image-upload', compact('error'));
 		}
+	}
+
+	public function GetImageUpload(Request $request) {
+		return view('imageupload.image-dialog');
 	}
 }

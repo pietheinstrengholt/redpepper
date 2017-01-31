@@ -13,6 +13,6 @@
 	menubar: '',
 	toolbar: 'undo redo | alignleft aligncenter alignright | bold italic underline | link | bullist numlist',
 	statusbar: false,
-	content_css: ["{!! URL::asset('css') . '/' . App\Helper::setting('css_style') !!}"],
+	content_css: ["{!! URL::asset('css') . '/' . Settings::get('css_style') !!}"],
 	content_style: "body {margin: 10px ! important; }",
 });</script>

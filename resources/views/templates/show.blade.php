@@ -32,7 +32,7 @@
 			@endif
 			{!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('subjects.sections.templates.destroy', $template->section->subject, $template->section, $child), 'onsubmit' => 'return confirm(\'Are you sure to delete this template?\')')) !!}
 			<td><a href="{{ route('subjects.sections.templates.show', [$template->section->subject, $template->section, $child]) }}">{{ $child->template_name }}</a></td>
-			<td>{!! App\Helper::contentAdjust($child->template_shortdesc) !!}</td>
+			<td>{!! Format::contentAdjust($child->template_shortdesc) !!}</td>
 			<td>
 			@if ( $child->rows->count() && $child->columns->count() )
 				<a class="btn btn-primary btn-xs" style="margin-left:2px;" href="{{ url('exporttemplate') . '/' . $child->id }}">Export</a>
@@ -52,14 +52,14 @@
 	@endif
 
 	<h2>{{ $template->template_name }}</h2>
-	<h4 class="tinymce" title="{{ $template->template_name }}">{!! App\Helper::contentAdjust($template->template_shortdesc) !!}</h4>
-	<h4 class="tinymce" title="{{ $template->template_name }}">{!! App\Helper::contentAdjust($template->template_longdesc) !!}</h4>
+	<h4 class="tinymce" title="{{ $template->template_name }}">{!! Format::contentAdjust($template->template_shortdesc) !!}</h4>
+	<h4 class="tinymce" title="{{ $template->template_name }}">{!! Format::contentAdjust($template->template_longdesc) !!}</h4>
 	@if ( $template->rows->count() && $template->columns->count() )
-		<h4>{!! App\Helper::contentAdjust($template->frequency_description) !!}</h4>
-		<h4>{!! App\Helper::contentAdjust($template->reporting_dates_description) !!}</h4>
-		<h4>{!! App\Helper::contentAdjust($template->main_changes_description) !!}</h4>
-		<h4>{!! App\Helper::contentAdjust($template->links_other_temp_description) !!}</h4>
-		<h4>{!! App\Helper::contentAdjust($template->process_and_organisation_description) !!}</h4>
+		<h4>{!! Format::contentAdjust($template->frequency_description) !!}</h4>
+		<h4>{!! Format::contentAdjust($template->reporting_dates_description) !!}</h4>
+		<h4>{!! Format::contentAdjust($template->main_changes_description) !!}</h4>
+		<h4>{!! Format::contentAdjust($template->links_other_temp_description) !!}</h4>
+		<h4>{!! Format::contentAdjust($template->process_and_organisation_description) !!}</h4>
 		<h5><a href="{{ url('subjects') . '/' . $template->section->subject->id . '/sections/' . $template->section->id . '/templates/' . $template->id . '/manual' }}"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print manual</a></h5>
 	@endif
 
