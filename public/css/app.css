@@ -435,3 +435,17 @@ a.bim-link {
    background-color: #eafcf9;
    text-decoration: none !important;
 }
+
+/* breadcrumb right dropdown */
+
+ul.breadcrumb li.right.dropdown {
+	float: right;
+}
+
+ul.breadcrumb li.right.dropdown a {
+	color: #95a5a6;
+}
+
+ul.breadcrumb li#status.right.dropdown:before {
+	display:none;
+}

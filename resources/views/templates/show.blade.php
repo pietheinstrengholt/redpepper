@@ -14,6 +14,7 @@
 			<li><a href="{{ route('subjects.sections.templates.show', array($template->section->subject, $template->section, $template->parent)) }}">{{ $template->parent->template_name }}</a></li>
 		@endif
 		<li class="active">{{ $template->template_name }}</li>
+		<li class="right dropdown hidden-xs" id="status"><div style="font-size: 18px; margin-top: -3px; float:left; margin-left: 3px;"><a href="{{ url('subjects') . '/' . $template->section->subject->id . '/sections/' . $template->section->id . '/templates/' . $template->id . '/edit' }}"><span title="Click to edit template" class="label label-info label-as-badge">Edit template</span></a></div></li>
 	</ul>
 
 	@if ( $template->children->count() )
