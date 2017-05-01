@@ -55,10 +55,10 @@ class Format
 		$output = self::formatUrlsInText($input);
 
 		//replace bim terms with hyperlinks
-		$output = self::addTermLinks($output);
+		//$output = self::addTermLinks($output);
 
 		//add nl2br to add line breaks
-		return nl2br($output);
+		return str_replace('\r\n', "<br>", $output);
 	}
 
 	public static function highlightInput($input1, $input2) {
