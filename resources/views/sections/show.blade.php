@@ -17,7 +17,7 @@
 	<h4 class="tinymce">{!! Format::contentAdjust($section->section_longdesc) !!}</h4>
 
 	@if ( !$section->templates->count() )
-		<p>This section has no items.</p><br>
+		<p>This section has no items. Use the link below to create a new item.</p><br>
 	@else
 		<h5>Total overview of all items</h5>
 
