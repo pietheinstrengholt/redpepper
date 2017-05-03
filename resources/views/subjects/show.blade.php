@@ -9,7 +9,6 @@
 		<li><a href="{{ route('subjects.show', $subject->parent->id) }}">{{ $subject->parent->subject_name }}</a></li>
 	@endif
 	<li class="active">{{ $subject->subject_name }}</li>
-	<li class="right dropdown hidden-xs" id="status"><div style="font-size: 18px; margin-top: -3px; float:left; margin-left: 3px;"><a href="{{ url('subjects') . '/' . $subject->id . '/edit/' }}"><span title="Click to edit building block" class="label label-info label-as-badge">Edit building block</span></a></div></li>
 	</ul>
 
 	<h2>{{ $subject->subject_name }}</h2>
