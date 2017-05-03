@@ -61,7 +61,7 @@
 					<strong style="padding-left:20px;">{{ $section->section_name }}</strong>
 				@endif
 				</td>
-				@if ( in_array($section->id, $sectionrights) )
+				@if ( in_array($section->id, $sectionrights) || in_array($section->subject->id, $subjectrights) )
 					<td class="rights" style="text-align: center;"><input name="section[{{ $section->id }}]" id="subject_rights" checked type="checkbox" value="{{ $section->id }}"></td>
 				@else
 					<td class="rights" style="text-align: center;"><input name="section[{{ $section->id }}]" id="subject_rights" type="checkbox" value="{{ $section->id }}"></td>
