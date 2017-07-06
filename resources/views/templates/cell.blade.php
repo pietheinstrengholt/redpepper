@@ -8,19 +8,19 @@
 <td>
 @if ( $field_property1 )
 	<dl class="dl-horizontal">
-	<dt>{!! Format::setting('fieldname_property1') !!}:</dt>
+	<dt>{!! Settings::get('fieldname_property1') !!}:</dt>
 	<dd><div title="{!! Format::returnHistory($field_property1) !!}" class="content-box">{{ $field_property1->content }}</div></dd>
 	</dl>
 @endif
 @if ( $field_property2 )
 	<dl class="dl-horizontal">
-	<dt>{!! Format::setting('fieldname_property2') !!}:</dt>
+	<dt>{!! Settings::get('fieldname_property2') !!}:</dt>
 	<dd><div title="{!! Format::returnHistory($field_property2) !!}" class="content-box">{{ $field_property2->content }}</div></dd>
 	</dl>
 @endif
 @if ( $field_interpretation )
 	<dl class="dl-horizontal">
-	<dt>Interpretation by {!! Format::setting('bank_name') !!}:</dt>
+	<dt>Interpretation by {!! Settings::get('bank_name') !!}:</dt>
 	<dd><div title="{!! Format::returnHistory($field_interpretation) !!}" class="content-box">{!! Format::contentAdjust($field_interpretation->content) !!}</div></dd>
 	</dl>
 @endif
