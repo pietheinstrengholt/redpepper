@@ -180,7 +180,7 @@ class CSVController extends Controller
 				//log activity
 				ActivityLog::submit("CSV content imported.");
 
-				return Redirect::to('/sections')->with('message', 'CSV successfully imported to the database.');
+				return Redirect::to('/subjects')->with('message', 'CSV successfully imported to the database.');
 			}
 		}
 	}
