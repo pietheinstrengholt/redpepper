@@ -11,7 +11,7 @@
 		<li><a href="{{ route('subjects.show', $section->subject->id) }}">{{ $section->subject->subject_name }}</a></li>
 		<li class="active">{{ $section->section_name }}</li>
 		@can('update-section', $section)
-			<li class="right dropdown hidden-xs" id="status"><div style="font-size: 18px; margin-top: -3px; float:left; margin-left: 3px;"><a href="{{ url('subjects') . '/' . $section->subject->id . '/sections/' . $section->id . '/edit/' }}"><span title="Click to edit section" class="label label-info label-as-badge">Edit section</span></a></div></li>
+			<li class="right dropdown hidden-xs" id="status"><div style="font-size: 18px; margin-top: -3px; float:left; margin-left: 3px;"><a href="{{ url('subjects') . '/' . $section->subject->id . '/sections/' . $section->id . '/edit' }}"><span title="Click to edit section" class="label label-info label-as-badge">Edit section</span></a></div></li>
 		@endcan
 	</ul>
 
