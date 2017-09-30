@@ -2,6 +2,10 @@ RED PEPPER REPORTING FRAMEWORK
 =======
 Copyright (c) 2017 Piethein Strengholt, piethein@strengholt-online.nl
 
+![Screenshot](public/img/screenshots/screenshot01.png)
+![Screenshot](public/img/screenshots/screenshot02.png)
+![Screenshot](public/img/screenshots/screenshot03.png)
+
 Red Pepper Reporting Framework is an easy to use management solution to easily maintain and document regulatory, management and disclosure reports.
 Red Pepper Reporting Framework features a lightweight fluid responsive design. It is written in PHP/Laravel + jQuery / HTML / CSS (Bootstrap).
 
