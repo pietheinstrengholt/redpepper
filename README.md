@@ -22,7 +22,7 @@ INITIAL DEPLOYMENT
 ------------
 * install composer: `curl -sS https://getcomposer.org/installer | php — –filename=composer`
 * ssh to the machine, go the www directory
-* clone the repository: `git clone https://github.com/pietheinstrengholt/laravel.git .`
+* clone the repository: `git clone https://github.com/pietheinstrengholt/redpepper.git .`
 * run `composer install --no-dev --optimize-autoloader` , use your github key when asked.
 * copy the `.env.example` to `.env` and configure with the correct database settings. If localhost doesn't work, try 127.0.0.1 instead.
 * run `php artisan key:generate` to generate an unique key. Add this key to the .env configuration file
