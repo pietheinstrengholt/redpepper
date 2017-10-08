@@ -53,16 +53,6 @@ class CreateForeign extends Migration
 			$table->foreign('username_id')->references('id')->on('t_usernames')->onDelete('cascade');
 		});
 
-		//on source_id
-		Schema::table('t_technical', function (Blueprint $table) {
-			$table->foreign('source_id')->references('id')->on('t_technical_sources')->onDelete('cascade');
-		});
-
-		//on type_id
-		Schema::table('t_technical', function (Blueprint $table) {
-			$table->foreign('type_id')->references('id')->on('t_technical_types')->onDelete('cascade');
-		});
-
 	}
 
 	/**

@@ -261,6 +261,85 @@ class CreateTablesScript extends Migration
 				$table->timestamps();
 			});
 		}
+
+		//add settings
+		DB::table('t_settings')->insert(
+			array(
+				'config_key' => 'bank_name',
+				'config_value' => 'Bank'
+			)
+		);
+
+		DB::table('t_settings')->insert(
+			array(
+				'config_key' => 'fieldname_property1',
+				'config_value' => 'Bank'
+			)
+		);
+
+		DB::table('t_settings')->insert(
+			array(
+				'config_key' => 'fieldname_property2',
+				'config_value' => 'Bank'
+			)
+		);
+
+		DB::table('t_settings')->insert(
+			array(
+				'config_key' => 'main_message1',
+				'config_value' => 'Redpepper Reporting Tool'
+			)
+		);
+
+		DB::table('t_settings')->insert(
+			array(
+				'config_key' => 'main_message2',
+				'config_value' => 'Stay in control!'
+			)
+		);
+
+		DB::table('t_settings')->insert(
+			array(
+				'config_key' => 'administrator_email',
+				'config_value' => 'piethein@strengholt-online.nl'
+			)
+		);
+
+		DB::table('t_settings')->insert(
+			array(
+				'config_key' => 'superadmin_process_directly',
+				'config_value' => 'yes'
+			)
+		);
+
+		DB::table('t_settings')->insert(
+			array(
+				'config_key' => 'tool_name',
+				'config_value' => 'Redpepper Reporting Tool'
+			)
+		);
+
+		DB::table('t_settings')->insert(
+			array(
+				'config_key' => 'homescreen_image',
+				'config_value' => 'default.jpg'
+			)
+		);
+
+		DB::table('t_settings')->insert(
+			array(
+				'config_key' => 'css_style',
+				'config_value' => 'bootstrap.min.css'
+			)
+		);
+
+		// Insert first deparment
+		DB::table('t_departments')->insert(
+			array(
+				'department_name' => 'Department',
+				'department_description' => 'Default Department'
+			)
+		);
 	}
 
 	/**
