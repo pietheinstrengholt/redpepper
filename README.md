@@ -26,7 +26,7 @@ INITIAL DEPLOYMENT
 * run `composer install --no-dev --optimize-autoloader` , use your github key when asked.
 * copy the `.env.example` to `.env` and configure with the correct database settings. If localhost doesn't work, try 127.0.0.1 instead.
 * run `php artisan key:generate` to generate an unique key. Add this key to the .env configuration file
-* deploy the database, use the following command: `php artisan migrate:install`
+* deploy the database, use the following command: `php artisan migrate`
 * run `php artisan optimize`
 * run `php artisan route:optimize`
 * run `php artisan cache:clear`
