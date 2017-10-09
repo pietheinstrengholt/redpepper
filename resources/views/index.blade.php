@@ -75,9 +75,9 @@
 
 		<div id="page-content2" class="row">
 			<div class="col-md-12 col-sm-12" id="footer">
-				<p class="muted credit" id="top">For questions contact the <a class="credit" href="mailto:{!! Settings::get('administrator_email') !!}">FRC team</a>, developed by Piethein Strengholt<img id="pepper" src="{{ URL::asset('img/pepper-small.png') }}" alt="redpepper" height="16" width="16"></p>
+				<p class="muted credit" id="top">For questions contact the <a class="credit" href="mailto:{!! Settings::get('administrator_email') !!}">Administrator</a>, developed by Piethein Strengholt<img id="pepper" src="{{ URL::asset('img/pepper-small.png') }}" alt="redpepper" height="16" width="16"></p>
 				@if (file_exists(base_path() . '/version'))
-					<p class="muted credit"><small>version: 2.0-{{ file_get_contents(base_path() . '/version') }}</small></p>
+					<p class="muted credit"><small>version: {{ file_get_contents(base_path() . '/version') }}</small></p>
 				@endif
 			</div>
 		</div>
